@@ -1,0 +1,175 @@
+###
+# zshの設定
+###
+
+# Emacs ライクな操作を有効にする（文字入力中に Ctrl-F,B でカーソル移動など）
+# Vi ライクな操作が好みであれば `bindkey -v` とする
+bindkey -v
+# ESCを別の方法で
+bindkey -M viins 'jj' vi-cmd-mode
+
+# 自動補完を有効にする
+# コマンドの引数やパス名を途中まで入力して <Tab> を押すといい感じに補完してくれる
+# 例： `cd path/to/<Tab>`, `ls -<Tab>`
+autoload -U compinit; compinit
+
+# 入力したコマンドが存在せず、かつディレクトリ名と一致するなら、ディレクトリに cd する
+# 例： /usr/bin と入力すると /usr/bin ディレクトリに移動
+setopt auto_cd
+
+# ↑を設定すると、 .. とだけ入力したら1つ上のディレクトリに移動できるので……
+# 2つ上、3つ上にも移動できるようにする
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# "~hoge" が特定のパス名に展開されるようにする（ブックマークのようなもの）
+# 例： cd ~hoge と入力すると /long/path/to/hogehoge ディレクトリに移動
+hash -d hoge=/long/path/to/hogehoge
+
+# cd した先のディレクトリをディレクトリスタックに追加する
+# ディレクトリスタックとは今までに行ったディレクトリの履歴のこと
+# `cd +<Tab>` でディレクトリの履歴が表示され、そこに移動できる
+setopt auto_pushd
+
+# pushd したとき、ディレクトリがすでにスタックに含まれていればスタックに追加しない
+setopt pushd_ignore_dups
+
+# 拡張 glob を有効にする
+# glob とはパス名にマッチするワイルドカードパターンのこと
+# （たとえば `mv hoge.* ~/dir` における "*"）
+# 拡張 glob を有効にすると # ~ ^ もパターンとして扱われる
+# どういう意味を持つかは `man zshexpn` の FILENAME GENERATION を参照
+setopt extended_glob
+
+# 入力したコマンドがすでにコマンド履歴に含まれる場合、履歴から古いほうのコマンドを削除する
+# コマンド履歴とは今まで入力したコマンドの一覧のことで、上下キーでたどれる
+setopt hist_ignore_all_dups
+
+# コマンドがスペースで始まる場合、コマンド履歴に追加しない
+# 例： <Space>echo hello と入力
+setopt hist_ignore_space
+
+# 単語の一部として扱われる文字のセットを指定する
+# ここではデフォルトのセットから / を抜いたものとする
+# こうすると、 Ctrl-W でカーソル前の1単語を削除したとき、 / までで削除が止まる
+WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+
+# ---
+# ---
+# ---
+
+# history search
+bindkey '^P' history-beginning-search-backward
+bindkey '^N' history-beginning-search-forward
+
+# ---
+# ---
+# ---
+
+# ---
+# general settings
+# ---
+
+# 補完候補を一覧で表示する
+setopt auto_list
+
+# 補完キー連打で候補順に自動で補完する
+setopt auto_menu
+
+# cd 時に自動でディレクトリスタックに追加する
+#setopt auto_pushd
+
+# コマンド履歴に実行時間も記録する
+setopt extended_history
+
+# 履歴中の重複行をすべて削除する
+#setopt hist_ignore_all_dups
+
+# 直前と重複するコマンドを記録しない
+setopt hist_ignore_dups
+
+# コマンド中の余分なスペースは削除して履歴に記録する
+setopt hist_reduce_blanks
+
+# 履歴と重複するコマンドを記録しない
+setopt hist_save_no_dups
+
+# ^D でシェルを終了しない
+setopt ignore_eof
+
+# 履歴をすぐに追加する（通常はシェル終了時）
+setopt inc_append_history
+
+# # 以降をコメントとして扱う
+setopt interactive_comments
+
+# ビープを無効にする
+setopt no_beep
+setopt no_hist_beep
+setopt no_list_beep
+
+# = 以降も補完する（例：--option=value）
+setopt magic_equal_subst
+
+# バックグラウンド処理の状態変化をすぐに通知する
+setopt notify
+
+# 8bit文字を有効にする
+setopt print_eight_bit
+
+# 終了ステータスが0以外の場合にステータスを表示する
+setopt print_exit_value
+
+# VCS情報の表示を有効にする
+setopt prompt_subst
+
+# ディレクトリスタックと重複したディレクトリをスタックに追加しない
+#setopt pushd_ignore_dups
+
+# rm * の前に確認をとる
+setopt rm_star_wait
+
+# Zsh間で履歴を共有する
+setopt share_history
+
+# コマンド実行後は右プロンプトを消す
+setopt transient_rprompt
+
+# ls 時の色を設定する
+export CLICOLOR=true
+export LSCOLORS='exfxcxdxbxGxDxabagacad'
+export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
+
+# 標準エディタを設定する
+export EDITOR=vim
+
+# コマンド履歴を保存するファイルを指定する
+export HISTFILE=~/.zhistory
+
+# メモリに保存する履歴の件数を指定する
+export HISTSIZE=1000
+
+# ファイルに保存する履歴の件数を指定する
+export SAVEHIST=1000000
+
+# 文字コードを設定する
+export LANG=ja_JP.UTF-8
+
+# ---
+# Key bindings
+# ---
+
+# コマンドラインの編集モードをViにする
+bindkey -v
+
+# バックスペースキーで文字を削除する
+bindkey -v '^?' backward-delete-char
+
+# Shift-Tabで候補を逆順に補完する
+bindkey '^[[Z' reverse-menu-complete
+
+# ghq で管理しているリポジトリから検索・移動する
+bindkey '^@' anyframe-widget-cd-ghq-repository
+
+# コマンドを履歴から検索・実行する
+bindkey '^r' anyframe-widget-put-history

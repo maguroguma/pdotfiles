@@ -1,0 +1,153 @@
+# <Tab> でパス名の補完候補を表示したあと、
+# 続けて <Tab> を押すと候補からパス名を選択できるようになる
+# 候補を選ぶには <Tab> か Ctrl-N,B,F,P
+zstyle ':completion:*:default' menu select=1
+
+# zplug
+# source ~/.zplug/init.zsh
+# 以下は brew install zplug した場合
+# export ZPLUG_HOME=/usr/local/opt/zplug
+export ZPLUG_HOME=$HOME/.zplug
+source $ZPLUG_HOME/init.zsh
+
+# (1) プラグインを定義する
+zplug 'zsh-users/zsh-autosuggestions'
+zplug 'zsh-users/zsh-completions'
+zplug 'zsh-users/zsh-syntax-highlighting'
+zplug 'mollifier/anyframe'
+zplug 'b-ryan/powerline-shell'
+
+# (2) インストールする
+if ! zplug check --verbose; then
+  printf 'Install? [y/N]: '
+  if read -q; then
+    echo; zplug install
+  fi
+fi
+
+zplug load --verbose
+
+# ---
+# autoload
+# ---
+
+# フック機能を有効にする
+autoload -Uz add-zsh-hook
+
+# コマンドのオプションや引数を補完する
+autoload -Uz compinit && compinit -u
+
+# URLをエスケープする
+autoload -Uz url-quote-magic
+
+# VCS情報の表示を有効にする
+autoload -Uz vcs_info
+
+# ---
+# ZLE settings
+# ---
+
+zle -N self-insert url-quote-magic
+
+# ---
+# Exports
+# ---
+
+# ---
+# Module setting
+# ---
+
+# 補完の表示方法を変更する
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' use-cache true
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*:default' menu select=2
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*:options' description 'yes'
+
+# ---
+# docker completion
+# ---
+
+fpath=(~/.zsh/completion $fpath)
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
+
+# ---
+# git branch
+# ---
+
+# この行は現在のパスを表示する設定です。ブランチを表示して色をつける設定とは関係ありません
+# RPROMPT="%{${fg[blue]}%}[%~]%{${reset_color}%}"
+
+autoload -Uz vcs_info
+setopt prompt_subst
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
+zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
+zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
+zstyle ':vcs_info:*' actionformats '[%b|%a]'
+precmd () { vcs_info }
+# RPROMPT=$RPROMPT'${vcs_info_msg_0_}'
+
+#
+# 複数行のプロンプト
+# TMOUTは危険！(http://vorfee.hatenablog.jp/entry/2017/02/03/031251)
+#
+
+autoload -Uz vcs_info
+# zstyle ':vcs_info:*' formats '[%b]'
+# zstyle ':vcs_info:*' actionformats '[%b|%a]'
+precmd () {
+  # 1行あける
+  print
+  # カレントディレクトリ
+  local left='%{\e[38;5;2m%}(%~)%{\e[m%}'
+  # local left='%m@%{\e[38;5;2m%}(%~)%{\e[m%}'
+  # バージョン管理されてた場合、ブランチ名
+  vcs_info
+  local right=" %{\e[38;5;32m%}${vcs_info_msg_0_}%{\e[m%}"
+  # スペースの長さを計算
+  # テキストを装飾する場合、エスケープシーケンスをカウントしないようにします
+  local invisible='%([BSUbfksu]|([FK]|){*})'
+  local leftwidth=${#${(S%%)left//$~invisible/}}
+  local rightwidth=${#${(S%%)right//$~invisible/}}
+  local padwidth=$(($COLUMNS - ($leftwidth + $rightwidth) % $COLUMNS))
+
+  # print -P $left${(r:$padwidth:: :)}$right
+  # print -P $left${(r:$padwidth:: :)}$RPROMPT
+  print -P $left$right
+}
+# ユーザ名@ホスト名
+# PROMPT='%n@%m %# '
+PROMPT='%{$fg[blue]%}$ %{$reset_color%}'
+# 現在時刻
+# RPROMPT=$'%{\e[38;5;251m%}%D{%b %d}, %*%{\e[m%}'
+RPROMPT=''
+# TMOUT=1
+TRAPALRM() {
+  zle reset-prompt
+}
+
+#
+# Prompt
+#
+
+# POWERLINE_SEPARATOR=$'\ue0b2'
+# POWERLINE_BRANCH=$'\ue0a0'
+#
+# zstyle ':vcs_info:*' formats '%F{7}%K{8} '$POWERLINE_BRANCH' %b %k%f'
+#
+# function precmd_vcs_info() {
+#   vcs_info
+# }
+#
+# add-zsh-hook precmd precmd_vcs_info
+#
+# # PROMPT='%F{2}%%%f '
+# PROMPT='> '
+# RPROMPT='%F{8}%K{0}'$POWERLINE_SEPARATOR'%k%f${vcs_info_msg_0_}%F{2}%K{8}'$POWERLINE_SEPARATOR'%k%f%F{0}%K{2} %c %k%f'
+#

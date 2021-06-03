@@ -1,0 +1,30 @@
+alias vi='nvim'
+alias vim='nvim'
+alias vimdiff='nvim -d'
+
+alias rm='rm -i'
+alias ..='cd ..'
+alias mv='mv -i'
+alias cp='cp -i'
+alias c='clear'
+alias relogin='exec $SHELL -l'
+
+# Git
+alias gs='git status'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias ga='git add'
+
+# tmux
+alias ta='tmux a'
+alias tks='tmux kill-server'
+# tns <session-name>
+alias tns='tmux new -s'
+
+# 競技プログラミング用(Go)
+alias gr='go run'
+
+# ubuntu
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
+alias tmux-copy='tmux save-buffer - | pbcopy'

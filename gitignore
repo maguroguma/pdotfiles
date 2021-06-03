@@ -1,0 +1,35 @@
+### https://raw.github.com/github/gitignore/18654b47c86bef38add5cd091ec2dac7d6e6e37b/Global/Vim.gitignore
+
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
+
+
+### https://raw.github.com/github/gitignore/18654b47c86bef38add5cd091ec2dac7d6e6e37b/Global/VisualStudioCode.gitignore
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### manually added
+.DS_Store
+
+### vim undo
+$XDG_CACHE_HOME/*
+

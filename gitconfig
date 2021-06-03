@@ -1,0 +1,44 @@
+[core]
+	excludesfile = ~/.gitignore
+  # @os-dependency
+  #editor = /usr/local/bin/nvim
+  editor = /usr/bin/nvim
+
+[diff]
+  tool      = vimdiff
+  algorithm = histogram
+  compactionHeuristic = true
+
+[merge]
+  tool = vimdiff
+
+[user]
+	name = myokoyama
+	email = part7steelballrun.to.8@gmail.com
+
+#[commit]
+#template = ~/.stCommitMsg
+
+[alias]
+  # --- original ---
+  s = status
+  l = log
+  b = branch
+  ba = branch -a
+  unstage = reset HEAD
+  lg = log --graph --all --decorate
+  lo = log --oneline
+  cho = checkout
+  # --- Borrowing ---
+  diffn = diff --name-only
+  diffs = diff --cached
+  review = diff origin/master...
+  today = log --oneline --since='12 hour ago'
+  cancel = reset --soft HEAD^
+#  dp = diff --no-prefix
+#  dsp = diff --cached --no-prefix
+#  graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
+
+[ghq]
+  # @os-dependency
+	root = /home/masahiro-yokoyama/go/src

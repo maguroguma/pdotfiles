@@ -1,0 +1,289 @@
+// 既定の設定を上書きするには、このファイル内に設定を挿入します
+{
+    // *** START ***
+    // shell
+    "terminal.integrated.shell.osx": "/bin/zsh",
+    // neovim
+    "vim.enableNeovim": true,
+    "vim.neovimPath": "/usr/local/bin/nvim",
+    // Java
+    "java.home": "/usr/libexec/java_home -v 12",
+    // Python configurations
+    "python.linting.flake8Path": "/usr/local/bin/flake8",
+    "python.linting.flake8Enabled": true,
+    // *** END ***
+
+    // on opening editor
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+    "workbench.panel.defaultLocation": "right",
+
+    // git
+    "git.ignoreMissingGitWarning": true,
+
+    // color theme, font, icon theme
+    "workbench.colorTheme": "Hybrid Next",
+    "workbench.colorCustomizations": {
+        // "editor.background": "#0f0f0f",
+        "editor.selectionBackground": "#606061",
+        "editor.selectionHighlightBackground": "#606061",
+        "terminal.background": "#1f1f1f",
+    },
+
+    // relative line number
+    "editor.lineNumbers": "on",
+    "settings.cycle":[
+        {
+            "id":"lineNumber",
+            "overrideWorkspaceSettings":false,
+            "values":[
+                {
+                    "editor.lineNumbers":"on"
+                },
+                {
+                    "editor.lineNumbers":"relative"
+                }
+            ]
+        }
+    ],
+    "editor.renderWhitespace": "none",
+    "editor.rulers": [80],
+
+    // editor minimap (off)
+    "editor.minimap.enabled": false,
+
+    // bread crumbs
+    "breadcrumbs.enabled": true,
+
+    // window zoom level
+    "window.zoomLevel": 1,
+
+    // VSCodeVim configurations
+    "vim.hlsearch": true,
+    "vim.easymotion": true,
+    "vim.searchHighlightColor": "rgba(200, 255, 200, 0.5)",
+    "vim.useSystemClipboard": false,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["j","j"],
+            "after": ["<Esc>"]
+        }
+    ],
+    "vim.leader": "<space>",
+    "vim.normalModeKeyBindings": [
+        {
+            "before": ["leader","w"],
+            "commands": [
+                {
+                    "command": "workbench.action.files.save",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": ["leader", "q"],
+            "commands": [":q"]
+        },
+        {
+            "before": ["leader", "y"],
+            "after": ["\"", "+", "y"]
+        },
+        {
+            "before": ["leader", "d"],
+            "after": ["\"", "+", "d"]
+        },
+        {
+            "before": ["leader", "p"],
+            "after": ["\"", "+", "p"]
+        },
+        {
+            "before": ["leader", "P"],
+            "after": ["\"", "+", "P"]
+        },
+        {
+            "before": ["leader", "Y"],
+            "commands": [
+                {
+                    "command": "editor.action.selectAll",
+                    "args": []
+                },
+                {
+                    "command": "editor.action.clipboardCopyAction",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": ["leader", "j"],
+            "after": ["1", "0", "j"]
+        },
+        {
+            "before": ["leader", "k"],
+            "after": ["1", "0", "k"]
+        },
+        {
+            "before": ["ctrl+h"],
+            "after": ["ctrl+w", "h"]
+        },
+        {
+            "before": ["ctrl+l"],
+            "after": ["ctrl+w", "l"]
+        },
+        {
+            "before": ["leader", "-"],
+            "commands": [
+                {
+                    "command": "workbench.action.splitEditorOrthogonal",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": ["leader", "|"],
+            "commands": [
+                {
+                    "command": "workbench.action.splitEditor",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": ["leader", "e", "d"],
+            "commands": [
+                {
+                    "command": "workbench.action.closeOtherEditors",
+                    "args": []
+                }
+            ]
+        }
+    ],
+    "vim.visualModeKeyBindings": [
+        {
+            "before": ["leader", "y"],
+            "after": ["\"", "+", "y"]
+        },
+        {
+            "before": ["leader", "d"],
+            "after": ["\"", "+", "d"]
+        },
+        {
+            "before": ["leader", "p"],
+            "after": ["\"", "+", "p"]
+        },
+        {
+            "before": ["leader", "P"],
+            "after": ["\"", "+", "P"]
+        },
+        {
+            "before": ["leader", "j"],
+            "after": ["1", "0", "j"]
+        },
+        {
+            "before": ["leader", "k"],
+            "after": ["1", "0", "k"]
+        }
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        // {
+        //     "before": ["j"],
+        //     "after": ["g", "j"]
+        // },
+        // {
+        //     "before": ["k"],
+        //     "after": ["g", "k"]
+        // },
+        {
+            "before": ["K"],
+            "after": ["{"],
+        },
+        {
+            "before": ["J"],
+            "after": ["}"],
+        },
+        {
+            "before": ["H"],
+            "after": ["^"],
+        },
+        {
+            "before": ["L"],
+            "after": ["$"],
+        },
+        // {
+        //     "before": ["s"],
+        //     "after": ["<C-w>"]
+        // },
+        {
+            "before": ["n"],
+            "after": ["n", "z", "z"]
+        },
+        {
+            "before": ["N"],
+            "after": ["N", "z", "z"]
+        },
+        {
+            "before": ["*"],
+            "after": ["*", "z", "z"]
+        }
+    ],
+
+    // Golang configurations
+    "go.coverOnSave": true,
+    "go.coverOnSingleTest": true,
+    "go.testOnSave": true,
+    "go.coverageOptions": "showBothCoveredAndUncoveredCode",
+    "terminal.integrated.rendererType": "dom",
+
+    // editor tab, space configurations
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+
+    // VSNotes
+    "vsnotes.defaultNotePath": "/Users/yokoyamamasahiro/Dropbox/vsnotes",
+
+    // snippet configurations
+    "editor.snippetSuggestions": "bottom",
+    "editor.tabCompletion": "on",
+
+    // wrap
+    "editor.wordWrap": "on",
+    "files.trimTrailingWhitespace": true,
+
+    // 改行文字の色
+    "code-eol.color": "#777777",
+    "editor.fontFamily": "Ricty Diminished Discord",
+    "terminal.external.osxExec": "iTerm2.app",
+    "editor.fontSize": 14,
+    "editor.lineHeight": 16,
+    "terminal.integrated.fontSize": 15,
+
+    // エディターのタブの大きさを制御します。
+    //常に完全なエディター ラベルを表示するのに足りるタブの大きさを維持するには 'fit' を設定します。
+    //すべてのタブを一度に表示するには利用可能なスペースが足りない場合に、タブを縮小可能にするには 'shrink' を設定します。
+    "workbench.editor.tabSizing": "shrink",
+    // エディター タブの閉じるボタンの位置を制御するか、[off] に設定した場合に無効にします。
+    "workbench.editor.tabCloseButton": "off",
+    // todo エディターグループにアクティブなエディターが一つしか存在できない
+    // 前のセッションからエディターが復元されていない場合に、起動時に表示するかどうかを制御します。
+    // 'none' を選択するとエディターなしで開始します。'welcomepage' を選択するとウェルカム ページを開きます (既定)。
+    // 'newuntitledfile' を選択すると新しい無題のファイルを開きます (空のワークスペースを開いているときのみ)。
+    // "workbench.startupEditor": "none",
+    // エディターを開く場所を制御します。
+    // 'left' または 'right' を選択すると現在アクティブになっているエディターの左または右にエディターを開きます。
+    // 'first' または 'last' を選択すると現在アクティブになっているエディターとは別個にエディターを開きます。
+    // "workbench.editor.openPositioning": "first",
+    // アクティビティバーでよけいなスペースを取られるのでfalse
+    "workbench.activityBar.visible": true,
+    // [開いているエディター] ウィンドウに表示するエディターの数。
+    "explorer.openEditors.visible": 0,
+    "vsicons.dontShowNewVersionMessage": true,
+    "spell.StopAsking": true,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+
+    "files.eol": "\n",
+    "markdown-toc.insertAnchor": true,
+    "python.jediEnabled": false,
+
+    "markdown.extension.tableFormatter.enabled": true,
+    "workbench.iconTheme": "material-icon-theme"
+}
