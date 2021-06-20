@@ -89,6 +89,9 @@ nmap <Leader>ac  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
 nmap <Leader>qf  <Plug>(coc-fix-current)
 
+" Prettier
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
 " " Create mappings for function text object, requires document symbols feature of languageserver.
 " xmap if <Plug>(coc-funcobj-i)
 " xmap af <Plug>(coc-funcobj-a)

@@ -121,6 +121,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'vim-jp/vital.vim'
 Plug 'mattn/vim-sonictemplate'
 " Plug 'wellle/context.vim'
+Plug 'editorconfig/editorconfig-vim'
 
 " defx
 if has('nvim')
