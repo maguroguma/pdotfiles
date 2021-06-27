@@ -90,8 +90,11 @@ Plug 'simeji/winresizer'
 " wilder.nvim
 Plug 'gelguy/wilder.nvim'
 
+" vue plugins
+Plug 'posva/vim-vue'
+Plug 'tomtom/tcomment_vim'
+
 " no setting file
-Plug 'tpope/vim-commentary'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'airblade/vim-gitgutter'
