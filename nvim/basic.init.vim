@@ -1,11 +1,14 @@
 " https://drumato.hatenablog.com/entry/2019/03/30/215117
 " fugitive {{{
 " nnoremap <Leader>gl :Glog --oneline<CR>
-" nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gl :Git log<CR>
+nnoremap <Leader>gs :Gstatus<CR>
 " nnoremap <Leader>gd :Gdiffsplit<CR>
+nnoremap <Leader>gd :Git diff<CR>
 nnoremap <Leader>gb :Gblame<CR>
 " nnoremap <Leader>ga :Gwrite<CR>
 " nnoremap <Leader>gc :Gcommit<CR>
+command! Gdiff :Git diff
 " }}}
 
 "" vim-easy-align
