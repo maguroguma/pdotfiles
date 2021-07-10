@@ -28,8 +28,8 @@ cnoremap <C-a>fp <C-r>=expand("%:p")<CR>
 command! OpenVimScriptHelp :h usr_41
 
 " 今日の日付
-inoremap <C-a>day <C-r>='@'.strftime("%Y-%m-%d")<CR>
-cnoremap <C-a>day <C-r>='@'.strftime("%Y-%m-%d")<CR>
+inoremap <C-a>day <C-r>=strftime("%Y-%m-%d")<CR>
+cnoremap <C-a>day <C-r>=strftime("%Y-%m-%d")<CR>
 
 " markdownのコードスニペット
 function! g:ReadTripleBackQuotes(lang_text)
