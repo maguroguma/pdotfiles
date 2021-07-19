@@ -125,6 +125,7 @@ Plug 'vim-jp/vital.vim'
 Plug 'mattn/vim-sonictemplate'
 " Plug 'wellle/context.vim'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'vim-test/vim-test'
 
 " defx
 if has('nvim')
