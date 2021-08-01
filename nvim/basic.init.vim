@@ -2,7 +2,7 @@
 " fugitive {{{
 " nnoremap <Leader>gl :Glog --oneline<CR>
 nnoremap <Leader>gl :Git log<CR>
-nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gs :Git<CR>
 " nnoremap <Leader>gd :Gdiffsplit<CR>
 nnoremap <Leader>gd :Git diff<CR>
 nnoremap <Leader>gb :Gblame<CR>
