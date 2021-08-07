@@ -26,7 +26,6 @@ call plug#begin(expand('~/.local/share/nvim/plugged'))
 " basic.init.vim
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-fugitive'
-Plug 'osyo-manga/vim-anzu'
 Plug 'vim-jp/vimdoc-ja'
 Plug 'mattn/emmet-vim', { 'for' : ['html', 'vue', 'html.twig'] }
 Plug 'luochen1990/rainbow'

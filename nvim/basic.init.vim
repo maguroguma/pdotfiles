@@ -15,19 +15,6 @@ command! Gdiff :Git diff
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
-" vim-anzu（検索）
-" mapping
-nmap n <Plug>(anzu-n-with-echo)
-nmap N <Plug>(anzu-N-with-echo)
-nmap * <Plug>(anzu-star-with-echo)
-nmap # <Plug>(anzu-sharp-with-echo)
-" clear status
-" nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
-" statusline
-set statusline=%{anzu#search_status()}
-nmap n <Plug>(anzu-mode-n)
-nmap N <Plug>(anzu-mode-N)
-
 " emmet-vim
 " emmet-vimの展開キー
 let g:user_emmet_leader_key='<C-t>'
