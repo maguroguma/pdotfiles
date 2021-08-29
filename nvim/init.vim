@@ -41,9 +41,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'Shougo/neomru.vim'
 Plug 'Shougo/denite.nvim'
 
-" neosnippet.init.vim
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
 
 " Markdown
 Plug 'mzlogin/vim-markdown-toc', { 'for': ['md', 'markdown'] }
@@ -191,7 +188,6 @@ let mapleader="\<Space>"
 runtime ./defx.init.vim
 runtime ./statusline.init.vim
 runtime ./denite.init.vim
-runtime ./neosnippet.init.vim
 runtime ./markdown.init.vim
 runtime ./golang.init.vim
 runtime ./theme.init.vim
@@ -210,6 +206,7 @@ runtime ./command.init.vim
 runtime ./grepper.init.vim
 runtime ./winresizer.init.vim
 runtime ./wildernvim.init.vim
+runtime ./ultisnip.init.vim
 " 自作コマンドなど
 runtime ./original/general.init.vim
 runtime ./original/competitive.init.vim

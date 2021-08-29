@@ -1,0 +1,5 @@
+snippet enumTSRecommended "const Obj = {...} as const"
+const ${1:TypeName} = {
+} as const
+type $1 = typeof $1[keyof typeof $1]
+endsnippet
