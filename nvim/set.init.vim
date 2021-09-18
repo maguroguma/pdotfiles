@@ -86,6 +86,10 @@ set incsearch
 " 検索語をハイライト表示
 set hlsearch
 
+" 自動改行を防ぐ
+" https://loumo.jp/archives/10503
+autocmd FileType text :set formatoptions=q
+
 " クリップボードの共有
 "set clipboard=unnamed
 
