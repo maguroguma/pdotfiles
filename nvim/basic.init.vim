@@ -5,7 +5,7 @@ nnoremap <Leader>gl :Git log<CR>
 nnoremap <Leader>gs :Git<CR>
 " nnoremap <Leader>gd :Gdiffsplit<CR>
 nnoremap <Leader>gd :Git diff<CR>
-nnoremap <Leader>gb :Gblame<CR>
+nnoremap <Leader>gb :Git blame<CR>
 " nnoremap <Leader>ga :Gwrite<CR>
 " nnoremap <Leader>gc :Gcommit<CR>
 command! Gdiff :Git diff

@@ -16,6 +16,7 @@ loadlib $ZSH_SUB_FILES_DIR/zshalias
 loadlib $ZSH_SUB_FILES_DIR/zshbasic
 loadlib $ZSH_SUB_FILES_DIR/zshzplug
 loadlib $ZSH_SUB_FILES_DIR/zshfzf
+loadlib $ZSH_SUB_FILES_DIR/zshfzfgit
 loadlib $ZSH_SUB_FILES_DIR/zshpeco
 
 # for direnv
