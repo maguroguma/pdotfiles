@@ -37,11 +37,6 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-" denite.init.vim
-Plug 'Shougo/neomru.vim'
-Plug 'Shougo/denite.nvim'
-
-
 " Markdown
 Plug 'mzlogin/vim-markdown-toc', { 'for': ['md', 'markdown'] }
 Plug 'iamcco/mathjax-support-for-mkdp', { 'for': ['md', 'markdown'] }
@@ -90,6 +85,19 @@ Plug 'gelguy/wilder.nvim'
 Plug 'posva/vim-vue'
 Plug 'tomtom/tcomment_vim'
 
+" fern
+Plug 'lambdalisue/fern.vim'
+Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'lambdalisue/fern-git-status.vim'
+Plug 'lambdalisue/fern-hijack.vim'
+Plug 'LumaKernel/fern-mapping-fzf.vim'
+
+" textobj
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-jabraces'
+Plug 'osyo-manga/vim-textobj-multiblock'
+Plug 'osyo-manga/vim-textobj-multitextobj'
+
 " no setting file
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
@@ -122,19 +130,6 @@ Plug 'mattn/vim-sonictemplate'
 " Plug 'wellle/context.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'vim-test/vim-test'
-
-" defx
-if has('nvim')
-  Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'kristijanhusak/defx-icons'
-  Plug 'kristijanhusak/defx-git'
-else
-  Plug 'Shougo/defx.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-  Plug 'kristijanhusak/defx-icons'
-  Plug 'kristijanhusak/defx-git'
-endif
 
 " oj.vim
 " Plug '~/go/src/github.com/my0k/vim-oj-helper'
@@ -185,7 +180,6 @@ filetype plugin indent on
 let mapleader="\<Space>"
 
 " プラグイン設定ファイル読み込み
-runtime ./defx.init.vim
 runtime ./statusline.init.vim
 runtime ./denite.init.vim
 runtime ./markdown.init.vim
@@ -207,6 +201,8 @@ runtime ./grepper.init.vim
 runtime ./winresizer.init.vim
 runtime ./wildernvim.init.vim
 runtime ./ultisnip.init.vim
+runtime ./textobj.init.vim
+runtime ./fern.init.vim
 " 自作コマンドなど
 runtime ./original/general.init.vim
 runtime ./original/competitive.init.vim
@@ -223,7 +219,7 @@ runtime ./basic.init.vim
 " @os-dependency
 " let g:python3_host_prog = expand('~/.pyenv/versions/neovim3/bin/python')
 " let g:python3_host_prog = expand('/usr/local/bin/python3')
-let g:python3_host_prog = expand('/usr/bin/python3')
+" let g:python3_host_prog = expand('/usr/bin/python3')
 
 " function
 "" xaml

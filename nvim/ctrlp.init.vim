@@ -50,12 +50,6 @@ command! -bang -nargs=* Rg
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 
-if executable('rg')
-  call denite#custom#var('file_rec', 'command',
-        \ ['rg', '--files', '--glob', '!.git'])
-  call denite#custom#var('grep', 'command', ['rg'])
-endif
-
 nnoremap <silent> <C-p> :Files<CR>
 " nnoremap <silent> <C-p><C-p> :Files<CR>
 " nnoremap <silent> <C-p>p :Files<CR>
