@@ -1,7 +1,9 @@
+###
+# basic
+###
 alias vi='nvim'
 alias vim='nvim'
 alias vimdiff='nvim -d'
-
 alias rm='rm -i'
 alias ..='cd ..'
 alias mv='mv -i'
@@ -9,22 +11,53 @@ alias cp='cp -i'
 alias c='clear'
 alias relogin='exec $SHELL -l'
 
+###
 # Git
+###
 alias gs='git status'
 alias gd='git diff'
 alias gds='git diff --staged'
 alias ga='git add'
+alias gm='git merge'
+alias gf='git fetch'
+alias gfp='git fetch --prune'
+alias gt='git tag'
+alias gta='git tag -a'
+alias gtd='git tag -d'
+alias gb='git branch'
+alias gba='git branch --all'
+alias gbd='git branch --delete'
+alias gbD='git branch -D'
 
+###
+# ripgrep
+###
+
+alias rgf='rg --files-with-matches'
+
+###
+# find
+###
+
+alias fdhere='find . -name'
+
+###
 # tmux
+###
 alias ta='tmux a'
 alias tks='tmux kill-server'
+alias tls='tmux ls'
 # tns <session-name>
 alias tns='tmux new -s'
 
+###
 # 競技プログラミング用(Go)
+###
 alias gr='go run'
 
+###
 # ubuntu
+###
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
 alias tmux-copy='tmux save-buffer - | pbcopy'
