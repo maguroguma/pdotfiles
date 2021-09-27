@@ -91,6 +91,18 @@ Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'lambdalisue/fern-git-status.vim'
 Plug 'lambdalisue/fern-hijack.vim'
 Plug 'LumaKernel/fern-mapping-fzf.vim'
+" defx
+if has('nvim')
+  Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+  " Plug 'kristijanhusak/defx-icons'
+  Plug 'kristijanhusak/defx-git'
+else
+  Plug 'Shougo/defx.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+  " Plug 'kristijanhusak/defx-icons'
+  Plug 'kristijanhusak/defx-git'
+endif
 
 " textobj
 Plug 'kana/vim-textobj-user'
@@ -203,6 +215,7 @@ runtime ./wildernvim.init.vim
 runtime ./ultisnip.init.vim
 runtime ./textobj.init.vim
 runtime ./fern.init.vim
+runtime ./defx.init.vim
 " 自作コマンドなど
 runtime ./original/general.init.vim
 runtime ./original/competitive.init.vim

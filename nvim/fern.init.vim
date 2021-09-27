@@ -1,4 +1,4 @@
-nnoremap <silent> <C-f> :<C-u>Fern . -reveal=%<CR>
+" nnoremap <silent> <C-f> :<C-u>Fern . -reveal=%<CR>
 
 function! s:init_fern() abort
   nmap <buffer> q :<C-u>quit<CR>
