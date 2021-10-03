@@ -110,6 +110,9 @@ Plug 'kana/vim-textobj-jabraces'
 Plug 'osyo-manga/vim-textobj-multiblock'
 Plug 'osyo-manga/vim-textobj-multitextobj'
 
+" gina.vim
+Plug 'lambdalisue/gina.vim'
+
 " no setting file
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
