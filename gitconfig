@@ -44,3 +44,6 @@
 [ghq]
   # @os-dependency
 	root = /home/masahiro-yokoyama/go/src
+
+[pull]
+  ff = only
