@@ -135,3 +135,6 @@ nnoremap <ESC><ESC> :nohlsearch<CR>
 " xによる削除はデフォルトレジスタを使わない
 noremap x "_x
 
+" 戻る・進むジャンプ後にzz
+nnoremap <C-o> <C-o>zz
+nnoremap <C-i> <C-i>zz
