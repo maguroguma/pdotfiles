@@ -31,6 +31,7 @@ alias gbd='git branch --delete'
 alias gbD='git branch -D'
 alias gcho='git checkout'
 alias gpoH='git push origin HEAD'
+alias gg='git grep'
 
 ###
 # ripgrep
