@@ -12,6 +12,7 @@ cnoremap <c-p> <up>
 
 " rgが好きなので
 nnoremap <leader>gr :Grepper -tool rg<cr>
+nnoremap <leader>gw :Grepper -tool rg -cword -noprompt<cr>
 
 " let g:grepper = {}
 " let g:grepper.tools = ['git', 'ag', 'grep']
