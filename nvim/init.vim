@@ -113,6 +113,15 @@ Plug 'osyo-manga/vim-textobj-multitextobj'
 " gina.vim
 Plug 'lambdalisue/gina.vim'
 
+" devdocs
+Plug 'rhysd/devdocs.vim'
+
+" vim-bookmarks
+Plug 'MattesGroeger/vim-bookmarks'
+
+" nvim-treesitter
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+
 " no setting file
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
@@ -219,6 +228,8 @@ runtime ./ultisnip.init.vim
 runtime ./textobj.init.vim
 runtime ./fern.init.vim
 runtime ./defx.init.vim
+runtime ./bookmarks.init.vim
+runtime ./treesitter.init.vim
 " 自作コマンドなど
 runtime ./original/general.init.vim
 runtime ./original/competitive.init.vim

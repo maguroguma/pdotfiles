@@ -33,3 +33,5 @@ tags
 ### vim undo
 $XDG_CACHE_HOME/*
 
+### vim bookmarks
+.vim-bookmarks

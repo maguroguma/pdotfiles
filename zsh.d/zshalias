@@ -32,6 +32,9 @@ alias gbD='git branch -D'
 alias gcho='git checkout'
 alias gpoH='git push origin HEAD'
 alias gg='git grep'
+alias gwl='git worktree list'
+alias gwa='git worktree add'
+alias gwp='git worktree prune'
 
 ###
 # ripgrep
