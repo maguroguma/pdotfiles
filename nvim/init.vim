@@ -234,6 +234,7 @@ runtime ./treesitter.init.vim
 runtime ./original/general.init.vim
 runtime ./original/competitive.init.vim
 runtime ./original/todo.init.vim
+runtime ./original/practical.init.vim
 " 手動donwloadしたもの
 runtime ./downloads/catn.vim
 
