@@ -35,6 +35,8 @@ alias gg='git grep'
 alias gwl='git worktree list'
 alias gwa='git worktree add'
 alias gwp='git worktree prune'
+alias gcommit-only-deleted='git ls-files --deleted | xargs git commit'
+alias gcheck-ignored='git ls-files -io --exclude-standard'
 
 ###
 # ripgrep
