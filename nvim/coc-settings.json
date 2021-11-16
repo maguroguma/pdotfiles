@@ -20,5 +20,21 @@
             }
         }
     },
-    "python.jediEnabled": false
+    "python.jediEnabled": false,
+    "suggest.floatConfig": {
+        "border": true,
+        "borderhighlight": "CocHintFloat"
+    },
+    "diagnostic.floatConfig": {
+        "border": true,
+        "borderhighlight": "CocWarningFloat"
+    },
+    "signature.floatConfig": {
+        "border": true,
+        "borderhighlight": "CocInfoFloat"
+    },
+    "hover.floatConfig": {
+        "border": true,
+        "borderhighlight": "CocInfoFloat"
+    }
 }
