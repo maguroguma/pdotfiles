@@ -29,3 +29,9 @@ nnoremap <leader>gc :CtrlSF -R
 let g:ctrlsf_search_mode = 'async'
 let g:ctrlsf_position = 'right'
 " let g:ctrlsf_winsize = '30%'
+
+"""
+" vimgrep
+"""
+" vim grepすると自動的にあたらしいウィンドウで検索結果一覧を表示する
+autocmd QuickFixCmdPost *grep* cwindow
