@@ -1,7 +1,8 @@
 " vim-airline
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#branch#enabled = 1
-" let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_statusline_ontop = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline_skip_empty_sections = 1
 set laststatus=2
@@ -48,5 +49,5 @@ let g:airline_theme = 'wombat'
 " VCSの情報('b'), ファイルのエンコーディング('y'), 行数('z')はオフ
 let g:airline#extensions#default#layout = [
       \ ['a', 'b', 'c'],
-      \ ['x']
+      \ ['x', 'y', 'z']
       \ ]
