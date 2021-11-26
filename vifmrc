@@ -1,0 +1,10 @@
+" show hiddden files in both panes
+windo normal zo
+
+" set confirm -=delete,permdelete
+
+set viewcolumns=*{name}..,16{mtime},7{}.
+set timefmt=" %Y/%m/%d %H:%M:%S "
+
+set statusline="  %t  [%T]%= %A %10u:%-7g %15s %20d [%a free]"
+set sizefmt=units:iec,precision:3

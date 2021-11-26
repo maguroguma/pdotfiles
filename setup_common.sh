@@ -28,3 +28,9 @@ ln -fnsv $HOME/dotfiles/gitignore $HOME/.gitignore
 pip3 install neovim
 # LSP servers
 npm i -g bash-language-server
+
+###
+# vifm
+###
+mkdir $HOME/.vifm
+ln -fnsv $HOME/dotfiles/vifmrc $HOME/.vifm
