@@ -8,3 +8,12 @@ set timefmt=" %Y/%m/%d %H:%M:%S "
 
 set statusline="  %t  [%T]%= %A %10u:%-7g %15s %20d [%a free]"
 set sizefmt=units:iec,precision:3
+
+" open by less
+set vicmd='less -N'
+
+" quit by q
+nnoremap q :quit<cr>
+
+" make directory
+nnoremap N :mkdir<space>

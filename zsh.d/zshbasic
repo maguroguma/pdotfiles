@@ -173,3 +173,6 @@ bindkey '^@' anyframe-widget-cd-ghq-repository
 
 # コマンドを履歴から検索・実行する
 bindkey '^r' anyframe-widget-put-history
+
+# vifm
+bindkey -s '^v' 'vifm . \n'
