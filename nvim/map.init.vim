@@ -62,13 +62,13 @@ nnoremap sl <C-w>l
 nnoremap sh <C-w>h
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
-nnoremap sw <C-w>w
+" nnoremap sw <C-w>w
 " 分割した画面の移動（入れ替え）
 nnoremap sJ <C-w>J
 nnoremap sK <C-w>K
 nnoremap sL <C-w>L
 nnoremap sH <C-w>H
-nnoremap sr <C-w>r
+" nnoremap sr <C-w>r
 " 新規タブ、タブ切り替え（snとspについては本来逆にすべきだが、現在のthemeではどうしてもしっくりこないので逆にしている）
 " nnoremap st :<C-u>tabnew<CR>
 " nnoremap sn gT
@@ -83,8 +83,8 @@ nnoremap sO <C-w>=
 nnoremap sq :<C-u>confirm quit<CR>
 nnoremap sQ :<C-u>bd<CR>
 " バッファ関連（？）
-nnoremap <silent> <C-j> :bprev<CR>
-nnoremap <silent> <C-k> :bnext<CR>
+" nnoremap <silent> <C-j> :bprev<CR>
+" nnoremap <silent> <C-k> :bnext<CR>
 " バッファが編集中でもその他のファイルを開けるように
 set hidden
 

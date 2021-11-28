@@ -154,6 +154,8 @@ Plug 'mattn/vim-sonictemplate'
 " Plug 'wellle/context.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'vim-test/vim-test'
+Plug 'machakann/vim-sandwich'
+Plug 'ap/vim-css-color'
 
 " oj.vim
 " Plug '~/go/src/github.com/my0k/vim-oj-helper'

@@ -21,7 +21,7 @@ nmap ga <Plug>(EasyAlign)
 
 " emmet-vim
 " emmet-vimの展開キー
-let g:user_emmet_leader_key='<C-t>'
+let g:user_emmet_leader_key='<C-e>'
 
 " rainbow
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
@@ -40,6 +40,8 @@ let g:extra_whitespace_ignored_filetypes = ['explorer']
 
 " easymotion
 map <Leader><Leader> <Plug>(easymotion-prefix)
+map <C-j> <Plug>(easymotion-prefix)j
+map <C-k> <Plug>(easymotion-prefix)k
 
 " open-browser.vim
 " vmap <Leader>b <Plug>(openbrowser-smart-search)
@@ -88,3 +90,10 @@ augroup HilightsForce
   autocmd WinEnter,BufRead,BufNew,Syntax * highlight Todo guibg=Red guifg=White
 augroup END
 
+" 折りたたみを自動で保存し、自動で読み込む
+" https://vim-jp.org/vim-users-jp/2009/10/08/Hack-84.html
+" Save fold settings.
+" autocmd BufWritePost * if expand('%') != '' && &buftype !~ 'nofile' | mkview | endif
+" autocmd BufRead * if expand('%') != '' && &buftype !~ 'nofile' | silent loadview | endif
+" " Don't save options.
+" set viewoptions-=options
