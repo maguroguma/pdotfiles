@@ -41,7 +41,7 @@ set showcmd
 
 " 見た目系
 " 行番号を表示
-set number
+" set number
 " 行番号を相対表示
 " set relativenumber
 " 現在の行を強調表示
