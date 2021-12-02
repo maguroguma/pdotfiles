@@ -40,6 +40,8 @@ set autoread
 set showcmd
 
 " 見た目系
+" 色は以下を参考
+" https://h2plus.biz/hiromitsu/entry/674
 " 行番号を表示
 " set number
 " 行番号を相対表示
@@ -62,6 +64,9 @@ set visualbell
 set showmatch
 " ステータスラインを常に表示
 set laststatus=2
+" ステータスラインの色
+highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
+highlight StatusLineNC ctermbg=193
 " コマンドラインの補完
 set wildmode=list:longest
 
