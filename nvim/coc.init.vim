@@ -91,7 +91,8 @@ nmap <Leader>qf  <Plug>(coc-fix-current)
 
 " Prettier
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
-autocmd BufWritePre *.js,*.ts,*.vue Prettier
+" ↓だとたまにファイルが壊れるのでやめる
+" autocmd BufWritePre *.js,*.ts,*.vue Prettier
 
 " " Create mappings for function text object, requires document symbols feature of languageserver.
 " xmap if <Plug>(coc-funcobj-i)

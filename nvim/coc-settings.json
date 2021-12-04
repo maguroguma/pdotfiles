@@ -1,40 +1,54 @@
 {
-    "languageserver": {
-        "golang": {
-            "command": "gopls",
-            "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
-            "filetypes": ["go"]
-        },
-        "bash": {
-            "command": "bash-language-server",
-            "args": ["start"],
-            "filetypes": ["sh"],
-            "ignoredRootPaths": ["~"]
-        },
-        "intelephense": {
-            "command": "intelephense",
-            "args": ["--stdio"],
-            "filetypes": ["php"],
-            "initializationOptions": {
-                "storagePath": "/tmp/intelephense"
-            }
-        }
+  "languageserver": {
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"]
     },
-    "python.jediEnabled": false,
-    "suggest.floatConfig": {
-        "border": true,
-        "borderhighlight": "CocHintFloat"
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"],
+      "ignoredRootPaths": ["~"]
     },
-    "diagnostic.floatConfig": {
-        "border": true,
-        "borderhighlight": "CocWarningFloat"
+    "intelephense": {
+      "command": "intelephense",
+      "args": ["--stdio"],
+      "filetypes": ["php"],
+      "initializationOptions": {
+        "storagePath": "/tmp/intelephense"
+      }
     },
-    "signature.floatConfig": {
-        "border": true,
-        "borderhighlight": "CocInfoFloat"
-    },
-    "hover.floatConfig": {
-        "border": true,
-        "borderhighlight": "CocInfoFloat"
+    "elmLS": {
+      "command": "elm-language-server",
+      "filetypes": ["elm"],
+      "rootPatterns": ["elm.json"]
     }
+  },
+  "python.jediEnabled": false,
+  "suggest.floatConfig": {
+    "border": true,
+    "borderhighlight": "CocHintFloat"
+  },
+  "diagnostic.floatConfig": {
+    "border": true,
+    "borderhighlight": "CocWarningFloat"
+  },
+  "signature.floatConfig": {
+    "border": true,
+    "borderhighlight": "CocInfoFloat"
+  },
+  "hover.floatConfig": {
+    "border": true,
+    "borderhighlight": "CocInfoFloat"
+  },
+  "coc.preferences.formatOnSaveFiletypes": [
+    "css",
+    "markdown",
+    "javascript",
+    "typescript",
+    "vue",
+    "html",
+    "json"
+  ]
 }
