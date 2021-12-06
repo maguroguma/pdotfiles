@@ -122,6 +122,9 @@ Plug 'MattesGroeger/vim-bookmarks'
 " nvim-treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
+" vim germanium(require denops and germanium)
+Plug 'skanehira/denops-germanium.vim'
+
 " no setting file
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
