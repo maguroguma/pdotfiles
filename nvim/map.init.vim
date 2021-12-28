@@ -60,8 +60,8 @@ nnoremap sj <C-w>j
 nnoremap sk <C-w>k
 nnoremap sl <C-w>l
 nnoremap sh <C-w>h
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
+" nnoremap <C-h> <C-w>h
+" nnoremap <C-l> <C-w>l
 " nnoremap sw <C-w>w
 " 分割した画面の移動（入れ替え）
 nnoremap sJ <C-w>J
@@ -87,6 +87,10 @@ nnoremap sQ :<C-u>bd<CR>
 " nnoremap <silent> <C-k> :bnext<CR>
 " バッファが編集中でもその他のファイルを開けるように
 set hidden
+
+" ターミナルモード
+" tnoremap <A-j> <C-\><C-n>
+tnoremap <ESC> <C-\><C-n>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader周り

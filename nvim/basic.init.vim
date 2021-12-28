@@ -42,6 +42,8 @@ let g:extra_whitespace_ignored_filetypes = ['explorer']
 map <Leader><Leader> <Plug>(easymotion-prefix)
 map <C-j> <Plug>(easymotion-prefix)j
 map <C-k> <Plug>(easymotion-prefix)k
+map <C-h> <Plug>(easymotion-prefix)b
+map <C-l> <Plug>(easymotion-prefix)w
 " https://github.com/KosukeMizuno/dotfiles/blob/2df31b153a5bcc4ed1729eae3f392a3449299f7d/nvim/rc/plugins.toml#L41-L77
 " let g:EasyMotion_do_mapping = 0  " Disable default mappings
 let g:EasyMotion_smartcase = 1
@@ -126,3 +128,44 @@ augroup END
 " autocmd BufRead * if expand('%') != '' && &buftype !~ 'nofile' | silent loadview | endif
 " " Don't save options.
 " set viewoptions-=options
+
+" nerdcommenter
+filetype on
+" Create default mappings
+let g:NERDCreateDefaultMappings = 1
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+" Enable NERDCommenterToggle to check all selected lines is commented or not
+let g:NERDToggleCheckAllLines = 1
+" for nerdcommenter on .vue
+let g:ft = ''
+function! NERDCommenter_before()
+  if &ft == 'vue'
+    let g:ft = 'vue'
+    let stack = synstack(line('.'), col('.'))
+    if len(stack) > 0
+      let syn = synIDattr((stack)[0], 'name')
+      if len(syn) > 0
+        exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+      endif
+    endif
+  endif
+endfunction
+function! NERDCommenter_after()
+  if g:ft == 'vue'
+    setf vue
+    let g:ft = ''
+  endif
+endfunction
