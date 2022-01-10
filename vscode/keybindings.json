@@ -281,7 +281,7 @@
 
     // パラメータヒント（docstringのようなもの）を閉じる
     {
-        "key": "ctrl+,",
+        "key": "ctrl+x",
         "command": "closeParameterHints",
         "when": "editorTextFocus && parameterHintsVisible"
     },

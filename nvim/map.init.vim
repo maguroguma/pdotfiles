@@ -164,3 +164,9 @@ cnoremap <c-p> <up>
 
 " マクロ周り, qはprefixとして使えるようにする
 nnoremap Q q
+
+" wrapのトグル
+nnoremap <Leader>l :<C-u>set wrap!<CR>
+
+" 開いているVim scriptファイルの読み込み
+" nnoremap <Leader> :<C-u>source %<CR>

@@ -42,8 +42,8 @@ let g:extra_whitespace_ignored_filetypes = ['explorer']
 map <Leader><Leader> <Plug>(easymotion-prefix)
 map <C-j> <Plug>(easymotion-prefix)j
 map <C-k> <Plug>(easymotion-prefix)k
-map <C-h> <Plug>(easymotion-prefix)b
-map <C-l> <Plug>(easymotion-prefix)w
+" map <C-h> <Plug>(easymotion-prefix)b
+" map <C-l> <Plug>(easymotion-prefix)w
 " https://github.com/KosukeMizuno/dotfiles/blob/2df31b153a5bcc4ed1729eae3f392a3449299f7d/nvim/rc/plugins.toml#L41-L77
 " let g:EasyMotion_do_mapping = 0  " Disable default mappings
 let g:EasyMotion_smartcase = 1

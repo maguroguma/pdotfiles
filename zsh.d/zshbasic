@@ -176,3 +176,6 @@ bindkey '^r' anyframe-widget-put-history
 
 # vifm
 bindkey -s '^f' 'vifm . \n'
+
+# nvim
+bindkey -s '^v' 'nvim\n'

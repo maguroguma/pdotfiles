@@ -16,8 +16,8 @@
 	name = myokoyama
 	email = part7steelballrun.to.8@gmail.com
 
-#[commit]
-#template = ~/.stCommitMsg
+[commit]
+  template = ~/.gitmessage
 
 [alias]
   # --- original ---
@@ -45,8 +45,7 @@
   clean-all = clean -df
 
 [ghq]
-  # @os-dependency
-	root = /home/masahiro-yokoyama/go/src
+	root = ~/go/src
 
 [pull]
   ff = only

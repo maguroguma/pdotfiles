@@ -30,23 +30,18 @@ Plug 'vim-jp/vimdoc-ja'
 Plug 'mattn/emmet-vim', { 'for' : ['html', 'vue', 'html.twig'] }
 Plug 'luochen1990/rainbow'
 Plug 'easymotion/vim-easymotion'
-Plug 'chrisbra/Colorizer'
 Plug 'ntpeters/vim-better-whitespace'
 
 " statusline.init.vim
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" ultisnips
+Plug 'sirver/ultisnips'
+
 " Markdown
 Plug 'mzlogin/vim-markdown-toc', { 'for': ['md', 'markdown'] }
 Plug 'iamcco/mathjax-support-for-mkdp', { 'for': ['md', 'markdown'] }
-" Plug 'iamcco/markdown-preview.vim', { 'for': ['md', 'markdown'] }
-" If you have nodejs and yarn
-" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
-" If you don't have nodejs and yarn
-" use pre build, add 'vim-plug' to the filetype list so vim-plug can update this plugin
-" see: https://github.com/iamcco/markdown-preview.nvim/issues/50
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " golang.init.vim
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
@@ -63,6 +58,7 @@ Plug 'jeetsukumaran/vim-buffergator'
 
 " coc.init.vim
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'}
 
 " fuzzy finder
 Plug 'junegunn/fzf', { 'do': './install --bin' }
@@ -86,11 +82,18 @@ Plug 'posva/vim-vue'
 Plug 'tomtom/tcomment_vim'
 
 " fern
-Plug 'lambdalisue/fern.vim'
-Plug 'antoinemadec/FixCursorHold.nvim'
-Plug 'lambdalisue/fern-git-status.vim'
-Plug 'lambdalisue/fern-hijack.vim'
-Plug 'LumaKernel/fern-mapping-fzf.vim'
+" Plug 'lambdalisue/fern.vim'
+" Plug 'antoinemadec/FixCursorHold.nvim'
+" Plug 'lambdalisue/fern-git-status.vim'
+" Plug 'lambdalisue/fern-hijack.vim'
+" Plug 'LumaKernel/fern-mapping-fzf.vim'
+
+" lir.nvim
+Plug 'tamago324/lir.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'tamago324/lir-git-status.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+
 " defx
 if has('nvim')
   Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -103,6 +106,10 @@ else
   " Plug 'kristijanhusak/defx-icons'
   Plug 'kristijanhusak/defx-git'
 endif
+
+" denops
+Plug 'vim-denops/denops.vim'
+Plug 'kat0h/dps-bufpreview.vim'
 
 " textobj
 Plug 'kana/vim-textobj-user'
@@ -117,13 +124,21 @@ Plug 'lambdalisue/gina.vim'
 Plug 'rhysd/devdocs.vim'
 
 " vim-bookmarks
-Plug 'MattesGroeger/vim-bookmarks'
+" Plug 'MattesGroeger/vim-bookmarks'
 
 " nvim-treesitter
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
 " vim germanium(require denops and germanium)
 Plug 'skanehira/denops-germanium.vim'
+
+" nerdcommenter
+" Plug 'preservim/nerdcommenter'
+
+" floaterm
+Plug 'voldikss/vim-floaterm'
+
+Plug 'rbtnn/vim-emphasiscursor'
 
 " no setting file
 Plug 'Raimondi/delimitMate'
@@ -154,11 +169,16 @@ Plug 'mbbill/undotree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-jp/vital.vim'
 Plug 'mattn/vim-sonictemplate'
-" Plug 'wellle/context.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'vim-test/vim-test'
+Plug 'heavenshell/vim-jsdoc', {
+  \ 'for': ['javascript', 'javascript.jsx','typescript'],
+  \ 'do': 'make install'
+\}
+Plug 'mattn/emmet-vim'
 Plug 'machakann/vim-sandwich'
 Plug 'ap/vim-css-color'
+
 
 " oj.vim
 " Plug '~/go/src/github.com/my0k/vim-oj-helper'
@@ -201,6 +221,14 @@ Plug 'maguroguma/vim-oj-helper'
 " Plug 'mcchrish/nnn.vim'
 " Plug 'romainl/vim-cool'
 " Plug 'liuchengxu/vista.vim'
+" Plug 'osyo-manga/vim-anzu'
+" Plug 'Shougo/neomru.vim'
+" Plug 'Shougo/denite.nvim'
+" Plug 'Shougo/neosnippet.vim'
+" Plug 'Shougo/neosnippet-snippets'
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+" Plug 'tpope/vim-commentary'
+" Plug 'wellle/context.vim'
 
 call plug#end()
 filetype plugin indent on
@@ -210,7 +238,6 @@ let mapleader="\<Space>"
 
 " プラグイン設定ファイル読み込み
 runtime ./statusline.init.vim
-runtime ./denite.init.vim
 runtime ./markdown.init.vim
 runtime ./golang.init.vim
 runtime ./theme.init.vim
@@ -233,15 +260,18 @@ runtime ./ultisnip.init.vim
 runtime ./textobj.init.vim
 runtime ./fern.init.vim
 runtime ./defx.init.vim
-runtime ./bookmarks.init.vim
-runtime ./treesitter.init.vim
+" runtime ./bookmarks.init.vim
+" runtime ./treesitter.init.vim
+runtime ./lir.init.vim
 " 自作コマンドなど
 runtime ./original/general.init.vim
 runtime ./original/competitive.init.vim
 runtime ./original/todo.init.vim
 runtime ./original/practical.init.vim
+runtime ./original/terminal.init.vim
 " 手動donwloadしたもの
 runtime ./downloads/catn.vim
+runtime ./downloads/qargs.vim
 
 " 汎用設定ファイル読み込み（プラグインに上書きされないように最後に読む）
 runtime ./set.init.vim
@@ -252,7 +282,7 @@ runtime ./basic.init.vim
 " @os-dependency
 " let g:python3_host_prog = expand('~/.pyenv/versions/neovim3/bin/python')
 " let g:python3_host_prog = expand('/usr/local/bin/python3')
-" let g:python3_host_prog = expand('/usr/bin/python3')
+let g:python3_host_prog = expand('/usr/bin/python3')
 
 " function
 "" xaml

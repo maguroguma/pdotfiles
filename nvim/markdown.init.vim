@@ -1,12 +1,6 @@
 " markdown-preview.vim
-" for normal mode
-nmap <silent> <Leader>mp <Plug>MarkdownPreview
-" for insert mode
-" imap <silent> <C-a>mp <Plug>MarkdownPreview
-" for normal mode
-nmap <silent> <Leader>smp <Plug>StopMarkdownPreview
-" for insert mode
-" imap <silent> <F9> <Plug>StopMarkdownPreview
+" nmap <silent> <Leader>mp <Plug>MarkdownPreview
+" nmap <silent> <Leader>smp <Plug>StopMarkdownPreview
 
 " mdpdfコマンドによるmarkdownからのPDFファイル生成コマンド
 function! Mdpdf() abort

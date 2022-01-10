@@ -101,6 +101,27 @@ if executable('jq')
   command! -bar -bang -range=% -nargs=? Jq  <line1>,<line2>call s:jq(<bang>0, <f-args>)
 endif
 
+" 行指定ビジュアル範囲の行頭に '- ' を付け加える
+command! -range -nargs=0 AddHyphen <line1>,<line2>execute I- 
+
+" バッファフォーカス時にカーソルを強調表示する
+" function! EmphasisCursorWrapper() abort
+"   EmphasisCursor
+" endfunction
+" autocmd BufEnter * call EmphasisCursorWrapper()
+
+" https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
+function! s:select_type() abort
+  let line = substitute(getline('.'), '^#\s*', '', 'g')
+  let title = printf('%s: ', split(line, ' ')[0])
+
+  silent! normal! "_dip
+  silent! put! =title
+  silent! startinsert!
+endfunction
+
+nnoremap <buffer> <CR><CR> <Cmd>call <SID>select_type()<CR>
+
 " ********
 
 " 範囲指定関数のサンプル

@@ -1,0 +1,6 @@
+function navi-func() {
+    navi
+    zle reset-prompt
+}
+zle -N navi-func
+bindkey '^v' navi-func

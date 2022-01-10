@@ -1,17 +1,11 @@
-# bindkey '^]' peco-src
-# function peco-src() {
-#     local src=$(ghq list --full-path | peco --query "$LBUFFER")
-#     if [ -n "$src" ]; then
-#         BUFFER="cd $src"
-#         zle accept-line
-#     fi
-#     zle -R -c
-# }
-# zle -N peco-src
-
 function ghq-fzf() {
-  # local src=$(ghq list | fzf --preview "ls -laTp $(ghq root)/{} | tail -n+4 | awk '{print \$9\"/\"\$6\"/\"\$7 \" \" \$10}'")
-  local src=$(ghq list | fzf --preview "bat --color=always --style=header,grid --line-range :80 $(ghq root)/{}/README.*")
+  # bat > catの優先度で使う
+  # ref: https://wonderwall.hatenablog.com/entry/2017/10/06/063000
+  local batcom="bat --color=always --style=header,grid --line-range :80 $(ghq root)/{}/README.*"
+  local defaultcom="cat $(ghq root)/{}/README.*"
+  local src=$(
+    ghq list | fzf --preview "(${batcom} || ${defaultcom}) 2> /dev/null | head -500"
+  )
   if [ -n "$src" ]; then
     BUFFER="cd $(ghq root)/$src"
     zle accept-line

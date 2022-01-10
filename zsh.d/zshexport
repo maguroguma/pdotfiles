@@ -18,6 +18,7 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 # goenv（上2行は旧goの設定）
 # @os-dependency
 export GOPATH=$HOME/go
+export GOBIN=$HOME/go/bin
 export PATH=$PATH:/usr/local/opt/go/libexec/bin:$GOPATH/bin
 export PATH=$PATH:/usr/local/go/bin
 # export PATH="$HOME/.goenv/bin:$PATH"
@@ -47,3 +48,13 @@ export PATH=$PATH:$HOME/.local/bin
 
 # @os-dependency
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH:$HOME/dotfiles/scripts"
+
+# deno
+export DENO_INSTALL=$HOME/.deno
+export PATH="$DENO_INSTALL/bin:$PATH"
+
+# fzwiki
+export FZWIKI_LANG="ja"
+
+# 独自ファイルなどのPATH
+export PATH=$PATH:$HOME/mybin
