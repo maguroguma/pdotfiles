@@ -48,6 +48,8 @@ cd $GOPATH/src/github.com/germanium/cmd/germanium && go install
 # fzwiki
 git clone https://github.com/sheepla/fzwiki.git $GOPATH/src/github.com/fzwiki
 cd $GOPATH/src/github.com/sheepla/fzwiki && go install
+# lazygit
+go get github.com/jesseduffield/lazygit
 
 #########
 # Rust

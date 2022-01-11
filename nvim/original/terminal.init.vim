@@ -1,3 +1,6 @@
+" ノーマルモードへの移行
+tnoremap <A-j> <C-\><C-n>
+
 " 参考: https://github.com/uga-rosa/dotfiles/blob/main/.config/nvim/plugin/term.vim
 
 let s:termname = "nvim_terminal"
@@ -20,13 +23,13 @@ function! TermToggle() abort
     endif
 endfunction
 
-nnoremap <C-a> <cmd>call TermToggle()<cr>
-tnoremap <C-a> <cmd>call TermToggle()<cr>
+nnoremap <C-q> <cmd>call TermToggle()<cr>
+tnoremap <C-q> <cmd>call TermToggle()<cr>
 
 " 参考: https://github.com/yutkat/dotfiles/blob/28e8df61c39727fa85d3f289343eb60feffd29d8/.config/nvim/rc/pluginconfig/vim-floaterm.vim
 
-let g:floaterm_height = 0.8
-let g:floaterm_width = 0.8
+let g:floaterm_height = 0.95
+let g:floaterm_width = 0.95
 
 """ original
 " nnoremap <terminal>   <Nop>

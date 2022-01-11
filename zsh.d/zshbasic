@@ -179,3 +179,7 @@ bindkey -s '^f' 'vifm . \n'
 
 # nvim
 bindkey -s '^v' 'nvim\n'
+
+# lazygit
+bindkey -s '^gg' 'lazygit\n'
+bindkey -s '^g^g' 'lazygit\n'
