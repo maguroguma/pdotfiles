@@ -15,6 +15,7 @@ alias relogin='exec $SHELL -l'
 ###
 # Git
 ###
+alias g='lazygit'
 alias ga='git add'
 alias gau='git add -u'
 alias gb='git branch'

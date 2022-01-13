@@ -15,6 +15,9 @@ command! GdiffCached :Gina diff --cached
 command! Gblame :Git blame
 " }}}
 
+" lazygit
+nnoremap <silent> <C-g> :LazyGit<CR>
+
 "" vim-easy-align
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)

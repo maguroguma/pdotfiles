@@ -140,6 +140,13 @@ Plug 'voldikss/vim-floaterm'
 
 Plug 'rbtnn/vim-emphasiscursor'
 
+" telescope.nvim
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+" lazygit.nvim
+Plug 'kdheepak/lazygit.nvim'
+
 " no setting file
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'

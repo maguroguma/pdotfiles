@@ -1,5 +1,5 @@
 " ノーマルモードへの移行
-tnoremap <A-j> <C-\><C-n>
+tnoremap <ESC> <C-\><C-n>
 
 " 参考: https://github.com/uga-rosa/dotfiles/blob/main/.config/nvim/plugin/term.vim
 

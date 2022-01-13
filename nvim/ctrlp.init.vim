@@ -103,7 +103,14 @@ omap <leader><tab> <plug>(fzf-maps-o)
 " imap <C-A>l <plug>(fzf-complete-line)
 
 " popup window
-" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " basic layout
-let g:fzf_layout = { 'down': '50%' }
+" let g:fzf_layout = { 'down': '50%' }
+
+" telescope.nvim
+" Find files using Telescope command-line sugar.
+" nnoremap <C-p> <cmd>Telescope find_files<cr>
+" nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+" nnoremap ; <cmd>Telescope buffers<cr>
+" nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
