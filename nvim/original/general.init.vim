@@ -122,6 +122,18 @@ endfunction
 
 nnoremap <buffer> <CR><CR> <Cmd>call <SID>select_type()<CR>
 
+" markdownのリンク生成用コマンド
+function! s:GenerateMdLink(text, url)
+  let l:presentation_text = '[' . a:text . ']'
+  let l:url_text = '(' . a:url . ')'
+  let l:output =  l:presentation_text . l:url_text
+  " redir @" | echo l:output | redir END
+  let @a = l:output
+  " normal p
+  normal "ap
+endfunction
+:command! -narg=* -range MdLink :call s:GenerateMdLink(<f-args>)
+
 " ********
 
 " 範囲指定関数のサンプル

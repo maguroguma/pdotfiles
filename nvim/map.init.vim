@@ -167,6 +167,8 @@ nnoremap Q q
 
 " wrapのトグル
 nnoremap <Leader>l :<C-u>set wrap!<CR>
+" numberのトグル
+nnoremap <Leader>n :<C-u>set number!<CR>
 
 " 開いているVim scriptファイルの読み込み
 " nnoremap <Leader> :<C-u>source %<CR>

@@ -85,7 +85,7 @@ endfunction
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " 起動
-nnoremap <silent> <Leader>n :<C-u>Defx<CR>
+" nnoremap <silent> <Leader>n :<C-u>Defx<CR>
 nnoremap <silent> <C-f> :<C-u>Defx<CR>
 " nnoremap <silent> <C-g> :<C-u>Defx <C-r>=expand('%:h')<CR><CR>
 
