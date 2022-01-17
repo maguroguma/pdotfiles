@@ -147,6 +147,10 @@ Plug 'nvim-telescope/telescope.nvim'
 " lazygit.nvim
 Plug 'kdheepak/lazygit.nvim'
 
+" motion
+Plug 'phaazon/hop.nvim'
+Plug 'rlane/pounce.nvim'
+
 " no setting file
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
@@ -270,6 +274,7 @@ runtime ./defx.init.vim
 " runtime ./bookmarks.init.vim
 " runtime ./treesitter.init.vim
 runtime ./lir.init.vim
+runtime ./motion.init.vim
 " 自作コマンドなど
 runtime ./original/general.init.vim
 runtime ./original/competitive.init.vim

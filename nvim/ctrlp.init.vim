@@ -103,9 +103,12 @@ omap <leader><tab> <plug>(fzf-maps-o)
 " imap <C-A>l <plug>(fzf-complete-line)
 
 " popup window
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.5, 'yoffset': 0.95 } }
+let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.5, 'yoffset': 0.95 } }
 " basic layout
 " let g:fzf_layout = { 'down': '50%' }
+
+" Empty value to disable preview window altogether
+let g:fzf_preview_window = []
 
 " telescope.nvim
 " Find files using Telescope command-line sugar.

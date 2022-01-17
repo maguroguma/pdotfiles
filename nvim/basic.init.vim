@@ -42,40 +42,40 @@ let g:extra_whitespace_ignored_filetypes = ['explorer']
 " augroup END
 
 " easymotion
-map <Leader><Leader> <Plug>(easymotion-prefix)
-map <C-j> <Plug>(easymotion-prefix)j
-map <C-k> <Plug>(easymotion-prefix)k
-map <C-h> <Plug>(easymotion-prefix)b
-map <C-l> <Plug>(easymotion-prefix)w
-" https://github.com/KosukeMizuno/dotfiles/blob/2df31b153a5bcc4ed1729eae3f392a3449299f7d/nvim/rc/plugins.toml#L41-L77
-" let g:EasyMotion_do_mapping = 0  " Disable default mappings
-let g:EasyMotion_smartcase = 1
-let g:EasyMotion_startofline = 0
-let g:EasyMotion_use_migemo = 1
-" s連打で戻れるように除く＆押しにくいもの除去＆group prefixは右手に集中させる
-let g:EasyMotion_keys = 'adghlweruiozxcvnmjk'
-" 三文字以上の英単語, 空行以外の行末, CamelCase, _, #
-"" CamelCaseと_#の後は2文字以上あれば候補にする
-let g:EasyMotion_re_wordheads = '\v' .
-    \       '(<\a\a\a)' . '|' .
-    \       '(.$)' . '|' .
-    \       '(\l)\zs(\u\a)' . '|' .
-    \       '(_\zs\a\a)' . '|' .
-    \       '(#\zs\a\a)'
-let g:EasyMotion_re_wordends = '\v' .
-    \       '(\a\a\zs\a>)' . '|' .
-    \       '(^.)' . '|' .
-    \       '(\a\a\a\zs\l\u\a)' . '|' .
-    \       '(\a\a\zs\a_\u\a)' . '|' .
-    \       '(\a\a\zs\a#\u\a)'
-nnoremap <Plug>(easymotion-jumptoheads) <cmd>let g:EasyMotion_re_anywhere = g:EasyMotion_re_wordheads<CR><cmd>call EasyMotion#JumpToAnywhere(0,2)<CR>
-nnoremap <Plug>(easymotion-jumptoends) <cmd>let g:EasyMotion_re_anywhere = g:EasyMotion_re_wordends<CR><cmd>call EasyMotion#JumpToAnywhere(0,2)<CR>
-" 一時的にLSPを停止＆再開
-augroup ToggleEasyMotionGroup
-  autocmd!
-  autocmd User EasyMotionPromptBegin silent! call lsp#disable()
-  autocmd User EasyMotionPromptEnd   silent! call lsp#enable()
-augroup END
+" map <Leader><Leader> <Plug>(easymotion-prefix)
+" map <C-j> <Plug>(easymotion-prefix)j
+" map <C-k> <Plug>(easymotion-prefix)k
+" map <C-h> <Plug>(easymotion-prefix)b
+" map <C-l> <Plug>(easymotion-prefix)w
+" " https://github.com/KosukeMizuno/dotfiles/blob/2df31b153a5bcc4ed1729eae3f392a3449299f7d/nvim/rc/plugins.toml#L41-L77
+" " let g:EasyMotion_do_mapping = 0  " Disable default mappings
+" let g:EasyMotion_smartcase = 1
+" let g:EasyMotion_startofline = 0
+" let g:EasyMotion_use_migemo = 1
+" " s連打で戻れるように除く＆押しにくいもの除去＆group prefixは右手に集中させる
+" let g:EasyMotion_keys = 'adghlweruiozxcvnmjk'
+" " 三文字以上の英単語, 空行以外の行末, CamelCase, _, #
+" "" CamelCaseと_#の後は2文字以上あれば候補にする
+" let g:EasyMotion_re_wordheads = '\v' .
+"     \       '(<\a\a\a)' . '|' .
+"     \       '(.$)' . '|' .
+"     \       '(\l)\zs(\u\a)' . '|' .
+"     \       '(_\zs\a\a)' . '|' .
+"     \       '(#\zs\a\a)'
+" let g:EasyMotion_re_wordends = '\v' .
+"     \       '(\a\a\zs\a>)' . '|' .
+"     \       '(^.)' . '|' .
+"     \       '(\a\a\a\zs\l\u\a)' . '|' .
+"     \       '(\a\a\zs\a_\u\a)' . '|' .
+"     \       '(\a\a\zs\a#\u\a)'
+" nnoremap <Plug>(easymotion-jumptoheads) <cmd>let g:EasyMotion_re_anywhere = g:EasyMotion_re_wordheads<CR><cmd>call EasyMotion#JumpToAnywhere(0,2)<CR>
+" nnoremap <Plug>(easymotion-jumptoends) <cmd>let g:EasyMotion_re_anywhere = g:EasyMotion_re_wordends<CR><cmd>call EasyMotion#JumpToAnywhere(0,2)<CR>
+" " 一時的にLSPを停止＆再開
+" augroup ToggleEasyMotionGroup
+"   autocmd!
+"   autocmd User EasyMotionPromptBegin silent! call lsp#disable()
+"   autocmd User EasyMotionPromptEnd   silent! call lsp#enable()
+" augroup END
 
 " open-browser.vim
 " vmap <Leader>b <Plug>(openbrowser-smart-search)
