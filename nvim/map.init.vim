@@ -123,11 +123,11 @@ nnoremap <Leader>e :e!<CR>
 
 " クリップボードレジスタを使ったヤンク・ペースト・削除
 vmap <Leader>y "+y
-vmap <Leader>d "+d
+" vmap <Leader>d "+d
 vmap <Leader>p "+p
 vmap <Leader>P "+P
 nmap <Leader>y "+y
-nmap <Leader>d "+d
+" nmap <Leader>d "+d
 nmap <Leader>p "+p
 nmap <Leader>P "+P
 " 全体をクリップボードレジスタにヤンク

@@ -172,3 +172,9 @@ function! NERDCommenter_after()
     let g:ft = ''
   endif
 endfunction
+
+" vim-asterisk
+map *  <Plug>(asterisk-z*)
+map #  <Plug>(asterisk-z#)
+map g* <Plug>(asterisk-gz*)
+map g# <Plug>(asterisk-gz#)

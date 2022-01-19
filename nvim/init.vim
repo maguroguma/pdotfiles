@@ -149,7 +149,13 @@ Plug 'kdheepak/lazygit.nvim'
 
 " motion
 Plug 'phaazon/hop.nvim'
-Plug 'rlane/pounce.nvim'
+" Plug 'rlane/pounce.nvim'
+
+" translate.vim
+Plug 'skanehira/translate.vim'
+
+" vim-asterisk
+Plug 'haya14busa/vim-asterisk'
 
 " no setting file
 Plug 'Raimondi/delimitMate'
@@ -159,7 +165,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'tpope/vim-repeat'
 Plug 'cohama/lexima.vim'
 Plug 'alvan/vim-closetag', { 'for': ['html', 'vue', 'html.twig'] }
-Plug 'terryma/vim-multiple-cursors'
+" Plug 'terryma/vim-multiple-cursors'
 Plug 'machakann/vim-highlightedyank'
 Plug 'emezeske/manpageview'
 Plug 'markonm/traces.vim'
@@ -172,7 +178,7 @@ Plug 'tyru/open-browser.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'AndrewRadev/linediff.vim'
 Plug 'thinca/vim-poslist'
-Plug 'thinca/vim-visualstar'
+" Plug 'thinca/vim-visualstar'
 Plug 'vim-scripts/autodate.vim'
 Plug 'rhysd/clever-f.vim'
 Plug 't9md/vim-choosewin'
@@ -189,7 +195,6 @@ Plug 'heavenshell/vim-jsdoc', {
 Plug 'mattn/emmet-vim'
 Plug 'machakann/vim-sandwich'
 Plug 'ap/vim-css-color'
-
 
 " oj.vim
 " Plug '~/go/src/github.com/my0k/vim-oj-helper'
