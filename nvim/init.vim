@@ -157,6 +157,9 @@ Plug 'skanehira/translate.vim'
 " vim-asterisk
 Plug 'haya14busa/vim-asterisk'
 
+" qfopen.vim
+Plug 'skanehira/qfopen.vim'
+
 " no setting file
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
