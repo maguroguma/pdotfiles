@@ -160,6 +160,9 @@ Plug 'haya14busa/vim-asterisk'
 " qfopen.vim
 Plug 'skanehira/qfopen.vim'
 
+" committia.vim
+Plug 'rhysd/committia.vim'
+
 " no setting file
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'

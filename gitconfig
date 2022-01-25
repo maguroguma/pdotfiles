@@ -18,21 +18,11 @@
 
 [commit]
   template = ~/.gitmessage
+	verbose = true
 
 [alias]
-  # --- original ---
-  s = status
-  l = log
-  b = branch
-  ba = branch -a
   unstage = reset HEAD
   lg = log --graph --all --decorate
-  lo = log --oneline
-  cho = checkout
-  # --- Borrowing ---
-  diffn = diff --name-only
-  diffs = diff --cached
-  review = diff origin/master...
   today = log --oneline --since='12 hour ago'
   cancel = reset --soft HEAD^
 #  dp = diff --no-prefix
