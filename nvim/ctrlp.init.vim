@@ -103,7 +103,7 @@ omap <leader><tab> <plug>(fzf-maps-o)
 " imap <C-A>l <plug>(fzf-complete-line)
 
 " popup window
-let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.3, 'yoffset': 0.95 } }
+let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
 " basic layout
 " let g:fzf_layout = { 'down': '50%' }
 

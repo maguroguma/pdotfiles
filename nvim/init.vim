@@ -149,7 +149,7 @@ Plug 'kdheepak/lazygit.nvim'
 
 " motion
 Plug 'phaazon/hop.nvim'
-" Plug 'rlane/pounce.nvim'
+Plug 'rlane/pounce.nvim'
 
 " translate.vim
 Plug 'skanehira/translate.vim'

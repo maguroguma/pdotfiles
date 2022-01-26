@@ -88,9 +88,9 @@ tnoremap <C-W>h       <cmd>wincmd h<cr>
 tnoremap <C-W><Right> <cmd>wincmd l<cr>
 tnoremap <C-W><C-L>   <cmd>wincmd l<cr>
 tnoremap <C-W>l       <cmd>wincmd l<cr>
-tnoremap <C-W>w       <cmd>wincmd w<cr>
-tnoremap <C-W><C-W>   <cmd>wincmd w<cr>
-tnoremap <C-W>W       <cmd>wincmd W<cr>
+" tnoremap <C-W>w       <cmd>wincmd w<cr>
+" tnoremap <C-W><C-W>   <cmd>wincmd w<cr>
+" tnoremap <C-W>W       <cmd>wincmd W<cr>
 tnoremap <C-W>t       <cmd>wincmd t<cr>
 tnoremap <C-W><C-T>   <cmd>wincmd t<cr>
 tnoremap <C-W>b       <cmd>wincmd b<cr>
@@ -113,3 +113,5 @@ tnoremap <C-W>-       <cmd>wincmd -<cr>
 tnoremap <C-W>+       <cmd>wincmd +<cr>
 tnoremap <C-W>z       <cmd>pclose<cr>
 tnoremap <C-W><C-Z>   <cmd>pclose<cr>
+" wordの削除は残す
+tnoremap <C-W><C-W> <C-w>
