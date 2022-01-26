@@ -17,3 +17,11 @@ lua require'hop'.setup { keys = 'etovxqpdygfblzhckisuran', jump_on_sole_occurren
 nmap ' <cmd>Pounce<CR>
 vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
+lua << EOF
+require'pounce'.setup{
+  accept_keys = "HJKLYUIOPNM",
+  accept_best_key = "<enter>",
+  multi_window = true,
+  debug = false,
+}
+EOF
