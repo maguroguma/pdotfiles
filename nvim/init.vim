@@ -143,6 +143,8 @@ Plug 'rbtnn/vim-emphasiscursor'
 " telescope.nvim
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+" gitsigns.nvim
+Plug 'lewis6991/gitsigns.nvim'
 
 " lazygit.nvim
 Plug 'kdheepak/lazygit.nvim'
@@ -166,7 +168,7 @@ Plug 'rhysd/committia.vim'
 " no setting file
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'
 Plug 'Yggdroot/indentLine'
 Plug 'tpope/vim-repeat'
 Plug 'cohama/lexima.vim'

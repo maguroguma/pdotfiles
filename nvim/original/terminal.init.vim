@@ -67,51 +67,49 @@ augroup vimrc_floaterm
 augroup END
 
 " 参考: https://zenn.dev/kyoh86/articles/b81c401cecc91c
-" <C-w>で使えるウィンドウの管理系をターミナルモードにマップする
-tnoremap <C-W>n       <cmd>new<cr>
-tnoremap <C-W><C-N>   <cmd>new<cr>
-tnoremap <C-W>q       <cmd>quit<cr>
-tnoremap <C-W><C-Q>   <cmd>quit<cr>
-tnoremap <C-W>c       <cmd>close<cr>
-tnoremap <C-W>o       <cmd>only<cr>
-tnoremap <C-W><C-O>   <cmd>only<cr>
-tnoremap <C-W><Down>  <cmd>wincmd j<cr>
-tnoremap <C-W><C-J>   <cmd>wincmd j<cr>
-tnoremap <C-W>j       <cmd>wincmd j<cr>
-tnoremap <C-W><Up>    <cmd>wincmd k<cr>
-tnoremap <C-W><C-K>   <cmd>wincmd k<cr>
-tnoremap <C-W>k       <cmd>wincmd k<cr>
-tnoremap <C-W><Left>  <cmd>wincmd h<cr>
-tnoremap <C-W><C-H>   <cmd>wincmd h<cr>
-tnoremap <C-W><BS>    <cmd>wincmd h<cr>
-tnoremap <C-W>h       <cmd>wincmd h<cr>
-tnoremap <C-W><Right> <cmd>wincmd l<cr>
-tnoremap <C-W><C-L>   <cmd>wincmd l<cr>
-tnoremap <C-W>l       <cmd>wincmd l<cr>
-" tnoremap <C-W>w       <cmd>wincmd w<cr>
-" tnoremap <C-W><C-W>   <cmd>wincmd w<cr>
-" tnoremap <C-W>W       <cmd>wincmd W<cr>
-tnoremap <C-W>t       <cmd>wincmd t<cr>
-tnoremap <C-W><C-T>   <cmd>wincmd t<cr>
-tnoremap <C-W>b       <cmd>wincmd b<cr>
-tnoremap <C-W><C-B>   <cmd>wincmd b<cr>
-tnoremap <C-W>p       <cmd>wincmd p<cr>
-tnoremap <C-W><C-P>   <cmd>wincmd p<cr>
-tnoremap <C-W>P       <cmd>wincmd P<cr>
-tnoremap <C-W>r       <cmd>wincmd r<cr>
-tnoremap <C-W><C-R>   <cmd>wincmd r<cr>
-tnoremap <C-W>R       <cmd>wincmd R<cr>
-tnoremap <C-W>x       <cmd>wincmd x<cr>
-tnoremap <C-W><C-X>   <cmd>wincmd x<cr>
-tnoremap <C-W>K       <cmd>wincmd K<cr>
-tnoremap <C-W>J       <cmd>wincmd J<cr>
-tnoremap <C-W>H       <cmd>wincmd H<cr>
-tnoremap <C-W>L       <cmd>wincmd L<cr>
-tnoremap <C-W>T       <cmd>wincmd T<cr>
-tnoremap <C-W>=       <cmd>wincmd =<cr>
-tnoremap <C-W>-       <cmd>wincmd -<cr>
-tnoremap <C-W>+       <cmd>wincmd +<cr>
-tnoremap <C-W>z       <cmd>pclose<cr>
-tnoremap <C-W><C-Z>   <cmd>pclose<cr>
-" wordの削除は残す
-tnoremap <C-W><C-W> <C-w>
+" <C-e>で使えるウィンドウの管理系をターミナルモードにマップする
+tnoremap <C-e>n       <cmd>new<cr>
+tnoremap <C-e><C-N>   <cmd>new<cr>
+tnoremap <C-e>q       <cmd>quit<cr>
+tnoremap <C-e><C-Q>   <cmd>quit<cr>
+tnoremap <C-e>c       <cmd>close<cr>
+tnoremap <C-e>o       <cmd>only<cr>
+tnoremap <C-e><C-O>   <cmd>only<cr>
+tnoremap <C-e><Down>  <cmd>wincmd j<cr>
+tnoremap <C-e><C-J>   <cmd>wincmd j<cr>
+tnoremap <C-e>j       <cmd>wincmd j<cr>
+tnoremap <C-e><Up>    <cmd>wincmd k<cr>
+tnoremap <C-e><C-K>   <cmd>wincmd k<cr>
+tnoremap <C-e>k       <cmd>wincmd k<cr>
+tnoremap <C-e><Left>  <cmd>wincmd h<cr>
+tnoremap <C-e><C-H>   <cmd>wincmd h<cr>
+tnoremap <C-e><BS>    <cmd>wincmd h<cr>
+tnoremap <C-e>h       <cmd>wincmd h<cr>
+tnoremap <C-e><Right> <cmd>wincmd l<cr>
+tnoremap <C-e><C-L>   <cmd>wincmd l<cr>
+tnoremap <C-e>l       <cmd>wincmd l<cr>
+tnoremap <C-e>w       <cmd>wincmd w<cr>
+tnoremap <C-e><C-e>   <cmd>wincmd w<cr>
+tnoremap <C-e>W       <cmd>wincmd W<cr>
+tnoremap <C-e>t       <cmd>wincmd t<cr>
+tnoremap <C-e><C-T>   <cmd>wincmd t<cr>
+tnoremap <C-e>b       <cmd>wincmd b<cr>
+tnoremap <C-e><C-B>   <cmd>wincmd b<cr>
+tnoremap <C-e>p       <cmd>wincmd p<cr>
+tnoremap <C-e><C-P>   <cmd>wincmd p<cr>
+tnoremap <C-e>P       <cmd>wincmd P<cr>
+tnoremap <C-e>r       <cmd>wincmd r<cr>
+tnoremap <C-e><C-R>   <cmd>wincmd r<cr>
+tnoremap <C-e>R       <cmd>wincmd R<cr>
+tnoremap <C-e>x       <cmd>wincmd x<cr>
+tnoremap <C-e><C-X>   <cmd>wincmd x<cr>
+tnoremap <C-e>K       <cmd>wincmd K<cr>
+tnoremap <C-e>J       <cmd>wincmd J<cr>
+tnoremap <C-e>H       <cmd>wincmd H<cr>
+tnoremap <C-e>L       <cmd>wincmd L<cr>
+tnoremap <C-e>T       <cmd>wincmd T<cr>
+tnoremap <C-e>=       <cmd>wincmd =<cr>
+tnoremap <C-e>-       <cmd>wincmd -<cr>
+tnoremap <C-e>+       <cmd>wincmd +<cr>
+tnoremap <C-e>z       <cmd>pclose<cr>
+tnoremap <C-e><C-Z>   <cmd>pclose<cr>
