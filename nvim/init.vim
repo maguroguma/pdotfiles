@@ -42,6 +42,7 @@ Plug 'sirver/ultisnips'
 " Markdown
 Plug 'mzlogin/vim-markdown-toc', { 'for': ['md', 'markdown'] }
 Plug 'iamcco/mathjax-support-for-mkdp', { 'for': ['md', 'markdown'] }
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " golang.init.vim
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
@@ -109,7 +110,7 @@ endif
 
 " denops
 Plug 'vim-denops/denops.vim'
-Plug 'kat0h/dps-bufpreview.vim'
+" Plug 'kat0h/bufpreview.vim'
 
 " textobj
 Plug 'kana/vim-textobj-user'
@@ -140,10 +141,8 @@ Plug 'voldikss/vim-floaterm'
 
 Plug 'rbtnn/vim-emphasiscursor'
 
-" telescope.nvim
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
 " gitsigns.nvim
+Plug 'nvim-lua/plenary.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 
 " lazygit.nvim
@@ -250,7 +249,6 @@ Plug 'maguroguma/vim-oj-helper'
 " Plug 'Shougo/denite.nvim'
 " Plug 'Shougo/neosnippet.vim'
 " Plug 'Shougo/neosnippet-snippets'
-" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 " Plug 'tpope/vim-commentary'
 " Plug 'wellle/context.vim'
 

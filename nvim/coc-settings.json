@@ -92,5 +92,8 @@
     "svelte",
     "twig",
     "vue"
-  ]
+  ],
+  // source settings
+  "coc.source.word.priority": -100,
+  "coc.source.syntax.priority": -1
 }

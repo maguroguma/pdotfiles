@@ -33,7 +33,7 @@ cnoremap <C-l> <Right>
 
 nnoremap s <Nop>
 nnoremap t <Nop>
-nnoremap q <Nop>
+" nnoremap q <Nop>
 nnoremap <Leader> <Nop>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

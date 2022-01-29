@@ -65,7 +65,7 @@ nnoremap <silent> <C-p> :Files<CR>
 " nnoremap <silent> <C-p>b :Buffers<CR>
 " nnoremap <silent> <C-p>gr :Rg!<CR>
 
-nnoremap <silent> ; :Buffers<CR>
+" nnoremap <silent> ; :Buffers<CR>
 
 " nnoremap <silent> ,f :GFiles<CR>
 " nnoremap <silent> ,F :GFiles?<CR>
@@ -109,11 +109,3 @@ let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
 
 " Empty value to disable preview window altogether
 let g:fzf_preview_window = []
-
-" telescope.nvim
-" Find files using Telescope command-line sugar.
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-
