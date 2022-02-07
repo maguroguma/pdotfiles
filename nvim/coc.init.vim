@@ -222,7 +222,8 @@ let g:coc_global_extensions = [
       \ 'coc-word',
       \ 'coc-syntax',
       \ 'coc-fzf-preview',
-      \ 'coc-docker'
+      \ 'coc-docker',
+      \ 'coc-tailwindcss'
       \ ]
 
 """

@@ -42,7 +42,7 @@ Plug 'sirver/ultisnips'
 " Markdown
 Plug 'mzlogin/vim-markdown-toc', { 'for': ['md', 'markdown'] }
 Plug 'iamcco/mathjax-support-for-mkdp', { 'for': ['md', 'markdown'] }
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " golang.init.vim
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
@@ -54,12 +54,12 @@ Plug 'srcery-colors/srcery-vim'
 
 " buffer.init.vim
 Plug 'moll/vim-bbye'
-Plug 'schickling/vim-bufonly'
-Plug 'jeetsukumaran/vim-buffergator'
+" Plug 'schickling/vim-bufonly'
+" Plug 'jeetsukumaran/vim-buffergator'
 
 " coc.init.vim
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'}
+" Plug 'iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'}
 
 " fuzzy finder
 Plug 'junegunn/fzf', { 'do': './install --bin' }
@@ -112,6 +112,9 @@ endif
 Plug 'vim-denops/denops.vim'
 " Plug 'kat0h/bufpreview.vim'
 
+" glance-vim(require denops)
+" Plug 'tani/glance-vim'
+
 " textobj
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-jabraces'
@@ -139,7 +142,7 @@ Plug 'skanehira/denops-germanium.vim'
 " floaterm
 Plug 'voldikss/vim-floaterm'
 
-Plug 'rbtnn/vim-emphasiscursor'
+" Plug 'rbtnn/vim-emphasiscursor'
 
 " gitsigns.nvim
 Plug 'nvim-lua/plenary.nvim'
@@ -164,6 +167,12 @@ Plug 'skanehira/qfopen.vim'
 " committia.vim
 Plug 'rhysd/committia.vim'
 
+" latest no setting plugins
+Plug 'osyo-manga/vim-brightest'
+Plug 'tyru/capture.vim'
+Plug 'lambdalisue/readablefold.vim'
+Plug 'tpope/vim-speeddating'
+
 " no setting file
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
@@ -182,6 +191,7 @@ Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'thinca/vim-quickrun'
 Plug 'flazz/vim-colorschemes'
 Plug 'tyru/open-browser.vim'
+" Plug 'open-browser-github.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'AndrewRadev/linediff.vim'
 Plug 'thinca/vim-poslist'

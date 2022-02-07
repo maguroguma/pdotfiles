@@ -1,7 +1,7 @@
 " https://drumato.hatenablog.com/entry/2019/03/30/215117
 " fugitive {{{
 " nnoremap <Leader>gl :Glog --oneline<CR>
-nnoremap <Leader>gl :Git log<CR>
+" nnoremap <Leader>gl :Git log<CR>
 " nnoremap <Leader>gs :Git<CR>
 nnoremap <Leader>gs :Gina status<CR>
 " nnoremap <Leader>gd :Gdiffsplit<CR>
@@ -16,7 +16,7 @@ command! Gblame :Git blame
 " }}}
 
 " lazygit
-nnoremap <silent> <C-g> :LazyGit<CR>
+nnoremap <silent> <Leader>gl :LazyGit<CR>
 
 "" vim-easy-align
 xmap ga <Plug>(EasyAlign)
@@ -34,7 +34,7 @@ let g:highlightedyank_highlight_duration = 1000
 
 " trailing white space
 " autocmd BufWritePre * :FixWhitespace
-let g:extra_whitespace_ignored_filetypes = ['explorer']
+" let g:extra_whitespace_ignored_filetypes = ['explorer']
 " augroup HighlightTrailingSpaces
 "   autocmd!
 "   autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
@@ -89,8 +89,10 @@ vmap gx <Plug>(openbrowser-smart-search)
 " vim-better-whitespace
 " defx, denite以外で有効にする
 " autocmd FileType * if &filetype != "defx" | execute 'EnableWhitespace' | endif
-let s:ftToIgnore = ['defx', 'denite']
-autocmd FileType * if index(s:ftToIgnore, &ft) < 0 | execute 'EnableWhitespace' | endif
+" let s:ftToIgnore = ['defx', 'denite', '__CtrlSF__']
+" autocmd FileType * if index(s:ftToIgnore, &ft) < 0 | execute 'EnableWhitespace' | endif
+let g:better_whitespace_filetypes_blacklist = ['diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'fugitive', 'defx', 'ctrlsf']
+let g:better_whitespace_ctermcolor = '195'
 
 " Goyo
 let g:goyo_width = 120
@@ -237,3 +239,9 @@ require('gitsigns').setup {
   },
 }
 EOF
+
+" vim-brightest
+" 下線でハイライトする
+" let g:brightest#highlight = {
+" \   "group" : "BrightestUnderline"
+" \}

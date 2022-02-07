@@ -1,3 +1,3 @@
-" buffer delete
-nnoremap <Leader>d :Bdelete<CR>
-" nnoremap <Leader>bo :BufOnly<CR>
+" vim-bbye
+nnoremap <Leader>d <C-u>:Bdelete<CR>
+nnoremap <Leader>D <C-u>:bufdo :Bdelete<CR>
