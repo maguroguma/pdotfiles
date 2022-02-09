@@ -7,3 +7,6 @@ curl -sfL https://direnv.net/install.sh | bash
 
 # vifm
 sudo apt install vifm
+
+# hub
+sudo apt install hub

@@ -80,7 +80,7 @@ Plug 'gelguy/wilder.nvim'
 
 " vue plugins
 Plug 'posva/vim-vue'
-Plug 'tomtom/tcomment_vim'
+" Plug 'tomtom/tcomment_vim'
 
 " fern
 " Plug 'lambdalisue/fern.vim'
@@ -131,7 +131,7 @@ Plug 'rhysd/devdocs.vim'
 " Plug 'MattesGroeger/vim-bookmarks'
 
 " nvim-treesitter
-" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
 " vim germanium(require denops and germanium)
 Plug 'skanehira/denops-germanium.vim'
@@ -167,8 +167,14 @@ Plug 'skanehira/qfopen.vim'
 " committia.vim
 Plug 'rhysd/committia.vim'
 
+" Comment.nvim
+Plug 'numToStr/Comment.nvim'
+
+" vim-doge
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+
 " latest no setting plugins
-Plug 'osyo-manga/vim-brightest'
+" Plug 'osyo-manga/vim-brightest'
 Plug 'tyru/capture.vim'
 Plug 'lambdalisue/readablefold.vim'
 Plug 'tpope/vim-speeddating'
@@ -191,7 +197,7 @@ Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'thinca/vim-quickrun'
 Plug 'flazz/vim-colorschemes'
 Plug 'tyru/open-browser.vim'
-" Plug 'open-browser-github.vim'
+Plug 'tyru/open-browser-github.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'AndrewRadev/linediff.vim'
 Plug 'thinca/vim-poslist'
@@ -293,7 +299,7 @@ runtime ./textobj.init.vim
 runtime ./fern.init.vim
 runtime ./defx.init.vim
 " runtime ./bookmarks.init.vim
-" runtime ./treesitter.init.vim
+runtime ./treesitter.init.vim
 runtime ./lir.init.vim
 runtime ./motion.init.vim
 " 自作コマンドなど

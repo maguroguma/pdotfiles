@@ -20,6 +20,8 @@ brew install duf
 brew install gibo
 brew install ghq
 git config --global ghq.root $GOPATH/src
+# hub
+brew install hub
 
 #########
 # System fonts
