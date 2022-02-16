@@ -249,9 +249,9 @@ nnoremap <silent> [fzf-p]q     :<C-u>CocCommand fzf-preview.QuickFix<CR>
 nnoremap <silent> [fzf-p]l     :<C-u>CocCommand fzf-preview.LocationList<CR>
 
 """ オリジナルのマップ
-nnoremap <silent> ;     :<C-u>CocCommand fzf-preview.Buffers<CR>
+" nnoremap <silent> ;     :<C-u>CocCommand fzf-preview.Buffers<CR>
 nnoremap <silent> q     :<C-u>CocCommand fzf-preview.QuickFix<CR>
-nnoremap          <Leader>Gr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
+" nnoremap          <Leader>Gr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
 
 """
 " node path

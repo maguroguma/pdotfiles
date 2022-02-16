@@ -166,7 +166,7 @@ cnoremap <c-p> <up>
 nnoremap Q q
 
 " wrapのトグル
-nnoremap <Leader>l :<C-u>set wrap!<CR>
+" nnoremap <Leader>l :<C-u>set wrap!<CR>
 " numberのトグル
 nnoremap <Leader>n :<C-u>set number!<CR>
 

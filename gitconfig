@@ -1,8 +1,6 @@
 [core]
 	excludesfile = ~/.gitignore
-  # @os-dependency
-  #editor = /usr/local/bin/nvim
-  editor = /usr/bin/nvim
+  editor = vim
 
 [diff]
   tool      = vimdiff

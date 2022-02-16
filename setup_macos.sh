@@ -22,6 +22,8 @@ brew install ghq
 git config --global ghq.root $GOPATH/src
 # hub
 brew install hub
+# glow
+brew install glow
 
 #########
 # System fonts

@@ -148,6 +148,10 @@ Plug 'voldikss/vim-floaterm'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 
+" diffview.nvim
+Plug 'nvim-lua/plenary.nvim'
+Plug 'sindrets/diffview.nvim'
+
 " lazygit.nvim
 Plug 'kdheepak/lazygit.nvim'
 
@@ -172,6 +176,12 @@ Plug 'numToStr/Comment.nvim'
 
 " vim-doge
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+
+" glow.nvim
+Plug 'ellisonleao/glow.nvim'
+
+" git-blame.nvim
+Plug 'f-person/git-blame.nvim'
 
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'

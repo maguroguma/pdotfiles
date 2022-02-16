@@ -65,7 +65,7 @@ nnoremap <silent> <C-p> :Files<CR>
 " nnoremap <silent> <C-p>b :Buffers<CR>
 " nnoremap <silent> <C-p>gr :Rg!<CR>
 
-" nnoremap <silent> ; :Buffers<CR>
+nnoremap <silent> ; :Buffers<CR>
 
 " nnoremap <silent> ,f :GFiles<CR>
 " nnoremap <silent> ,F :GFiles?<CR>
