@@ -56,7 +56,7 @@ nnoremap <C-g><C-o> :CtrlSFOpen<CR>
 nnoremap <C-g><C-t> :CtrlSFToggle<CR>
 inoremap <C-g><C-t> <Esc>:CtrlSFToggle<CR>
 " original
-nnoremap <leader>gc :CtrlSF -R 
+" nnoremap <leader>gc :CtrlSF -R 
 
 """
 " vimgrep

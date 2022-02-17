@@ -181,7 +181,7 @@ Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 Plug 'ellisonleao/glow.nvim'
 
 " git-blame.nvim
-Plug 'f-person/git-blame.nvim'
+" Plug 'f-person/git-blame.nvim'
 
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'

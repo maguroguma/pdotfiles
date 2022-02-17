@@ -5,7 +5,7 @@
 " nnoremap <Leader>gs :Git<CR>
 nnoremap <Leader>gs :Gina status<CR>
 " nnoremap <Leader>gd :Gdiffsplit<CR>
-nnoremap <Leader>gd :Git diff %<CR>
+" nnoremap <Leader>gd :Git diff %<CR>
 nnoremap <Leader>gb :Git blame<CR>
 " nnoremap <Leader>ga :Gwrite<CR>
 " nnoremap <Leader>gc :Gcommit<CR>
@@ -257,6 +257,7 @@ let g:doge_enable_mappings = 0
 nnoremap <silent> <Leader>mp :<C-u>Glow<CR>
 noremap <C-w>z <C-w>\|<C-w>\_
 
+" diffview.nvim
 lua << EOF
 local cb = require'diffview.config'.diffview_callback
 
@@ -273,9 +274,9 @@ require'diffview'.setup {
     fold_open = "",
   },
   file_panel = {
-    position = "left",                  -- One of 'left', 'right', 'top', 'bottom'
+    position = "bottom",                  -- One of 'left', 'right', 'top', 'bottom'
     width = 35,                         -- Only applies when position is 'left' or 'right'
-    height = 10,                        -- Only applies when position is 'top' or 'bottom'
+    height = 20,                        -- Only applies when position is 'top' or 'bottom'
     listing_style = "tree",             -- One of 'list' or 'tree'
     tree_options = {                    -- Only applies when listing_style is 'tree'
       flatten_dirs = true,              -- Flatten dirs that only contain one single dir
@@ -364,3 +365,5 @@ require'diffview'.setup {
   },
 }
 EOF
+nnoremap <silent> <Leader>gd :<C-u>DiffviewOpen<CR>
+nnoremap <silent> <Leader>gc :<C-u>DiffviewClose<CR>
