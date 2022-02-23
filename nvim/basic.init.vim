@@ -277,7 +277,7 @@ require'diffview'.setup {
     position = "bottom",                  -- One of 'left', 'right', 'top', 'bottom'
     width = 35,                         -- Only applies when position is 'left' or 'right'
     height = 20,                        -- Only applies when position is 'top' or 'bottom'
-    listing_style = "tree",             -- One of 'list' or 'tree'
+    listing_style = "list",             -- One of 'list' or 'tree'
     tree_options = {                    -- Only applies when listing_style is 'tree'
       flatten_dirs = true,              -- Flatten dirs that only contain one single dir
       folder_statuses = "only_folded",  -- One of 'never', 'only_folded' or 'always'.
@@ -365,5 +365,5 @@ require'diffview'.setup {
   },
 }
 EOF
-nnoremap <silent> <Leader>gd :<C-u>DiffviewOpen<CR>
+nnoremap <silent> <Leader>gd :<C-u>DiffviewOpen
 nnoremap <silent> <Leader>gc :<C-u>DiffviewClose<CR>

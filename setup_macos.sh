@@ -24,6 +24,11 @@ git config --global ghq.root $GOPATH/src
 brew install hub
 # glow
 brew install glow
+# wget
+brew install wget
+# gnu-sed, gawk
+brew install gnu-sed
+brew install gawk
 
 #########
 # System fonts

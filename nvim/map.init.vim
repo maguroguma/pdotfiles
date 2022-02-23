@@ -140,7 +140,9 @@ nnoremap <Leader>= ggVG=
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 inoremap <C-r><C-r> <C-r>"
+inoremap <C-r>r <C-r>"
 cnoremap <C-r><C-r> <C-r>"
+cnoremap <C-r>r <C-r>"
 inoremap <C-r><Space> <C-r>+
 cnoremap <C-r><Space> <C-r>+
 
