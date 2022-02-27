@@ -463,7 +463,7 @@ set foldlevelstart=100
 
 " 80文字ルール
 " set colorcolumn=80
-execute "set colorcolumn=" . join(range(101, 9999), ',')
+" execute "set colorcolumn=" . join(range(101, 9999), ',')
 
 
 
