@@ -46,3 +46,10 @@ git clone https://github.com/macchaberrycream/RictyDiminished-Nerd-Fonts.git
 #########
 mkdir $HOME/Pictures/screenshots
 defaults write com.apple.screencapture location $HOME/Pictures/screenshots
+
+# asdf
+brew install asdf
+echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
+# node(asdf)
+asdf install nodejs latest
+asdf global nodejs latest

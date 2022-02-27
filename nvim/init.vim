@@ -76,7 +76,21 @@ Plug 'dyng/ctrlsf.vim'
 Plug 'simeji/winresizer'
 
 " wilder.nvim
-Plug 'gelguy/wilder.nvim'
+if has('nvim')
+  function! UpdateRemotePlugins(...)
+    " Needed to refresh runtime files
+    let &rtp=&rtp
+    UpdateRemotePlugins
+  endfunction
+
+  Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+else
+  Plug 'gelguy/wilder.nvim'
+
+  " To use Python remote plugin features in Vim, can be skipped
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 
 " vue plugins
 Plug 'posva/vim-vue'
@@ -182,6 +196,39 @@ Plug 'ellisonleao/glow.nvim'
 
 " git-blame.nvim
 " Plug 'f-person/git-blame.nvim'
+
+" nvim-bqf
+Plug 'kevinhwang91/nvim-bqf'
+
+" nvim-hlslens
+Plug 'kevinhwang91/nvim-hlslens'
+
+" specs.nvim
+Plug 'edluffy/specs.nvim'
+
+" shade.nvim
+" Plug 'sunjon/shade.nvim'
+
+" pretty-fold.nvim
+" Plug 'anuvyklack/pretty-fold.nvim'
+
+" vim-illuminate(neovim)
+Plug 'RRethy/vim-illuminate'
+
+" registers.nvim
+Plug 'tversteeg/registers.nvim'
+
+" todo-comments.nvim
+Plug 'nvim-lua/plenary.nvim'
+Plug 'folke/todo-comments.nvim'
+
+" nvim-scrollview
+Plug 'dstein64/nvim-scrollview', { 'branch': 'main' }
+
+" sniprun(neovim)
+Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
+" 'bash install.sh 1' to get the bleeding edge or if you have trouble with the precompiled binary,
+"  but you'll compile sniprun at every update & will need the rust toolchain
 
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'
@@ -331,7 +378,8 @@ runtime ./basic.init.vim
 " @os-dependency
 " let g:python3_host_prog = expand('~/.pyenv/versions/neovim3/bin/python')
 " let g:python3_host_prog = expand('/usr/local/bin/python3')
-let g:python3_host_prog = expand('/usr/bin/python3')
+" let g:python3_host_prog = expand('/usr/bin/python3')
+let g:python3_host_prog = expand('/opt/homebrew/bin/python3')
 
 " function
 "" xaml

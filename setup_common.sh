@@ -26,7 +26,8 @@ ln -fnsv $HOME/dotfiles/gitmessage $HOME/.gitmessage
 # Vim library
 #########
 # defx
-pip3 install neovim
+# pip3 install neovim
+pip3 install --user pynvim
 
 #########
 # Node.js

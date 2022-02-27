@@ -19,7 +19,7 @@ vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
 lua << EOF
 require'pounce'.setup{
-  accept_keys = "HJKLYUIOPNM",
+  accept_keys = "HJKLYUIOPNMQWERTASDFGZXCVB",
   accept_best_key = "<enter>",
   multi_window = true,
   debug = false,

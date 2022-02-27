@@ -5,7 +5,7 @@
 " nnoremap <Leader>gs :Git<CR>
 nnoremap <Leader>gs :Gina status<CR>
 " nnoremap <Leader>gd :Gdiffsplit<CR>
-" nnoremap <Leader>gd :Git diff %<CR>
+nnoremap <Leader>gd :Git diff %<CR>
 nnoremap <Leader>gb :Git blame<CR>
 " nnoremap <Leader>ga :Gwrite<CR>
 " nnoremap <Leader>gc :Gcommit<CR>
@@ -121,11 +121,11 @@ augroup END  " }}}
 
 " すべてのファイルでTODO:などをハイライトする
 " http://baqamore.hatenablog.com/entry/2016/11/15/220358
-augroup HilightsForce
-  autocmd!
-  autocmd WinEnter,BufRead,BufNew,Syntax * :silent! call matchadd('Todo', '\(TODO\|NOTE\|INFO\|XXX\|TEMP\):')
-  autocmd WinEnter,BufRead,BufNew,Syntax * highlight Todo guibg=Red guifg=White
-augroup END
+" augroup HilightsForce
+"   autocmd!
+"   autocmd WinEnter,BufRead,BufNew,Syntax * :silent! call matchadd('Todo', '\(TODO\|NOTE\|INFO\|XXX\|TEMP\):')
+"   autocmd WinEnter,BufRead,BufNew,Syntax * highlight Todo guibg=Red guifg=White
+" augroup END
 
 " 折りたたみを自動で保存し、自動で読み込む
 " https://vim-jp.org/vim-users-jp/2009/10/08/Hack-84.html
@@ -365,5 +365,277 @@ require'diffview'.setup {
   },
 }
 EOF
-nnoremap <silent> <Leader>gd :<C-u>DiffviewOpen
-nnoremap <silent> <Leader>gc :<C-u>DiffviewClose<CR>
+" nnoremap <silent> <Leader>gd :<C-u>DiffviewOpen
+" nnoremap <silent> <Leader>gc :<C-u>DiffviewClose<CR>
+
+" nvim-bqf: quickfixウィンドウの拡張プラグイン
+lua << EOF
+local fn = vim.fn
+
+function _G.qftf(info)
+    local items
+    local ret = {}
+    if info.quickfix == 1 then
+        items = fn.getqflist({id = info.id, items = 0}).items
+    else
+        items = fn.getloclist(info.winid, {id = info.id, items = 0}).items
+    end
+    local limit = 31
+    local fname_fmt1, fname_fmt2 = '%-' .. limit .. 's', '…%.' .. (limit - 1) .. 's'
+    local valid_fmt = '%s │%5d:%-3d│%s %s'
+    for i = info.start_idx, info.end_idx do
+        local e = items[i]
+        local fname = ''
+        local str
+        if e.valid == 1 then
+            if e.bufnr > 0 then
+                fname = fn.bufname(e.bufnr)
+                if fname == '' then
+                    fname = '[No Name]'
+                else
+                    fname = fname:gsub('^' .. vim.env.HOME, '~')
+                end
+                -- char in fname may occur more than 1 width, ignore this issue in order to keep performance
+                if #fname <= limit then
+                    fname = fname_fmt1:format(fname)
+                else
+                    fname = fname_fmt2:format(fname:sub(1 - limit))
+                end
+            end
+            local lnum = e.lnum > 99999 and -1 or e.lnum
+            local col = e.col > 999 and -1 or e.col
+            local qtype = e.type == '' and '' or ' ' .. e.type:sub(1, 1):upper()
+            str = valid_fmt:format(fname, lnum, col, qtype, e.text)
+        else
+            str = e.text
+        end
+        table.insert(ret, str)
+    end
+    return ret
+end
+
+vim.o.qftf = '{info -> v:lua._G.qftf(info)}'
+
+-- Adapt fzf's delimiter in nvim-bqf
+require('bqf').setup({
+    filter = {
+        fzf = {
+            extra_opts = {'--bind', 'ctrl-o:toggle-all', '--delimiter', '│'}
+        }
+    }
+})
+EOF
+
+" nvim-hlslens
+lua << EOF
+-- minimal setting
+local kopts = {noremap = true, silent = true}
+
+vim.api.nvim_set_keymap('n', 'n',
+    [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
+    kopts)
+vim.api.nvim_set_keymap('n', 'N',
+    [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
+    kopts)
+vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+
+vim.api.nvim_set_keymap('x', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('x', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('x', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('x', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+
+vim.api.nvim_set_keymap('n', '<Leader>l', ':noh<CR>', kopts)
+
+-- customize virtual text
+require('hlslens').setup({
+    override_lens = function(render, plist, nearest, idx, r_idx)
+        local sfw = vim.v.searchforward == 1
+        local indicator, text, chunks
+        local abs_r_idx = math.abs(r_idx)
+        if abs_r_idx > 1 then
+            indicator = ('%d%s'):format(abs_r_idx, sfw ~= (r_idx > 1) and '▲' or '▼')
+        elseif abs_r_idx == 1 then
+            indicator = sfw ~= (r_idx == 1) and '▲' or '▼'
+        else
+            indicator = ''
+        end
+
+        local lnum, col = unpack(plist[idx])
+        if nearest then
+            local cnt = #plist
+            if indicator ~= '' then
+                text = ('[%s %d/%d]'):format(indicator, idx, cnt)
+            else
+                text = ('[%d/%d]'):format(idx, cnt)
+            end
+            chunks = {{' ', 'Ignore'}, {text, 'HlSearchLensNear'}}
+        else
+            text = ('[%s %d]'):format(indicator, idx)
+            chunks = {{' ', 'Ignore'}, {text, 'HlSearchLens'}}
+        end
+        render.set_virt(0, lnum - 1, col - 1, chunks, nearest)
+    end
+})
+
+-- packer
+-- use 'haya14busa/vim-asterisk'
+
+-- vim-asterisk
+vim.api.nvim_set_keymap('n', '*', [[<Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('n', '#', [[<Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('n', 'g*', [[<Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('n', 'g#', [[<Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>]], {})
+
+vim.api.nvim_set_keymap('x', '*', [[<Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('x', '#', [[<Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('x', 'g*', [[<Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('x', 'g#', [[<Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>]], {})
+EOF
+
+" specs.nvim
+lua << EOF
+require('specs').setup{
+    show_jumps  = true,
+    min_jump = 15,
+    popup = {
+        delay_ms = 0, -- delay before popup displays
+        inc_ms = 8, -- time increments used for fade/resize effects
+        blend = 10, -- starting blend, between 0-100 (fully transparent), see :h winblend
+        width = 50,
+        winhl = "PMenu",
+        fader = require('specs').linear_fader,
+        resizer = require('specs').shrink_resizer
+    },
+    ignore_filetypes = {},
+    ignore_buftypes = {
+        nofile = true,
+    },
+}
+EOF
+
+" todo-comments.nvim
+" FIXME:
+" TODO:
+" BUG:
+" PERF:
+" HACK:
+" WARNING:
+lua << EOF
+  require("todo-comments").setup {
+  signs = true, -- show icons in the signs column
+  sign_priority = 8, -- sign priority
+  -- keywords recognized as todo comments
+  keywords = {
+    FIX = {
+      icon = " ", -- icon used for the sign, and in search results
+      color = "error", -- can be a hex color, or a named color (see below)
+      alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
+      -- signs = false, -- configure signs for some keywords individually
+    },
+    TODO = { icon = " ", color = "info" },
+    HACK = { icon = " ", color = "warning" },
+    WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+    PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+    NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+  },
+  merge_keywords = true, -- when true, custom keywords will be merged with the defaults
+  -- highlighting of the line containing the todo comment
+  -- * before: highlights before the keyword (typically comment characters)
+  -- * keyword: highlights of the keyword
+  -- * after: highlights after the keyword (todo text)
+  highlight = {
+    before = "", -- "fg" or "bg" or empty
+    keyword = "wide", -- "fg", "bg", "wide" or empty. (wide is the same as bg, but will also highlight surrounding characters)
+    after = "fg", -- "fg" or "bg" or empty
+    pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlightng (vim regex)
+    comments_only = true, -- uses treesitter to match keywords in comments only
+    max_line_len = 400, -- ignore lines longer than this
+    exclude = {}, -- list of file types to exclude highlighting
+  },
+  -- list of named colors where we try to extract the guifg from the
+  -- list of hilight groups or use the hex color if hl not found as a fallback
+  colors = {
+    error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+    warning = { "DiagnosticWarning", "WarningMsg", "#FBBF24" },
+    info = { "DiagnosticInfo", "#2563EB" },
+    hint = { "DiagnosticHint", "#10B981" },
+    default = { "Identifier", "#7C3AED" },
+  },
+  search = {
+    command = "rg",
+    args = {
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+    },
+    -- regex that will be used to match keywords.
+    -- don't replace the (KEYWORDS) placeholder
+    pattern = [[\b(KEYWORDS):]], -- ripgrep regex
+    -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+  },
+}
+EOF
+
+" sniprun
+lua << EOF
+require'sniprun'.setup({
+  selected_interpreters = {},     --# use those instead of the default for the current filetype
+  repl_enable = {},               --# enable REPL-like behavior for the given interpreters
+  repl_disable = {},              --# disable REPL-like behavior for the given interpreters
+
+  interpreter_options = {         --# intepreter-specific options, see docs / :SnipInfo <name>
+    GFM_original = {
+      use_on_filetypes = {"markdown.pandoc"}    --# the 'use_on_filetypes' configuration key is
+                                                --# available for every interpreter
+    }
+  },
+
+  --# you can combo different display modes as desired
+  display = {
+    "Classic",                    --# display results in the command-line  area
+    "VirtualTextOk",              --# display ok results as virtual text (multiline is shortened)
+
+    -- "VirtualTextErr",          --# display error results as virtual text
+    "TempFloatingWindow",      --# display results in a floating window
+    -- "LongTempFloatingWindow",  --# same as above, but only long results. To use with VirtualText__
+    -- "Terminal",                --# display results in a vertical split
+    -- "TerminalWithCode",        --# display results and code history in a vertical split
+    -- "NvimNotify",              --# display with the nvim-notify plugin
+    -- "Api"                      --# return output to a programming interface
+  },
+
+  display_options = {
+    terminal_width = 45,       --# change the terminal display option width
+    notification_timeout = 5   --# timeout for nvim_notify output
+  },
+
+  --# You can use the same keys to customize whether a sniprun producing
+  --# no output should display nothing or '(no output)'
+  show_no_output = {
+    "Classic",
+    "TempFloatingWindow",      --# implies LongTempFloatingWindow, which has no effect on its own
+  },
+
+  --# customize highlight groups (setting this overrides colorscheme)
+  snipruncolors = {
+    SniprunVirtualTextOk   =  {bg="#66eeff",fg="#000000",ctermbg="Cyan",cterfg="Black"},
+    SniprunFloatingWinOk   =  {fg="#66eeff",ctermfg="Cyan"},
+    SniprunVirtualTextErr  =  {bg="#881515",fg="#000000",ctermbg="DarkRed",cterfg="Black"},
+    SniprunFloatingWinErr  =  {fg="#881515",ctermfg="DarkRed"},
+  },
+
+  --# miscellaneous compatibility/adjustement settings
+  inline_messages = 0,             --# inline_message (0/1) is a one-line way to display messages
+				   --# to workaround sniprun not being able to display anything
+
+  borders = 'single',              --# display borders around floating windows
+                                   --# possible values are 'none', 'single', 'double', or 'shadow'
+  live_mode_toggle='off',       --# live mode toggle, see Usage - Running for more info
+})
+EOF
+

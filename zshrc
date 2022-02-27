@@ -33,3 +33,5 @@ source /Users/yokoyamamasahiro/.ghcup/env
 # @os-dependency
 # added by travis gem
 [ -f /Users/yokoyamamasahiro/.travis/travis.sh ] && source /Users/yokoyamamasahiro/.travis/travis.sh
+
+. /opt/homebrew/opt/asdf/libexec/asdf.sh

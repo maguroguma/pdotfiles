@@ -1,40 +1,27 @@
-call wilder#enable_cmdline_enter()
-set wildcharm=<Tab>
-cmap <expr> <Tab> wilder#in_context() ? wilder#next() : "\<Tab>"
-cmap <expr> <S-Tab> wilder#in_context() ? wilder#previous() : "\<S-Tab>"
+call wilder#setup({'modes': [':', '/', '?']})
 
-" only / and ? are enabled by default
-call wilder#set_option('modes', ['/', '?', ':'])
+call wilder#set_option('pipeline', [
+      \   wilder#branch(
+      \     wilder#cmdline_pipeline({
+      \       'fuzzy': 1,
+      \       'set_pcre2_pattern': 1,
+      \     }),
+      \     wilder#python_search_pipeline({
+      \       'pattern': 'fuzzy',
+      \     }),
+      \   ),
+      \ ])
 
-" use wilder#wildmenu_lightline_theme() if using Lightline
-" 'highlights' : can be overriden, see :h wilder#wildmenu_renderer()
-call wilder#set_option('renderer', wilder#wildmenu_renderer(
-      \ wilder#wildmenu_airline_theme({
-      \   'highlights': {},
-      \   'highlighter': wilder#basic_highlighter(),
-      \   'separator': ' · ',
-      \ })))
-
-" popup mode (experimental)
-" 'highlighter' : applies highlighting to the candidates
-" call wilder#set_option('renderer', wilder#popupmenu_renderer({
-"       \ 'highlighter': wilder#basic_highlighter(),
-"       \ }))
-
-" call wilder#set_option('renderer', wilder#renderer_mux({
-"       \ ':': wilder#popupmenu_renderer({
-"       \ 'highlighter': wilder#basic_highlighter(),
-"       \ }),
-"       \ '/': wilder#wildmenu_renderer(
-"       \ wilder#wildmenu_airline_theme({
-"       \   'highlights': {},
-"       \   'highlighter': wilder#basic_highlighter(),
-"       \   'separator': ' · ',
-"       \ })),
-"       \ }))
+let s:highlighters = [
+        \ wilder#pcre2_highlighter(),
+        \ wilder#basic_highlighter(),
+        \ ]
 
 call wilder#set_option('renderer', wilder#renderer_mux({
       \ ':': wilder#popupmenu_renderer({
-      \ 'highlighter': wilder#basic_highlighter(),
+      \   'highlighter': s:highlighters,
+      \ }),
+      \ '/': wilder#wildmenu_renderer({
+      \   'highlighter': s:highlighters,
       \ }),
       \ }))
