@@ -277,7 +277,7 @@ require'diffview'.setup {
     position = "bottom",                  -- One of 'left', 'right', 'top', 'bottom'
     width = 35,                         -- Only applies when position is 'left' or 'right'
     height = 20,                        -- Only applies when position is 'top' or 'bottom'
-    listing_style = "list",             -- One of 'list' or 'tree'
+    listing_style = "tree",             -- One of 'list' or 'tree'
     tree_options = {                    -- Only applies when listing_style is 'tree'
       flatten_dirs = true,              -- Flatten dirs that only contain one single dir
       folder_statuses = "only_folded",  -- One of 'never', 'only_folded' or 'always'.
@@ -365,8 +365,7 @@ require'diffview'.setup {
   },
 }
 EOF
-" nnoremap <silent> <Leader>gd :<C-u>DiffviewOpen
-" nnoremap <silent> <Leader>gc :<C-u>DiffviewClose<CR>
+nnoremap <silent> <Leader>gc :<C-u>DiffviewClose<CR>
 
 " nvim-bqf: quickfixウィンドウの拡張プラグイン
 lua << EOF
@@ -496,25 +495,25 @@ vim.api.nvim_set_keymap('x', 'g#', [[<Plug>(asterisk-gz#)<Cmd>lua require('hlsle
 EOF
 
 " specs.nvim
-lua << EOF
-require('specs').setup{
-    show_jumps  = true,
-    min_jump = 15,
-    popup = {
-        delay_ms = 0, -- delay before popup displays
-        inc_ms = 8, -- time increments used for fade/resize effects
-        blend = 10, -- starting blend, between 0-100 (fully transparent), see :h winblend
-        width = 50,
-        winhl = "PMenu",
-        fader = require('specs').linear_fader,
-        resizer = require('specs').shrink_resizer
-    },
-    ignore_filetypes = {},
-    ignore_buftypes = {
-        nofile = true,
-    },
-}
-EOF
+" lua << EOF
+" require('specs').setup{
+"     show_jumps  = true,
+"     min_jump = 15,
+"     popup = {
+"         delay_ms = 0, -- delay before popup displays
+"         inc_ms = 8, -- time increments used for fade/resize effects
+"         blend = 10, -- starting blend, between 0-100 (fully transparent), see :h winblend
+"         width = 50,
+"         winhl = "PMenu",
+"         fader = require('specs').linear_fader,
+"         resizer = require('specs').shrink_resizer
+"     },
+"     ignore_filetypes = {},
+"     ignore_buftypes = {
+"         nofile = true,
+"     },
+" }
+" EOF
 
 " todo-comments.nvim
 " FIXME:

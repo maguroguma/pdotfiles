@@ -204,7 +204,7 @@ Plug 'kevinhwang91/nvim-bqf'
 Plug 'kevinhwang91/nvim-hlslens'
 
 " specs.nvim
-Plug 'edluffy/specs.nvim'
+" Plug 'edluffy/specs.nvim'
 
 " shade.nvim
 " Plug 'sunjon/shade.nvim'
