@@ -29,6 +29,8 @@ brew install wget
 # gnu-sed, gawk
 brew install gnu-sed
 brew install gawk
+# git-delta
+brew install git-delta
 
 #########
 # System fonts

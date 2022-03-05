@@ -1,22 +1,25 @@
 [core]
-	excludesfile = ~/.gitignore
+  excludesfile = ~/.gitignore
   editor = vim
+  pager = delta
 
 [diff]
   tool      = vimdiff
   algorithm = histogram
   compactionHeuristic = true
+  colorMoved = default
 
 [merge]
   tool = vimdiff
+  conflictstyle = diff3
 
 [user]
-	name = myokoyama
-	email = part7steelballrun.to.8@gmail.com
+  name = myokoyama
+  email = part7steelballrun.to.8@gmail.com
 
 [commit]
   template = ~/.gitmessage
-	verbose = true
+  verbose = true
 
 [alias]
   unstage = reset HEAD
@@ -33,7 +36,14 @@
   clean-all = clean -df
 
 [ghq]
-	root = ~/go/src
+  root = ~/go/src
 
 [pull]
   ff = only
+
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  navigate = true  # use n and N to move between diff sections
+  line-numbers = true
