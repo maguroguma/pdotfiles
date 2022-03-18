@@ -48,7 +48,8 @@
     "typescript",
     "vue",
     "html",
-    "json"
+    "json",
+    "typescriptreact"
   ],
   "tailwindCSS.cssLanguages": [
     "css",

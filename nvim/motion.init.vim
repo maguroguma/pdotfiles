@@ -13,10 +13,11 @@ xnoremap <C-k> <cmd>HopLineBC<CR>
 " a balanced distribution of terminal / sequence keys
 lua require'hop'.setup { keys = 'etovxqpdygfblzhckisuran', jump_on_sole_occurrence = false }
 
-" nmap ' :<C-u>FuzzyMotion<CR>
-nmap ' <cmd>Pounce<CR>
+nmap ' :<C-u>FuzzyMotion<CR>
+" nmap ' <cmd>Pounce<CR>
 vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
+let g:fuzzy_motion_labels = ['H', 'J', 'K', 'L', 'Y', 'U', 'I', 'O', 'P', 'N', 'M', 'Q', 'W', 'E', 'R', 'T', 'A', 'S', 'D', 'F', 'G', 'Z', 'X', 'C', 'V', 'B']
 lua << EOF
 require'pounce'.setup{
   accept_keys = "HJKLYUIOPNMQWERTASDFGZXCVB",

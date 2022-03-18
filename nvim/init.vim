@@ -172,6 +172,8 @@ Plug 'kdheepak/lazygit.nvim'
 " motion
 Plug 'phaazon/hop.nvim'
 Plug 'rlane/pounce.nvim'
+" require denops
+Plug 'yuki-yano/fuzzy-motion.vim'
 
 " translate.vim
 Plug 'skanehira/translate.vim'
