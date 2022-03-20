@@ -203,7 +203,7 @@ Plug 'ellisonleao/glow.nvim'
 Plug 'kevinhwang91/nvim-bqf'
 
 " nvim-hlslens
-Plug 'kevinhwang91/nvim-hlslens'
+" Plug 'kevinhwang91/nvim-hlslens'
 
 " specs.nvim
 " Plug 'edluffy/specs.nvim'
@@ -225,7 +225,7 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'folke/todo-comments.nvim'
 
 " nvim-scrollview
-Plug 'dstein64/nvim-scrollview', { 'branch': 'main' }
+" Plug 'dstein64/nvim-scrollview', { 'branch': 'main' }
 
 " sniprun(neovim)
 Plug 'michaelb/sniprun', {'do': 'bash install.sh'}

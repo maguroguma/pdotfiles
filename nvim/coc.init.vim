@@ -223,7 +223,8 @@ let g:coc_global_extensions = [
       \ 'coc-syntax',
       \ 'coc-fzf-preview',
       \ 'coc-docker',
-      \ 'coc-tailwindcss'
+      \ 'coc-tailwindcss',
+      \ 'coc-deno'
       \ ]
 
 """
