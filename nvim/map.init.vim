@@ -41,10 +41,10 @@ nnoremap <Leader> <Nop>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " 行頭、行末移動（もともとのH, Lは表示領域中でのカーソルの画面最上部・最下部への移動）
-nnoremap H ^
-nnoremap L $
-vnoremap H ^
-vnoremap L $
+" nnoremap H ^
+" nnoremap L $
+" vnoremap H ^
+" vnoremap L $
 
 " 検索ワードを移動したらzz
 nnoremap n nzz

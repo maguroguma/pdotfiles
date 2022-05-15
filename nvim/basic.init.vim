@@ -100,7 +100,8 @@ let g:goyo_width = 120
 
 " surround vim
 " https://rcmdnk.com/blog/2014/05/03/computer-vim-octopress/
-xmap <Leader>* S*gvS*
+xmap <Leader>B S*gvS*
+xmap <Leader>b S*gvS*gvS<Space><Space>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ヘルプの言語を日本語優先にする

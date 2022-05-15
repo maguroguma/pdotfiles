@@ -55,3 +55,8 @@ echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
 # node(asdf)
 asdf install nodejs latest
 asdf global nodejs latest
+
+# docker completion
+mkdir -p ~/.zsh/completion
+ln -s /Applications/Docker.app/Contents/Resources/etc/docker.zsh-completion ~/.zsh/completion/_docker
+ln -s /Applications/Docker.app/Contents/Resources/etc/docker-compose.zsh-completion ~/.zsh/completion/_docker-compose

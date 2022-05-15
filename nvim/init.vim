@@ -44,6 +44,9 @@ Plug 'mzlogin/vim-markdown-toc', { 'for': ['md', 'markdown'] }
 Plug 'iamcco/mathjax-support-for-mkdp', { 'for': ['md', 'markdown'] }
 " Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
+" Markdown Preview
+Plug 'previm/previm'
+
 " golang.init.vim
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
 Plug 'jodosha/vim-godebug', { 'for': 'go' }
@@ -231,6 +234,9 @@ Plug 'folke/todo-comments.nvim'
 Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 " 'bash install.sh 1' to get the bleeding edge or if you have trouble with the precompiled binary,
 "  but you'll compile sniprun at every update & will need the rust toolchain
+
+" Japanese Text
+Plug 'deton/jasegment.vim'
 
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'
@@ -455,7 +461,7 @@ set nocompatible
 syntax enable
 
 " 全モードでマウス利用
-set mouse=a
+set mouse=n
 
 " foldXXX
 " インデントレベルで折り畳めるように
