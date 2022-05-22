@@ -60,7 +60,7 @@ nnoremap <silent> <C-p> :Files<CR>
 " nnoremap <silent> <C-p><C-p> :Files<CR>
 " nnoremap <silent> <C-p>p :Files<CR>
 " nnoremap <silent> <C-p><C-m> :Fmru<CR>
-" nnoremap <silent> <C-p>m :Fmru<CR>
+nnoremap <silent> <C-m> :Fmru<CR>
 " nnoremap <silent> <C-p><C-b> :Buffers<CR>
 " nnoremap <silent> <C-p>b :Buffers<CR>
 " nnoremap <silent> <C-p>gr :Rg!<CR>

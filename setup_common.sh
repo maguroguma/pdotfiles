@@ -58,6 +58,8 @@ go install github.com/jesseduffield/lazygit@latest
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # bat
 cargo install --locked bat
+# silicon
+cargo install silicon
 
 #########
 # Must tools

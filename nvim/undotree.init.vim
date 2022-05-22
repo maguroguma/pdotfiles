@@ -5,7 +5,7 @@
 " endif
 let g:undotree_WindowLayout = 2         " undotreeは左側/diffは下にウィンドウ幅で表示
 let g:undotree_ShortIndicators = 1      " 時間単位は短く表示
-let g:undotree_SplitWidth = 30          " undotreeのウィンドウ幅
+let g:undotree_SplitWidth = 40          " undotreeのウィンドウ幅
 let g:undotree_SetFocusWhenToggle = 1   " undotreeを開いたらフォーカスする
 "let g:undotree_DiffAutoOpen = 0         " diffウィンドウは起動時無効
 let g:undotree_DiffpanelHeight = 8      " diffウィンドウの行数

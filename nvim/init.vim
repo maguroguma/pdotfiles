@@ -145,13 +145,16 @@ Plug 'lambdalisue/gina.vim'
 Plug 'rhysd/devdocs.vim'
 
 " vim-bookmarks
-" Plug 'MattesGroeger/vim-bookmarks'
+Plug 'MattesGroeger/vim-bookmarks'
 
 " nvim-treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
 " vim germanium(require denops and germanium)
 Plug 'skanehira/denops-germanium.vim'
+
+" vim-silicon(Rust)
+Plug 'segeljakt/vim-silicon'
 
 " nerdcommenter
 " Plug 'preservim/nerdcommenter'
@@ -238,11 +241,37 @@ Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 " Japanese Text
 Plug 'deton/jasegment.vim'
 
+" vim-quickhl
+Plug 't9md/vim-quickhl'
+
+" vim-edgemotion
+Plug 'haya14busa/vim-edgemotion'
+
+" vim-rengbang
+Plug 'deris/vim-rengbang'
+
+" nvim-spectre
+Plug 'nvim-lua/plenary.nvim'
+Plug 'windwp/nvim-spectre'
+
+" which-key.nvim
+Plug 'folke/which-key.nvim'
+
+" dial.nvim
+Plug 'monaqa/dial.nvim'
+
+" vim-print-debug
+Plug 'sentriz/vim-print-debug'
+
+" legendary.nvim (requires neovim 0.7.0)
+" Plug 'mrjones2014/legendary.nvim'
+
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'
 Plug 'tyru/capture.vim'
 Plug 'lambdalisue/readablefold.vim'
-Plug 'tpope/vim-speeddating'
+" Plug 'tpope/vim-speeddating'
+Plug 'mtdl9/vim-log-highlighting'
 
 " no setting file
 Plug 'Raimondi/delimitMate'
@@ -283,6 +312,7 @@ Plug 'heavenshell/vim-jsdoc', {
 Plug 'mattn/emmet-vim'
 Plug 'machakann/vim-sandwich'
 Plug 'ap/vim-css-color'
+Plug 'jsborjesson/vim-uppercase-sql'
 
 " oj.vim
 " Plug '~/go/src/github.com/my0k/vim-oj-helper'
@@ -363,7 +393,7 @@ runtime ./ultisnip.init.vim
 runtime ./textobj.init.vim
 runtime ./fern.init.vim
 runtime ./defx.init.vim
-" runtime ./bookmarks.init.vim
+runtime ./bookmarks.init.vim
 runtime ./treesitter.init.vim
 runtime ./lir.init.vim
 runtime ./motion.init.vim

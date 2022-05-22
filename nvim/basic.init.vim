@@ -675,3 +675,84 @@ require'sniprun'.setup({
 })
 EOF
 
+" vim-quickhl
+nmap M <Plug>(quickhl-manual-this)
+xmap <Space>m <Plug>(quickhl-manual-this)
+" nmap <Space>M <Plug>(quickhl-manual-reset)
+xmap <Space>M <Plug>(quickhl-manual-reset)
+
+" vim-edgemotion
+map <C-j> <Plug>(edgemotion-j)
+map <C-k> <Plug>(edgemotion-k)
+
+" vim-rengbang
+let g:rengbang_default_pattern  = '\(\d\+\)'
+let g:rengbang_default_start    = 0
+let g:rengbang_default_step     = 1
+let g:rengbang_default_usefirst = 0
+let g:rengbang_default_confirm_sequence = [
+  \ 'pattern',
+  \ 'start',
+  \ 'step',
+  \ 'usefirst',
+  \ 'format',
+  \ ]
+
+" nvim-spectre
+nnoremap <leader>S <cmd>lua require('spectre').open()<CR>
+"search current word
+nnoremap <leader>sw <cmd>lua require('spectre').open_visual({select_word=true})<CR>
+vnoremap <leader>s <cmd>lua require('spectre').open_visual()<CR>
+"  search in current file
+nnoremap <leader>sp viw:lua require('spectre').open_file_search()<cr>
+" run command :Spectre
+
+" which-key.nvim
+lua << EOF
+  require("which-key").setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  }
+EOF
+
+" capture.vim examples
+" Show all defined mappings in a buffer (you can search them).
+" :Capture map | map! | lmap
+" Show echoed messages again in a buffer.
+" :Capture mes
+" Show installed scripts in a buffer.
+" :Capture scriptnames
+" Import an external command's output to a buffer (like new | r!ls).
+" :Capture !ls
+" Show currently defined digraphs in a buffer.
+" :Capture digraphs
+
+" vim-silicon examples
+" Generate an image of the current buffer and write it to /path/to/output.png
+" :Silicon /path/to/output.png
+" Generate an image of the current buffer and write it to /path/to/output.png and clipboard.
+" :Silicon /path/to/output.png --to-clipboard
+" Generate an image of the current buffer and write it to /path/to/<filename>.png
+" :Silicon /path/to/
+" Generate an image of the current visual line selection and write it to /path/to/output.png
+" :'<,'>Silicon /path/to/output.png
+" Generate an image of the current buffer, with the current visual line selection highlighted.
+" :'<,'>Silicon! /path/to/output.png
+
+" dial.nvim
+nmap  <C-a>  <Plug>(dial-increment)
+nmap  <C-x>  <Plug>(dial-decrement)
+vmap  <C-a>  <Plug>(dial-increment)
+vmap  <C-x>  <Plug>(dial-decrement)
+vmap g<C-a> g<Plug>(dial-increment)
+vmap g<C-x> g<Plug>(dial-decrement)
+
+" vim-print-debug
+nnoremap <leader>D :call print_debug#print_debug()<cr>
+let g:print_debug_templates = {
+\   'go':         'fmt.Printf("+++ {}\n")',
+\   'python':     'print(f"+++ {}")',
+\   'javascript': 'console.log(`+++ {}`);',
+\   'c':          'printf("+++ {}\n");',
+\ }
