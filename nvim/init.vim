@@ -180,6 +180,7 @@ Plug 'phaazon/hop.nvim'
 Plug 'rlane/pounce.nvim'
 " require denops
 Plug 'yuki-yano/fuzzy-motion.vim'
+Plug 'skanehira/denops-docker.vim'
 
 " translate.vim
 Plug 'skanehira/translate.vim'
@@ -265,6 +266,12 @@ Plug 'sentriz/vim-print-debug'
 
 " legendary.nvim (requires neovim 0.7.0)
 " Plug 'mrjones2014/legendary.nvim'
+
+" auto-git-diff(rebase plugin)
+Plug 'hotwatermorning/auto-git-diff'
+
+" modesearch.vim
+Plug 'monaqa/modesearch.vim'
 
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'

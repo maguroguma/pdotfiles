@@ -756,3 +756,12 @@ let g:print_debug_templates = {
 \   'javascript': 'console.log(`+++ {}`);',
 \   'c':          'printf("+++ {}\n");',
 \ }
+
+" modesearch.vim
+" nmap g/ <Plug>(modesearch-slash)
+" nmap g? <Plug>(modesearch-question)
+cmap <C-x> <Plug>(modesearch-toggle-mode)
+" Always starts in 'rawstr' mode
+nmap g/ <Plug>(modesearch-slash-rawstr)
+" Always starts in 'regexp' mode
+nmap g? <Plug>(modesearch-question-rawstr)
