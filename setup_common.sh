@@ -80,6 +80,10 @@ make install
 mkdir $HOME/.config/navi
 ln -fnsv $HOME/dotfiles/navi/config.yaml $HOME/.config/navi/config.yaml
 
+# tmux
+# TPM
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 #########
 # deno
 #########

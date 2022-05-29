@@ -48,6 +48,11 @@ alias gwl='git worktree list'
 alias gwp='git worktree prune'
 
 ###
+# Docker
+###
+alias docker-restart='docker-compose down && docker-compose build && docker-compose up -d'
+
+###
 # ripgrep
 ###
 
@@ -67,6 +72,7 @@ alias tks='tmux kill-server'
 alias tls='tmux ls'
 # tns <session-name>
 alias tns='tmux new -s'
+alias t='tmux-session-fzf.sh'
 
 ###
 # 競技プログラミング用(Go)

@@ -273,6 +273,9 @@ Plug 'hotwatermorning/auto-git-diff'
 " modesearch.vim
 Plug 'monaqa/modesearch.vim'
 
+" nvim-remote-containers
+Plug 'jamestthompson3/nvim-remote-containers'
+
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'
 Plug 'tyru/capture.vim'
