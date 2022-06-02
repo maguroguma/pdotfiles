@@ -677,9 +677,9 @@ EOF
 
 " vim-quickhl
 nmap M <Plug>(quickhl-manual-this)
-xmap <Space>m <Plug>(quickhl-manual-this)
+xmap M <Plug>(quickhl-manual-this)
 " nmap <Space>M <Plug>(quickhl-manual-reset)
-xmap <Space>M <Plug>(quickhl-manual-reset)
+" xmap M <Plug>(quickhl-manual-reset)
 
 " vim-edgemotion
 map <C-j> <Plug>(edgemotion-j)

@@ -6,8 +6,8 @@ let g:bookmark_auto_save = 1
 let g:bookmark_no_default_key_mappings = 1
 nmap <Leader>mm <Plug>BookmarkToggle
 nmap <Leader>mi <Plug>BookmarkAnnotate
-nmap <Leader>mn <Plug>BookmarkNext
-nmap <Leader>mp <Plug>BookmarkPrev
+" nmap <Leader>mn <Plug>BookmarkNext
+" nmap <Leader>mp <Plug>BookmarkPrev
 nmap <Leader>ma <Plug>BookmarkShowAll
 nmap <Leader>mc <Plug>BookmarkClear
 nmap <Leader>mx <Plug>BookmarkClearAll
