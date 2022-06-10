@@ -765,3 +765,14 @@ cmap <C-x> <Plug>(modesearch-toggle-mode)
 nmap g/ <Plug>(modesearch-slash-rawstr)
 " Always starts in 'regexp' mode
 nmap g? <Plug>(modesearch-question-rawstr)
+
+" bufjump.nvim
+lua << EOF
+require("bufjump").setup({
+    forward = "<C-i>",
+    backward = "<C-o>",
+    on_success = function()
+        vim.cmd([[execute "normal! g`\"zz"]])
+    end,
+})
+EOF

@@ -115,3 +115,13 @@ sudo make install
 
 # git hooks pre-push
 ln -fnsv $HOME/dotfiles/git_template $HOME/.git_template
+
+###
+# Git
+###
+
+# git-secrets
+git clone git@github.com:awslabs/git-secrets.git $GOPATH/src/github.com/awslabs/git-secrets
+cd $GOPATH/src/github.com/awslabs/git-secrets
+sudo make install
+cd --

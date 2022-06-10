@@ -134,6 +134,9 @@ function! s:GenerateMdLink(text, url)
 endfunction
 :command! -narg=* -range MdLink :call s:GenerateMdLink(<f-args>)
 
+" confirm qall
+nnoremap <leader>qq :<C-u>confirm qall<CR>
+
 " ********
 
 " 範囲指定関数のサンプル

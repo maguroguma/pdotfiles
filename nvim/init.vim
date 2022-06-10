@@ -56,9 +56,13 @@ Plug 'w0ng/vim-hybrid'
 Plug 'srcery-colors/srcery-vim'
 
 " buffer.init.vim
-Plug 'moll/vim-bbye'
+" Plug 'moll/vim-bbye'
 " Plug 'schickling/vim-bufonly'
 " Plug 'jeetsukumaran/vim-buffergator'
+Plug 'Asheq/close-buffers.vim'
+
+" close-buffers.nvim
+" Plug 'kazhala/close-buffers.nvim'
 
 " coc.init.vim
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -275,6 +279,9 @@ Plug 'monaqa/modesearch.vim'
 
 " nvim-remote-containers
 Plug 'jamestthompson3/nvim-remote-containers'
+
+" bufjump.nvim
+Plug 'kwkarlwang/bufjump.nvim'
 
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'
