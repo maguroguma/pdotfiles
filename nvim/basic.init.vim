@@ -767,12 +767,12 @@ nmap g/ <Plug>(modesearch-slash-rawstr)
 nmap g? <Plug>(modesearch-question-rawstr)
 
 " bufjump.nvim
-lua << EOF
-require("bufjump").setup({
-    forward = "<C-i>",
-    backward = "<C-o>",
-    on_success = function()
-        vim.cmd([[execute "normal! g`\"zz"]])
-    end,
-})
-EOF
+" lua << EOF
+" require("bufjump").setup({
+"     forward = "<C-i>",
+"     backward = "<C-o>",
+"     on_success = function()
+"         vim.cmd([[execute "normal! g`\"zz"]])
+"     end,
+" })
+" EOF

@@ -281,7 +281,7 @@ Plug 'monaqa/modesearch.vim'
 Plug 'jamestthompson3/nvim-remote-containers'
 
 " bufjump.nvim
-Plug 'kwkarlwang/bufjump.nvim'
+" Plug 'kwkarlwang/bufjump.nvim'
 
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'
