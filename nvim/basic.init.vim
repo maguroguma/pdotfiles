@@ -255,8 +255,8 @@ lua require('Comment').setup()
 let g:doge_enable_mappings = 0
 
 " glow.nvim
-nnoremap <silent> <Leader>mp :<C-u>Glow<CR>
-noremap <C-w>z <C-w>\|<C-w>\_
+" nnoremap <silent> <Leader>mp :<C-u>Glow<CR>
+" noremap <C-w>z <C-w>\|<C-w>\_
 
 " diffview.nvim
 lua << EOF

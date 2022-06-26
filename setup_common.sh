@@ -51,6 +51,8 @@ git clone https://github.com/sheepla/fzwiki.git $GOPATH/src/github.com/fzwiki
 cd $GOPATH/src/github.com/sheepla/fzwiki && go install
 # lazygit
 go install github.com/jesseduffield/lazygit@latest
+# ojosama
+go install github.com/jiro4989/ojosama/cmd/ojosama@latest
 
 #########
 # Rust

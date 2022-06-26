@@ -205,7 +205,7 @@ Plug 'numToStr/Comment.nvim'
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 
 " glow.nvim
-Plug 'ellisonleao/glow.nvim'
+" Plug 'ellisonleao/glow.nvim'
 
 " git-blame.nvim
 " Plug 'f-person/git-blame.nvim'
@@ -282,6 +282,9 @@ Plug 'jamestthompson3/nvim-remote-containers'
 
 " bufjump.nvim
 " Plug 'kwkarlwang/bufjump.nvim'
+
+" nvim-pasta
+" Plug 'hrsh7th/nvim-pasta'
 
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'

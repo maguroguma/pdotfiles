@@ -22,3 +22,6 @@ command! Mdpdf call Mdpdf()
 
 " vim-markdown-toc
 " :GenTocXXX
+
+" previm
+nnoremap <silent> <Leader>mp :<C-u>PrevimOpen<CR>
