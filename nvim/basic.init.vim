@@ -699,12 +699,12 @@ let g:rengbang_default_confirm_sequence = [
   \ ]
 
 " nvim-spectre
-nnoremap <leader>S <cmd>lua require('spectre').open()<CR>
+nnoremap <leader>s <cmd>lua require('spectre').open()<CR>
 "search current word
-nnoremap <leader>sw <cmd>lua require('spectre').open_visual({select_word=true})<CR>
+" nnoremap <leader>sw <cmd>lua require('spectre').open_visual({select_word=true})<CR>
 vnoremap <leader>s <cmd>lua require('spectre').open_visual()<CR>
 "  search in current file
-nnoremap <leader>sp viw:lua require('spectre').open_file_search()<cr>
+" nnoremap <leader>sp viw:lua require('spectre').open_file_search()<cr>
 " run command :Spectre
 
 " which-key.nvim
@@ -767,12 +767,12 @@ nmap g/ <Plug>(modesearch-slash-rawstr)
 nmap g? <Plug>(modesearch-question-rawstr)
 
 " bufjump.nvim
-" lua << EOF
-" require("bufjump").setup({
-"     forward = "<C-i>",
-"     backward = "<C-o>",
-"     on_success = function()
-"         vim.cmd([[execute "normal! g`\"zz"]])
-"     end,
-" })
-" EOF
+lua << EOF
+require("bufjump").setup({
+    forward = "<Leader>-",
+    backward = "-",
+    on_success = function()
+        vim.cmd([[execute "normal! g`\"zz"]])
+    end,
+})
+EOF
