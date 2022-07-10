@@ -67,6 +67,7 @@ Plug 'Asheq/close-buffers.vim'
 " coc.init.vim
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'iamcco/coc-tailwindcss',  {'do': 'yarn install --frozen-lockfile && yarn run build'}
+Plug 'liuchengxu/vista.vim'
 
 " fuzzy finder
 Plug 'junegunn/fzf', { 'do': './install --bin' }
@@ -374,7 +375,6 @@ Plug 'maguroguma/vim-oj-helper'
 " Plug 'skywind3000/asyncrun.vim'
 " Plug 'mcchrish/nnn.vim'
 " Plug 'romainl/vim-cool'
-" Plug 'liuchengxu/vista.vim'
 " Plug 'osyo-manga/vim-anzu'
 " Plug 'Shougo/neomru.vim'
 " Plug 'Shougo/denite.nvim'
