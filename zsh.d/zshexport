@@ -8,7 +8,6 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 # @os-dependency
-export EDITOR=/usr/local/bin/nvim
 eval "$(direnv hook zsh)"
 
 # nodebrew
