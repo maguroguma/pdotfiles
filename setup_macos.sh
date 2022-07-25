@@ -60,3 +60,11 @@ asdf global nodejs latest
 mkdir -p ~/.zsh/completion
 ln -s /Applications/Docker.app/Contents/Resources/etc/docker.zsh-completion ~/.zsh/completion/_docker
 ln -s /Applications/Docker.app/Contents/Resources/etc/docker-compose.zsh-completion ~/.zsh/completion/_docker-compose
+
+# mecab
+brew install mecab
+brew install mecab-ipadic
+
+# shell-gei
+brew install nkf
+brew install pwgen

@@ -53,6 +53,10 @@ cd $GOPATH/src/github.com/sheepla/fzwiki && go install
 go install github.com/jesseduffield/lazygit@latest
 # ojosama
 go install github.com/jiro4989/ojosama/cmd/ojosama@latest
+# godoc
+go install golang.org/x/tools/cmd/godoc@latest
+# gojson
+go install github.com/ChimeraCoder/gojson/gojson@latest
 
 #########
 # Rust
