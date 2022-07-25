@@ -287,6 +287,9 @@ Plug 'kwkarlwang/bufjump.nvim'
 " nvim-pasta
 " Plug 'hrsh7th/nvim-pasta'
 
+" vim-gh-line
+Plug 'ruanyl/vim-gh-line'
+
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'
 Plug 'tyru/capture.vim'
