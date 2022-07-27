@@ -69,6 +69,8 @@ highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
 highlight StatusLineNC ctermbg=193
 " コマンドラインの補完
 set wildmode=list:longest
+" 折りたたみの色
+hi Folded ctermbg=Green ctermfg=Gray
 
 " Tab系
 " 不可視文字を可視化(タブが「▸-」と表示される)
