@@ -57,6 +57,12 @@ go install github.com/jiro4989/ojosama/cmd/ojosama@latest
 go install golang.org/x/tools/cmd/godoc@latest
 # gojson
 go install github.com/ChimeraCoder/gojson/gojson@latest
+# stringer
+go install golang.org/x/tools/cmd/stringer@latest
+# errcheck
+go install github.com/kisielk/errcheck@latest
+# golangci-lint-langserver
+go install github.com/nametake/golangci-lint-langserver@latest
 
 #########
 # Rust

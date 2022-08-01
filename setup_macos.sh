@@ -68,3 +68,7 @@ brew install mecab-ipadic
 # shell-gei
 brew install nkf
 brew install pwgen
+
+# golangci-lint
+brew install golangci-lint
+brew upgrade golangci-lint
