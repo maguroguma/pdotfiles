@@ -36,6 +36,7 @@
   clean-all = clean -df
   sec-install = secrets --install
   sec-scan-history = secrets --scan-history
+  sec-register-aws = secrets --register-aws
 
 [ghq]
   root = ~/go/src
