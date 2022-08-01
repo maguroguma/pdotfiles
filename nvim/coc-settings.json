@@ -5,6 +5,21 @@
       "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
       "filetypes": ["go"]
     },
+    "golangci-lint-languageserver": {
+      "command": "golangci-lint-langserver",
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "command": [
+          "golangci-lint",
+          "run",
+          "--enable-all",
+          "--disable",
+          "lll",
+          "--out-format",
+          "json"
+        ]
+      }
+    },
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],

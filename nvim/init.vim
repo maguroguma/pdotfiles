@@ -102,7 +102,7 @@ endif
 
 " vue plugins
 Plug 'posva/vim-vue'
-" Plug 'tomtom/tcomment_vim'
+Plug 'tomtom/tcomment_vim'
 
 " fern
 " Plug 'lambdalisue/fern.vim'
@@ -153,7 +153,7 @@ Plug 'rhysd/devdocs.vim'
 Plug 'MattesGroeger/vim-bookmarks'
 
 " nvim-treesitter
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
 " vim germanium(require denops and germanium)
 Plug 'skanehira/denops-germanium.vim'
@@ -174,8 +174,8 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 
 " diffview.nvim
-Plug 'nvim-lua/plenary.nvim'
-Plug 'sindrets/diffview.nvim'
+" Plug 'nvim-lua/plenary.nvim'
+" Plug 'sindrets/diffview.nvim'
 
 " lazygit.nvim
 Plug 'kdheepak/lazygit.nvim'
@@ -200,7 +200,7 @@ Plug 'skanehira/qfopen.vim'
 Plug 'rhysd/committia.vim'
 
 " Comment.nvim
-Plug 'numToStr/Comment.nvim'
+" Plug 'numToStr/Comment.nvim'
 
 " vim-doge
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
@@ -289,6 +289,9 @@ Plug 'kwkarlwang/bufjump.nvim'
 
 " vim-gh-line
 Plug 'ruanyl/vim-gh-line'
+
+" scratch.vim
+Plug 'mtth/scratch.vim'
 
 " latest no setting plugins
 " Plug 'osyo-manga/vim-brightest'
@@ -417,7 +420,7 @@ runtime ./textobj.init.vim
 runtime ./fern.init.vim
 runtime ./defx.init.vim
 runtime ./bookmarks.init.vim
-runtime ./treesitter.init.vim
+" runtime ./treesitter.init.vim
 runtime ./lir.init.vim
 runtime ./motion.init.vim
 " 自作コマンドなど
@@ -426,6 +429,7 @@ runtime ./original/competitive.init.vim
 runtime ./original/todo.init.vim
 runtime ./original/practical.init.vim
 runtime ./original/terminal.init.vim
+runtime ./original/shell-history.vim
 " 手動donwloadしたもの
 runtime ./downloads/catn.vim
 runtime ./downloads/qargs.vim
