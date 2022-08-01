@@ -147,7 +147,7 @@ export EDITOR=nvim
 export HISTFILE=~/.zhistory
 
 # メモリに保存する履歴の件数を指定する
-export HISTSIZE=1000
+export HISTSIZE=5000
 
 # ファイルに保存する履歴の件数を指定する
 export SAVEHIST=1000000
