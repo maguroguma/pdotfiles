@@ -433,6 +433,7 @@ runtime ./original/shell-history.vim
 " 手動donwloadしたもの
 runtime ./downloads/catn.vim
 runtime ./downloads/qargs.vim
+runtime ./downloads/jq.vim
 
 " 汎用設定ファイル読み込み（プラグインに上書きされないように最後に読む）
 runtime ./set.init.vim
