@@ -430,6 +430,7 @@ runtime ./original/todo.init.vim
 runtime ./original/practical.init.vim
 runtime ./original/terminal.init.vim
 runtime ./original/shell-history.vim
+runtime ./original/nkf.vim
 " 手動donwloadしたもの
 runtime ./downloads/catn.vim
 runtime ./downloads/qargs.vim

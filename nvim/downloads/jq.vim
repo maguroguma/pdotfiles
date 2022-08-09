@@ -24,5 +24,6 @@ if executable('jq')
     " エラーメッセージ用バッファは読み取り専用にしておく
     setlocal readonly
   endfunction
+
   command! -bar -bang -range=% -nargs=? Jq  <line1>,<line2>call s:jq(<bang>0, <f-args>)
 endif
