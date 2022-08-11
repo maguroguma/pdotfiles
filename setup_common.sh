@@ -21,6 +21,8 @@ ln -fnsv $HOME/dotfiles/nvim $HOME/.config/nvim
 ln -fnsv $HOME/dotfiles/gitconfig $HOME/.gitconfig
 ln -fnsv $HOME/dotfiles/gitignore $HOME/.gitignore
 ln -fnsv $HOME/dotfiles/gitmessage $HOME/.gitmessage
+# editorconfig
+ln -fnsv $HOME/dotfiles/.editorconfig $HOME/.editorconfig
 
 #########
 # Vim library
