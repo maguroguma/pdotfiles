@@ -72,3 +72,6 @@ brew install pwgen
 # golangci-lint
 brew install golangci-lint
 brew upgrade golangci-lint
+
+# yq(yaml parser)
+brew install yq
