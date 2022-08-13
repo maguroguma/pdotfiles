@@ -1,14 +1,18 @@
-" TODO: grepできるバージョンも作りたい
 if executable('show-history.sh')
-  function! s:showShellHistory()
+  function! s:showShellHistory(...)
     execute 'botright' 10 'new'
     setlocal nobuflisted bufhidden=unload buftype=nofile
-    :read !show-history.sh
-    :norm gg
+    read !show-history.sh
+    if a:0 == 1
+      " echo 'v/' . a:1 . '/d'
+      let l:exe_com = 'v/' . a:1 . '/d'
+      execute l:exe_com
+    endif
+    norm gg
     setlocal nomodified
     " setlocal readonly
   endfunction
 
   " g/<regexp>/d や v/<regexp>/d などしてフィルタはその後行う
-  command! -nargs=0 ShellHistory :call s:showShellHistory()
+  command! -nargs=? ShellHistory :call s:showShellHistory(<f-args>)
 endif
