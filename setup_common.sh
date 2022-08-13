@@ -65,6 +65,15 @@ go install golang.org/x/tools/cmd/stringer@latest
 go install github.com/kisielk/errcheck@latest
 # golangci-lint-langserver
 go install github.com/nametake/golangci-lint-langserver@latest
+# sqlc
+go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
+# sqlboiler
+go install github.com/volatiletech/sqlboiler/v4@latest
+go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-psql@latest
+# swag(go-swagger)
+go install github.com/swaggo/swag/cmd/swag@latest
+# oapi-codegen(go-openapi)
+go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
 
 #########
 # Rust
