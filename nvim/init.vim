@@ -1,7 +1,6 @@
-" 起動時設定
-if has('vim_starting')
-  set nocompatible
-endif
+"""
+" ENTRYPOINT:
+"""
 
 " vim-plugのチェック（未インストールであれば、curlでインストールの後、初期化を行う）
 if !filereadable(expand('~/.local/share/nvim/site/autoload/plug.vim'))
@@ -154,8 +153,12 @@ call plug#end()
 
 filetype plugin indent on
 
-" leader
+" leaderの設定は最初に行う
 let mapleader="\<Space>"
+
+" python3 path
+" @os-dependency
+let g:python3_host_prog = expand('/opt/homebrew/bin/python3')
 
 " プラグイン設定ファイル読み込み
 runtime ./plugins/statusline-setting.vim
@@ -183,90 +186,3 @@ runtime ./original/nkf.vim
 " 汎用設定ファイル読み込み（プラグインに上書きされないように最後に読む）
 runtime ./set.init.vim
 runtime ./map.init.vim
-
-" python3 path
-" @os-dependency
-let g:python3_host_prog = expand('/opt/homebrew/bin/python3')
-
-" function
-"" xaml
-augroup MyXML
-  autocmd!
-  autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
-  autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
-augroup END
-
-"" The PC is fast enough, do syntax highlight syncing from start unless 200 lines
-augroup vimrc-sync-fromstart
-  autocmd!
-  autocmd BufEnter * :syntax sync maxlines=200
-augroup END
-
-"" Remember cursor position
-augroup vimrc-remember-cursor-position
-  autocmd!
-  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-augroup END
-
-"" txt
-augroup vimrc-wrapping
-  autocmd!
-  autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
-augroup END
-if !exists('*s:setupWrapping')
-  function s:setupWrapping()
-    set wrap
-    set wm=2
-    set textwidth=79
-  endfunction
-endif
-
-"" make/cmake
-augroup vimrc-make-cmake
-  autocmd!
-  autocmd FileType make setlocal noexpandtab
-  autocmd BufNewFile,BufRead CMakeLists.txt setlocal filetype=cmake
-augroup END
-
-"" python
-augroup vimrc-python
-  autocmd!
-  autocmd FileType python setlocal
-      \ formatoptions+=croq softtabstop=4
-      \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
-augroup END
-
-" vi互換モードで動作させない
-set nocompatible
-
-syntax enable
-
-" 全モードでマウス利用
-set mouse=n
-
-" foldXXX
-" インデントレベルで折り畳めるように
-set foldmethod=indent
-" 初期表示で折り畳まにように
-set foldlevelstart=100
-
-if has("autocmd")
-  "ファイルタイプの検索を有効にする
-  filetype plugin on
-  "ファイルタイプに合わせたインデントを利用
-  filetype indent on
-  "sw=softtabstop, sts=shiftwidth, ts=tabstop, et=expandtabの略
-  autocmd FileType c           setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType ruby        setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType js          setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType css         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType scss        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType sass        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType javascript  setlocal sw=2 sts=2 ts=2 et
-endif

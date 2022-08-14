@@ -15,6 +15,19 @@
 " PageUp      <PageUp><PageDown>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" vi互換モードで動作させない
+set nocompatible
+
+syntax enable
+
+" ノーマルモードでのみマウス利用
+set mouse=n
+
+" インデントレベルで折り畳めるように
+set foldmethod=indent
+" 初期表示で折り畳まないように
+set foldlevelstart=100
+
 " 挿入モードでのバックスペースで改行が削除できない場合に設定する項目
 set backspace=indent,eol,start
 
@@ -148,3 +161,72 @@ set wildmenu
 set history=200
 
 set helplang=ja
+
+" function
+"" xaml
+augroup MyXML
+  autocmd!
+  autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
+augroup END
+
+"" The PC is fast enough, do syntax highlight syncing from start unless 200 lines
+augroup vimrc-sync-fromstart
+  autocmd!
+  autocmd BufEnter * :syntax sync maxlines=200
+augroup END
+
+"" Remember cursor position
+augroup vimrc-remember-cursor-position
+  autocmd!
+  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+augroup END
+
+"" txt
+augroup vimrc-wrapping
+  autocmd!
+  autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
+augroup END
+if !exists('*s:setupWrapping')
+  function s:setupWrapping()
+    set wrap
+    set wm=2
+    set textwidth=79
+  endfunction
+endif
+
+"" make/cmake
+augroup vimrc-make-cmake
+  autocmd!
+  autocmd FileType make setlocal noexpandtab
+  autocmd BufNewFile,BufRead CMakeLists.txt setlocal filetype=cmake
+augroup END
+
+"" python
+augroup vimrc-python
+  autocmd!
+  autocmd FileType python setlocal
+      \ formatoptions+=croq softtabstop=4
+      \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+augroup END
+
+if has("autocmd")
+  "ファイルタイプの検索を有効にする
+  filetype plugin on
+  "ファイルタイプに合わせたインデントを利用
+  filetype indent on
+  "sw=softtabstop, sts=shiftwidth, ts=tabstop, et=expandtabの略
+  autocmd FileType c           setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType ruby        setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType js          setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType css         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType scss        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType sass        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType javascript  setlocal sw=2 sts=2 ts=2 et
+endif
