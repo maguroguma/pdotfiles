@@ -121,3 +121,72 @@ nnoremap <leader>qq :<C-u>confirm qall<CR>
 :  echo "found " . n . " words"
 :endfunction
 
+" %:hのための、:hのマッピング
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+"""
+" tempfile.init.vimより移動
+"""
+" 一時ファイルを作成して開くコマンド
+:command! OpenTempfile :edit `=tempname()`
+
+" 日付、時刻を挿入する<C-A>dt, <C-A>tsを定義
+" :でコマンドラインモードに入ったあとに使える
+cnoremap <expr> <C-A>dt strftime('%Y%m%d')
+cnoremap <expr> <C-A>ts strftime('%Y%m%d%H%M')
+
+" mdpdfコマンドによるmarkdownからのPDFファイル生成コマンド
+function! Mdpdf() abort
+  if expand('%:e') != 'md'
+    return
+  endif
+  let l:command = 'mdpdf ' . expand('%:p')
+  call system(l:command)
+  call system('open ' . expand('%:r') . '.pdf')
+endfunction
+
+command! Mdpdf call Mdpdf()
+
+" 自動的にディレクトリを作成する: https://vim-jp.org/vim-users-jp/2011/02/20/Hack-202.html
+augroup vimrc-auto-mkdir  " {{{
+  autocmd!
+  autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
+  function! s:auto_mkdir(dir, force)  " {{{
+    if !isdirectory(a:dir) && (a:force ||
+    \    input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+      call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+    endif
+  endfunction  " }}}
+augroup END  " }}}
+
+" vimgrep
+" vim grepすると自動的にあたらしいウィンドウで検索結果一覧を表示する
+autocmd QuickFixCmdPost *grep* cwindow
+
+" ノーマルモードへの移行
+tnoremap <C-z> <C-\><C-n>
+
+" 参考: https://github.com/uga-rosa/dotfiles/blob/main/.config/nvim/plugin/term.vim
+
+let s:termname = "nvim_terminal"
+
+function! TermToggle() abort
+    let l:pane = bufwinnr(s:termname)
+    let l:buf = bufexists(s:termname)
+    if pane > 0
+        execute pane . "wincmd c"
+    elseif buf > 0
+        botright vs
+        execute "buffer " . s:termname
+        startinsert
+    else
+        botright vs
+        terminal
+        startinsert
+        execute "f " . s:termname
+        setlocal nobuflisted
+    endif
+endfunction
+
+nnoremap <C-q> <cmd>call TermToggle()<cr>
+tnoremap <C-q> <cmd>call TermToggle()<cr>

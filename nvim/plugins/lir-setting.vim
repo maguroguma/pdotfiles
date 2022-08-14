@@ -1,7 +1,14 @@
-lua <<EOF
+"""
+" PLUGSETTING: tamago324/lir.nvim
+"""
+
+lua << EOF
 local actions = require'lir.actions'
 local mark_actions = require 'lir.mark.actions'
 local clipboard_actions = require'lir.clipboard.actions'
+
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
 require'lir'.setup {
   show_hidden_files = true,
@@ -15,21 +22,22 @@ require'lir'.setup {
     ['h']     = actions.up,
     ['q']     = actions.quit,
 
-    ['K']     = actions.mkdir,
-    ['N']     = actions.newfile,
-    ['R']     = actions.rename,
+    ['M']     = actions.mkdir,
+    -- ['N']     = actions.newfile,
+    ['N']     = actions.touch,
+    ['r']     = actions.rename,
     ['@']     = actions.cd,
     ['Y']     = actions.yank_path,
     ['.']     = actions.toggle_show_hidden,
-    ['D']     = actions.delete,
+    ['d']     = actions.delete,
 
-    ['J'] = function()
+    ['x'] = function()
       mark_actions.toggle_mark()
       vim.cmd('normal! j')
     end,
-    ['C'] = clipboard_actions.copy,
-    ['X'] = clipboard_actions.cut,
-    ['P'] = clipboard_actions.paste,
+    ['c'] = clipboard_actions.copy,
+    ['m'] = clipboard_actions.cut,
+    ['p'] = clipboard_actions.paste,
   },
   float = {
     winblend = 0,
@@ -40,19 +48,17 @@ require'lir'.setup {
 
     -- -- You can define a function that returns a table to be passed as the third
     -- -- argument of nvim_open_win().
-    -- win_opts = function()
-    --   local width = math.floor(vim.o.columns * 0.8)
-    --   local height = math.floor(vim.o.lines * 0.8)
-    --   return {
-    --     border = require("lir.float.helper").make_border_opts({
-    --       "+", "─", "+", "│", "+", "─", "+", "│",
-    --     }, "Normal"),
-    --     width = width,
-    --     height = height,
-    --     row = 1,
-    --     col = math.floor((vim.o.columns - width) / 2),
-    --   }
-    -- end,
+    win_opts = function()
+      local width = math.floor(vim.o.columns * 0.5)
+      local height = math.floor(vim.o.lines * 0.8)
+      return {
+        border = {
+          "+", "=", "+", "│", "+", "=", "+", "│",
+        },
+        width = width,
+        height = height,
+      }
+    end,
   },
   hide_cursor = true,
   on_init = function()
@@ -83,3 +89,9 @@ require'lir.git_status'.setup({
   show_ignored = false
 })
 EOF
+
+" nnoremap <C-f> :<C-u>edit .<CR>
+nnoremap <C-f> :<C-u>lua require'lir.float'.toggle()<CR>
+nnoremap <C-h> :<C-u>lua require'lir.float'.toggle('.')<CR>
+" nnoremap <C-f>  :<C-u>lua require'lir.float'.init()<CR>
+command! Lir :edit .

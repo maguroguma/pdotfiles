@@ -1,8 +1,8 @@
-if executable('show-history.sh')
+if executable('shell-history.sh')
   function! s:showShellHistory(...)
     execute 'botright' 10 'new'
     setlocal nobuflisted bufhidden=unload buftype=nofile
-    read !show-history.sh
+    read !shell-history.sh
     if a:0 == 1
       " echo 'v/' . a:1 . '/d'
       let l:exe_com = 'v/' . a:1 . '/d'

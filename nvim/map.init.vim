@@ -33,24 +33,18 @@ cnoremap <C-l> <Right>
 
 nnoremap s <Nop>
 nnoremap t <Nop>
-" nnoremap q <Nop>
+nnoremap q <Nop>
 nnoremap <Leader> <Nop>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 画面分割、移動、タブ
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" 行頭、行末移動（もともとのH, Lは表示領域中でのカーソルの画面最上部・最下部への移動）
-" nnoremap H ^
-" nnoremap L $
-" vnoremap H ^
-" vnoremap L $
-
 " 検索ワードを移動したらzz
 nnoremap n nzz
 nnoremap N Nzz
-nnoremap * *zz
-nnoremap # #zz
+" map * *zz
+" map # #zz
 
 " 水平分割、垂直分割
 nnoremap s- :<C-u>sp<CR>
@@ -60,37 +54,19 @@ nnoremap sj <C-w>j
 nnoremap sk <C-w>k
 nnoremap sl <C-w>l
 nnoremap sh <C-w>h
-" nnoremap <C-h> <C-w>h
-" nnoremap <C-l> <C-w>l
-" nnoremap sw <C-w>w
 " 分割した画面の移動（入れ替え）
 nnoremap sJ <C-w>J
 nnoremap sK <C-w>K
 nnoremap sL <C-w>L
 nnoremap sH <C-w>H
-" nnoremap sr <C-w>r
-" 新規タブ、タブ切り替え（snとspについては本来逆にすべきだが、現在のthemeではどうしてもしっくりこないので逆にしている）
-" nnoremap st :<C-u>tabnew<CR>
-" nnoremap sn gT
-" nnoremap sp gt
-" nnoremap tq :<C-u>tabclose<CR>
 " 画面サイズを正規化（最大化など）
 nnoremap s= <C-w>=
 nnoremap so <C-w>_<C-w>|
 nnoremap sO <C-w>=
 " 閉じる
-" nnoremap sq :<C-u>q<CR>
 nnoremap sq :<C-u>confirm quit<CR>
-nnoremap sQ :<C-u>bd<CR>
-" バッファ関連（？）
-" nnoremap <silent> <C-j> :bprev<CR>
-" nnoremap <silent> <C-k> :bnext<CR>
 " バッファが編集中でもその他のファイルを開けるように
 set hidden
-
-" ターミナルモード
-" tnoremap <A-j> <C-\><C-n>
-" tnoremap <ESC> <C-\><C-n>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader周り
@@ -106,20 +82,8 @@ nnoremap K 10gk
 vnoremap J 10gj
 vnoremap K 10gk
 
-" 画面分割をtmuxぽく
-" nnoremap <Leader>- :<C-u>sp<CR>
-" nnoremap <Leader><Bar> :<C-u>vs<CR>
-" 縦方向に画面サイズを均一化
-
 nnoremap <Leader>w :w<CR>
-" バッファを破棄してカレントファイルをリロード
 nnoremap <Leader>e :e!<CR>
-
-" init.vimの編集（リロードはなぜかできないので手動でやる必要がある）
-" nnoremap <Leader>. :e $HOME/.config/nvim/init.vim<CR>
-
-" 相対行トグル
-" nnoremap <silent> <Leader>l :set relativenumber!<CR>
 
 " クリップボードレジスタを使ったヤンク・ペースト・削除
 vmap <Leader>y "+y
@@ -167,10 +131,5 @@ cnoremap <c-p> <up>
 " マクロ周り, qはprefixとして使えるようにする
 nnoremap Q q
 
-" wrapのトグル
-" nnoremap <Leader>l :<C-u>set wrap!<CR>
 " numberのトグル
 nnoremap <Leader>n :<C-u>set number!<CR>
-
-" 開いているVim scriptファイルの読み込み
-" nnoremap <Leader> :<C-u>source %<CR>

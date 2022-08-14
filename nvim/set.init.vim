@@ -15,10 +15,6 @@
 " PageUp      <PageUp><PageDown>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"set
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " 挿入モードでのバックスペースで改行が削除できない場合に設定する項目
 set backspace=indent,eol,start
 
@@ -42,16 +38,9 @@ set showcmd
 " 見た目系
 " 色は以下を参考
 " https://h2plus.biz/hiromitsu/entry/674
-" 行番号を表示
-" set number
-" 行番号を相対表示
-" set relativenumber
 " 現在の行を強調表示
 set cursorline
 highlight CursorLine ctermbg=238
-" 現在の行を強調表示（縦）
-" set cursorcolumn
-" highlight CursorColumn ctermbg=238
 " ビジュアルモードの色を変更
 highlight Visual cterm=bold ctermbg=darkblue ctermfg=NONE
 " 行末の1文字先までカーソルを移動できるように
@@ -92,21 +81,12 @@ set ignorecase
 set smartcase
 " 検索文字列入力時に順次対象文字列にヒットさせる
 set incsearch
-" 検索時に最後まで行ったら最初に戻る
-"set wrapscan
 " 検索語をハイライト表示
 set hlsearch
 
 " 自動改行を防ぐ
 " https://loumo.jp/archives/10503
 autocmd FileType text :set formatoptions=q
-
-" クリップボードの共有
-"set clipboard=unnamed
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" インデントあれこれ
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set autoindent          "改行時に前の行のインデントを計測
 set smartindent         "改行時に入力された行の末尾に合わせて次の行のインデントを増減する
@@ -166,3 +146,5 @@ set wildmenu
 
 " 実践Vim
 set history=200
+
+set helplang=ja

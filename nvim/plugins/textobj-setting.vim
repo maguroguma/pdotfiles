@@ -1,3 +1,10 @@
+"""
+" PLUGSETTING: 'kana/vim-textobj-user'
+" PLUGSETTING: 'kana/vim-textobj-jabraces'
+" PLUGSETTING: 'osyo-manga/vim-textobj-multiblock'
+" PLUGSETTING: 'osyo-manga/vim-textobj-multitextobj'
+"""
+
 " 日本語のカッコをib, abでテキストオブジェクトとして解釈できるようにする
 " 参考: https://kainokikaede.hatenablog.com/entry/2014/07/14/070518
 let g:textobj_multitextobj_textobjects_i = [
