@@ -49,11 +49,11 @@ require'lir'.setup {
     -- -- You can define a function that returns a table to be passed as the third
     -- -- argument of nvim_open_win().
     win_opts = function()
-      local width = math.floor(vim.o.columns * 0.5)
-      local height = math.floor(vim.o.lines * 0.8)
+      local width = math.floor(vim.o.columns * 0.3)
+      local height = math.floor(vim.o.lines * 0.4)
       return {
         border = {
-          "+", "=", "+", "│", "+", "=", "+", "│",
+          "+", "=", "+", "|", "+", "=", "+", "|",
         },
         width = width,
         height = height,
@@ -90,7 +90,7 @@ require'lir.git_status'.setup({
 })
 EOF
 
-" nnoremap <C-f> :<C-u>edit .<CR>
+nnoremap F :<C-u>edit .<CR>
 nnoremap <C-f> :<C-u>lua require'lir.float'.toggle()<CR>
 nnoremap <C-h> :<C-u>lua require'lir.float'.toggle('.')<CR>
 " nnoremap <C-f>  :<C-u>lua require'lir.float'.init()<CR>
