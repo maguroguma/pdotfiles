@@ -54,6 +54,7 @@ Plug 'jsborjesson/vim-uppercase-sql'
 Plug 'skanehira/denops-docker.vim'
 Plug 'posva/vim-vue'
 Plug 'tomtom/tcomment_vim' " for commenting on vue SFC
+Plug 'pseewald/vim-anyfold'
 
 " basic-setting.vim
 Plug 'junegunn/vim-easy-align'
@@ -99,6 +100,7 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'kevinhwang91/nvim-bqf'
 Plug 'folke/todo-comments.nvim'
 Plug 'kwkarlwang/bufjump.nvim'
+Plug 'jbyuki/venn.nvim'
 
 " statusline-setting.vim
 Plug 'vim-airline/vim-airline'

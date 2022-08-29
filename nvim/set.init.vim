@@ -24,7 +24,7 @@ syntax enable
 set mouse=n
 
 " インデントレベルで折り畳めるように
-set foldmethod=indent
+set foldmethod=manual
 " 初期表示で折り畳まないように
 set foldlevelstart=100
 
@@ -76,10 +76,9 @@ hi Folded ctermbg=Green ctermfg=Gray
 
 " Tab系
 " 不可視文字を可視化(タブが「▸-」と表示される)
-" set list listchars=tab:\▸\-,trail:-,nbsp:%,eol:↲
 set list listchars=tab:\^\-,trail:~,nbsp:%,eol:$
-hi NonText    ctermbg=None ctermfg=239 guibg=NONE guifg=None
-hi SpecialKey ctermbg=None ctermfg=239 guibg=NONE guifg=None
+highlight NonText    ctermbg=None ctermfg=239 guibg=NONE guifg=None
+highlight SpecialKey ctermbg=None ctermfg=239 guibg=NONE guifg=None
 " Tab文字を半角スペースにする
 set expandtab
 " 行頭以外のTab文字の表示幅（スペースいくつ分）
