@@ -290,3 +290,4 @@ require'marks'.setup {
   mappings = {}
 }
 EOF
+nnoremap <leader>M :<C-u>MarksListBuf<CR>
