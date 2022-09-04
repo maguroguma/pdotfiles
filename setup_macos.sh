@@ -75,3 +75,6 @@ brew upgrade golangci-lint
 
 # yq(yaml parser)
 brew install yq
+
+# tree
+brew install tree

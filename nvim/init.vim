@@ -169,11 +169,11 @@ runtime ./plugins/golang-setting.vim
 runtime ./plugins/coc-setting.vim
 runtime ./plugins/fzf-setting.vim
 runtime ./plugins/textobj-setting.vim
-runtime ./plugins/motion-setting.vim
 runtime ./plugins/lir-setting.vim
 runtime ./plugins/wildernvim-setting.vim
 runtime ./plugins/basic-setting.vim
 runtime ./plugins/lua-setting.vim
+runtime ./plugins/motion-setting.vim
 " 手動donwloadしたもの
 runtime ./downloads/catn.vim
 runtime ./downloads/qargs.vim

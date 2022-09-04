@@ -74,6 +74,8 @@ go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-psql@latest
 go install github.com/swaggo/swag/cmd/swag@latest
 # oapi-codegen(go-openapi)
 go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
+# gtree(needs go 1.18>=)
+go install github.com/ddddddO/gtree/cmd/gtree@latest
 
 #########
 # Rust
