@@ -41,7 +41,6 @@ Plug 'mtdl9/vim-log-highlighting'
 Plug 'Raimondi/delimitMate' " automatic closing of quotes, parenthesis, brackets, etc.
 Plug 'Yggdroot/indentLine'
 Plug 'tpope/vim-repeat'
-Plug 'cohama/lexima.vim'
 Plug 'alvan/vim-closetag', { 'for': ['html', 'vue', 'html.twig'] }
 Plug 'AndrewRadev/linediff.vim'
 Plug 'ryanoasis/vim-devicons'
@@ -54,7 +53,8 @@ Plug 'jsborjesson/vim-uppercase-sql'
 Plug 'skanehira/denops-docker.vim'
 Plug 'posva/vim-vue'
 Plug 'tomtom/tcomment_vim' " for commenting on vue SFC
-Plug 'pseewald/vim-anyfold'
+" Plug 'pseewald/vim-anyfold'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " basic-setting.vim
 Plug 'junegunn/vim-easy-align'
@@ -134,6 +134,9 @@ Plug 'osyo-manga/vim-textobj-multitextobj'
 Plug 'rlane/pounce.nvim'
 Plug 'yuki-yano/fuzzy-motion.vim'
 
+" lexima-setting.vim
+Plug 'cohama/lexima.vim'
+
 Plug 'maguroguma/vim-oj-helper'
 
 " wildernvim-setting.vim
@@ -174,6 +177,7 @@ runtime ./plugins/wildernvim-setting.vim
 runtime ./plugins/basic-setting.vim
 runtime ./plugins/lua-setting.vim
 runtime ./plugins/motion-setting.vim
+runtime ./plugins/lexima-setting.vim
 " 手動donwloadしたもの
 runtime ./downloads/catn.vim
 runtime ./downloads/qargs.vim
@@ -185,6 +189,7 @@ runtime ./original/todo.init.vim
 runtime ./original/practical.init.vim
 runtime ./original/shell-history.vim
 runtime ./original/nkf.vim
+runtime ./original/trim-trailing-whitespaces.vim
 
 " 汎用設定ファイル読み込み（プラグインに上書きされないように最後に読む）
 runtime ./set.init.vim

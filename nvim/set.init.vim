@@ -24,7 +24,10 @@ syntax enable
 set mouse=n
 
 " インデントレベルで折り畳めるように
-set foldmethod=manual
+" set foldmethod=manual
+" 折りたたみにtree-sitterを利用する
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 " 初期表示で折り畳まないように
 set foldlevelstart=100
 

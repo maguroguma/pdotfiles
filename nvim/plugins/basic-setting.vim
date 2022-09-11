@@ -183,13 +183,13 @@ let g:memolist_fzf = 1
 """
 " https://besier.hatenadiary.org/entry/20140605/1401961885
 " 一時ファイルを作成
-nnoremap ,ot :e `tempname()`<CR>
+" nnoremap ,ot :e `tempname()`<CR>
 
 " quickrun.vim
-nnoremap <silent> ,vb :QuickRun -type vim<CR>
-nnoremap <silent> ,vn :QuickRun -type vim -outputter null<CR>
-vnoremap <silent> ,vb :QuickRun -type vim<CR>
-vnoremap <silent> ,vn :QuickRun -type vim -outputter null<CR>
+" nnoremap <silent> ,vb :QuickRun -type vim<CR>
+" nnoremap <silent> ,vn :QuickRun -type vim -outputter null<CR>
+" vnoremap <silent> ,vb :QuickRun -type vim<CR>
+" vnoremap <silent> ,vn :QuickRun -type vim -outputter null<CR>
 
 " https://qiita.com/844196/items/879db6528999ccf470b8
 " :QuickRun json

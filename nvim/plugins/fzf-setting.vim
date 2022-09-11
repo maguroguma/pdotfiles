@@ -31,6 +31,7 @@ command! -bang -nargs=* Rg
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <C-m> :Fmru<CR>
 nnoremap <silent> ; :Buffers<CR>
+nnoremap <silent> , :Marks<CR>
 
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(
