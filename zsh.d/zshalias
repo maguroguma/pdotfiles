@@ -48,7 +48,7 @@ alias gwa='git worktree add'
 alias gwl='git worktree list'
 alias gwp='git worktree prune'
 
-function _mr_checkouted_branch () {
+function _mr_checkouted_branch() {
     local branch=$($DOTFILES_DIR/scripts/mru-branch-list.sh | fzf)
     if [ -z "$branch" ] ; then
         echo 'canceled swiching branch'

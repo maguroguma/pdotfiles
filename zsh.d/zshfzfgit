@@ -76,3 +76,14 @@ bind-git-helper() {
 }
 bind-git-helper f b t r h s
 unset -f bind-git-helper
+
+# original
+function _mr_checkouted_branch_zle_widget() {
+    local branch=$($DOTFILES_DIR/scripts/mru-branch-list.sh | fzf)
+    zle redisplay
+    zle reset-prompt
+    LBUFFER+=$branch
+}
+zle -N _mr_checkouted_branch_zle_widget
+bindkey '^g^m' _mr_checkouted_branch_zle_widget
+bindkey '^gm' _mr_checkouted_branch_zle_widget
