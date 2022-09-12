@@ -101,7 +101,6 @@ Plug 'kevinhwang91/nvim-bqf'
 Plug 'folke/todo-comments.nvim'
 Plug 'kwkarlwang/bufjump.nvim'
 Plug 'jbyuki/venn.nvim'
-Plug 'chentoast/marks.nvim'
 
 " statusline-setting.vim
 Plug 'vim-airline/vim-airline'
