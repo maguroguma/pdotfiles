@@ -64,6 +64,12 @@ join-lines() {
   done
 }
 
+# original
+_gm() {
+    is_in_git_repo || return
+    $DOTFILES_DIR/scripts/mru-branch-list.sh | fzf
+}
+
 # 2個目のキーはctrlなしでも発動するようにする
 bind-git-helper() {
   local c
@@ -74,16 +80,5 @@ bind-git-helper() {
     eval "bindkey '^g$c' fzf-g$c-widget"
   done
 }
-bind-git-helper f b t r h s
+bind-git-helper f b t r h s m
 unset -f bind-git-helper
-
-# original
-function _mr_checkouted_branch_zle_widget() {
-    local branch=$($DOTFILES_DIR/scripts/mru-branch-list.sh | fzf)
-    zle redisplay
-    zle reset-prompt
-    LBUFFER+=$branch
-}
-zle -N _mr_checkouted_branch_zle_widget
-bindkey '^g^m' _mr_checkouted_branch_zle_widget
-bindkey '^gm' _mr_checkouted_branch_zle_widget

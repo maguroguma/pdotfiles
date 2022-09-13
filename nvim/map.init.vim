@@ -17,8 +17,6 @@
 
 " escのリマップ
 inoremap <silent> jj <ESC>
-inoremap <silent> jk <ESC>
-inoremap <silent> kj <ESC>
 " 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
