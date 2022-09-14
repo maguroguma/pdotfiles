@@ -43,7 +43,7 @@ _gh() {
   grep -o "[a-f0-9]\{7,\}"
 }
 
-_gr() {
+_gv() {
   is_in_git_repo || return
   git remote -v | awk '{print $1 "\t" $2}' | uniq |
   fzf-down --tac \
@@ -67,7 +67,16 @@ join-lines() {
 # original
 _gm() {
     is_in_git_repo || return
-    $DOTFILES_DIR/scripts/mru-branch-list.sh | fzf
+    $DOTFILES_DIR/scripts/mru-branch-list.sh | \
+        fzf-down --preview 'git show --color=always {1}'
+}
+
+# original
+_gr() {
+    is_in_git_repo || return
+    git --no-pager reflog | \
+        fzf-down --preview 'git show --color=always {1}' | \
+        cut -d' ' -f1
 }
 
 # 2個目のキーはctrlなしでも発動するようにする
@@ -80,5 +89,5 @@ bind-git-helper() {
     eval "bindkey '^g$c' fzf-g$c-widget"
   done
 }
-bind-git-helper f b t r h s m
+bind-git-helper f b t r h s m v
 unset -f bind-git-helper
