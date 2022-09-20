@@ -31,6 +31,8 @@ brew install gnu-sed
 brew install gawk
 # git-delta
 brew install git-delta
+# gh(GitHub CLI)
+brew install gh
 
 #########
 # System fonts

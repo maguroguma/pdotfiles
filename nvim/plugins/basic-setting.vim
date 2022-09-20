@@ -3,12 +3,12 @@
 """
 nnoremap <Leader>gd :Git diff %<CR>
 nnoremap <Leader>gb :Git blame<CR>
+nnoremap <silent> <Leader>gl :Git log %<CR>
 command! Gblame :Git blame
 
 """
 " PLUGSETTING: kdheepak/lazygit.nvim
 """
-nnoremap <silent> <Leader>gl :LazyGit<CR>
 nnoremap <silent> <Leader>lg :LazyGit<CR>
 
 """

@@ -35,6 +35,3 @@ $XDG_CACHE_HOME/*
 
 ### vim bookmarks
 .vim-bookmarks
-
-### my temporary files
-_*/

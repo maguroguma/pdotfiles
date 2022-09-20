@@ -76,6 +76,8 @@ go install github.com/swaggo/swag/cmd/swag@latest
 go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
 # gtree(needs go 1.18>=)
 go install github.com/ddddddO/gtree/cmd/gtree@latest
+# sqldef
+go install github.com/k0kubun/sqldef/cmd/mysqldef@latest
 
 #########
 # Rust

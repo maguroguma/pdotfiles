@@ -100,7 +100,6 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'kevinhwang91/nvim-bqf'
 Plug 'folke/todo-comments.nvim'
 Plug 'kwkarlwang/bufjump.nvim'
-Plug 'jbyuki/venn.nvim'
 
 " statusline-setting.vim
 Plug 'vim-airline/vim-airline'
