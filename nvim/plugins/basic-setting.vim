@@ -3,6 +3,7 @@
 """
 nnoremap <Leader>gd :Git diff %<CR>
 nnoremap <Leader>gb :Git blame<CR>
+nnoremap <Leader>gs :Git show origin/main:%<CR>
 nnoremap <silent> <Leader>gl :Git log %<CR>
 command! Gblame :Git blame
 

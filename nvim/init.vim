@@ -188,6 +188,7 @@ runtime ./original/practical.init.vim
 runtime ./original/shell-history.vim
 runtime ./original/nkf.vim
 runtime ./original/trim-trailing-whitespaces.vim
+runtime ./original/search-pr-by-commit.vim
 
 " 汎用設定ファイル読み込み（プラグインに上書きされないように最後に読む）
 runtime ./set.init.vim
