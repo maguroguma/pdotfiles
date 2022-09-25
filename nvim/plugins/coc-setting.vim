@@ -129,6 +129,11 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
 
+" original(from vim-jp)
+" https://vim-jp.slack.com/archives/CQ88WB7B3/p1659323660504669
+hi CocMenuSel ctermbg=109 guibg=#082A4B
+hi CocSearch ctermfg=12 guifg=#18A3FF
+
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
@@ -225,3 +230,4 @@ let g:coc_global_extensions = [
 " node path
 """
 " let g:coc_node_path = '/path/to/node'
+
