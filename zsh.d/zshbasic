@@ -183,3 +183,12 @@ bindkey -s '^v' 'nvim\n'
 # lazygit
 bindkey -s '^gg' 'lazygit\n'
 bindkey -s '^g^g' 'lazygit\n'
+
+# original
+today-for-zle() {
+    local result=$(date -u +%Y-%m-%d)
+    zle reset-prompt
+    LBUFFER+=$result
+}
+zle -N today-for-zle
+bindkey '^aday' today-for-zle

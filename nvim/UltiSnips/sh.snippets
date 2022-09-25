@@ -25,3 +25,13 @@ while [ -z "$check" ]; do
   esac
 done
 endsnippet
+
+snippet zleExample "zle -N foo"
+${1:func-name}() {
+    local result=$(${2:command})
+    zle reset-prompt
+    LBUFFER+=$result
+}
+zle -N $1
+bindkey '${3:key-map}' $1
+endsnippet
