@@ -1,0 +1,9 @@
+snippet ifFileExist "if getftype(...) != ''"
+if getftype(${1:file-name-exp}) != ""
+endif
+endsnippet
+
+snippet ifCommandExist "if executable()"
+if executable('${1:command-exp}')
+else
+endsnippet

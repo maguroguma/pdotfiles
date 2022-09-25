@@ -6,6 +6,17 @@ nnoremap <Leader>gb :Git blame<CR>
 nnoremap <Leader>gs :Git show origin/main:%<CR>
 nnoremap <silent> <Leader>gl :Git log %<CR>
 command! Gblame :Git blame
+" 現在のバッファのファイルをcheckoutする
+function! s:gitCheckoutThis()
+  let l:confirm_msg = 'You checkout this buffer file, OK?'
+  let l:is_ok = confirm(l:confirm_msg, "y yes\nn no")
+  if l:is_ok != 1
+    return
+  endif
+  :Git checkout %
+endfunction
+command! GCheckoutThis :call s:gitCheckoutThis()
+nnoremap <silent> <Leader>gc :GCheckoutThis<CR>
 
 """
 " PLUGSETTING: kdheepak/lazygit.nvim
@@ -22,6 +33,15 @@ nmap ga <Plug>(EasyAlign)
 " PLUGSETTING: mattn/emmet-vim
 """
 let g:user_emmet_leader_key='<C-e>'
+
+"""
+" PLUGSETTING: mattn/vim-sonictemplate
+"""
+" 参考: https://qiita.com/n_kats_/items/d4bede25e7b0a2397f20
+let g:sonictemplate_vim_template_dir = [
+      \ expand('$GOPATH') . '/src/github.com/maguroguma/go-competitive/template',
+      \ expand('$DOTFILES_DIR') . '/nvim/sonic-template',
+      \]
 
 """
 " PLUGSETTING: luochen1990/rainbow
@@ -139,6 +159,7 @@ nmap ss <Plug>(choosewin)
 let g:choosewin_overlay_enable          = 1
 " オーバーレイ・フォントをマルチバイト文字を含むバッファでも綺麗に表示する。
 let g:choosewin_overlay_clear_multibyte = 1
+let g:choosewin_label = 'HJKLYUIONM'
 
 """
 " PLUGSETTING: mhinz/vim-grepper
@@ -213,10 +234,11 @@ colorscheme hybrid
 """
 " PLUGSETTING: sirver/ultisnips
 """
-" let g:UltiSnipsExpandTrigger='<c-l>'
-let g:UltiSnipsJumpForwardTrigger='<c-j>'
-let g:UltiSnipsJumpBackwardTrigger='<c-k>'
-let g:UltiSnipsEditSplit='vertical'
+let g:UltiSnipsExpandTrigger = '<c-j>'
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+let g:UltiSnipsEditSplit = 'vertical'
+" let g:UltiSnipsSnippetDirectories = ['']
 
 """
 " PLUGSETTING: mbbill/undotree

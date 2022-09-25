@@ -61,7 +61,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'mattn/emmet-vim', { 'for' : ['html', 'vue', 'html.twig'] }
 Plug 'luochen1990/rainbow'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'sirver/ultisnips'
+Plug 'sirver/ultisnips' " require coc-ultisnips if used with coc.nvim
 Plug 'moll/vim-bbye'
 Plug 'glidenote/memolist.vim'
 Plug 'mhinz/vim-grepper'
@@ -161,8 +161,7 @@ filetype plugin indent on
 let mapleader="\<Space>"
 
 " python3 path
-" @os-dependency
-let g:python3_host_prog = expand('/opt/homebrew/bin/python3')
+let g:python3_host_prog = expand('$VIM_PYTHON_PATH')
 
 " プラグイン設定ファイル読み込み
 runtime ./plugins/statusline-setting.vim
@@ -189,6 +188,7 @@ runtime ./original/shell-history.vim
 runtime ./original/nkf.vim
 runtime ./original/trim-trailing-whitespaces.vim
 runtime ./original/search-pr-by-commit.vim
+runtime ./original/trans.vim
 
 " 汎用設定ファイル読み込み（プラグインに上書きされないように最後に読む）
 runtime ./set.init.vim

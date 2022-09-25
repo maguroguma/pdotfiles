@@ -11,6 +11,10 @@ alias mv='mv -i'
 alias cp='cp -i'
 alias c='clear'
 alias relogin='exec $SHELL -l'
+alias path="echo $PATH | tr ':' '\n'"
+if [ -e "$HOME/.zhistory" ]; then
+    alias shell-history='tac $HOME/.zhistory | cut -b 16- | head -n 5000'
+fi
 
 ###
 # Git
@@ -81,7 +85,6 @@ alias fdhere='find . -name'
 alias ta='tmux a'
 alias tks='tmux kill-server'
 alias tls='tmux ls'
-# tns <session-name>
 alias tns='tmux new -s'
 alias t='tmux-session-fzf.sh'
 

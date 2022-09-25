@@ -50,6 +50,6 @@ let g:airline_theme = 'wombat'
 
 " VCSの情報('b'), ファイルのエンコーディング('y'), 行数('z')はオフ
 let g:airline#extensions#default#layout = [
-      \ ['a', 'b', 'c'],
+      \ ['a', 'c'],
       \ ['x', 'y']
       \ ]

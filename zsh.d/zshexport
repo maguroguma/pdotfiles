@@ -20,6 +20,8 @@ export GOPATH=$HOME/go
 export GOBIN=$HOME/go/bin
 export PATH=$PATH:/usr/local/opt/go/libexec/bin:$GOPATH/bin
 export PATH=$PATH:/usr/local/go/bin
+export PATH="/opt/homebrew/opt/openssl@3/bin:$PATH"
+export VIM_PYTHON_PATH="/usr/bin/python3"
 # export PATH="$HOME/.goenv/bin:$PATH"
 # eval "$(goenv init -)"
 # go modules

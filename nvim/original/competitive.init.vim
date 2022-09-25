@@ -1,6 +1,6 @@
-let g:sonictemplate_vim_template_dir = [
-      \ '~/go/src/github.com/maguroguma/go-competitive/template'
-      \]
+" let g:sonictemplate_vim_template_dir = [
+"       \ '~/go/src/github.com/maguroguma/go-competitive/template'
+"       \]
 
 " quoted from: https://gist.github.com/AmaiSaeta/8631399
 " function! g:Ls(all)

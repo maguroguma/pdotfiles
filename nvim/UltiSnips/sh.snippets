@@ -1,0 +1,27 @@
+snippet ifFileExist "if [ -e {{ file-name }} ]; then"
+if [ -e "${1:file-name}" ]; then
+fi
+endsnippet
+
+snippet caseExample "case $check in"
+check=""
+while [ -z "$check" ]; do
+  echo "Choose command"
+  echo " 1. ls"
+  echo " 2. pwd"
+  echo -n "Input (1 or 2) ? "
+  read check
+  case $check in
+    1)
+      ls
+      ;;
+    2)
+      pwd
+      ;;
+    *)
+      echo "*** Undefined choice!"
+      check=""
+      ;;
+  esac
+done
+endsnippet

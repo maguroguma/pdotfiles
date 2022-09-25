@@ -47,6 +47,7 @@ command! -bang -nargs=? -complete=dir Buffers
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
+imap <C-a><tab> <plug>(fzf-maps-i)
 
 " popup window
 let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
