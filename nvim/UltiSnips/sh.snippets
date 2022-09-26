@@ -3,6 +3,28 @@ if [ -e "${1:file-name}" ]; then
 fi
 endsnippet
 
+snippet ifCommandExecutable "if type 'ls' > /dev/null 2>&1; then"
+if type "ls" > /dev/null 2>&1; then
+  echo "ls exists"
+fi
+
+if !(type "ahaha" > /dev/null 2>&1); then
+  echo "ahaha does'nt exist"
+fi
+endsnippet
+
+snippet ifArgsNumRight ""
+echo "args num is $#"
+echo "args = $@"
+
+if [ $# != 2 ]; then
+  echo "args count error!"
+  exit 1
+fi
+
+echo "args count OK!"
+endsnippet
+
 snippet caseExample "case $check in"
 check=""
 while [ -z "$check" ]; do
@@ -26,6 +48,27 @@ while [ -z "$check" ]; do
 done
 endsnippet
 
+snippet caseFileExtExample "*.txt)"
+file="$1"
+case "$file" in
+    *.txt)
+        head "$file"
+        ;;
+    *.tar.gz | *.tgz)    # このようにしてパターンのorも表現可能
+        tar xzf "$file"
+        ;;
+    *)
+        echo "not supported file : $file"
+        ;;
+esac
+endsnippet
+
+snippet cdBack "OD=$(pwd)"
+OD=$(pwd)
+${1}
+cd $OD
+endsnippet
+
 snippet zleExample "zle -N foo"
 ${1:func-name}() {
     local result=$(${2:command})
@@ -35,3 +78,44 @@ ${1:func-name}() {
 zle -N $1
 bindkey '${3:key-map}' $1
 endsnippet
+
+snippet forFileLoopExample "for x in $(...)"
+for x in $(find ./*.sh); do echo $x; done
+endsnippet
+
+snippet forLoopBasic "for i in 1 2 3;"
+for i in 1 2 3 ; do echo $i ; done
+endsnippet
+
+snippet forSSH "for x in {host1} {host2}..."
+for x in 172.31.xxx.xxx 172.31.yyy.yyy ; do ssh $x 'grep "ababa" /var/log/error.log' ; done
+endsnippet
+
+snippet xargsBasic "... | xargs rm -fv"
+find . -name "*.log" | xargs rm -fv
+endsnippet
+
+snippet xargsBasicDryrun "... | xargs -p rm -fv"
+find . -name "*.log" | xargs -p rm -fv
+endsnippet
+
+snippet xargsArgPositionDesignate "... | xargs -i cp {} ./tmp/"
+find . -name "*.log" | xargs -i cp {} ./tmp/
+endsnippet
+
+snippet xargsRowsepToSpacesep "| xargs"
+ids=$(xargs < /dev/stdin)
+endsnippet
+
+snippet xargsMiddleLevel "grep -rl {word} ./* | xargs..."
+grep -rl 'foofoo' ./* | xargs perl -i -pe "s/foofoo/barbar/g"
+endsnippet
+
+snippet teeStdout "| tee ..."
+${1:command} | tee command.log
+endsnippet
+
+snippet teeStdoutStderr "2>&1 | tee ..."
+${1:command} 2>&1 | tee command.log
+endsnippet
+
