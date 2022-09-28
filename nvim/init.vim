@@ -53,8 +53,8 @@ Plug 'jsborjesson/vim-uppercase-sql'
 Plug 'skanehira/denops-docker.vim'
 Plug 'posva/vim-vue'
 Plug 'tomtom/tcomment_vim' " for commenting on vue SFC
-" Plug 'pseewald/vim-anyfold'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'mattn/vim-sqlfmt'
 
 " basic-setting.vim
 Plug 'junegunn/vim-easy-align'

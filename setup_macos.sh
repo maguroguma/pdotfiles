@@ -80,3 +80,6 @@ brew install yq
 
 # tree
 brew install tree
+
+# sqlparse(sqlformat)
+brew install sqlparse

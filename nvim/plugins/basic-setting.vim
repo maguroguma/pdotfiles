@@ -4,8 +4,8 @@
 nnoremap <Leader>gd :Git diff %<CR>
 nnoremap <Leader>gb :Git blame<CR>
 nnoremap <Leader>gs :Git show origin/main:%<CR>
+nnoremap <Leader>ga :Git add %<CR>
 nnoremap <silent> <Leader>gl :Git log %<CR>
-command! Gblame :Git blame
 " 現在のバッファのファイルをcheckoutする
 function! s:gitCheckoutThis()
   let l:confirm_msg = 'You checkout this buffer file, OK?'

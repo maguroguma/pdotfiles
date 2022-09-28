@@ -131,7 +131,7 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 
 " original(from vim-jp)
 " https://vim-jp.slack.com/archives/CQ88WB7B3/p1659323660504669
-hi CocMenuSel ctermbg=233 guibg=#082A4B cterm=BOLD
+hi CocMenuSel ctermbg=53 guibg=#082A4B cterm=BOLD
 hi CocSearch ctermfg=184 guifg=#18A3FF
 
 " Add (Neo)Vim's native statusline support.
