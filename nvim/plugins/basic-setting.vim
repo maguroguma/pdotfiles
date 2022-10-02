@@ -1,11 +1,6 @@
 """
 " PLUGSETTING: tpope/vim-fugitive
 """
-nnoremap <Leader>gd :Git diff %<CR>
-nnoremap <Leader>gb :Git blame<CR>
-nnoremap <Leader>gs :Git show origin/main:%<CR>
-nnoremap <Leader>ga :Git add %<CR>
-nnoremap <silent> <Leader>gl :Git log %<CR>
 " 現在のバッファのファイルをcheckoutする
 function! s:gitCheckoutThis()
   let l:confirm_msg = 'You checkout this buffer file, OK?'
@@ -17,6 +12,10 @@ function! s:gitCheckoutThis()
 endfunction
 command! GCheckoutThis :call s:gitCheckoutThis()
 nnoremap <silent> <Leader>gc :GCheckoutThis<CR>
+nnoremap <Leader>gd :Git diff %<CR>
+nnoremap <Leader>gb :Git blame<CR>
+nnoremap <Leader>ga :Git add %<CR>
+nnoremap <silent> <Leader>gl :Git log %<CR>
 
 """
 " PLUGSETTING: kdheepak/lazygit.nvim

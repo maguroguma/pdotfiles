@@ -135,16 +135,16 @@ nnoremap Q q
 nnoremap <Leader>n :<C-u>set number!<CR>
 
 " mkviewコマンド、loadviewコマンドの関数化、マッピング
-function! g:Mkview_and_echo_msg() abort
-  mkview
-  echo 'done mkview'
-endfunction
-function! g:Loadview_and_echo_msg() abort
-  loadview
-  echo 'done loadview'
-endfunction
-nnoremap <C-m> :<C-u>call g:Mkview_and_echo_msg()<CR>
-nnoremap <C-l> :<C-u>call g:Loadview_and_echo_msg()<CR>
+" function! g:Mkview_and_echo_msg() abort
+"   mkview
+"   echo 'done mkview'
+" endfunction
+" function! g:Loadview_and_echo_msg() abort
+"   loadview
+"   echo 'done loadview'
+" endfunction
+" nnoremap <C-m> :<C-u>call g:Mkview_and_echo_msg()<CR>
+" nnoremap <C-l> :<C-u>call g:Loadview_and_echo_msg()<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " マーク設定

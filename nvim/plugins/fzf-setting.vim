@@ -2,22 +2,23 @@
 " PLUGSETTING: junegunn/fzf.vim
 """
 
+"""
+" commands
+"""
+
+" ripgrep with vim
+" http://hogeai.hatenablog.com/entry/2018/03/04/201744
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
 command! Fmru FZFMru
 command! FZFMru call fzf#run({
             \  'source':  v:oldfiles,
             \  'sink':    'e',
             \  'options': '-m -x +s',
             \  'down':    '40%'})
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ripgrep with vim
-" http://hogeai.hatenablog.com/entry/2018/03/04/201744
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-if executable('rg')
-    set grepprg=rg\ --vimgrep\ --no-heading
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
 
 " fzf
 " Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
@@ -27,11 +28,6 @@ command! -bang -nargs=* Rg
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
-
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <C-m> :Fmru<CR>
-nnoremap <silent> ; :Buffers<CR>
-nnoremap <silent> , :Marks<CR>
 
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(
@@ -43,19 +39,8 @@ command! -bang -nargs=? -complete=dir Buffers
     \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
     \   <bang>0)
 
-" Mapping selecting mappings
-nmap <leader><tab> <plug>(fzf-maps-n)
-xmap <leader><tab> <plug>(fzf-maps-x)
-omap <leader><tab> <plug>(fzf-maps-o)
-imap <C-a><tab> <plug>(fzf-maps-i)
-
-" popup window
-let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
-
-" Empty value to disable preview window altogether
-let g:fzf_preview_window = []
-
-" https://github.com/junegunn/fzf.vim/pull/733#issuecomment-559720813
+" deletes buffers by fzf
+" ref: https://github.com/junegunn/fzf.vim/pull/733#issuecomment-559720813
 function! s:list_buffers()
   redir => list
   silent ls
@@ -72,3 +57,52 @@ command! BD call fzf#run(fzf#wrap({
   \ 'sink*': { lines -> s:delete_buffers(lines) },
   \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
 \ }))
+
+"""
+" custom git show with fugitive.vim
+"""
+" source
+function! s:list_commits() abort
+  let l:res = system('git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --color=always')
+  return split(l:res, "\n")
+endfunction
+" sink
+function! s:select_commits(commit_hash) abort
+  let l:list = split(a:commit_hash, ' ')
+  let l:execute_command = 'Git show ' . l:list[1] . ':%'
+  execute l:execute_command
+endfunction
+command! GShow call fzf#run(fzf#wrap({
+  \ 'source': s:list_commits(),
+  \ 'sink': funcref('s:select_commits'),
+  \ 'options': '--ansi --prompt "git show of the buffer> "',
+\ }))
+
+"""
+" layouts, styles
+"""
+
+" popup window
+let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
+
+" Empty value to disable preview window altogether
+let g:fzf_preview_window = []
+
+"""
+" maps
+"""
+
+" Snippets, Commits, BCommits, Commands
+nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <C-m> :History<CR>
+nnoremap <silent> ; :Buffers<CR>
+nnoremap <silent> , :Marks<CR>
+nnoremap <silent> <leader>h :Helptags<CR>
+nnoremap <silent> <leader>gf :GFiles?<CR>
+nnoremap <silent> <leader>Q :History:<CR>
+nnoremap <silent> <leader>gs :GShow<CR>
+
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+imap <C-a><tab> <plug>(fzf-maps-i)

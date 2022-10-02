@@ -30,6 +30,7 @@ command! OpenVimScriptHelp :h usr_41
 " 今日の日付
 inoremap <C-a>day <C-r>=strftime("%Y-%m-%d")<CR>
 cnoremap <C-a>day <C-r>=strftime("%Y-%m-%d")<CR>
+inoremap <C-a>date <C-r>=strftime("%Y-%m-%d %T")<CR>
 
 " markdownのコードスニペット
 function! g:ReadTripleBackQuotes(lang_text)
