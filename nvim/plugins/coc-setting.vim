@@ -223,8 +223,12 @@ let g:coc_global_extensions = [
       \ 'coc-syntax',
       \ 'coc-docker',
       \ 'coc-tailwindcss',
-      \ 'coc-deno'
+      \ 'coc-deno',
+      \ 'coc-fzf-preview',
       \ ]
+
+" fzf-preview
+let g:fzf_preview_floating_window_rate = 0.9
 
 """
 " node path

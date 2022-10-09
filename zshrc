@@ -18,6 +18,7 @@ loadlib $ZSH_SUB_FILES_DIR/zshzplug
 loadlib $ZSH_SUB_FILES_DIR/zshfzf
 loadlib $ZSH_SUB_FILES_DIR/zshfzfgit
 loadlib $ZSH_SUB_FILES_DIR/zshpeco
+loadlib $ZSH_SUB_FILES_DIR/zshfzftmux
 # loadlib $ZSH_SUB_FILES_DIR/zshnavi
 
 # for direnv

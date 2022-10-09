@@ -143,6 +143,8 @@ nmap <Leader>mx <Plug>BookmarkClearAll
 nmap <Leader>mkk <Plug>BookmarkMoveUp
 nmap <Leader>mjj <Plug>BookmarkMoveDown
 nmap <Leader>mg <Plug>BookmarkMoveToLine
+" require coc-fzf-preview
+nnoremap <Leader>mf :<C-u>CocCommand fzf-preview.Bookmarks<CR>
 
 """
 " PLUGSETTING: moll/vim-bbye

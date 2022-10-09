@@ -48,8 +48,10 @@ endif
 
 let g:airline_theme = 'wombat'
 
-" VCSの情報('b'), ファイルのエンコーディング('y'), 行数('z')はオフ
+" a-b-c, x-y-zの情報を配置する
+" a: モード, b: gitのブランチ, c: バッファのファイルパス
+" x: ファイルタイプ, y: ファイルのエンコーディング, z: 行数
 let g:airline#extensions#default#layout = [
-      \ ['a', 'c'],
-      \ ['x', 'y']
+      \ ['a', 'b', 'x', 'y', 'z', 'c'],
+      \ [],
       \ ]
