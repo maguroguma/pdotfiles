@@ -16,7 +16,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " escのリマップ
-inoremap <silent> jj <ESC>
+" inoremap <silent> jj <ESC> " better-escapeプラグインに委譲
 " 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk

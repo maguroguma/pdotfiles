@@ -3,3 +3,24 @@ if err != nil {
 	${1}
 }
 endsnippet
+
+snippet warnInstanceCopy "func (*Entity) Lock() {}"
+type ${1:TypeName} struct {
+	${2}
+}
+
+func (*$1) Lock()   {}
+func (*$1) Unlock() {}
+endsnippet
+
+snippet generateByStringer "//go:generate stringer -type=..."
+//go:generate stringer -type=${1:TypeName}
+
+type $1 int
+
+// or iota + 1
+const (
+	${2:varName1} $1 = 1 << iota
+	${3:varName2}
+)
+endsnippet

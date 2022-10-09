@@ -55,7 +55,7 @@ endfunction
 command! BD call fzf#run(fzf#wrap({
   \ 'source': s:list_buffers(),
   \ 'sink*': { lines -> s:delete_buffers(lines) },
-  \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
+  \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept --prompt "delete(close) buffers> "'
 \ }))
 
 """
@@ -101,6 +101,7 @@ nnoremap <silent> <leader>h :Helptags<CR>
 nnoremap <silent> <leader>gf :GFiles?<CR>
 nnoremap <silent> <leader>Q :History:<CR>
 nnoremap <silent> <leader>gs :GShow<CR>
+nnoremap <silent> <leader>bd :BD<CR>
 
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)

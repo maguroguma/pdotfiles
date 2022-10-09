@@ -54,6 +54,8 @@ alias gm='git merge'
 alias gms='git merge --squash'
 # push
 alias gpoH='git push origin HEAD'
+# reset
+alias gu='git reset HEAD'
 # status
 alias gs='git status --short'
 # tag
