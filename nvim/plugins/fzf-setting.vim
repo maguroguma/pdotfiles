@@ -48,12 +48,27 @@ function! s:list_buffers()
   return split(list, "\n")
 endfunction
 
+function! s:list_buffers_customized()
+  redir => list
+  silent ls
+  redir END
+
+  let l:res = []
+  let l:raw_lines = split(list, "\n")
+  for l:raw_line in raw_lines
+    let l:elems = split(l:raw_line)
+    let l:custom_line = l:elems[0] . "\t" . substitute(l:elems[2], '"', "", "g")
+    call add(l:res, l:custom_line)
+  endfor
+ return l:res
+endfunction
+
 function! s:delete_buffers(lines)
   execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
 endfunction
 
 command! BD call fzf#run(fzf#wrap({
-  \ 'source': s:list_buffers(),
+  \ 'source': s:list_buffers_customized(),
   \ 'sink*': { lines -> s:delete_buffers(lines) },
   \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept --prompt "delete(close) buffers> "'
 \ }))

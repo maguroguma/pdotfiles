@@ -165,7 +165,7 @@ augroup END  " }}}
 autocmd QuickFixCmdPost *grep* cwindow
 
 " ノーマルモードへの移行
-tnoremap <C-z> <C-\><C-n>
+tnoremap <C-e> <C-\><C-n>
 
 " 参考: https://github.com/uga-rosa/dotfiles/blob/main/.config/nvim/plugin/term.vim
 
