@@ -3,6 +3,9 @@
 " PLUGSETTING: yuki-yano/fuzzy-motion.vim
 """
 " nmap ' :<C-u>FuzzyMotion<CR>
+nmap f <cmd>Pounce<CR>
+vmap f <cmd>Pounce<CR>
+omap gf <cmd>Pounce<CR>
 nmap ' <cmd>Pounce<CR>
 vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
