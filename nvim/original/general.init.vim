@@ -1,4 +1,5 @@
 " カレントバッファの相対ファイルパスをクリップボードレジスタに保存
+" NOTE: vim-gh-lineというプラグインが上位互換の働きをしているため、このスクリプトは引退したほうが良い
 function! YankCurrentBufferFileRelativePath()
   let l:relative_path = expand("%")
   let l:cur_lnumber = line(".")
@@ -30,7 +31,17 @@ command! OpenVimScriptHelp :h usr_41
 " 今日の日付
 inoremap <C-a>day <C-r>=strftime("%Y-%m-%d")<CR>
 cnoremap <C-a>day <C-r>=strftime("%Y-%m-%d")<CR>
-inoremap <C-a>date <C-r>=strftime("%Y-%m-%d %T")<CR>
+" 現在時刻
+inoremap <C-a>time <C-r>=strftime("%Y-%m-%d %T")<CR>
+" fzfで日付を入力したい
+function g:TerminalDay()
+  let l:temp = @z
+  redir @z | echo strftime("%Y-%m-%d") | redir END
+  norm "zp
+  let @z = l:temp
+  norm a
+endfunction
+tnoremap <C-a>day <C-\><C-n>:call g:TerminalDay()<CR>
 
 " markdownのコードスニペット
 function! g:ReadTripleBackQuotes(lang_text)
