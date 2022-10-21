@@ -52,6 +52,6 @@ let g:airline_theme = 'wombat'
 " a: モード, b: gitのブランチ, c: バッファのファイルパス
 " x: ファイルタイプ, y: ファイルのエンコーディング, z: 行数
 let g:airline#extensions#default#layout = [
-      \ ['a', 'b', 'x', 'y', 'z', 'c'],
-      \ [],
+      \ ['z', 'y', 'c'],
+      \ ['x', 'b'],
       \ ]
