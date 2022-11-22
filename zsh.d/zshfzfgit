@@ -1,5 +1,5 @@
-# https://junegunn.kr/2016/07/fzf-git/
 # GIT heart FZF
+# https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236
 # -------------
 
 is_in_git_repo() {
@@ -84,14 +84,14 @@ _gm() {
           { memo[$0] = 1; results[length(results)] = $0; } }
           END { for(i=1; i<length(results); i++) print results[i] }
         ' | \
-    fzf-down -m --preview 'git show --color=always {1}' --prompt="refs> "
+    fzf-down -m --preview 'git show --color=always {1}' --prompt="branch> "
 }
 
 # original: reflogs -> commit hash
 _gr() {
     is_in_git_repo || return
     git --no-pager reflog | \
-        fzf-down --preview 'git show --color=always {1}' --prompt="refs> " | \
+        fzf-down --preview 'git show --color=always {1}' --prompt="ref> " | \
         cut -d' ' -f1
 }
 

@@ -94,6 +94,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'kdheepak/lazygit.nvim'
 Plug 'ruanyl/vim-gh-line'
 Plug 'voldikss/vim-floaterm' " terminal by float window
+Plug 'TaDaa/vimade'
 
 " lua-setting.vim
 Plug 'lewis6991/gitsigns.nvim'

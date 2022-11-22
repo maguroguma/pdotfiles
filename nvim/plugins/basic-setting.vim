@@ -280,3 +280,9 @@ augroup vimrc_floaterm
   autocmd User FloatermOpen tnoremap <buffer> <silent> <C-s> <C-\><C-n>:FloatermToggle<CR>
   autocmd QuitPre * FloatermKill!
 augroup END
+
+"""
+" PLUGSETTING: TaDaa/vimade
+"""
+let g:vimade = {}
+let g:vimade.fadelevel = 0.55
