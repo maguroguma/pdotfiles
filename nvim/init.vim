@@ -155,6 +155,14 @@ else
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
+
+" ddu-ui-filer
+Plug 'Shougo/ddu.vim'
+Plug 'Shougo/ddu-ui-filer'
+Plug 'Shougo/ddu-source-file'
+Plug 'Shougo/ddu-kind-file'
+Plug 'Shougo/ddu-column-filename'
+Plug 'ryota2357/ddu-column-icon_filename'
 call plug#end()
 
 filetype plugin indent on
@@ -177,6 +185,7 @@ runtime ./plugins/lua-setting.vim
 runtime ./plugins/motion-setting.vim
 runtime ./plugins/lexima-setting.vim
 runtime ./plugins/coc-setting.vim
+runtime ./plugins/ddu-ui-filer-setting.vim
 " 手動donwloadしたもの
 runtime ./downloads/catn.vim
 runtime ./downloads/qargs.vim
