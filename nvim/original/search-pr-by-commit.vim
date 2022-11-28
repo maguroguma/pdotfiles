@@ -14,12 +14,12 @@ function! s:buildGitHubPRSearchURL(...)
   let l:search_word = @z
   let @z = l:temp
 
-  " build query URL and assign it to register
+  " build query URL and assign it to the default and clipboard registers
   let l:goal = l:command_result . l:search_word
   let @" = l:goal
   let @+ = l:goal
 
-  " interactive question
+  " interactive question whether open it by your default browser
   let l:confirm_msg = 'Open it by browser? -> ' . '"' . l:goal . '"'
   let l:is_open_browser = confirm(l:confirm_msg, "y yes\nn no")
   if l:is_open_browser != 1
