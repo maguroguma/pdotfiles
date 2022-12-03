@@ -3,6 +3,7 @@
 # ref: https://qiita.com/kompiro/items/a09c0b44e7c741724c80#%E3%82%AD%E3%83%BC%E3%83%90%E3%82%A4%E3%83%B3%E3%83%89
 ##############################
 
+# ripgrepはデフォルトで.gitignoreを考慮することに注意！
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border'

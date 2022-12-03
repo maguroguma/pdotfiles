@@ -94,7 +94,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'kdheepak/lazygit.nvim'
 Plug 'ruanyl/vim-gh-line'
 Plug 'voldikss/vim-floaterm' " terminal by float window
-Plug 'TaDaa/vimade'
 
 " lua-setting.vim
 Plug 'lewis6991/gitsigns.nvim'
@@ -114,6 +113,7 @@ Plug 'jodosha/vim-godebug', { 'for': 'go' }
 " coc-setting.vim
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'liuchengxu/vista.vim'
+Plug 'stevearc/aerial.nvim'
 
 " fzf-setting.vim
 Plug 'junegunn/fzf', { 'do': './install --bin' }

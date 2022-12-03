@@ -134,6 +134,9 @@ nnoremap Q q
 " numberのトグル
 nnoremap <Leader>n :<C-u>set number!<CR>
 
+" wrapのトグル
+nnoremap <Leader>W :<C-u>set wrap!<CR>
+
 " mkviewコマンド、loadviewコマンドの関数化、マッピング
 " function! g:Mkview_and_echo_msg() abort
 "   mkview

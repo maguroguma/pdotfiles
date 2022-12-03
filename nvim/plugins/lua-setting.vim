@@ -1,7 +1,5 @@
-"""
-" PLUGSETTING: lewis6991/gitsigns.nvim
-"""
 lua << EOF
+-- PLUGSETTING: lewis6991/gitsigns.nvim
 require('gitsigns').setup {
   signs = {
     add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
@@ -45,12 +43,8 @@ require('gitsigns').setup {
     enable = false
   },
 }
-EOF
 
-"""
-" PLUGSETTING: kevinhwang91/nvim-bqf
-"""
-lua << EOF
+-- PLUGSETTING: kevinhwang91/nvim-bqf
 local fn = vim.fn
 
 function _G.qftf(info)
@@ -141,19 +135,14 @@ require('bqf').setup({
         }
     }
 })
-EOF
 
-"""
-" PLUGSETTING: folke/todo-comments.nvim
-"
-" FIXME:
-" TODO:
-" BUG:
-" PERF:
-" HACK:
-" WARNING:
-"""
-lua << EOF
+-- PLUGSETTING: folke/todo-comments.nvim
+-- FIXME:
+-- TODO:
+-- BUG:
+-- PERF:
+-- HACK:
+-- WARNING:
   require("todo-comments").setup {
   signs = true, -- show icons in the signs column
   sign_priority = 8, -- sign priority
@@ -209,12 +198,8 @@ lua << EOF
     -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
   },
 }
-EOF
 
-"""
-" PLUGSETTING: kwkarlwang/bufjump.nvim
-"""
-lua << EOF
+-- PLUGSETTING: kwkarlwang/bufjump.nvim
 require("bufjump").setup({
     forward = "<Leader>-",
     backward = "-",
@@ -222,12 +207,8 @@ require("bufjump").setup({
         vim.cmd([[execute "normal! g`\"zz"]])
     end,
 })
-EOF
 
-"""
-" PLUGSETTING: max397574/better-escape.nvim
-"""
-lua << EOF
+-- PLUGSETTING: max397574/better-escape.nvim
 -- lua, default settings
 require("better_escape").setup {
     mapping = {"jj", "jk", "kj"}, -- a table with mappings to use
@@ -239,4 +220,20 @@ require("better_escape").setup {
     --   return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
     -- end,
 }
+
+-- PLUGSETTING: stevearc/aerial.nvim
+require('aerial').setup({
+  -- Priority list of preferred backends for aerial.
+  -- This can be a filetype map (see :help aerial-filetype-map)
+  backends = { "treesitter", "lsp", "markdown", "man" },
+
+  -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+  on_attach = function(bufnr)
+    -- Jump forwards/backwards with '{' and '}'
+    vim.keymap.set('n', '{', '<cmd>AerialPrev<CR>', {buffer = bufnr})
+    vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', {buffer = bufnr})
+  end
+})
+-- You probably also want to set a keymap to toggle aerial
+vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
 EOF

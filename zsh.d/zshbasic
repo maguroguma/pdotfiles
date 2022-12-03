@@ -192,3 +192,8 @@ today-for-zle() {
 }
 zle -N today-for-zle
 bindkey '^aday' today-for-zle
+
+# https://dev.classmethod.jp/articles/eetann-zle-edit-command-line/
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey "^o" edit-command-line
