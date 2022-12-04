@@ -16,4 +16,4 @@ set vicmd='less -N'
 nnoremap q :quit<cr>
 
 " make directory
-nnoremap N :mkdir<space>
+nnoremap K :mkdir<space>

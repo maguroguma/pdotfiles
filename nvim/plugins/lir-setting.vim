@@ -22,9 +22,9 @@ require'lir'.setup {
     ['h']     = actions.up,
     ['q']     = actions.quit,
 
-    ['M']     = actions.mkdir,
+    ['mk']     = actions.mkdir,
     -- ['N']     = actions.newfile,
-    ['N']     = actions.touch,
+    ['mn']     = actions.touch,
     ['r']     = actions.rename,
     ['@']     = actions.cd,
     ['Y']     = actions.yank_path,

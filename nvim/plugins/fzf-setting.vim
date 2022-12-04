@@ -94,6 +94,24 @@ command! GShow call fzf#run(fzf#wrap({
 \ }))
 
 """
+" custom insert command from history
+"""
+" source
+function! s:list_command_history() abort
+  let l:res = system("cat $HOME/.zhistory | cut -b 16- | head -n 5000")
+  return split(l:res, "\n")
+endfunction
+" sink
+function! s:insert_target(shell_command) abort
+  call setline(line("."), a:shell_command)
+endfunction
+command! HCommand call fzf#run(fzf#wrap({
+  \ 'source': s:list_command_history(),
+  \ 'sink': funcref('s:insert_target'),
+  \ 'options': '--ansi --prompt "replace current line> "',
+\ }))
+
+"""
 " layouts, styles
 """
 
@@ -117,6 +135,7 @@ nnoremap <silent> <leader>gf :GFiles?<CR>
 nnoremap <silent> <leader>Q :History:<CR>
 nnoremap <silent> <leader>gs :GShow<CR>
 nnoremap <silent> <leader>bd :BD<CR>
+nnoremap <silent> R :HCommand<CR>
 
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
