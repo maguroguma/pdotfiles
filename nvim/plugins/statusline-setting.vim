@@ -7,12 +7,14 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline_statusline_ontop = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline_skip_empty_sections = 1
+" NOTE: これはairlineに限ったものではないので別の場所で定義しても良い気がする
 set laststatus=2
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 " let g:airline#extensions#virtualenv#enabled = 1
 
 " vim-airline
+" NOTE: このあたりのif文はなんかおかしい気がする
 let g:airline#extensions#virtualenv#enabled = 1
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}

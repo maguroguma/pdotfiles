@@ -1,5 +1,6 @@
 function! s:buildGitHubPRSearchURL(...)
   " GitHub PR search link
+  " FIXME: カバーできていないケースが多そう（ghq -pで取得したリポジトリだと上手く行かない）
   let l:shell_one_liner = 'git remote -v | '
         \ . 'grep "github" | '
         \ . 'cut -d":" -f2 | '

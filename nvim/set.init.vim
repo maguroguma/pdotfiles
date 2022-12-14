@@ -101,6 +101,7 @@ set hlsearch
 
 " 自動改行を防ぐ
 " https://loumo.jp/archives/10503
+" NOTE: 消して良いかも、、
 autocmd FileType text :set formatoptions=q
 
 set autoindent          "改行時に前の行のインデントを計測
@@ -185,6 +186,7 @@ augroup vimrc-remember-cursor-position
 augroup END
 
 "" txt
+" NOTE: こいつがテキストを自動改行する要因なので、消したほうが良さそう
 augroup vimrc-wrapping
   autocmd!
   autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
