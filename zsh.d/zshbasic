@@ -1,18 +1,40 @@
-###
-# zshの設定
-###
-
-# Emacs ライクな操作を有効にする（文字入力中に Ctrl-F,B でカーソル移動など）
-# Vi ライクな操作が好みであれば `bindkey -v` とする
+#############################
+# key bindings
+#############################
+# vi mode
 bindkey -v
-# ESCを別の方法で
 bindkey -M viins 'jj' vi-cmd-mode
+bindkey '^P' history-beginning-search-backward
+bindkey '^N' history-beginning-search-forward
+# バックスペースキーで文字を削除する
+bindkey -v '^?' backward-delete-char
+# Shift-Tabで候補を逆順に補完する
+bindkey '^[[Z' reverse-menu-complete
 
-# 自動補完を有効にする
-# コマンドの引数やパス名を途中まで入力して <Tab> を押すといい感じに補完してくれる
-# 例： `cd path/to/<Tab>`, `ls -<Tab>`
-autoload -U compinit; compinit
+# vifm
+bindkey -s '^f' 'vifm . \n'
 
+# lazygit
+bindkey -s '^gg' 'lazygit\n'
+bindkey -s '^g^g' 'lazygit\n'
+
+# today zle
+today-for-zle() {
+    local result=$(date +%Y-%m-%d)
+    zle reset-prompt
+    LBUFFER+=$result
+}
+zle -N today-for-zle
+bindkey '^aday' today-for-zle
+
+# command line zle
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey "^o" edit-command-line
+
+#############################
+# setopt
+#############################
 # 入力したコマンドが存在せず、かつディレクトリ名と一致するなら、ディレクトリに cd する
 # 例： /usr/bin と入力すると /usr/bin ディレクトリに移動
 setopt auto_cd
@@ -22,15 +44,11 @@ setopt auto_cd
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-# "~hoge" が特定のパス名に展開されるようにする（ブックマークのようなもの）
-# 例： cd ~hoge と入力すると /long/path/to/hogehoge ディレクトリに移動
-hash -d hoge=/long/path/to/hogehoge
-
 # cd した先のディレクトリをディレクトリスタックに追加する
 # ディレクトリスタックとは今までに行ったディレクトリの履歴のこと
 # `cd +<Tab>` でディレクトリの履歴が表示され、そこに移動できる
 setopt auto_pushd
-
+DIRSTACKSIZE=500
 # pushd したとき、ディレクトリがすでにスタックに含まれていればスタックに追加しない
 setopt pushd_ignore_dups
 
@@ -42,7 +60,6 @@ setopt pushd_ignore_dups
 setopt extended_glob
 
 # 入力したコマンドがすでにコマンド履歴に含まれる場合、履歴から古いほうのコマンドを削除する
-# コマンド履歴とは今まで入力したコマンドの一覧のことで、上下キーでたどれる
 setopt hist_ignore_all_dups
 
 # コマンドがスペースで始まる場合、コマンド履歴に追加しない
@@ -54,36 +71,14 @@ setopt hist_ignore_space
 # こうすると、 Ctrl-W でカーソル前の1単語を削除したとき、 / までで削除が止まる
 WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
-# ---
-# ---
-# ---
-
-# history search
-bindkey '^P' history-beginning-search-backward
-bindkey '^N' history-beginning-search-forward
-
-# ---
-# ---
-# ---
-
-# ---
-# general settings
-# ---
-
 # 補完候補を一覧で表示する
 setopt auto_list
 
 # 補完キー連打で候補順に自動で補完する
 setopt auto_menu
 
-# cd 時に自動でディレクトリスタックに追加する
-#setopt auto_pushd
-
 # コマンド履歴に実行時間も記録する
 setopt extended_history
-
-# 履歴中の重複行をすべて削除する
-#setopt hist_ignore_all_dups
 
 # 直前と重複するコマンドを記録しない
 setopt hist_ignore_dups
@@ -100,7 +95,7 @@ setopt ignore_eof
 # 履歴をすぐに追加する（通常はシェル終了時）
 setopt inc_append_history
 
-# # 以降をコメントとして扱う
+# '#' 以降をコメントとして扱う
 setopt interactive_comments
 
 # ビープを無効にする
@@ -123,77 +118,217 @@ setopt print_exit_value
 # VCS情報の表示を有効にする
 setopt prompt_subst
 
-# ディレクトリスタックと重複したディレクトリをスタックに追加しない
-#setopt pushd_ignore_dups
-
 # rm * の前に確認をとる
 setopt rm_star_wait
 
-# Zsh間で履歴を共有する
+# zsh間で履歴を共有する
 setopt share_history
 
 # コマンド実行後は右プロンプトを消す
 setopt transient_rprompt
 
-# ls 時の色を設定する
+# URLをエスケープする
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
+
+#############################
+# zsh hook
+#############################
+autoload -Uz add-zsh-hook
+
+#############################
+# completion setting
+#############################
+# コマンドのオプションや引数を補完する
+autoload -Uz compinit && compinit -u
+
+# 補完の表示方法を変更する
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' use-cache true
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*:default' menu select=2
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*:options' description 'yes'
+
+# ---
+# docker completion
+# ---
+
+fpath=(~/.zsh/completion $fpath)
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
+
+
+#############################
+# prompt setting
+#############################
+
+autoload -Uz vcs_info
+
+setopt prompt_subst
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
+zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
+zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
+zstyle ':vcs_info:*' actionformats '[%b|%a]'
+
+# 複数行のプロンプト
+precmd () {
+  # 1行あける
+  print
+  # カレントディレクトリ
+  local left='%B%K{153}%{\e[38;5;18m%}(%~)%{\e[m%}%k%b'
+  # バージョン管理されてた場合、ブランチ名
+  vcs_info
+  local right="%B%K{153} %{\e[38;5;32m%}${vcs_info_msg_0_}%{\e[m%}%k%b%B%K{153} %{\e[38;5;18m%}%DT%*%{\e[m%} %k%b"
+  # スペースの長さを計算
+  # テキストを装飾する場合、エスケープシーケンスをカウントしないようにする
+  local invisible='%([BSUbfksu]|([FK]|){*})'
+  local leftwidth=${#${(S%%)left//$~invisible/}}
+  local rightwidth=${#${(S%%)right//$~invisible/}}
+  local padwidth=$(($COLUMNS - ($leftwidth + $rightwidth) % $COLUMNS))
+
+  print -P $left$right
+}
+
+PROMPT='%{$fg[green]%}$%{$reset_color%} '
+TRAPALRM() {
+  zle reset-prompt
+}
+
+#############################
+# environmental values
+#############################
+export LANG=ja_JP.UTF-8
+export EDITOR="nvim -u $HOME/.config/nvim/minimal.init.vim"
+
+# dotfiles
+export DOTFILES_DIR=$HOME/dotfiles
+export PATH=$PATH:$DOTFILES_DIR/scripts
+export PATH=$PATH:$HOME/mybin
+
+# zsh
+export HISTFILE=~/.zhistory
+export HISTSIZE=100000
+export SAVEHIST=1000000
 export CLICOLOR=true
 export LSCOLORS='exfxcxdxbxGxDxabagacad'
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
 
-# 標準エディタを設定する
-export EDITOR=nvim
+# go
+export GOPATH=$HOME/go
+export GOBIN=$HOME/go/bin
+export GO111MODULE=on
+export PATH=$PATH:/usr/local/opt/go/libexec/bin
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:/usr/local/go/bin
+export PATH=/opt/homebrew/opt/openssl@3/bin:$PATH
+export GOCOMPE=$GOPATH/src/github.com/maguroguma/go-competitive
 
-# コマンド履歴を保存するファイルを指定する
-export HISTFILE=~/.zhistory
+# yarn
+export PATH=$HOME/.yarn/bin:$PATH
+export PATH=$HOME/.config/yarn/global/node_modules/.bin:$PATH
 
-# メモリに保存する履歴の件数を指定する
-export HISTSIZE=5000
+# deno
+export DENO_INSTALL=$HOME/.deno
+export PATH=$DENO_INSTALL/bin:$PATH
 
-# ファイルに保存する履歴の件数を指定する
-export SAVEHIST=1000000
+#############################
+# alias
+#############################
+# basic
+alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
+alias vimdiff='nvim -d'
+alias rm='rm -i'
+alias ..='cd ..'
+alias mv='mv -i'
+alias cp='cp -i'
+alias c='clear'
+alias relogin='exec $SHELL -l'
+alias lined_path="echo $PATH | tr ':' '\n'"
+if [ -e "$HOME/.zhistory" ]; then
+    alias shell-history='cat $HOME/.zhistory | cut -b 16- | head -n 5000'
+fi
+alias hw='hostname;whoami'
+alias rgf='rg --files-with-matches'
+alias gr='go run'
+alias enja='trans en:ja'
+alias jaen='trans ja:en'
 
-# 文字コードを設定する
-export LANG=ja_JP.UTF-8
+# Git
+alias g='lazygit'
+# add
+alias ga='git add'
+alias gau='git add -u'
+# branch
+alias gb='git branch'
+alias gbD='git branch -D'
+alias gba='git branch --all'
+alias gbd='git branch --delete'
+# checkout
+alias gcho='git checkout'
+# commit
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gcam='git commit --amend'
+# config
+alias gc-list='git config -l'
+# diff
+alias gd='git diff'
+alias gdi='git diff --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change'
+alias gds='git diff --staged'
+alias gdsi='git diff --staged --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change'
+# fetch
+alias gf='git fetch'
+alias gfp='git fetch --prune'
+# grep
+alias gg='git grep'
+# log
+alias glg='git log --graph --all --decorate'
+alias glo='git log --oneline -n 30 --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --color=always --date=format:"%Y/%m/%d %H:%M:%S"'
+# ls-files
+alias gcheck-ignored='git ls-files -io --exclude-standard'
+# merge
+alias gm='git merge'
+alias gms='git merge --squash'
+# push
+alias gpoH='git push origin HEAD'
+# reset
+alias gu='git reset HEAD'
+# status
+alias gs='git status --short'
+# tag
+alias gt='git tag'
+alias gta='git tag -a'
+alias gtd='git tag -d'
+# submodule
+alias gss='git submodule status'
+alias gsa='git submodule add'
+alias gsu='git submodule update'
+alias gsur='git submodule update --recursive'
+# worktree
+alias gwa='git worktree add'
+alias gwl='git worktree list'
+alias gwp='git worktree prune'
 
-# ---
-# Key bindings
-# ---
+# composite command
+alias gcommit-only-deleted='git ls-files --deleted | xargs git commit'
 
-# コマンドラインの編集モードをViにする
-bindkey -v
+# Docker
+alias docker-restart='docker-compose down && docker-compose build && docker-compose up -d'
 
-# バックスペースキーで文字を削除する
-bindkey -v '^?' backward-delete-char
+# tmux
+alias ta='tmux a'
+alias tks='tmux kill-server'
+alias tls='tmux ls'
+alias tns='tmux new -s'
 
-# Shift-Tabで候補を逆順に補完する
-bindkey '^[[Z' reverse-menu-complete
-
-# ghq で管理しているリポジトリから検索・移動する
-bindkey '^@' anyframe-widget-cd-ghq-repository
-
-# コマンドを履歴から検索・実行する
-bindkey '^r' anyframe-widget-put-history
-
-# vifm
-bindkey -s '^f' 'vifm . \n'
-
-# nvim
-bindkey -s '^v' 'nvim\n'
-
-# lazygit
-bindkey -s '^gg' 'lazygit\n'
-bindkey -s '^g^g' 'lazygit\n'
-
-# original
-today-for-zle() {
-    local result=$(date -u +%Y-%m-%d)
-    zle reset-prompt
-    LBUFFER+=$result
-}
-zle -N today-for-zle
-bindkey '^aday' today-for-zle
-
-# https://dev.classmethod.jp/articles/eetann-zle-edit-command-line/
-autoload -Uz edit-command-line
-zle -N edit-command-line
-bindkey "^o" edit-command-line
+# ubuntu
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
+alias tmux-copy='tmux save-buffer - | pbcopy'

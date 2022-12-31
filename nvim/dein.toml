@@ -1,0 +1,767 @@
+[[plugins]]
+repo = 'tani/vim-jetpack'
+opt = true
+
+[[plugins]]
+repo = 'nvim-tree/nvim-web-devicons'
+on_cmd = ['NvimTreeToggle', 'NvimTreeOpen']
+
+[[plugins]]
+repo = 'nvim-tree/nvim-tree.lua'
+on_cmd = ['NvimTreeToggle', 'NvimTreeOpen']
+depends = 'nvim-tree/nvim-web-devicons'
+hook_post_source = '''
+lua << EOF
+local HEIGHT_RATIO = 0.8  -- You can change this
+local WIDTH_RATIO = 0.5   -- You can change this too
+
+require('nvim-tree').setup({
+  view = {
+    float = {
+      enable = true,
+      open_win_config = function()
+        local screen_w = vim.opt.columns:get()
+        local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
+        local window_w = screen_w * WIDTH_RATIO
+        local window_h = screen_h * HEIGHT_RATIO
+        local window_w_int = math.floor(window_w)
+        local window_h_int = math.floor(window_h)
+        local center_x = (screen_w - window_w) / 2
+        local center_y = ((vim.opt.lines:get() - window_h) / 2)
+                         - vim.opt.cmdheight:get()
+        return {
+          border = 'rounded',
+          relative = 'editor',
+          row = center_y,
+          col = center_x,
+          width = window_w_int,
+          height = window_h_int,
+        }
+        end,
+    },
+    width = function()
+      return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
+    end,
+    mappings = {
+      list = {
+        { key = "o", action = "edit_no_picker" },
+        { key = "l", action = "edit_no_picker", action_cb = edit_or_open },
+        -- { key = "L", action = "vsplit_preview", action_cb = vsplit_preview },
+        { key = "h", action = "close_node" },
+        -- { key = "H", action = "collapse_all", action_cb = collapse_all }
+        { key = "J", action = "" },
+        { key = "K", action = "" },
+      },
+    },
+  },
+  renderer = {
+    full_name = true,
+    group_empty = true,
+    special_files = {},
+    symlink_destination = true,
+    indent_markers = {
+      enable = true,
+    },
+    icons = {
+      git_placement = "signcolumn",
+      show = {
+        file = true,
+        folder = true,
+        folder_arrow = false,
+        git = true,
+      },
+    },
+  },
+})
+
+vim.api.nvim_set_keymap("n", "<C-f>", ":NvimTreeToggle<cr>" ,{silent = true, noremap = true})
+EOF
+'''
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+on_cmd = ['Git', 'GCheckoutThis']
+hook_post_source = '''
+" 現在のバッファのファイルをcheckoutする
+function! s:gitCheckoutThis()
+  let l:confirm_msg = 'You checkout this buffer file, OK?'
+  let l:is_ok = confirm(l:confirm_msg, "y yes\nn no")
+  if l:is_ok != 1
+    return
+  endif
+  :Git checkout %
+endfunction
+command! GCheckoutThis :call s:gitCheckoutThis()
+'''
+
+[[plugins]]
+repo = 'cohama/lexima.vim'
+on_event = 'InsertEnter'
+hook_post_source = '''
+" yuki-yanoさんのスクリプトを参考に
+" https://github.com/yuki-yano/dotfiles/blob/1c865f70c5ca3c2b4b59181c30bdb69ac6a0870a/.vimrc
+" '\%#' はカーソル位置を表す
+function! s:setup_lexima_insert() abort
+  let s:rules = []
+
+  "" markdown
+  let s:rules += [
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\%#',                        'input': '<C-w><CR>',                         },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\%#',                    'input': '<C-w><C-w><CR>',                    },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s*-\s\w.*\%#',                 'input': '<CR>-<Space>',                      },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\[\%#\]',                    'input': '<End><C-w><C-w><C-w><CR>',          },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\[\%#\]',                'input': '<End><C-w><C-w><C-w><C-w><CR>',     },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\[\(\s\|x\)\]\s\%#',         'input': '<C-w><C-w><C-w><CR>',               },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\[\(\s\|x\)\]\s\%#',     'input': '<C-w><C-w><C-w><C-w><CR>',          },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s*-\s\[\(\s\|x\)\]\s\w.*\%#',  'input': '<CR>-<Space>[]<Space><Left><Left>', },
+  \ ]
+  "" markdown(original)
+  let s:rules += [
+  \ { 'filetype': 'markdown', 'char': '<Space>', 'at': '\[\%#', 'input': '<Space>'},
+  \ ]
+
+  for s:rule in s:rules
+    call lexima#add_rule(s:rule)
+  endfor
+endfunction
+
+function! SetupLexima() abort
+  call s:setup_lexima_insert()
+endfunction
+
+call SetupLexima()
+
+" cocの補完をEnterで決定する
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+'''
+
+[[plugins]]
+# read vim command result to buffer
+repo = 'tyru/capture.vim'
+on_cmd = ['Capture']
+
+[[plugins]]
+repo = 'AndrewRadev/linediff.vim'
+on_cmd = ['Linediff']
+
+[[plugins]]
+repo = 'moll/vim-bbye'
+on_cmd = ['Bdelete']
+
+[[plugins]]
+repo = 'glidenote/memolist.vim'
+on_cmd = ['MemoNew', 'MemoList', 'MemoGrep']
+hook_post_source = '''
+let g:memolist_path = "~/go/src/github.com/maguroguma/memolist"
+" suffix type (default markdown)
+let g:memolist_memo_suffix = "md"
+" date format (default %Y-%m-%d %H:%M)
+let g:memolist_memo_date = "%Y-%m-%d %H:%M"
+" tags prompt (default 0)
+let g:memolist_prompt_tags = 1
+" categories prompt (default 0)
+let g:memolist_prompt_categories = 1
+" use fzf (default 0)
+let g:memolist_fzf = 1
+'''
+
+[[plugins]]
+repo = 'mbbill/undotree'
+on_cmd = ['UndotreeToggle']
+hook_post_source = '''
+let g:undotree_WindowLayout = 2         " undotreeは左側/diffは下にウィンドウ幅で表示
+let g:undotree_ShortIndicators = 1      " 時間単位は短く表示
+let g:undotree_SplitWidth = 40          " undotreeのウィンドウ幅
+let g:undotree_SetFocusWhenToggle = 1   " undotreeを開いたらフォーカスする
+"let g:undotree_DiffAutoOpen = 0         " diffウィンドウは起動時無効
+let g:undotree_DiffpanelHeight = 8      " diffウィンドウの行数
+"let g:undotree_HighlightChangedText = 0 " 変更箇所のハイライト無効
+'''
+
+[[plugins]]
+repo = 'kdheepak/lazygit.nvim'
+on_cmd = ['LazyGit']
+
+[[plugins]]
+repo = 'voldikss/vim-floaterm'
+on_cmd = ['FloatermToggle']
+hook_post_source = '''
+" 参考: https://github.com/yutkat/dotfiles/blob/28e8df61c39727fa85d3f289343eb60feffd29d8/.config/nvim/rc/pluginconfig/vim-floaterm.vim
+let g:floaterm_height = 0.95
+let g:floaterm_width = 0.95
+augroup vimrc_floaterm
+  autocmd!
+  autocmd User FloatermOpen tnoremap <buffer> <silent> <C-s> <C-\><C-n>:FloatermToggle<CR>
+  autocmd QuitPre * FloatermKill!
+augroup END
+'''
+
+[[plugins]]
+repo = 'mzlogin/vim-markdown-toc'
+on_ft = ['md', 'markdown']
+
+[[plugins]]
+repo = 'iamcco/mathjax-support-for-mkdp'
+on_ft = ['md', 'markdown']
+
+[[plugins]]
+repo = 'alvan/vim-closetag'
+on_ft = ['html', 'vue', 'html.twig']
+
+[[plugins]]
+repo = 'ap/vim-css-color'
+on_ft = ['html', 'vue', 'html.twig']
+
+[[plugins]]
+repo = 'jsborjesson/vim-uppercase-sql'
+on_ft = ['sql']
+
+[[plugins]]
+repo = 'posva/vim-vue'
+on_ft = ['vue']
+
+[[plugins]]
+repo = 'mattn/vim-sqlfmt'
+on_ft = ['sql']
+
+[[plugins]]
+repo = 'mattn/emmet-vim'
+on_ft = ['html', 'vue', 'html.twig']
+hook_post_source = '''
+let g:user_emmet_leader_key='<C-e>'
+'''
+
+[[plugins]]
+repo = 'mattn/vim-maketable'
+on_ft = ['md', 'markdown']
+
+[[plugins]]
+repo = 'heavenshell/vim-jsdoc'
+on_ft = ['javascript', 'javascript.jsx','typescript']
+build = 'make install'
+hook_post_source = '''
+let g:jsdoc_formatter = 'tsdoc'
+'''
+
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = 'go'
+hook_post_source = '''
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+let g:go_fmt_command = "goimports"
+" LSPに任せる機能をOFFにする
+let g:go_def_mapping_enabled = 0
+let g:go_doc_keywordprg_enabled = 0
+
+" autocmd FileType go nmap <Space>b  <Plug>(go-build)
+autocmd FileType go nmap <Space>r  <Plug>(go-run)
+autocmd FileType go nmap <Space>t  <Plug>(go-test)
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+autocmd FileType go nmap <Space>b :<C-u>call <SID>build_go_files()<CR>
+autocmd FileType go nmap <Space>c <Plug>(go-coverage-toggle)
+
+" ハイライト
+" :help go-settings
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_generate_tags = 1
+
+" let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+let g:go_metalinter_autosave = 0
+" オートで実行するものは選定できる
+" let g:go_metalinter_autosave_enabled = ['vet', 'golint']
+'''
+
+[[plugins]]
+repo = 'jodosha/vim-godebug'
+on_ft = 'go'
+
+[[plugins]]
+# better <C-a> and <C-x>
+repo = 'monaqa/dial.nvim'
+on_cmd = ['DialIncrement', 'DialDecrement']
+hook_post_source = '''
+vmap  <C-a>  <Plug>(dial-increment)
+vmap  <C-x>  <Plug>(dial-decrement)
+vmap g<C-a> g<Plug>(dial-increment)
+vmap g<C-x> g<Plug>(dial-decrement)
+'''
+
+[[plugins]]
+repo = 'lambdalisue/fern.vim'
+on_cmd = 'Fern'
+hook_post_source = '''
+" nmap <C-f> :<C-u>Fern . -reveal=%<CR>
+let g:fern#renderer = "nerdfont"
+let g:fern#renderer#nerdfont#indent_markers = 1
+
+function! s:init_fern() abort
+  " Use 'select' instead of 'edit' for default 'open' action
+  " nmap <buffer> <Plug>(fern-action-open) <Plug>(fern-action-open:select)
+endfunction
+
+augroup fern-custom
+  autocmd! *
+  autocmd FileType fern call s:init_fern()
+augroup END
+
+augroup my-glyph-palette
+  autocmd! *
+  autocmd FileType fern call glyph_palette#apply()
+  autocmd FileType nerdtree,startify call glyph_palette#apply()
+augroup END
+'''
+
+[[plugins]]
+repo = 'lambdalisue/fern-git-status.vim'
+on_cmd = 'Fern'
+depends = 'lambdalisue/fern.vim'
+
+[[plugins]]
+repo = 'lambdalisue/nerdfont.vim'
+on_cmd = 'Fern'
+depends = 'lambdalisue/fern.vim'
+
+[[plugins]]
+repo = 'lambdalisue/fern-renderer-nerdfont.vim'
+on_cmd = 'Fern'
+depends = 'lambdalisue/fern.vim'
+
+[[plugins]]
+repo = 'lambdalisue/glyph-palette.vim'
+on_cmd = 'Fern'
+depends = 'lambdalisue/fern.vim'
+
+[[plugins]]
+repo = 'lambdalisue/fern-hijack.vim'
+on_cmd = 'Fern'
+depends = 'lambdalisue/fern.vim'
+
+[[plugins]]
+repo = 'lewis6991/gitsigns.nvim'
+on_cmd = ['NvimTreeToggle', 'NvimTreeOpen', 'Files']
+hook_post_source = '''
+lua << EOF
+-- PLUGSETTING: lewis6991/gitsigns.nvim
+require('gitsigns').setup {
+  signs = {
+    add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+    change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+  },
+  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
+  numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
+  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
+  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+  watch_gitdir = {
+    interval = 1000,
+    follow_files = true
+  },
+  attach_to_untracked = true,
+  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+  current_line_blame_opts = {
+    virt_text = true,
+    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+    delay = 1000,
+    ignore_whitespace = false,
+  },
+  current_line_blame_formatter_opts = {
+    relative_time = false
+  },
+  sign_priority = 6,
+  update_debounce = 100,
+  status_formatter = nil, -- Use default
+  max_file_length = 40000,
+  preview_config = {
+    -- Options passed to nvim_open_win
+    border = 'single',
+    style = 'minimal',
+    relative = 'cursor',
+    row = 0,
+    col = 1
+  },
+  yadm = {
+    enable = false
+  },
+}
+EOF
+'''
+
+[[plugins]]
+repo = 'junegunn/fzf'
+on_cmd = ['Files', 'HCommand', 'Buffers', 'MemoList']
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+depends = 'junegunn/fzf'
+on_cmd = ['Files', 'HCommand', 'Buffers', 'MemoList']
+hook_post_source = '''
+"""
+" commands
+"""
+
+" ripgrep with vim
+" http://hogeai.hatenablog.com/entry/2018/03/04/201744
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
+command! Fmru FZFMru
+command! FZFMru call fzf#run({
+            \  'source':  v:oldfiles,
+            \  'sink':    'e',
+            \  'options': '-m -x +s',
+            \  'down':    '40%'})
+
+" fzf
+" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(
+    \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
+    \   <bang>0)
+
+command! -bang -nargs=? -complete=dir Buffers
+    \ call fzf#vim#buffers(
+    \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
+    \   <bang>0)
+
+" deletes buffers by fzf
+" ref: https://github.com/junegunn/fzf.vim/pull/733#issuecomment-559720813
+function! s:list_buffers()
+  redir => list
+  silent ls
+  redir END
+  return split(list, "\n")
+endfunction
+
+function! s:list_buffers_customized()
+  redir => list
+  silent ls
+  redir END
+
+  let l:res = []
+  let l:raw_lines = split(list, "\n")
+  for l:raw_line in raw_lines
+    let l:elems = split(l:raw_line)
+    let l:custom_line = l:elems[0] . "\t" . substitute(l:elems[2], '"', "", "g")
+    call add(l:res, l:custom_line)
+  endfor
+ return l:res
+endfunction
+
+function! s:delete_buffers(lines)
+  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
+endfunction
+
+command! BD call fzf#run(fzf#wrap({
+  \ 'source': s:list_buffers_customized(),
+  \ 'sink*': { lines -> s:delete_buffers(lines) },
+  \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept --prompt "delete(close) buffers> "'
+\ }))
+
+"""
+" custom git show with fugitive.vim
+"""
+" source
+function! s:list_commits() abort
+  let l:res = system('git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --color=always')
+  return split(l:res, "\n")
+endfunction
+" sink
+function! s:select_commits(commit_hash) abort
+  let l:list = split(a:commit_hash, ' ')
+  let l:execute_command = 'Git show ' . l:list[1] . ':%'
+  execute l:execute_command
+endfunction
+command! GShow call fzf#run(fzf#wrap({
+  \ 'source': s:list_commits(),
+  \ 'sink': funcref('s:select_commits'),
+  \ 'options': '--ansi --prompt "git show of the buffer> "',
+\ }))
+
+"""
+" custom insert command from history
+"""
+" source
+function! s:list_command_history() abort
+  let l:res = system("cat $HOME/.zhistory | cut -b 16- | head -n 5000")
+  return reverse(split(l:res, "\n"))
+endfunction
+" sink
+function! s:insert_target(shell_command) abort
+  call setline(line("."), a:shell_command)
+endfunction
+command! HCommand call fzf#run(fzf#wrap({
+  \ 'source': s:list_command_history(),
+  \ 'sink': funcref('s:insert_target'),
+  \ 'options': '--ansi --prompt "replace current line> "',
+\ }))
+
+"""
+" layouts, styles
+"""
+
+" popup window
+let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
+
+" Empty value to disable preview window altogether
+let g:fzf_preview_window = []
+
+nnoremap <silent> , :Marks<CR>
+nnoremap <silent> <Space>h :Helptags<CR>
+nnoremap <silent> <Space>gf :GitFiles?<CR>
+nnoremap <silent> <Space>q :History:<CR>
+nnoremap <silent> <Space>gs :GShow<CR>
+nnoremap <silent> <Space>bd :BD<CR>
+'''
+
+[[plugins]]
+repo = 'rlane/pounce.nvim'
+on_cmd = ['Pounce']
+hook_post_source = '''
+highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#FFAF60
+highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#E27878
+highlight PounceAccept     cterm=underline,bold ctermfg=184 ctermbg=236 gui=underline,bold guifg=#FFAF60 guibg=#555555
+highlight PounceAcceptBest cterm=underline,bold ctermfg=196 ctermbg=236 gui=underline,bold guifg=#EE2513 guibg=#555555
+
+lua << EOF
+require'pounce'.setup{
+  accept_keys = "HJKLYUIOPNMQWERTASDFGZXCVB",
+  accept_best_key = "<enter>",
+  multi_window = true,
+  debug = false,
+}
+EOF
+'''
+
+[[plugins]]
+repo = 'folke/todo-comments.nvim'
+on_cmd = ['NvimTreeToggle', 'NvimTreeOpen', 'Files']
+hook_post_source = '''
+lua << EOF
+-- PLUGSETTING: folke/todo-comments.nvim
+-- FIXME:
+-- TODO:
+-- BUG:
+-- PERF:
+-- HACK:
+-- WARNING:
+  require("todo-comments").setup {
+  signs = true, -- show icons in the signs column
+  sign_priority = 8, -- sign priority
+  -- keywords recognized as todo comments
+  keywords = {
+    FIX = {
+      icon = " ", -- icon used for the sign, and in search results
+      color = "error", -- can be a hex color, or a named color (see below)
+      alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
+      -- signs = false, -- configure signs for some keywords individually
+    },
+    TODO = { icon = " ", color = "info" },
+    HACK = { icon = " ", color = "warning" },
+    WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+    PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+    NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+  },
+  merge_keywords = true, -- when true, custom keywords will be merged with the defaults
+  -- highlighting of the line containing the todo comment
+  -- * before: highlights before the keyword (typically comment characters)
+  -- * keyword: highlights of the keyword
+  -- * after: highlights after the keyword (todo text)
+  highlight = {
+    before = "", -- "fg" or "bg" or empty
+    keyword = "wide", -- "fg", "bg", "wide" or empty. (wide is the same as bg, but will also highlight surrounding characters)
+    after = "fg", -- "fg" or "bg" or empty
+    pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlightng (vim regex)
+    comments_only = true, -- uses treesitter to match keywords in comments only
+    max_line_len = 400, -- ignore lines longer than this
+    exclude = {}, -- list of file types to exclude highlighting
+  },
+  -- list of named colors where we try to extract the guifg from the
+  -- list of hilight groups or use the hex color if hl not found as a fallback
+  colors = {
+    error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+    warning = { "DiagnosticWarning", "WarningMsg", "#FBBF24" },
+    info = { "DiagnosticInfo", "#2563EB" },
+    hint = { "DiagnosticHint", "#10B981" },
+    default = { "Identifier", "#7C3AED" },
+  },
+  search = {
+    command = "rg",
+    args = {
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+    },
+    -- regex that will be used to match keywords.
+    -- don't replace the (KEYWORDS) placeholder
+    pattern = [[\b(KEYWORDS):]], -- ripgrep regex
+    -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+  },
+}
+EOF
+'''
+
+[[plugins]]
+repo = 'stevearc/aerial.nvim'
+on_cmd = ['AerialToggle']
+hook_post_source = '''
+lua << EOF
+-- PLUGSETTING: stevearc/aerial.nvim
+require('aerial').setup({
+  -- Priority list of preferred backends for aerial.
+  -- This can be a filetype map (see :help aerial-filetype-map)
+  backends = { "treesitter", "lsp", "markdown", "man" },
+
+  layout = {
+    win_opts = {
+      winblend = 10,
+    },
+    -- default_direction = 'float',
+    placement = 'edge',
+  },
+
+  -- Options for opening aerial in a floating win
+  float = {
+    -- Controls border appearance. Passed to nvim_open_win
+    border = "rounded",
+
+    -- Determines location of floating window
+    --   cursor - Opens float on top of the cursor
+    --   editor - Opens float centered in the editor
+    --   win    - Opens float centered in the window
+    relative = "win",
+
+    -- These control the height of the floating window.
+    -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
+    -- min_height and max_height can be a list of mixed types.
+    -- min_height = {8, 0.1} means "the greater of 8 rows or 10% of total"
+    max_height = 0.9,
+    height = nil,
+    min_height = { 8, 0.1 },
+
+    override = function(conf, source_winid)
+      -- This is the config that will be passed to nvim_open_win.
+      -- Change values here to customize the layout
+      conf.anchor = 'NE'
+      conf.col = vim.fn.winwidth(source_winid)
+      conf.row = 0
+      return conf
+    end,
+  },
+
+  -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+  on_attach = function(bufnr)
+    -- Jump forwards/backwards with '{' and '}'
+    vim.keymap.set('n', '{', '<cmd>AerialPrev<CR>', {buffer = bufnr})
+    vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', {buffer = bufnr})
+  end
+})
+-- You probably also want to set a keymap to toggle aerial
+-- vim.keymap.set('n', '<Space>a', '<cmd>AerialToggle<CR>')
+EOF
+'''
+
+[[plugins]]
+repo = 'max397574/better-escape.nvim'
+on_event = 'InsertEnter'
+hook_post_source = '''
+lua << EOF
+-- PLUGSETTING: max397574/better-escape.nvim
+-- lua, default settings
+require("better_escape").setup {
+    mapping = {"jj", "jk", "kj"}, -- a table with mappings to use
+    timeout = 200, -- the time in which the keys must be hit in ms. Use option timeoutlen by default
+    clear_empty_lines = false, -- clear line after escaping if there is only whitespace
+    keys = "<Esc>", -- keys used for escaping, if it is a function will use the result everytime
+    -- example(recommended)
+    -- keys = function()
+    --   return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
+    -- end,
+}
+EOF
+'''
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+on_cmd = ['NvimTreeToggle', 'NvimTreeOpen', 'Files']
+hook_post_source = '''
+lua << EOF
+-- PLUGSETTING: nvim-treesitter/nvim-treesitter
+require'nvim-treesitter.configs'.setup {
+  parser_install_dir = "~/.local/share/nvim/site/pack/jetpack/nvim-treesitter",
+}
+EOF
+'''
+
+[[plugins]]
+# automatic closing of quotes, parenthesis, brackets, etc.
+repo = 'Raimondi/delimitMate'
+on_event = 'InsertEnter'
+
+[[plugins]]
+repo = 'windwp/nvim-spectre'
+on_cmd = 'Spectre'
+
+[[plugins]]
+repo = 't9md/vim-choosewin'
+on_cmd = 'ChooseWin'
+hook_post_source = '''
+" オーバーレイ機能を有効にしたい場合
+let g:choosewin_overlay_enable          = 1
+" オーバーレイ・フォントをマルチバイト文字を含むバッファでも綺麗に表示する。
+let g:choosewin_overlay_clear_multibyte = 1
+let g:choosewin_label = 'HJKLYUIONM'
+'''
+
+[[plugins]]
+repo = 'MattesGroeger/vim-bookmarks'
+on_cmd = ['BookmarkToggle', 'BookmarkAnnotate', 'BookmarkShowAll', 'BookmarkClear', 'BookmarkClearAll', 'BookmarkMoveUp', 'BookmarkMoveDown', 'BookmarkMoveToLine']
+hook_post_source = '''
+let g:bookmark_save_per_working_dir = 1
+let g:bookmark_auto_save = 1
+let g:bookmark_no_default_key_mappings = 1
+'''
+
+[[plugins]]
+repo = 'rhysd/committia.vim'
+on_ft = ['gitcommit']
+
+[[plugins]]
+repo = 'simeji/winresizer'
+on_cmd = 'WinResizerStartResize'
+
+[[plugins]]
+# for commenting on vue SFC
+repo = 'tomtom/tcomment_vim'
+on_event = 'CursorHold'
+
+[[plugins]]
+repo = 'vim-test/vim-test'
+on_cmd = ['TestFile', 'TestNearest']

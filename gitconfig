@@ -32,7 +32,7 @@
 #  graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
 # https://qiita.com/hajimeni/items/73d2155fc59e152630c4
   delete-merged-branch = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|main'|xargs git branch -d; };f"
-  push-f = push --force-with-lease
+  push-f = push --force-with-lease --force-if-includes
   clean-confirm = clean -dn
   clean-all = clean -df
   sec-install = secrets --install
