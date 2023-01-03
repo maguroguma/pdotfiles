@@ -268,6 +268,10 @@ nnoremap H ^
 vnoremap H ^
 nnoremap L $
 vnoremap L $
+nnoremap <C-h> ^
+vnoremap <C-h> ^
+nnoremap <C-l> $
+vnoremap <C-l> $
 
 " search
 nnoremap n nzz

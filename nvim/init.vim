@@ -135,7 +135,7 @@ imap <C-a><tab> <plug>(fzf-maps-i)
 
 nmap <silent> <C-f> <cmd>NvimTreeToggle<CR>
 nmap <silent> f <cmd>NvimTreeOpen .<CR>
-nmap <silent> <C-h> <cmd>execute 'NvimTreeOpen ' . expand('%:p:h')<CR>
+nmap <silent> F <cmd>execute 'NvimTreeOpen ' . expand('%:p:h')<CR>
 
 nnoremap <silent> <Space>gc :GCheckoutThis<CR>
 nnoremap <Space>gd :Git diff %<CR>
@@ -211,7 +211,14 @@ let g:partedit#auto_prefix = v:false
 
 nmap <C-e> <cmd>WinResizerStartResize<CR>
 
+let g:previm_open_cmd = 'open -a Google\ Chrome'
 nnoremap <silent> <Space>mp <cmd>PrevimOpen<CR>
+
+let g:UltiSnipsExpandTrigger = '<c-j>'
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+let g:UltiSnipsEditSplit = 'vertical'
+" let g:UltiSnipsSnippetDirectories = ['']
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
@@ -284,20 +291,6 @@ command! WhatCurFEncoding :se fenc?
 " タイムスタンプ・日時の相互変換
 " JST日時 -> タイムスタンプ: date -j -f "%Y/%m/%d %T" "2019/03/16 11:18:00" "+%s"
 " タイムスタンプ -> JST日時: date -j -f "%s" "1552735080" "+%Y/%m/%d %T"
-
-" https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
-augroup conventional-commit
-  autocmd!
-  autocmd FileType gitcommit nnoremap <C-m><C-m> <cmd>call <SID>select_type()<CR>
-  function! s:select_type() abort
-    let line = substitute(getline('.'), '^#\s*', '', 'g')
-    let title = printf('%s: ', split(line, ' ')[0])
-
-    silent! normal! "_dip
-    silent! put! =title
-    silent! startinsert!
-  endfunction
-augroup END
 
 " %:hのための、:hのマッピング
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
@@ -455,6 +448,18 @@ if executable('trans')
   " 和英 - :Jaen <日本語の単語>
   command! -nargs=1 Jaen :call s:japaToEng(<f-args>)
 endif
+
+" vimgrepのショートカット
+function! s:vimgrep_cur_dir()
+  let l:regexp = input("Regexp pattern: ")
+  if l:regexp == ""
+    echo "my vimgrep canceled."
+    return
+  endif
+  execute 'vim /' . l:regexp . '/ ./**'
+endfunction
+command! -nargs=0 MyVimGrep :call s:vimgrep_cur_dir()
+nnoremap <Space>gr <cmd>MyVimGrep<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
@@ -659,6 +664,10 @@ nnoremap H ^
 vnoremap H ^
 nnoremap L $
 vnoremap L $
+nnoremap <C-h> ^
+vnoremap <C-h> ^
+nnoremap <C-l> $
+vnoremap <C-l> $
 
 " search
 nnoremap n nzz
@@ -732,6 +741,7 @@ augroup END
 " lua scripts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set completeopt=menu,menuone,noselect
+set pumheight=20
 
 nmap <Space>a <cmd>AerialToggle<CR>
 

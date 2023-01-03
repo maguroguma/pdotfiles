@@ -12,8 +12,8 @@ on_cmd = ['NvimTreeToggle', 'NvimTreeOpen']
 depends = 'nvim-tree/nvim-web-devicons'
 hook_post_source = '''
 lua << EOF
-local HEIGHT_RATIO = 0.8  -- You can change this
-local WIDTH_RATIO = 0.5   -- You can change this too
+local HEIGHT_RATIO = 0.5  -- You can change this
+local WIDTH_RATIO = 0.4   -- You can change this too
 
 require('nvim-tree').setup({
   view = {
@@ -30,7 +30,9 @@ require('nvim-tree').setup({
         local center_y = ((vim.opt.lines:get() - window_h) / 2)
                          - vim.opt.cmdheight:get()
         return {
-          border = 'rounded',
+          border = {
+            "+", "=", "+", "|", "+", "=", "+", "|",
+          },
           relative = 'editor',
           row = center_y,
           col = center_x,
@@ -49,6 +51,7 @@ require('nvim-tree').setup({
         -- { key = "L", action = "vsplit_preview", action_cb = vsplit_preview },
         { key = "h", action = "close_node" },
         -- { key = "H", action = "collapse_all", action_cb = collapse_all }
+        { key = "+", action = "cd" },
         { key = "J", action = "" },
         { key = "K", action = "" },
       },
@@ -752,6 +755,18 @@ let g:bookmark_no_default_key_mappings = 1
 [[plugins]]
 repo = 'rhysd/committia.vim'
 on_ft = ['gitcommit', 'git']
+hook_post_source = '''
+" https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
+nnoremap <C-m><C-m> <cmd>call g:SelectType()<CR>
+function! g:SelectType() abort
+  let line = substitute(getline('.'), '^#\s*', '', 'g')
+  let title = printf('%s: ', split(line, ' ')[0])
+
+  silent! normal! "_dip
+  silent! put! =title
+  silent! startinsert!
+endfunction
+'''
 
 [[plugins]]
 repo = 'simeji/winresizer'
@@ -971,13 +986,6 @@ on_ft = ['gitcommit', 'git']
 # require coc-ultisnips if used with coc.nvim
 repo = 'sirver/ultisnips'
 on_event = 'InsertEnter'
-hook_post_source = '''
-let g:UltiSnipsExpandTrigger = '<c-j>'
-let g:UltiSnipsJumpForwardTrigger = '<c-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
-let g:UltiSnipsEditSplit = 'vertical'
-" let g:UltiSnipsSnippetDirectories = ['']
-'''
 
 [[plugins]]
 repo = 'mtdl9/vim-log-highlighting'
