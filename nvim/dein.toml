@@ -759,8 +759,9 @@ hook_post_source = '''
 " https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
 nnoremap <C-m><C-m> <cmd>call g:SelectType()<CR>
 function! g:SelectType() abort
-  let line = substitute(getline('.'), '^#\s*', '', 'g')
-  let title = printf('%s: ', split(line, ' ')[0])
+  let line = substitute(getline('.'), '^#\s*', '', 'g') " 最初の '# ' を除く
+  let arr = split(line, ' ')
+  let title = printf('%s: %s ', arr[0], arr[1])
 
   silent! normal! "_dip
   silent! put! =title
@@ -786,10 +787,6 @@ repo = 'neoclide/coc.nvim'
 branch = 'release'
 on_cmd = ['NvimTreeToggle', 'NvimTreeOpen', 'Files']
 hook_post_source = '''
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SECTION: neoclide/coc.nvim
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Some servers have issues with backup files, see #649.
 set nobackup
 set nowritebackup
@@ -858,8 +855,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <Space>rn <Plug>(coc-rename)
 
 " Formatting selected code.
-" xmap <Space>f  <Plug>(coc-format-selected)
-" nmap <Space>f  <Plug>(coc-format-selected)
+xmap <Space>f  <Plug>(coc-format-selected)
+nmap <Space>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -871,16 +868,16 @@ augroup end
 
 " Applying codeAction to the selected region.
 " Example: `<Space>aap` for current paragraph
-" xmap <Space>a  <Plug>(coc-codeaction-selected)
-" nmap <Space>a  <Plug>(coc-codeaction-selected)
+xmap <Space>a  <Plug>(coc-codeaction-selected)
+nmap <Space>a  <Plug>(coc-codeaction-selected)
 
 " Remap keys for applying codeAction to the current buffer.
-" nmap <Space>ac  <Plug>(coc-codeaction)
+nmap <Space>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 " nmap <Space>qf  <Plug>(coc-fix-current)
 
 " Run the Code Lens action on the current line.
-" nmap <Space>cl  <Plug>(coc-codelens-action)
+nmap <Space>cl  <Plug>(coc-codelens-action)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.

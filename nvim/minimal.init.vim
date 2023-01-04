@@ -115,8 +115,8 @@ inoremap <C-a>time <C-r>=strftime("%Y-%m-%d %T")<CR>
 " fzfで日付を入力したい
 function g:TerminalDay()
   let l:temp = @z
-  redir @z | echo strftime("%Y-%m-%d") | redir END
-  norm "zp
+  let @z = strftime("%Y-%m-%d")
+  put! z
   let @z = l:temp
   norm a
 endfunction

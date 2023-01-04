@@ -262,8 +262,8 @@ inoremap <C-a>time <C-r>=strftime("%Y-%m-%d %T")<CR>
 " fzfで日付を入力したい
 function g:TerminalDay()
   let l:temp = @z
-  redir @z | echo strftime("%Y-%m-%d") | redir END
-  norm "zp
+  let @z = strftime("%Y-%m-%d")
+  put! z
   let @z = l:temp
   norm a
 endfunction
@@ -456,7 +456,13 @@ function! s:vimgrep_cur_dir()
     echo "my vimgrep canceled."
     return
   endif
-  execute 'vim /' . l:regexp . '/ ./**'
+  let l:target = input("Target files(default: './**'): ")
+  if l:target == ""
+    let l:target = './**'
+  endif
+  let l:command = 'vimgrep /' .. l:regexp .. '/ ' .. l:target
+  execute 'silent ' .. l:command
+  echo l:command
 endfunction
 command! -nargs=0 MyVimGrep :call s:vimgrep_cur_dir()
 nnoremap <Space>gr <cmd>MyVimGrep<CR>
@@ -642,8 +648,8 @@ nnoremap t <Nop>
 " nnoremap q <Nop>
 nnoremap <Space> <Nop>
 
-" macro
-" nnoremap Q q
+" command line window
+nnoremap Q q:
 
 " cursor move
 nnoremap j gj
@@ -743,7 +749,7 @@ augroup END
 set completeopt=menu,menuone,noselect
 set pumheight=20
 
-nmap <Space>a <cmd>AerialToggle<CR>
+nmap <Space>v <cmd>AerialToggle<CR>
 
 " jetpack利用時は先頭に追加するようにする
 set runtimepath^=~/.local/share/nvim/site/pack/jetpack/nvim-treesitter
