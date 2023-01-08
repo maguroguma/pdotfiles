@@ -131,6 +131,12 @@ setopt transient_rprompt
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 
+# 不要なコマンドをhistoryから除外する
+zshaddhistory() {
+    local line="${1%%$'\n'}"
+    [[ ! "$line" =~ "^(cd|lazygit|ls|c|v|gc|gf|glo|gpoH|gs|ta|tks)($| )" ]]
+}
+
 #############################
 # zsh hook
 #############################
@@ -332,3 +338,13 @@ alias tns='tmux new -s'
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
 alias tmux-copy='tmux save-buffer - | pbcopy'
+
+# GNU系ツールに置き換える
+case "$OSTYPE" in
+    darwin*)
+        (( ${+commands[gsed]} )) && alias sed='gsed'
+        (( ${+commands[ggrep]} )) && alias grep='ggrep'
+        (( ${+commands[gfind]} )) && alias find='gfind'
+        (( ${+commands[gxargs]} )) && alias xargs='gxargs'
+    ;;
+esac

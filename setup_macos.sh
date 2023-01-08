@@ -21,6 +21,7 @@ brew install yq
 brew install tree
 brew install sqlparse
 brew install envchain
+brew install coreutils findutils gnu-sed grep
 
 brew tap homebrew/cask-fonts
 brew install font-plemol-jp
