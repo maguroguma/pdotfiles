@@ -12,11 +12,19 @@ bindkey -v '^?' backward-delete-char
 bindkey '^[[Z' reverse-menu-complete
 
 # vifm
-bindkey -s '^f' 'tmux popup -w95% -h95% -E -d "#{pane_current_path}" vifm . \n'
+vifm::here() {
+    tmux popup -w95% -h95% -E -d "#{pane_current_path}" vifm .
+}
+zle -N vifm::here
+bindkey '^f' vifm::here
 
 # lazygit
-bindkey -s '^gg' 'tmux popup -w95% -h95% -E -d "#{pane_current_path}" "lazygit"\n'
-bindkey -s '^g^g' 'tmux popup -w95% -h95% -E -d "#{pane_current_path}" "lazygit"\n'
+lazygit::here() {
+    tmux popup -w95% -h95% -E -d "#{pane_current_path}" "lazygit"
+}
+zle -N lazygit::here
+bindkey '^gg' lazygit::here
+bindkey '^g^g' lazygit::here
 
 # today zle
 today-for-zle() {
