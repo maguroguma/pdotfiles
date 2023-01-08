@@ -1,6 +1,6 @@
 [core]
   excludesfile = ~/.gitignore
-  editor = nvim
+  editor = "nvim -u $HOME/.config/nvim/minimal.init.vim"
   pager = delta
   quotepath = false
 

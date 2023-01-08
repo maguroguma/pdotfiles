@@ -12,11 +12,11 @@ bindkey -v '^?' backward-delete-char
 bindkey '^[[Z' reverse-menu-complete
 
 # vifm
-bindkey -s '^f' 'vifm . \n'
+bindkey -s '^f' 'tmux popup -w95% -h95% -E -d "#{pane_current_path}" vifm . \n'
 
 # lazygit
-bindkey -s '^gg' 'lazygit\n'
-bindkey -s '^g^g' 'lazygit\n'
+bindkey -s '^gg' 'tmux popup -w95% -h95% -E -d "#{pane_current_path}" "lazygit"\n'
+bindkey -s '^g^g' 'tmux popup -w95% -h95% -E -d "#{pane_current_path}" "lazygit"\n'
 
 # today zle
 today-for-zle() {
@@ -261,7 +261,7 @@ alias enja='trans en:ja'
 alias jaen='trans ja:en'
 
 # Git
-alias g='lazygit'
+alias g='tmux popup -w95% -h95% -E -d "#{pane_current_path}" "lazygit"'
 # add
 alias ga='git add'
 alias gau='git add -u'

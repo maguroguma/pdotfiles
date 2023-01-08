@@ -51,7 +51,7 @@ require('nvim-tree').setup({
         -- { key = "L", action = "vsplit_preview", action_cb = vsplit_preview },
         { key = "h", action = "close_node" },
         -- { key = "H", action = "collapse_all", action_cb = collapse_all }
-        { key = "+", action = "cd" },
+        { key = "=", action = "cd" },
         { key = "J", action = "" },
         { key = "K", action = "" },
       },
@@ -76,8 +76,6 @@ require('nvim-tree').setup({
     },
   },
 })
-
-vim.api.nvim_set_keymap("n", "<C-f>", ":NvimTreeToggle<cr>" ,{silent = true, noremap = true})
 EOF
 '''
 
@@ -134,13 +132,13 @@ endfunction
 
 call SetupLexima()
 
-" cocの補完をEnterで決定する
+" cocの補完をEnterで決定する（leximaの設定を上書きする）
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 '''
 
-[[plugins]]
 # read vim command result to buffer
+[[plugins]]
 repo = 'tyru/capture.vim'
 on_cmd = ['Capture']
 
@@ -181,10 +179,6 @@ let g:undotree_SetFocusWhenToggle = 1   " undotreeを開いたらフォーカス
 let g:undotree_DiffpanelHeight = 8      " diffウィンドウの行数
 "let g:undotree_HighlightChangedText = 0 " 変更箇所のハイライト無効
 '''
-
-[[plugins]]
-repo = 'kdheepak/lazygit.nvim'
-on_cmd = ['LazyGit']
 
 [[plugins]]
 repo = 'voldikss/vim-floaterm'
@@ -247,6 +241,7 @@ hook_post_source = '''
 let g:jsdoc_formatter = 'tsdoc'
 '''
 
+# TODO: mapの削除
 [[plugins]]
 repo = 'fatih/vim-go'
 on_ft = 'go'
@@ -293,8 +288,8 @@ let g:go_metalinter_autosave = 0
 repo = 'jodosha/vim-godebug'
 on_ft = 'go'
 
-[[plugins]]
 # better <C-a> and <C-x>
+[[plugins]]
 repo = 'monaqa/dial.nvim'
 on_cmd = ['DialIncrement', 'DialDecrement']
 hook_post_source = '''
@@ -633,6 +628,7 @@ EOF
 
 [[plugins]]
 repo = 'stevearc/aerial.nvim'
+depends = 'nvim-tree/nvim-web-devicons'
 on_cmd = ['AerialToggle']
 hook_post_source = '''
 lua << EOF
@@ -723,8 +719,8 @@ require'nvim-treesitter.configs'.setup {
 EOF
 '''
 
-[[plugins]]
 # automatic closing of quotes, parenthesis, brackets, etc.
+[[plugins]]
 repo = 'Raimondi/delimitMate'
 on_event = 'InsertEnter'
 
@@ -974,13 +970,13 @@ let g:fzf_preview_floating_window_rate = 0.9
 " let g:coc_node_path = '/path/to/node'
 '''
 
-[[plugins]]
 # show git diff on git rebase
+[[plugins]]
 repo = 'hotwatermorning/auto-git-diff'
 on_ft = ['gitcommit', 'git']
 
-[[plugins]]
 # require coc-ultisnips if used with coc.nvim
+[[plugins]]
 repo = 'sirver/ultisnips'
 on_event = 'InsertEnter'
 
@@ -988,18 +984,51 @@ on_event = 'InsertEnter'
 repo = 'mtdl9/vim-log-highlighting'
 on_ft = ['log']
 
-[[plugins]]
 # better asterisk behavior
+[[plugins]]
 repo = 'haya14busa/vim-asterisk'
 on_map = '<Plug>(asterisk'
+on_event = 'CmdlineEnter'
 
 [[plugins]]
+repo = 'kevinhwang91/nvim-hlslens'
+depends = 'haya14busa/vim-asterisk'
+on_map = '<Plug>(asterisk'
+on_event = 'CmdlineEnter'
+hook_post_source = '''
+lua << EOF
+require('hlslens').setup({
+    nearest_only = true
+})
+
+local kopts = {noremap = true, silent = true}
+
+vim.api.nvim_set_keymap('n', 'n',
+    [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
+    kopts)
+vim.api.nvim_set_keymap('n', 'N',
+    [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
+    kopts)
+
+-- vim-asterisk integration
+vim.api.nvim_set_keymap('n', '*', [[<Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('n', '#', [[<Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('n', 'g*', [[<Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('n', 'g#', [[<Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('x', '*', [[<Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('x', '#', [[<Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('x', 'g*', [[<Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>]], {})
+vim.api.nvim_set_keymap('x', 'g#', [[<Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>]], {})
+EOF
+'''
+
 # mark colors to words and sentences
+[[plugins]]
 repo = 't9md/vim-quickhl'
 on_map = '<Plug>(quickhl'
 
-[[plugins]]
 # realize live substitute
+[[plugins]]
 repo = 'markonm/traces.vim'
 on_event = 'CmdlineEnter'
 

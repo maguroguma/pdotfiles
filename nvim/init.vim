@@ -143,8 +143,6 @@ nnoremap <Space>gb :Git blame<CR>
 nnoremap <Space>ga :Git add %<CR>
 nnoremap <silent> <Space>gl :Git log %<CR>
 
-nnoremap <silent> <Space>lg :LazyGit<CR>
-
 let g:sonictemplate_vim_template_dir = [
       \ expand('$GOPATH') . '/src/github.com/maguroguma/go-competitive/template',
       \ expand('$DOTFILES_DIR') . '/nvim/sonic-template',
@@ -523,8 +521,9 @@ highlight Visual cterm=bold ctermbg=darkblue ctermfg=NONE
 " highlight StatusLineNC ctermbg=193
 highlight NonText    ctermbg=None ctermfg=239 guibg=NONE guifg=None
 highlight SpecialKey ctermbg=None ctermfg=239 guibg=NONE guifg=None
-highlight Search cterm=bold ctermbg=50 ctermfg=0
+highlight Search ctermbg=50 ctermfg=0
 highlight Folded ctermbg=Green ctermfg=Gray
+highlight IncSearch cterm=bold ctermbg=50 ctermfg=0
 
 " txtファイルで自動改行を防ぐ
 " https://loumo.jp/archives/10503
@@ -676,8 +675,8 @@ nnoremap <C-l> $
 vnoremap <C-l> $
 
 " search
-nnoremap n nzz
-nnoremap N Nzz
+" nnoremap n nzz
+" nnoremap N Nzz
 nnoremap <ESC><ESC> :nohlsearch<CR>
 
 " window

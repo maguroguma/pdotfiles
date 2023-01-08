@@ -68,8 +68,16 @@ let s:minimal_jetpack_dir = stdpath('data') .. '/site/pack/jetpack/minimal/'
 " manage plugins by jetpack
 packadd vim-jetpack
 call jetpack#begin(s:minimal_jetpack_dir)
-call jetpack#load_toml(expand('$HOME/.config/nvim/minimal.dein.toml'))
 call jetpack#add('nathom/filetype.nvim')
+
+call jetpack#add('tani/vim-jetpack', { 'opt': 1 })
+call jetpack#add('junegunn/fzf')
+call jetpack#add('junegunn/fzf.vim')
+call jetpack#add('rlane/pounce.nvim')
+call jetpack#add('max397574/better-escape.nvim')
+call jetpack#add('m4xshen/autoclose.nvim') " substitute of lexima
+call jetpack#add('rhysd/committia.vim')
+call jetpack#add('hotwatermorning/auto-git-diff')
 
 call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('markonm/traces.vim') " realize live substitute
@@ -91,14 +99,41 @@ let mapleader="\<Space>"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: plugin map
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(
+    \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
+    \   <bang>0)
+
+" source
+function! s:list_command_history() abort
+  let l:res = system("cat $HOME/.zhistory | cut -b 16- | head -n 5000")
+  return reverse(split(l:res, "\n"))
+endfunction
+" sink
+function! s:insert_target(shell_command) abort
+  call setline(line("."), a:shell_command)
+endfunction
+command! HCommand call fzf#run(fzf#wrap({
+  \ 'source': s:list_command_history(),
+  \ 'sink': funcref('s:insert_target'),
+  \ 'options': '--ansi --prompt "replace current line> "',
+\ }))
+
+" popup window
+let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
+
+" Empty value to disable preview window altogether
+let g:fzf_preview_window = []
 
 nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <Space>Q :History:<CR>
+nnoremap <silent> <Space>q :History:<CR>
 nnoremap <silent> R :HCommand<CR>
 
-nmap f <cmd>Pounce<CR>
-vmap f <cmd>Pounce<CR>
-omap gf <cmd>Pounce<CR>
 nmap ' <cmd>Pounce<CR>
 vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
@@ -315,6 +350,10 @@ nnoremap <Space>= ggVG=
 
 " blackhole register
 noremap x "_x
+nnoremap D "_d
+nnoremap C "_c
+xnoremap D "_d
+xnoremap C "_c
 
 " register
 inoremap <C-r><C-r> <C-r>"
@@ -333,3 +372,47 @@ nnoremap <Space>n :<C-u>set number!<CR>
 nnoremap <Space>W :<C-u>set wrap!<CR>
 
 colorscheme duskfox
+
+augroup git-semantic-commit-message
+  autocmd! *
+  " https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
+  function! g:SelectType() abort
+    let line = substitute(getline('.'), '^#\s*', '', 'g') " 最初の '# ' を除く
+    let arr = split(line, ' ')
+    let title = printf('%s: %s ', arr[0], arr[1])
+
+    silent! normal! "_dip
+    silent! put! =title
+    silent! startinsert!
+  endfunction
+  autocmd FileType gitcommit nnoremap <C-m><C-m> <cmd>call g:SelectType()<CR>
+augroup END
+
+highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#FFAF60
+highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#E27878
+highlight PounceAccept     cterm=underline,bold ctermfg=184 ctermbg=236 gui=underline,bold guifg=#FFAF60 guibg=#555555
+highlight PounceAcceptBest cterm=underline,bold ctermfg=196 ctermbg=236 gui=underline,bold guifg=#EE2513 guibg=#555555
+
+lua <<EOF
+require'pounce'.setup{
+  accept_keys = "HJKLYUIOPNMQWERTASDFGZXCVB",
+  accept_best_key = "<enter>",
+  multi_window = true,
+  debug = false,
+}
+
+-- PLUGSETTING: max397574/better-escape.nvim
+-- lua, default settings
+require("better_escape").setup {
+    mapping = {"jj", "jk", "kj"}, -- a table with mappings to use
+    timeout = 200, -- the time in which the keys must be hit in ms. Use option timeoutlen by default
+    clear_empty_lines = false, -- clear line after escaping if there is only whitespace
+    keys = "<Esc>", -- keys used for escaping, if it is a function will use the result everytime
+    -- example(recommended)
+    -- keys = function()
+    --   return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
+    -- end,
+}
+
+require("autoclose").setup({})
+EOF
