@@ -13,7 +13,14 @@ set sizefmt=units:iec,precision:3
 set vicmd='less -N'
 
 " quit by q
-nnoremap q :quit<cr>
+nnoremap q :quit<CR>
 
 " make directory
 nnoremap K :mkdir<space>
+
+" toggle quickview
+nnoremap Q :set quickview!<CR>
+
+" show git status
+command! Gst git -c color.status=always status -s %q
+nnoremap s :Gst<CR>

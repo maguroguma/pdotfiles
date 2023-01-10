@@ -75,6 +75,9 @@ require('nvim-tree').setup({
       },
     },
   },
+  git = {
+    ignore = false,
+  },
 })
 EOF
 '''
@@ -97,6 +100,7 @@ command! GCheckoutThis :call s:gitCheckoutThis()
 
 [[plugins]]
 repo = 'cohama/lexima.vim'
+depends = 'neoclide/coc.nvim'
 on_event = 'InsertEnter'
 hook_post_source = '''
 " yuki-yanoさんのスクリプトを参考に
@@ -753,8 +757,13 @@ repo = 'rhysd/committia.vim'
 on_ft = ['gitcommit', 'git']
 hook_post_source = '''
 " https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
-nnoremap <C-m><C-m> <cmd>call g:SelectType()<CR>
+nnoremap ZZ <cmd>call g:SelectType()<CR>
 function! g:SelectType() abort
+  if &filetype !=? "gitcommit"
+    echoerr 'This is not gitcommit buffer!'
+    return
+  endif
+
   let line = substitute(getline('.'), '^#\s*', '', 'g') " 最初の '# ' を除く
   let arr = split(line, ' ')
   let title = printf('%s: %s ', arr[0], arr[1])

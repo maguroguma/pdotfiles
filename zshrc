@@ -10,6 +10,7 @@ export ZSH_SUB_FILES_DIR=$HOME/.zsh.d
 loadlib $ZSH_SUB_FILES_DIR/zshbasic
 loadlib $ZSH_SUB_FILES_DIR/zshzplug
 loadlib $ZSH_SUB_FILES_DIR/zshfzf
+loadlib $ZSH_SUB_FILES_DIR/_zshexternal
 
 # direnv
 eval "$(direnv hook zsh)"

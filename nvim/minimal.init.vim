@@ -377,6 +377,11 @@ augroup git-semantic-commit-message
   autocmd! *
   " https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
   function! g:SelectType() abort
+    if &filetype !=? "gitcommit"
+      echoerr 'This is not gitcommit buffer!'
+      return
+    endif
+
     let line = substitute(getline('.'), '^#\s*', '', 'g') " 最初の '# ' を除く
     let arr = split(line, ' ')
     let title = printf('%s: %s ', arr[0], arr[1])
@@ -385,7 +390,7 @@ augroup git-semantic-commit-message
     silent! put! =title
     silent! startinsert!
   endfunction
-  autocmd FileType gitcommit nnoremap <C-m><C-m> <cmd>call g:SelectType()<CR>
+  autocmd FileType gitcommit nnoremap ZZ <cmd>call g:SelectType()<CR>
 augroup END
 
 highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#FFAF60

@@ -94,6 +94,7 @@ call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
 call jetpack#add('mattn/vim-sonictemplate')
 call jetpack#add('thinca/vim-partedit')
 call jetpack#add('previm/previm')
+call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper
 
 " lua plugin
 call jetpack#add('kevinhwang91/nvim-bqf')
@@ -135,7 +136,7 @@ imap <C-a><tab> <plug>(fzf-maps-i)
 
 nmap <silent> <C-f> <cmd>NvimTreeToggle<CR>
 nmap <silent> f <cmd>NvimTreeOpen .<CR>
-nmap <silent> F <cmd>execute 'NvimTreeOpen ' . expand('%:p:h')<CR>
+nmap <silent> <C-h> <cmd>execute 'NvimTreeOpen ' . expand('%:p:h')<CR>
 
 nnoremap <silent> <Space>gc :GCheckoutThis<CR>
 nnoremap <Space>gd :Git diff %<CR>
@@ -669,8 +670,8 @@ nnoremap H ^
 vnoremap H ^
 nnoremap L $
 vnoremap L $
-nnoremap <C-h> ^
-vnoremap <C-h> ^
+" nnoremap <C-h> ^
+" vnoremap <C-h> ^
 nnoremap <C-l> $
 vnoremap <C-l> $
 
