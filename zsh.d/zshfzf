@@ -151,7 +151,7 @@ _gm() {
           { memo[$0] = 1; results[length(results)] = $0; } }
           END { for(i=1; i<length(results); i++) print results[i] }
         ' | \
-    fzf-down -m --preview 'git show --color=always {1}' --prompt="branch> "
+    fzf-down -m --preview 'git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" {1}' --prompt="branch> "
 }
 
 # original: reflogs -> commit hash
