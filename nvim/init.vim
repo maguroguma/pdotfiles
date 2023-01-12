@@ -522,9 +522,13 @@ highlight Visual cterm=bold ctermbg=darkblue ctermfg=NONE
 " highlight StatusLineNC ctermbg=193
 highlight NonText    ctermbg=None ctermfg=239 guibg=NONE guifg=None
 highlight SpecialKey ctermbg=None ctermfg=239 guibg=NONE guifg=None
-highlight Search ctermbg=50 ctermfg=0
 highlight Folded ctermbg=Green ctermfg=Gray
-highlight IncSearch cterm=bold ctermbg=50 ctermfg=0
+highlight Search ctermbg=44 ctermfg=0
+highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
+
+" nvim-cmp
+highlight! CmpItemAbbrMatch cterm=bold ctermbg=NONE ctermfg=44
+highlight! CmpItemAbbrMatchFuzzy ctermbg=NONE ctermfg=27
 
 " txtファイルで自動改行を防ぐ
 " https://loumo.jp/archives/10503
