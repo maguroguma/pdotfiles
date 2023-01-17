@@ -1,6 +1,11 @@
+echo "[zshbasic] load settings"
+
 #############################
 # key bindings
 #############################
+# キーの受付時間を1秒にする
+export KEYTIMEOUT=100
+
 # vi mode
 bindkey -v
 bindkey -M viins 'jj' vi-cmd-mode

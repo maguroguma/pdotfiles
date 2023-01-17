@@ -1,3 +1,5 @@
+echo "[zshfzf] load settings"
+
 # setup fzf
 export FZF_HOME=$HOME/.fzf
 if [[ ! "$PATH" == */.fzf/bin* ]]; then

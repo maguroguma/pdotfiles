@@ -7,8 +7,8 @@ function loadlib() {
 export ZSH_SUB_FILES_DIR=$HOME/.zsh.d
 
 # load files
-loadlib $ZSH_SUB_FILES_DIR/zshbasic
 loadlib $ZSH_SUB_FILES_DIR/zshzplug
+loadlib $ZSH_SUB_FILES_DIR/zshbasic
 loadlib $ZSH_SUB_FILES_DIR/zshfzf
 loadlib $ZSH_SUB_FILES_DIR/_zshexternal
 

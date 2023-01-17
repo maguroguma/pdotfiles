@@ -94,7 +94,10 @@ call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
 call jetpack#add('mattn/vim-sonictemplate')
 call jetpack#add('thinca/vim-partedit')
 call jetpack#add('previm/previm')
-call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper
+call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper(depends on denops)
+call jetpack#add('lambdalisue/kensaku.vim') " search Japanese by megemo(depends on denops)
+call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin(depends on denops)
+call jetpack#add('kana/vim-textobj-user')
 
 " lua plugin
 call jetpack#add('kevinhwang91/nvim-bqf')
@@ -218,6 +221,92 @@ let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
 let g:UltiSnipsEditSplit = 'vertical'
 " let g:UltiSnipsSnippetDirectories = ['']
+
+" kana/vim-textobj-user setting
+call textobj#user#plugin('datetime', {
+\   'date': {
+\     'pattern': '\<\d\d\d\d-\d\d-\d\d\>',
+\     'select': ['ad', 'id'],
+\   },
+\   'time': {
+\     'pattern': '\<\d\d:\d\d:\d\d\>',
+\     'select': ['at', 'it'],
+\   },
+\ })
+
+call textobj#user#plugin('braces', {
+\   'angle': {
+\     'pattern': ['<<', '>>'],
+\     'select-a': 'aA',
+\     'select-i': 'iA',
+\   },
+\ })
+
+" japanese brackets
+call textobj#user#plugin('jparentheses', {
+\   'jparentheses': {
+\     'pattern': ['（', '）'],
+\     'select-a': 'aj(',
+\     'select-i': 'ij(',
+\   },
+\ })
+call textobj#user#plugin('jsquarebrackets', {
+\   'jsquarebrackets': {
+\     'pattern': ['【', '】'],
+\     'select-a': 'aj[',
+\     'select-i': 'ij[',
+\   },
+\ })
+call textobj#user#plugin('jquotation', {
+\   'jquotation': {
+\     'pattern': ['「', '」'],
+\     'select-a': 'ajb',
+\     'select-i': 'ijb',
+\   },
+\ })
+
+call textobj#user#plugin('line', {
+\   '-': {
+\     'select-a-function': 'CurrentLineA',
+\     'select-a': 'al',
+\     'select-i-function': 'CurrentLineI',
+\     'select-i': 'il',
+\   },
+\ })
+
+function! CurrentLineA()
+  normal! 0
+  let head_pos = getpos('.')
+  normal! $
+  let tail_pos = getpos('.')
+  return ['v', head_pos, tail_pos]
+endfunction
+
+function! CurrentLineI()
+  normal! ^
+  let head_pos = getpos('.')
+  normal! g_
+  let tail_pos = getpos('.')
+  let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
+  return
+  \ non_blank_char_exists_p
+  \ ? ['v', head_pos, tail_pos]
+  \ : 0
+endfunction
+
+let g:fuzzy_motion_labels = [
+      \ 'H', 'J', 'K', 'L', 'Y',
+      \ 'U', 'I', 'O', 'P', 'N',
+      \ 'M', 'Q', 'W', 'E', 'R',
+      \ 'T', 'A', 'S', 'D', 'F',
+      \ 'G', 'Z', 'X', 'C', 'V',
+      \ 'B'
+      \]
+highlight FuzzyMotionMatch ctermfg=159 ctermbg=240
+highlight FuzzyMotionChar cterm=bold ctermfg=207
+highlight FuzzyMotionSubChar cterm=bold ctermfg=44
+" highlight FuzzyMotionShade ctermfg=0 ctermbg=0
+let g:fuzzy_motion_matchers = ['fzf', 'kensaku']
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
@@ -761,7 +850,8 @@ set runtimepath^=~/.local/share/nvim/site/pack/jetpack/nvim-treesitter
 """
 " PLUGSETTING: rlane/pounce.nvim
 """
-nmap ' <cmd>Pounce<CR>
+" nmap ' <cmd>Pounce<CR>
+nmap ' <cmd>FuzzyMotion<CR>
 vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
 
