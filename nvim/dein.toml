@@ -417,14 +417,6 @@ hook_post_source = '''
 """
 " commands
 """
-
-" ripgrep with vim
-" http://hogeai.hatenablog.com/entry/2018/03/04/201744
-if executable('rg')
-    set grepprg=rg\ --vimgrep\ --no-heading
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
-
 command! Fmru FZFMru
 command! FZFMru call fzf#run({
             \  'source':  v:oldfiles,
@@ -953,7 +945,7 @@ highlight CocSearch cterm=bold ctermfg=44 guifg=#18A3FF
 let g:coc_global_extensions = [
       \ 'coc-json',
       \ 'coc-prettier',
-      \ 'coc-python',
+      \ 'coc-pyright',
       \ 'coc-tsserver',
       \ 'coc-ultisnips',
       \ 'coc-vetur',
@@ -1062,4 +1054,11 @@ repo = 'machakann/vim-highlightedyank'
 on_event = ['CursorHold', 'CursorMoved']
 hook_post_source = '''
 let g:highlightedyank_highlight_duration = 500
+'''
+
+[[plugins]]
+repo = 'kyoh86/vim-ripgrep'
+on_cmd = 'Ripgrep'
+hook_post_source = '''
+command! -nargs=+ -complete=file Ripgrep :call ripgrep#search(<q-args>)
 '''

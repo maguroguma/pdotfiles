@@ -96,6 +96,8 @@ call jetpack#add('thinca/vim-partedit')
 call jetpack#add('previm/previm')
 call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper(depends on denops)
 call jetpack#add('lambdalisue/kensaku.vim') " search Japanese by megemo(depends on denops)
+call jetpack#add('lambdalisue/kensaku-search.vim')
+call jetpack#add('lambdalisue/kensaku-command.vim')
 call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin(depends on denops)
 call jetpack#add('kana/vim-textobj-user')
 
@@ -307,6 +309,7 @@ highlight FuzzyMotionChar cterm=bold ctermfg=207
 highlight FuzzyMotionSubChar cterm=bold ctermfg=44
 " highlight FuzzyMotionShade ctermfg=0 ctermbg=0
 let g:fuzzy_motion_matchers = ['fzf', 'kensaku']
+cnoremap <C-a><CR> <Plug>(kensaku-search-replace)<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
@@ -397,10 +400,6 @@ augroup vimrc-auto-mkdir  " {{{
     endif
   endfunction  " }}}
 augroup END  " }}}
-
-" vimgrep
-" vim grepすると自動的にあたらしいウィンドウで検索結果一覧を表示する
-autocmd QuickFixCmdPost *grep* cwindow
 
 " terminal modeにおけるnormal modeへの移行
 tnoremap <C-e> <C-\><C-n>
@@ -537,22 +536,31 @@ if executable('trans')
   command! -nargs=1 Jaen :call s:japaToEng(<f-args>)
 endif
 
-" vimgrepのショートカット
-function! s:vimgrep_cur_dir()
-  let l:regexp = input("Regexp pattern: ")
+" vimgrep
+" vim grepすると自動的にあたらしいウィンドウで検索結果一覧を表示する
+autocmd QuickFixCmdPost *grep* cwindow
+
+" ripgrep with vim
+" http://hogeai.hatenablog.com/entry/2018/03/04/201744
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
+" :grepのショートカット
+function! s:grep_cur_dir()
+  let l:regexp = input("grep(rg) pattern: ")
   if l:regexp == ""
-    echo "my vimgrep canceled."
+    echo "grep canceled."
     return
   endif
-  let l:target = input("Target files(default: './**'): ")
-  if l:target == ""
-    let l:target = './**'
-  endif
-  let l:command = 'vimgrep /' .. l:regexp .. '/ ' .. l:target
+  let l:command = 'grep ' . l:regexp
   execute 'silent ' .. l:command
-  echo l:command
+  if len(getqflist()) == 0
+    echoerr 'not found: ' . l:command
+  endif
 endfunction
-command! -nargs=0 MyVimGrep :call s:vimgrep_cur_dir()
+command! -nargs=0 MyVimGrep :call s:grep_cur_dir()
 nnoremap <Space>gr <cmd>MyVimGrep<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
