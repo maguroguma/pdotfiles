@@ -1,16 +1,170 @@
-[[plugins]]
-repo = 'tani/vim-jetpack'
-opt = true
+let s:memolist_scripts =<< END
+let g:memolist_path = expand("$GOPATH/src/github.com/maguroguma/memolist")
+" suffix type (default markdown)
+let g:memolist_memo_suffix = "md"
+" date format (default %Y-%m-%d %H:%M)
+let g:memolist_memo_date = "%Y-%m-%d %H:%M"
+" tags prompt (default 0)
+let g:memolist_prompt_tags = 1
+" categories prompt (default 0)
+let g:memolist_prompt_categories = 1
+" use fzf (default 0)
+let g:memolist_fzf = 1
+END
+let g:jetpack_memolist_scripts = join(s:memolist_scripts, "\n")
 
-[[plugins]]
-repo = 'nvim-tree/nvim-web-devicons'
-on_cmd = ['NvimTreeToggle', 'NvimTreeOpen']
+let s:gitsigns_scripts =<< END
+lua << EOF
+-- PLUGSETTING: lewis6991/gitsigns.nvim
+require('gitsigns').setup {
+  signs = {
+    add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+    change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+  },
+  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
+  numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
+  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
+  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+  watch_gitdir = {
+    interval = 1000,
+    follow_files = true
+  },
+  attach_to_untracked = true,
+  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+  current_line_blame_opts = {
+    virt_text = true,
+    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+    delay = 1000,
+    ignore_whitespace = false,
+  },
+  current_line_blame_formatter_opts = {
+    relative_time = false
+  },
+  sign_priority = 6,
+  update_debounce = 100,
+  status_formatter = nil, -- Use default
+  max_file_length = 40000,
+  preview_config = {
+    -- Options passed to nvim_open_win
+    border = 'single',
+    style = 'minimal',
+    relative = 'cursor',
+    row = 0,
+    col = 1
+  },
+  yadm = {
+    enable = false
+  },
+}
+EOF
+END
+let g:jetpack_gitsigns_scripts = join(s:gitsigns_scripts, "\n")
 
-[[plugins]]
-repo = 'nvim-tree/nvim-tree.lua'
-on_cmd = ['NvimTreeToggle', 'NvimTreeOpen']
-depends = 'nvim-tree/nvim-web-devicons'
-hook_post_source = '''
+let s:fugitive_scripts =<< END
+" 現在のバッファのファイルをcheckoutする
+function! s:gitCheckoutThis()
+  let l:confirm_msg = 'You checkout this buffer file, OK?'
+  let l:is_ok = confirm(l:confirm_msg, "y yes\nn no")
+  if l:is_ok != 1
+    return
+  endif
+  :Git checkout %
+endfunction
+command! GCheckoutThis :call s:gitCheckoutThis()
+END
+let g:jetpack_fugitive_scripts = join(s:fugitive_scripts, "\n")
+
+let s:cmp_scripts =<< END
+lua << EOF
+-- Set up nvim-cmp.
+local cmp = require'cmp'
+
+local kind_icons = {
+  Text = "",
+  Method = "",
+  Function = "",
+  Constructor = "",
+  Field = "",
+  Variable = "",
+  Class = "ﴯ",
+  Interface = "",
+  Module = "",
+  Property = "ﰠ",
+  Unit = "",
+  Value = "",
+  Enum = "",
+  Keyword = "",
+  Snippet = "",
+  Color = "",
+  File = "",
+  Reference = "",
+  Folder = "",
+  EnumMember = "",
+  Constant = "",
+  Struct = "",
+  Event = "",
+  Operator = "",
+  TypeParameter = ""
+}
+
+cmp.setup {
+  formatting = {
+    format = function(entry, vim_item)
+      -- Kind icons
+      vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+      -- Source
+      vim_item.menu = ({
+        buffer = "[Buffer]",
+        nvim_lsp = "[LSP]",
+        luasnip = "[LuaSnip]",
+        nvim_lua = "[Lua]",
+        latex_symbols = "[LaTeX]",
+      })[entry.source.name]
+      return vim_item
+    end
+  },
+}
+
+-- Set configuration for specific filetype.
+cmp.setup.filetype('gitcommit', {
+  sources = cmp.config.sources({
+    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+-- cmp.setup.cmdline({ '/', '?' }, {
+--   mapping = cmp.mapping.preset.cmdline(),
+--   sources = {
+--     { name = 'buffer' }
+--   },
+--   view = {
+--     entries = {name = 'custom', selection_order = 'near_cursor' }
+--   },
+-- })
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  }),
+  view = {
+    entries = {name = 'custom', selection_order = 'near_cursor' }
+  },
+})
+EOF
+END
+let g:jetpack_cmp_scripts = join(s:cmp_scripts, "\n")
+
+let s:nvim_tree_scripts =<< END
 lua << EOF
 local HEIGHT_RATIO = 0.5  -- You can change this
 local WIDTH_RATIO = 0.4   -- You can change this too
@@ -80,101 +234,10 @@ require('nvim-tree').setup({
   },
 })
 EOF
-'''
+END
+let g:jetpack_nvim_tree_scripts = join(s:nvim_tree_scripts, "\n")
 
-[[plugins]]
-repo = 'tpope/vim-fugitive'
-on_cmd = ['Git', 'GCheckoutThis']
-hook_post_source = '''
-" 現在のバッファのファイルをcheckoutする
-function! s:gitCheckoutThis()
-  let l:confirm_msg = 'You checkout this buffer file, OK?'
-  let l:is_ok = confirm(l:confirm_msg, "y yes\nn no")
-  if l:is_ok != 1
-    return
-  endif
-  :Git checkout %
-endfunction
-command! GCheckoutThis :call s:gitCheckoutThis()
-'''
-
-[[plugins]]
-repo = 'cohama/lexima.vim'
-depends = 'neoclide/coc.nvim'
-on_event = 'InsertEnter'
-hook_post_source = '''
-" yuki-yanoさんのスクリプトを参考に
-" https://github.com/yuki-yano/dotfiles/blob/1c865f70c5ca3c2b4b59181c30bdb69ac6a0870a/.vimrc
-" '\%#' はカーソル位置を表す
-function! s:setup_lexima_insert() abort
-  let s:rules = []
-
-  "" markdown
-  let s:rules += [
-  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\%#',                        'input': '<C-w><CR>',                         },
-  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\%#',                    'input': '<C-w><C-w><CR>',                    },
-  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s*-\s\w.*\%#',                 'input': '<CR>-<Space>',                      },
-  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\[\%#\]',                    'input': '<End><C-w><C-w><C-w><CR>',          },
-  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\[\%#\]',                'input': '<End><C-w><C-w><C-w><C-w><CR>',     },
-  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\[\(\s\|x\)\]\s\%#',         'input': '<C-w><C-w><C-w><CR>',               },
-  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\[\(\s\|x\)\]\s\%#',     'input': '<C-w><C-w><C-w><C-w><CR>',          },
-  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s*-\s\[\(\s\|x\)\]\s\w.*\%#',  'input': '<CR>-<Space>[]<Space><Left><Left>', },
-  \ ]
-  "" markdown(original)
-  let s:rules += [
-  \ { 'filetype': 'markdown', 'char': '<Space>', 'at': '\[\%#', 'input': '<Space>'},
-  \ ]
-
-  for s:rule in s:rules
-    call lexima#add_rule(s:rule)
-  endfor
-endfunction
-
-function! SetupLexima() abort
-  call s:setup_lexima_insert()
-endfunction
-
-call SetupLexima()
-
-" cocの補完をEnterで決定する（leximaの設定を上書きする）
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-'''
-
-# read vim command result to buffer
-[[plugins]]
-repo = 'tyru/capture.vim'
-on_cmd = ['Capture']
-
-[[plugins]]
-repo = 'AndrewRadev/linediff.vim'
-on_cmd = ['Linediff']
-
-[[plugins]]
-repo = 'moll/vim-bbye'
-on_cmd = ['Bdelete']
-
-[[plugins]]
-repo = 'glidenote/memolist.vim'
-on_cmd = ['MemoNew', 'MemoList', 'MemoGrep']
-hook_post_source = '''
-let g:memolist_path = "~/go/src/github.com/maguroguma/memolist"
-" suffix type (default markdown)
-let g:memolist_memo_suffix = "md"
-" date format (default %Y-%m-%d %H:%M)
-let g:memolist_memo_date = "%Y-%m-%d %H:%M"
-" tags prompt (default 0)
-let g:memolist_prompt_tags = 1
-" categories prompt (default 0)
-let g:memolist_prompt_categories = 1
-" use fzf (default 0)
-let g:memolist_fzf = 1
-'''
-
-[[plugins]]
-repo = 'mbbill/undotree'
-on_cmd = ['UndotreeToggle']
-hook_post_source = '''
+let s:undotree_scripts =<< END
 let g:undotree_WindowLayout = 2         " undotreeは左側/diffは下にウィンドウ幅で表示
 let g:undotree_ShortIndicators = 1      " 時間単位は短く表示
 let g:undotree_SplitWidth = 40          " undotreeのウィンドウ幅
@@ -182,12 +245,10 @@ let g:undotree_SetFocusWhenToggle = 1   " undotreeを開いたらフォーカス
 "let g:undotree_DiffAutoOpen = 0         " diffウィンドウは起動時無効
 let g:undotree_DiffpanelHeight = 8      " diffウィンドウの行数
 "let g:undotree_HighlightChangedText = 0 " 変更箇所のハイライト無効
-'''
+END
+let g:jetpack_undotree_scripts = join(s:undotree_scripts, "\n")
 
-[[plugins]]
-repo = 'voldikss/vim-floaterm'
-on_cmd = ['FloatermToggle']
-hook_post_source = '''
+let s:floaterm_scripts =<< END
 " 参考: https://github.com/yutkat/dotfiles/blob/28e8df61c39727fa85d3f289343eb60feffd29d8/.config/nvim/rc/pluginconfig/vim-floaterm.vim
 let g:floaterm_height = 0.95
 let g:floaterm_width = 0.95
@@ -196,60 +257,10 @@ augroup vimrc_floaterm
   autocmd User FloatermOpen tnoremap <buffer> <silent> <C-s> <C-\><C-n>:FloatermToggle<CR>
   autocmd QuitPre * FloatermKill!
 augroup END
-'''
+END
+let g:jetpack_floaterm_scripts = join(s:floaterm_scripts, "\n")
 
-[[plugins]]
-repo = 'mzlogin/vim-markdown-toc'
-on_ft = ['md', 'markdown']
-
-[[plugins]]
-repo = 'iamcco/mathjax-support-for-mkdp'
-on_ft = ['md', 'markdown']
-
-[[plugins]]
-repo = 'alvan/vim-closetag'
-on_ft = ['html', 'vue', 'html.twig']
-
-[[plugins]]
-repo = 'ap/vim-css-color'
-on_ft = ['html', 'vue', 'html.twig']
-
-[[plugins]]
-repo = 'jsborjesson/vim-uppercase-sql'
-on_ft = ['sql']
-
-[[plugins]]
-repo = 'posva/vim-vue'
-on_ft = ['vue']
-
-[[plugins]]
-repo = 'mattn/vim-sqlfmt'
-on_ft = ['sql']
-
-[[plugins]]
-repo = 'mattn/emmet-vim'
-on_ft = ['html', 'vue', 'html.twig']
-hook_post_source = '''
-let g:user_emmet_leader_key='<C-e>'
-'''
-
-[[plugins]]
-repo = 'mattn/vim-maketable'
-on_ft = ['md', 'markdown']
-
-[[plugins]]
-repo = 'heavenshell/vim-jsdoc'
-on_ft = ['javascript', 'javascript.jsx','typescript']
-build = 'make install'
-hook_post_source = '''
-let g:jsdoc_formatter = 'tsdoc'
-'''
-
-# TODO: mapの削除
-[[plugins]]
-repo = 'fatih/vim-go'
-on_ft = 'go'
-hook_post_source = '''
+let s:vim_go_scripts =<< END
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_fields = 1
@@ -286,27 +297,18 @@ let g:go_highlight_generate_tags = 1
 let g:go_metalinter_autosave = 0
 " オートで実行するものは選定できる
 " let g:go_metalinter_autosave_enabled = ['vet', 'golint']
-'''
+END
+let g:jetpack_vim_go_scripts = join(s:vim_go_scripts, "\n")
 
-[[plugins]]
-repo = 'jodosha/vim-godebug'
-on_ft = 'go'
-
-# better <C-a> and <C-x>
-[[plugins]]
-repo = 'monaqa/dial.nvim'
-on_cmd = ['DialIncrement', 'DialDecrement']
-hook_post_source = '''
+let s:dial_scripts =<< END
 vmap  <C-a>  <Plug>(dial-increment)
 vmap  <C-x>  <Plug>(dial-decrement)
 vmap g<C-a> g<Plug>(dial-increment)
 vmap g<C-x> g<Plug>(dial-decrement)
-'''
+END
+let g:jetpack_dial_scripts = join(s:dial_scripts, "\n")
 
-[[plugins]]
-repo = 'lambdalisue/fern.vim'
-on_cmd = 'Fern'
-hook_post_source = '''
+let s:fern_scripts =<< END
 " nmap <C-f> :<C-u>Fern . -reveal=%<CR>
 let g:fern#renderer = "nerdfont"
 let g:fern#renderer#nerdfont#indent_markers = 1
@@ -326,94 +328,10 @@ augroup my-glyph-palette
   autocmd FileType fern call glyph_palette#apply()
   autocmd FileType nerdtree,startify call glyph_palette#apply()
 augroup END
-'''
+END
+let g:jetpack_fern_scripts = join(s:fern_scripts, "\n")
 
-[[plugins]]
-repo = 'lambdalisue/fern-git-status.vim'
-on_cmd = 'Fern'
-depends = 'lambdalisue/fern.vim'
-
-[[plugins]]
-repo = 'lambdalisue/nerdfont.vim'
-on_cmd = 'Fern'
-depends = 'lambdalisue/fern.vim'
-
-[[plugins]]
-repo = 'lambdalisue/fern-renderer-nerdfont.vim'
-on_cmd = 'Fern'
-depends = 'lambdalisue/fern.vim'
-
-[[plugins]]
-repo = 'lambdalisue/glyph-palette.vim'
-on_cmd = 'Fern'
-depends = 'lambdalisue/fern.vim'
-
-[[plugins]]
-repo = 'lambdalisue/fern-hijack.vim'
-on_cmd = 'Fern'
-depends = 'lambdalisue/fern.vim'
-
-[[plugins]]
-repo = 'lewis6991/gitsigns.nvim'
-on_cmd = ['NvimTreeToggle', 'NvimTreeOpen', 'Files']
-hook_post_source = '''
-lua << EOF
--- PLUGSETTING: lewis6991/gitsigns.nvim
-require('gitsigns').setup {
-  signs = {
-    add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
-    change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-    delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-  },
-  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
-  numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
-  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
-  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
-  watch_gitdir = {
-    interval = 1000,
-    follow_files = true
-  },
-  attach_to_untracked = true,
-  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
-  current_line_blame_opts = {
-    virt_text = true,
-    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-    delay = 1000,
-    ignore_whitespace = false,
-  },
-  current_line_blame_formatter_opts = {
-    relative_time = false
-  },
-  sign_priority = 6,
-  update_debounce = 100,
-  status_formatter = nil, -- Use default
-  max_file_length = 40000,
-  preview_config = {
-    -- Options passed to nvim_open_win
-    border = 'single',
-    style = 'minimal',
-    relative = 'cursor',
-    row = 0,
-    col = 1
-  },
-  yadm = {
-    enable = false
-  },
-}
-EOF
-'''
-
-[[plugins]]
-repo = 'junegunn/fzf'
-on_cmd = ['Files', 'HCommand', 'Buffers', 'MemoList']
-
-[[plugins]]
-repo = 'junegunn/fzf.vim'
-depends = 'junegunn/fzf'
-on_cmd = ['Files', 'HCommand', 'Buffers', 'MemoList']
-hook_post_source = '''
+let s:fzf_scripts =<< END
 """
 " commands
 """
@@ -531,12 +449,10 @@ nnoremap <silent> <Space>gf :GitFiles?<CR>
 nnoremap <silent> <Space>q :History:<CR>
 nnoremap <silent> <Space>gs :GShow<CR>
 nnoremap <silent> <Space>bd :BD<CR>
-'''
+END
+let g:jetpack_fzf_scripts = join(s:fzf_scripts, "\n")
 
-[[plugins]]
-repo = 'rlane/pounce.nvim'
-on_cmd = ['Pounce']
-hook_post_source = '''
+let s:pounce_scripts =<< END
 highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#FFAF60
 highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#E27878
 highlight PounceAccept     cterm=underline,bold ctermfg=184 ctermbg=236 gui=underline,bold guifg=#FFAF60 guibg=#555555
@@ -550,12 +466,10 @@ require'pounce'.setup{
   debug = false,
 }
 EOF
-'''
+END
+let g:jetpack_pounce_scripts = join(s:pounce_scripts, "\n")
 
-[[plugins]]
-repo = 'folke/todo-comments.nvim'
-on_cmd = ['NvimTreeToggle', 'NvimTreeOpen', 'Files']
-hook_post_source = '''
+let s:todo_comments_scripts =<< END
 lua << EOF
 -- PLUGSETTING: folke/todo-comments.nvim
 -- FIXME:
@@ -620,13 +534,10 @@ lua << EOF
   },
 }
 EOF
-'''
+END
+let g:jetpack_todo_comments_scripts = join(s:todo_comments_scripts, "\n")
 
-[[plugins]]
-repo = 'stevearc/aerial.nvim'
-depends = 'nvim-tree/nvim-web-devicons'
-on_cmd = ['AerialToggle']
-hook_post_source = '''
+let s:aerial_scripts =<< END
 lua << EOF
 -- PLUGSETTING: stevearc/aerial.nvim
 require('aerial').setup({
@@ -681,12 +592,10 @@ require('aerial').setup({
 -- You probably also want to set a keymap to toggle aerial
 -- vim.keymap.set('n', '<Space>a', '<cmd>AerialToggle<CR>')
 EOF
-'''
+END
+let g:jetpack_aerial_scripts = join(s:aerial_scripts, "\n")
 
-[[plugins]]
-repo = 'max397574/better-escape.nvim'
-on_event = 'InsertEnter'
-hook_post_source = '''
+let s:better_escape_scripts =<< END
 lua << EOF
 -- PLUGSETTING: max397574/better-escape.nvim
 -- lua, default settings
@@ -701,53 +610,20 @@ require("better_escape").setup {
     -- end,
 }
 EOF
-'''
+END
+let g:jetpack_better_escape_scripts = join(s:better_escape_scripts, "\n")
 
-[[plugins]]
-repo = 'nvim-treesitter/nvim-treesitter'
-on_cmd = ['NvimTreeToggle', 'NvimTreeOpen', 'Files']
-hook_post_source = '''
+let s:treesitter_scripts =<< END
 lua << EOF
 -- PLUGSETTING: nvim-treesitter/nvim-treesitter
 require'nvim-treesitter.configs'.setup {
-  parser_install_dir = "~/.local/share/nvim/site/pack/jetpack/nvim-treesitter",
+  parser_install_dir = vim.fn.expand("$XDG_DATA_HOME/nvim/site/pack/jetpack/nvim-treesitter"),
 }
 EOF
-'''
+END
+let g:jetpack_treesitter_scripts = join(s:treesitter_scripts, "\n")
 
-# automatic closing of quotes, parenthesis, brackets, etc.
-[[plugins]]
-repo = 'Raimondi/delimitMate'
-on_event = 'InsertEnter'
-
-[[plugins]]
-repo = 'windwp/nvim-spectre'
-on_cmd = 'Spectre'
-
-[[plugins]]
-repo = 't9md/vim-choosewin'
-on_cmd = 'ChooseWin'
-hook_post_source = '''
-" オーバーレイ機能を有効にしたい場合
-let g:choosewin_overlay_enable          = 1
-" オーバーレイ・フォントをマルチバイト文字を含むバッファでも綺麗に表示する。
-let g:choosewin_overlay_clear_multibyte = 1
-let g:choosewin_label = 'HJKLYUIONM'
-'''
-
-[[plugins]]
-repo = 'MattesGroeger/vim-bookmarks'
-on_cmd = ['BookmarkToggle', 'BookmarkAnnotate', 'BookmarkShowAll', 'BookmarkClear', 'BookmarkClearAll', 'BookmarkMoveUp', 'BookmarkMoveDown', 'BookmarkMoveToLine']
-hook_post_source = '''
-let g:bookmark_save_per_working_dir = 1
-let g:bookmark_auto_save = 1
-let g:bookmark_no_default_key_mappings = 1
-'''
-
-[[plugins]]
-repo = 'rhysd/committia.vim'
-on_ft = ['gitcommit', 'git']
-hook_post_source = '''
+let s:committia_scripts =<< END
 " https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
 nnoremap ZZ <cmd>call g:SelectType()<CR>
 function! g:SelectType() abort
@@ -764,26 +640,10 @@ function! g:SelectType() abort
   silent! put! =title
   silent! startinsert!
 endfunction
-'''
+END
+let g:jetpack_committia_scripts = join(s:committia_scripts, "\n")
 
-[[plugins]]
-repo = 'simeji/winresizer'
-on_cmd = 'WinResizerStartResize'
-
-[[plugins]]
-# for commenting on vue SFC
-repo = 'tomtom/tcomment_vim'
-on_event = ['CursorHold', 'CursorMoved']
-
-[[plugins]]
-repo = 'vim-test/vim-test'
-on_cmd = ['TestFile', 'TestNearest']
-
-[[plugins]]
-repo = 'neoclide/coc.nvim'
-branch = 'release'
-on_cmd = ['NvimTreeToggle', 'NvimTreeOpen', 'Files']
-hook_post_source = '''
+let s:coc_scripts =<< END
 " Some servers have issues with backup files, see #649.
 set nobackup
 set nowritebackup
@@ -969,34 +829,10 @@ let g:fzf_preview_floating_window_rate = 0.9
 " node path
 """
 " let g:coc_node_path = '/path/to/node'
-'''
+END
+let g:jetpack_coc_scripts = join(s:coc_scripts, "\n")
 
-# show git diff on git rebase
-[[plugins]]
-repo = 'hotwatermorning/auto-git-diff'
-on_ft = ['gitcommit', 'git']
-
-# require coc-ultisnips if used with coc.nvim
-[[plugins]]
-repo = 'sirver/ultisnips'
-on_event = 'InsertEnter'
-
-[[plugins]]
-repo = 'mtdl9/vim-log-highlighting'
-on_ft = ['log']
-
-# better asterisk behavior
-[[plugins]]
-repo = 'haya14busa/vim-asterisk'
-on_map = '<Plug>(asterisk'
-on_event = 'CmdlineEnter'
-
-[[plugins]]
-repo = 'kevinhwang91/nvim-hlslens'
-depends = 'haya14busa/vim-asterisk'
-on_map = '<Plug>(asterisk'
-on_event = 'CmdlineEnter'
-hook_post_source = '''
+let s:hlslens_scripts =<< END
 lua << EOF
 require('hlslens').setup({
     nearest_only = true
@@ -1021,44 +857,87 @@ vim.api.nvim_set_keymap('x', '#', [[<Plug>(asterisk-z#)<Cmd>lua require('hlslens
 vim.api.nvim_set_keymap('x', 'g*', [[<Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>]], {})
 vim.api.nvim_set_keymap('x', 'g#', [[<Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>]], {})
 EOF
-'''
+END
+let g:jetpack_hlslens_scripts = join(s:hlslens_scripts, "\n")
 
-# mark colors to words and sentences
-[[plugins]]
-repo = 't9md/vim-quickhl'
-on_map = '<Plug>(quickhl'
+let s:lexima_scripts =<< END
+" yuki-yanoさんのスクリプトを参考に
+" https://github.com/yuki-yano/dotfiles/blob/1c865f70c5ca3c2b4b59181c30bdb69ac6a0870a/.vimrc
+" '\%#' はカーソル位置を表す
+function! s:setup_lexima_insert() abort
+  let s:rules = []
 
-# realize live substitute
-[[plugins]]
-repo = 'markonm/traces.vim'
-on_event = 'CmdlineEnter'
+  "" markdown
+  let s:rules += [
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\%#',                        'input': '<C-w><CR>',                         },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\%#',                    'input': '<C-w><C-w><CR>',                    },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s*-\s\w.*\%#',                 'input': '<CR>-<Space>',                      },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\[\%#\]',                    'input': '<End><C-w><C-w><C-w><CR>',          },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\[\%#\]',                'input': '<End><C-w><C-w><C-w><C-w><CR>',     },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\[\(\s\|x\)\]\s\%#',         'input': '<C-w><C-w><C-w><CR>',               },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\[\(\s\|x\)\]\s\%#',     'input': '<C-w><C-w><C-w><C-w><CR>',          },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s*-\s\[\(\s\|x\)\]\s\w.*\%#',  'input': '<CR>-<Space>[]<Space><Left><Left>', },
+  \ ]
+  "" markdown(original)
+  let s:rules += [
+  \ { 'filetype': 'markdown', 'char': '<Space>', 'at': '\[\%#', 'input': '<Space>'},
+  \ ]
 
-[[plugins]]
-repo = 'tyru/open-browser.vim'
-on_map = '<Plug>(openbrowser-smart-search)'
+  for s:rule in s:rules
+    call lexima#add_rule(s:rule)
+  endfor
+endfunction
 
-[[plugins]]
-repo = 'monaqa/modesearch.vim'
-on_map = '<Plug>(modesearch-'
+function! SetupLexima() abort
+  call s:setup_lexima_insert()
+endfunction
 
-[[plugins]]
-repo = 'ntpeters/vim-better-whitespace'
-on_event = ['CursorHold', 'CursorMoved']
-hook_post_source = '''
+call SetupLexima()
+
+" cocの補完をEnterで決定する（leximaの設定を上書きする）
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+END
+let g:jetpack_lexima_scripts = join(s:lexima_scripts, "\n")
+
+let s:emmet_scripts =<< END
+let g:user_emmet_leader_key='<C-e>'
+END
+let g:jetpack_emmet_scripts = join(s:emmet_scripts, "\n")
+
+let s:jsdoc_scripts =<< END
+let g:jsdoc_formatter = 'tsdoc'
+END
+let g:jetpack_jsdoc_scripts = join(s:jsdoc_scripts, "\n")
+
+let s:choosewin_scripts =<< END
+" オーバーレイ機能を有効にしたい場合
+let g:choosewin_overlay_enable          = 1
+" オーバーレイ・フォントをマルチバイト文字を含むバッファでも綺麗に表示する。
+let g:choosewin_overlay_clear_multibyte = 1
+let g:choosewin_label = 'HJKLYUIONM'
+END
+let g:jetpack_choosewin_scripts = join(s:choosewin_scripts, "\n")
+
+let s:bookmarks_scripts =<< END
+let g:bookmark_save_per_working_dir = 1
+let g:bookmark_auto_save = 1
+let g:bookmark_no_default_key_mappings = 1
+END
+let g:jetpack_bookmarks_scripts = join(s:bookmarks_scripts, "\n")
+
+let s:better_whitespace_scripts =<< END
 let g:better_whitespace_filetypes_blacklist = ['diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'fugitive', 'defx']
 let g:better_whitespace_ctermcolor = '12'
-'''
+END
+let g:jetpack_better_whitespace_scripts = join(s:better_whitespace_scripts, "\n")
 
-[[plugins]]
-repo = 'machakann/vim-highlightedyank'
-on_event = ['CursorHold', 'CursorMoved']
-hook_post_source = '''
+let s:highlightedyank_scripts =<< END
 let g:highlightedyank_highlight_duration = 500
-'''
+END
+let g:jetpack_highlightedyank_scripts = join(s:highlightedyank_scripts, "\n")
 
-[[plugins]]
-repo = 'kyoh86/vim-ripgrep'
-on_cmd = 'Ripgrep'
-hook_post_source = '''
+let s:ripgrep_scripts =<< END
 command! -nargs=+ -complete=file Ripgrep :call ripgrep#search(<q-args>)
-'''
+END
+let g:jetpack_ripgrep_scripts = join(s:ripgrep_scripts, "\n")

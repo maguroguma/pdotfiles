@@ -1,6 +1,7 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SECTION: initialize
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if exists('g:loaded_maguroguma_nvim_setting')
+  finish
+endif
+let g:loaded_maguroguma_nvim_setting = 1
 
 " ref: https://qiita.com/yasunori-kirin0418/items/4672919be73a524afb47
 " Disable default plugins {{{
@@ -44,11 +45,6 @@ let g:did_load_ftplugin         = v:true
 let g:loaded_rrhelper           = v:true
 " }}}
 
-if exists('g:loaded_maguroguma_nvim_setting')
-  finish
-endif
-let g:loaded_maguroguma_nvim_setting = 1
-
 " Automatic installation on startup(neovim + vim)
 let s:jetpackfile = stdpath('data') .. '/site/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim'
 let s:jetpackurl = "https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim"
@@ -65,12 +61,14 @@ endif
 " main version
 let s:main_jetpack_dir = stdpath('data') .. '/site/pack/jetpack/main/'
 
+" load hook post sources
+execute 'source ' .. expand('$XDG_CONFIG_HOME/nvim/lazysource.vim')
+
 " manage plugins by jetpack
 " plugins {{{
 packadd vim-jetpack
 call jetpack#begin(s:main_jetpack_dir)
-call jetpack#load_toml(expand('$HOME/.config/nvim/dein.toml'))
-call jetpack#add('nathom/filetype.nvim')
+call jetpack#add('tani/vim-jetpack', { 'opt': 1 })
 
 " common library
 call jetpack#add('vim-denops/denops.vim')
@@ -94,22 +92,259 @@ call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
 call jetpack#add('mattn/vim-sonictemplate')
 call jetpack#add('thinca/vim-partedit')
 call jetpack#add('previm/previm')
-call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper(depends on denops)
-call jetpack#add('lambdalisue/kensaku.vim') " search Japanese by megemo(depends on denops)
+call jetpack#add('kana/vim-textobj-user')
+
+" depends on denops
+call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper
+call jetpack#add('lambdalisue/kensaku.vim') " search Japanese by megemo
 call jetpack#add('lambdalisue/kensaku-search.vim')
 call jetpack#add('lambdalisue/kensaku-command.vim')
-call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin(depends on denops)
-call jetpack#add('kana/vim-textobj-user')
+call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin
 
 " lua plugin
 call jetpack#add('kevinhwang91/nvim-bqf')
 call jetpack#add('nvim-lualine/lualine.nvim')
 
-" nvim-cmp
-call jetpack#add('hrsh7th/cmp-buffer')
-call jetpack#add('hrsh7th/cmp-path')
-call jetpack#add('hrsh7th/cmp-cmdline')
-call jetpack#add('hrsh7th/nvim-cmp')
+" lazy
+call jetpack#add('tpope/vim-fugitive', {
+      \ 'on_cmd': ['Git', 'GCheckoutThis'],
+      \ 'hook_post_source': g:jetpack_fugitive_scripts
+      \ })
+call jetpack#add('glidenote/memolist.vim', {
+      \ 'on_cmd': ['MemoNew', 'MemoList', 'MemoGrep'],
+      \ 'hook_post_source': g:jetpack_memolist_scripts
+      \ })
+call jetpack#add('lewis6991/gitsigns.nvim', {
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files'],
+      \ 'hook_post_source': g:jetpack_gitsigns_scripts
+      \ })
+call jetpack#add('hrsh7th/nvim-cmp', {
+      \ 'on_event': 'CmdlineEnter'
+      \ })
+call jetpack#add('hrsh7th/cmp-buffer', {
+      \ 'on_event': 'CmdlineEnter',
+      \ 'depends': 'hrsh7th/nvim-cmp'
+      \ })
+call jetpack#add('hrsh7th/cmp-path', {
+      \ 'on_event': 'CmdlineEnter',
+      \ 'depends': 'hrsh7th/nvim-cmp'
+      \ })
+call jetpack#add('hrsh7th/cmp-cmdline', {
+      \ 'on_event': 'CmdlineEnter',
+      \ 'depends': 'hrsh7th/nvim-cmp',
+      \ 'hook_post_source': g:jetpack_cmp_scripts
+      \ })
+call jetpack#add('nvim-tree/nvim-web-devicons', {
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen']
+      \ })
+call jetpack#add('nvim-tree/nvim-tree.lua', {
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen'],
+      \ 'depends': 'nvim-tree/nvim-web-devicons',
+      \ 'hook_post_source': g:jetpack_nvim_tree_scripts
+      \ })
+call jetpack#add('mbbill/undotree', {
+      \ 'on_cmd': ['UndotreeToggle'],
+      \ 'hook_post_source': g:jetpack_undotree_scripts
+      \ })
+call jetpack#add('voldikss/vim-floaterm', {
+      \ 'on_cmd': ['FloatermToggle'],
+      \ 'hook_post_source': g:jetpack_floaterm_scripts
+      \ })
+call jetpack#add('fatih/vim-go', {
+      \ 'on_ft': 'go',
+      \ 'hook_post_source': g:jetpack_vim_go_scripts
+      \ })
+" better <C-a> and <C-x>
+call jetpack#add('monaqa/dial.nvim', {
+      \ 'on_cmd': ['DialIncrement', 'DialDecrement'],
+      \ 'hook_post_source': g:jetpack_dial_scripts
+      \ })
+call jetpack#add('lambdalisue/fern.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'hook_post_source': g:jetpack_fern_scripts
+      \ })
+call jetpack#add('lambdalisue/fern-git-status.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'depends': 'lambdalisue/fern.vim'
+      \ })
+call jetpack#add('lambdalisue/nerdfont.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'depends': 'lambdalisue/fern.vim'
+      \ })
+call jetpack#add('lambdalisue/fern-renderer-nerdfont.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'depends': 'lambdalisue/fern.vim'
+      \ })
+call jetpack#add('lambdalisue/glyph-palette.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'depends': 'lambdalisue/fern.vim'
+      \ })
+call jetpack#add('lambdalisue/fern-hijack.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'depends': 'lambdalisue/fern.vim'
+      \ })
+call jetpack#add('junegunn/fzf', {
+      \ 'on_cmd': ['Files', 'HCommand', 'Buffers', 'MemoList']
+      \ })
+call jetpack#add('junegunn/fzf.vim', {
+      \ 'depends': 'junegunn/fzf',
+      \ 'on_cmd': ['Files', 'HCommand', 'Buffers', 'MemoList'],
+      \ 'hook_post_source': g:jetpack_fzf_scripts
+      \ })
+call jetpack#add('rlane/pounce.nvim', {
+      \ 'on_cmd': ['Pounce'],
+      \ 'hook_post_source': g:jetpack_pounce_scripts
+      \ })
+call jetpack#add('folke/todo-comments.nvim', {
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files'],
+      \ 'hook_post_source': g:jetpack_todo_comments_scripts
+      \ })
+call jetpack#add('stevearc/aerial.nvim', {
+      \ 'depends': 'nvim-tree/nvim-web-devicons',
+      \ 'on_cmd': ['AerialToggle'],
+      \ 'hook_post_source': g:jetpack_aerial_scripts
+      \ })
+call jetpack#add('max397574/better-escape.nvim', {
+      \ 'on_event': 'InsertEnter',
+      \ 'hook_post_source': g:jetpack_better_escape_scripts
+      \ })
+call jetpack#add('nvim-treesitter/nvim-treesitter', {
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files'],
+      \ 'hook_post_source': g:jetpack_treesitter_scripts
+      \ })
+call jetpack#add('rhysd/committia.vim', {
+      \ 'on_ft': ['gitcommit', 'git'],
+      \ 'hook_post_source': g:jetpack_committia_scripts
+      \ })
+call jetpack#add('neoclide/coc.nvim', {
+      \ 'branch': 'release',
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files'],
+      \ 'hook_post_source': g:jetpack_coc_scripts
+      \ })
+call jetpack#add('cohama/lexima.vim', {
+      \ 'depends': 'neoclide/coc.nvim',
+      \ 'on_event': 'InsertEnter',
+      \ 'hook_post_source': g:jetpack_lexima_scripts
+      \ })
+" better asterisk behavior
+call jetpack#add('haya14busa/vim-asterisk', {
+      \ 'on_map': '<Plug>(asterisk',
+      \ 'on_event': 'CmdlineEnter'
+      \ })
+call jetpack#add('kevinhwang91/nvim-hlslens', {
+      \ 'depends': 'haya14busa/vim-asterisk',
+      \ 'on_map': '<Plug>(asterisk',
+      \ 'on_event': 'CmdlineEnter',
+      \ 'hook_post_source': g:jetpack_hlslens_scripts
+      \ })
+call jetpack#add('mattn/emmet-vim', {
+      \ 'on_ft': ['html', 'vue', 'html.twig'],
+      \ 'hook_post_source': g:jetpack_emmet_scripts
+      \ })
+call jetpack#add('heavenshell/vim-jsdoc', {
+      \ 'on_ft': ['javascript', 'javascript.jsx','typescript'],
+      \ 'build': 'make install',
+      \ 'hook_post_source': g:jetpack_jsdoc_scripts
+      \ })
+call jetpack#add('t9md/vim-choosewin', {
+      \ 'on_cmd': 'ChooseWin',
+      \ 'hook_post_source': g:jetpack_choosewin_scripts
+      \ })
+call jetpack#add('MattesGroeger/vim-bookmarks', {
+      \ 'on_cmd': ['BookmarkToggle', 'BookmarkAnnotate', 'BookmarkShowAll', 'BookmarkClear', 'BookmarkClearAll', 'BookmarkMoveUp', 'BookmarkMoveDown', 'BookmarkMoveToLine'],
+      \ 'hook_post_source': g:jetpack_bookmarks_scripts
+      \ })
+call jetpack#add('ntpeters/vim-better-whitespace', {
+      \ 'on_event': ['CursorHold', 'CursorMoved'],
+      \ 'hook_post_source': g:jetpack_better_whitespace_scripts
+      \ })
+call jetpack#add('machakann/vim-highlightedyank', {
+      \ 'on_event': ['CursorHold', 'CursorMoved'],
+      \ 'hook_post_source': g:jetpack_highlightedyank_scripts
+      \ })
+call jetpack#add('kyoh86/vim-ripgrep', {
+      \ 'on_cmd': 'Ripgrep',
+      \ 'hook_post_source': g:jetpack_ripgrep_scripts
+      \ })
+" read vim command result to buffer
+call jetpack#add('tyru/capture.vim', {
+      \ 'on_cmd': ['Capture']
+      \ })
+call jetpack#add('AndrewRadev/linediff.vim', {
+      \ 'on_cmd': ['Linediff']
+      \ })
+call jetpack#add('moll/vim-bbye', {
+      \ 'on_cmd': ['Bdelete']
+      \ })
+call jetpack#add('mattn/vim-maketable', {
+      \ 'on_ft': ['md', 'markdown']
+      \ })
+call jetpack#add('jodosha/vim-godebug', {
+      \ 'on_ft': 'go'
+      \ })
+" automatic closing of quotes, parenthesis, brackets, etc.
+call jetpack#add('Raimondi/delimitMate', {
+      \ 'on_event': 'InsertEnter'
+      \ })
+call jetpack#add('windwp/nvim-spectre', {
+      \ 'on_cmd': 'Spectre'
+      \ })
+call jetpack#add('simeji/winresizer', {
+      \ 'on_cmd': 'WinResizerStartResize'
+      \ })
+" for commenting on vue SFC
+call jetpack#add('tomtom/tcomment_vim', {
+      \ 'on_event': ['CursorHold', 'CursorMoved']
+      \ })
+call jetpack#add('vim-test/vim-test', {
+      \ 'on_cmd': ['TestFile', 'TestNearest']
+      \ })
+" mark colors to words and sentences
+call jetpack#add('t9md/vim-quickhl', {
+      \ 'on_map': '<Plug>(quickhl'
+      \ })
+" realize live substitute
+call jetpack#add('markonm/traces.vim', {
+      \ 'on_event': 'CmdlineEnter'
+      \ })
+call jetpack#add('tyru/open-browser.vim', {
+      \ 'on_map': '<Plug>(openbrowser-smart-search)'
+      \ })
+call jetpack#add('monaqa/modesearch.vim', {
+      \ 'on_map': '<Plug>(modesearch-'
+      \ })
+" require coc-ultisnips if used with coc.nvim
+call jetpack#add('sirver/ultisnips', {
+      \ 'on_event': 'InsertEnter'
+      \ })
+call jetpack#add('mtdl9/vim-log-highlighting', {
+      \ 'on_ft': ['log']
+      \ })
+" show git diff on git rebase
+call jetpack#add('hotwatermorning/auto-git-diff', {
+      \ 'on_ft': ['gitcommit', 'git']
+      \ })
+call jetpack#add('mzlogin/vim-markdown-toc', {
+      \ 'on_ft': ['md', 'markdown']
+      \ })
+call jetpack#add('iamcco/mathjax-support-for-mkdp', {
+      \ 'on_ft': ['md', 'markdown']
+      \ })
+call jetpack#add('alvan/vim-closetag', {
+      \ 'on_ft': ['html', 'vue', 'html.twig']
+      \ })
+call jetpack#add('ap/vim-css-color', {
+      \ 'on_ft': ['html', 'vue', 'html.twig']
+      \ })
+call jetpack#add('jsborjesson/vim-uppercase-sql', {
+      \ 'on_ft': ['sql']
+      \ })
+call jetpack#add('posva/vim-vue', {
+      \ 'on_ft': ['vue']
+      \ })
+call jetpack#add('mattn/vim-sqlfmt', {
+      \ 'on_ft': ['sql']
+      \ })
 call jetpack#end()
 " plugins END }}}
 
@@ -150,8 +385,8 @@ nnoremap <Space>ga :Git add %<CR>
 nnoremap <silent> <Space>gl :Git log %<CR>
 
 let g:sonictemplate_vim_template_dir = [
-      \ expand('$GOPATH') . '/src/github.com/maguroguma/go-competitive/template',
-      \ expand('$DOTFILES_DIR') . '/nvim/sonic-template',
+      \ expand('$GOPATH/src/github.com/maguroguma/go-competitive/template'),
+      \ expand('$DOTFILES_DIR/nvim/sonic-template'),
       \]
 
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
@@ -436,12 +671,12 @@ xnoremap <Space>e <Esc>gv"zy:<C-u>echo "<C-r>z"
 
 " FIXME: sedのエラーを回避したい（Vim scriptで全部やるべき）
 " show zsh command history
-if getftype(expand('$HOME') . '/.zhistory') != ""
+if getftype(expand('$HISTFILE')) != ""
   function! s:showShellHistory(...)
     execute 'botright' 10 'new'
     setlocal nobuflisted bufhidden=unload buftype=nofile
-    silent read !cat $HOME/.zhistory | cut -b 16- | head -n 5000
-    " silent read !cat $HOME/.zhistory |
+    silent read !cat $HISTFILE | cut -b 16- | head -n 5000
+    " silent read !cat $HISTFILE |
     "       \ grep '^:' |
     "       \ cut -b 3-12 -b 16- |
     "       \ sed -r '2,$s/([0-9]{10})/\1@@@/' |
@@ -667,7 +902,7 @@ augroup vimrc-auto-cursorline
   endfunction
 augroup END
 
-set shell=/bin/zsh
+execute 'set shell=' .. expand('$SHELL')
 set title
 set wildmenu
 set history=200
@@ -751,6 +986,7 @@ nnoremap <Space> <Nop>
 
 " command line window
 nnoremap Q q:
+nnoremap ? q/
 
 " cursor move
 nnoremap j gj
@@ -844,6 +1080,16 @@ augroup MyXML
   autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
 augroup END
 
+" :Profileコマンド実行後、そのあとに実行される関数、あるいは読み込まれるスクリプトファイルを対象に、
+" ~/profile.txtにプロファイル情報を書き出す
+" ref: https://zenn.dev/kato_k/articles/vim-tips-no004
+command! Profile call s:command_profile()
+function! s:command_profile() abort
+  profile start ~/profile.txt
+  profile func *
+  profile file *
+endfunction
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " lua scripts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -853,7 +1099,7 @@ set pumheight=20
 nmap <Space>v <cmd>AerialToggle<CR>
 
 " jetpack利用時は先頭に追加するようにする
-set runtimepath^=~/.local/share/nvim/site/pack/jetpack/nvim-treesitter
+execute 'set runtimepath^=' .. expand('$XDG_DATA_HOME/nvim/site/pack/jetpack/nvim-treesitter')
 
 """
 " PLUGSETTING: rlane/pounce.nvim
@@ -864,88 +1110,6 @@ vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
 
 lua << EOF
--- Set up nvim-cmp.
-local cmp = require'cmp'
-
-local kind_icons = {
-  Text = "",
-  Method = "",
-  Function = "",
-  Constructor = "",
-  Field = "",
-  Variable = "",
-  Class = "ﴯ",
-  Interface = "",
-  Module = "",
-  Property = "ﰠ",
-  Unit = "",
-  Value = "",
-  Enum = "",
-  Keyword = "",
-  Snippet = "",
-  Color = "",
-  File = "",
-  Reference = "",
-  Folder = "",
-  EnumMember = "",
-  Constant = "",
-  Struct = "",
-  Event = "",
-  Operator = "",
-  TypeParameter = ""
-}
-
-cmp.setup {
-  formatting = {
-    format = function(entry, vim_item)
-      -- Kind icons
-      vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
-      -- Source
-      vim_item.menu = ({
-        buffer = "[Buffer]",
-        nvim_lsp = "[LSP]",
-        luasnip = "[LuaSnip]",
-        nvim_lua = "[Lua]",
-        latex_symbols = "[LaTeX]",
-      })[entry.source.name]
-      return vim_item
-    end
-  },
-}
-
--- Set configuration for specific filetype.
-cmp.setup.filetype('gitcommit', {
-  sources = cmp.config.sources({
-    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-  }, {
-    { name = 'buffer' },
-  })
-})
-
--- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
--- cmp.setup.cmdline({ '/', '?' }, {
---   mapping = cmp.mapping.preset.cmdline(),
---   sources = {
---     { name = 'buffer' }
---   },
---   view = {
---     entries = {name = 'custom', selection_order = 'near_cursor' }
---   },
--- })
-
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    { name = 'cmdline' }
-  }),
-  view = {
-    entries = {name = 'custom', selection_order = 'near_cursor' }
-  },
-})
-
 -- PLUGSETTING: kevinhwang91/nvim-bqf
 local fn = vim.fn
 

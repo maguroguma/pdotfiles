@@ -1,6 +1,6 @@
 [core]
-  excludesfile = ~/.gitignore
-  editor = "nvim -u $HOME/.config/nvim/minimal.init.vim"
+  excludesfile = ~/.config/git/ignore
+  editor = "nvim -u $XDG_CONFIG_HOME/nvim/minimal.init.vim"
   pager = delta
   quotepath = false
 
@@ -19,7 +19,7 @@
   email = part7steelballrun.to.8@gmail.com
 
 [commit]
-  template = ~/.gitmessage
+  template = ~/.config/git/message
   verbose = true
 
 [alias]

@@ -1,0 +1,33 @@
+# direnv
+if command -v direnv &>/dev/null; then
+    eval "$(direnv hook zsh)"
+else
+    echo "direnv is not executable."
+fi
+
+# zoxide
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init zsh)"
+else
+    echo "zoxide is not executable."
+fi
+
+# asdf
+if [ -f "$HOME/.asdf/asdf.sh" ]; then
+    . "$HOME/.asdf/asdf.sh"
+    # append completions to fpath
+    fpath=(${ASDF_DIR}/completions $fpath)
+    # initialise completions with ZSH's compinit
+    autoload -Uz compinit && compinit
+else
+    echo "asdf is not installed"
+fi
+
+# rust
+if [ -f "$HOME/.cargo/env" ]; then
+    . "$HOME/.cargo/env"
+else
+    echo "cargo(rust) is not installed"
+fi
+
+echo "\e[33m[$(basename $0)]\e[0m\t\e[32mloaded\e[0m"

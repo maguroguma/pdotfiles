@@ -1,3 +1,6 @@
 _times/**
 _temp/**
-zsh.d/_zshexternal
+
+**/_zshexternal
+**/.zcompdump
+**/.zcompcache

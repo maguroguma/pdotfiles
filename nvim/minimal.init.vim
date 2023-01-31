@@ -1,6 +1,7 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SECTION: initialize
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if exists('g:loaded_maguroguma_nvim_setting')
+  finish
+endif
+let g:loaded_maguroguma_nvim_setting = 1
 
 " ref: https://qiita.com/yasunori-kirin0418/items/4672919be73a524afb47
 " Disable default plugins {{{
@@ -43,11 +44,6 @@ let g:did_indent_on             = v:true
 let g:did_load_ftplugin         = v:true
 let g:loaded_rrhelper           = v:true
 " }}}
-
-if exists('g:loaded_maguroguma_nvim_setting')
-  finish
-endif
-let g:loaded_maguroguma_nvim_setting = 1
 
 " Automatic installation on startup(neovim + vim)
 let s:jetpackfile = stdpath('data') .. '/site/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim'
@@ -111,7 +107,7 @@ command! -bang -nargs=? -complete=dir Files
 
 " source
 function! s:list_command_history() abort
-  let l:res = system("cat $HOME/.zhistory | cut -b 16- | head -n 5000")
+  let l:res = system("cat $HISTFILE | cut -b 16- | head -n 5000")
   return reverse(split(l:res, "\n"))
 endfunction
 " sink
@@ -235,7 +231,7 @@ set hlsearch
 " https://loumo.jp/archives/10503
 autocmd FileType text :set formatoptions=q
 
-set shell=/bin/zsh
+execute 'set shell=' .. expand('$SHELL')
 set title
 set wildmenu
 set history=200
@@ -282,7 +278,8 @@ nnoremap t <Nop>
 nnoremap <Space> <Nop>
 
 " macro
-" nnoremap Q q
+nnoremap Q q:
+nnoremap ? q/
 
 " cursor move
 nnoremap j gj
