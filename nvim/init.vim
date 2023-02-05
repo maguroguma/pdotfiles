@@ -3,6 +3,62 @@ if exists('g:loaded_maguroguma_nvim_setting')
 endif
 let g:loaded_maguroguma_nvim_setting = 1
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SECTION: depeding on environment
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" load hook post sources
+execute 'source ' .. expand('$XDG_CONFIG_HOME/nvim/lazysource.vim')
+
+let g:sonictemplate_vim_template_dir = [
+      \ expand('$GOPATH/src/github.com/maguroguma/go-competitive/template'),
+      \ expand('$DOTFILES_DIR/nvim/sonic-template'),
+      \]
+
+execute 'set shell=' .. expand('$SHELL')
+
+" jetpack利用時は先頭に追加するようにする
+execute 'set runtimepath^=' .. expand('$XDG_DATA_HOME/nvim/site/pack/jetpack/nvim-treesitter')
+
+" FIXME: sedのエラーを回避したい（Vim scriptで全部やるべき）
+" show zsh command history
+if getftype(expand('$HISTFILE')) != ""
+  function! s:showShellHistory(...)
+    execute 'botright' 10 'new'
+    setlocal nobuflisted bufhidden=unload buftype=nofile
+    silent read !cat $HISTFILE | cut -b 16- | head -n 5000
+    " silent read !cat $HISTFILE |
+    "       \ grep '^:' |
+    "       \ cut -b 3-12 -b 16- |
+    "       \ sed -r '2,$s/([0-9]{10})/\1@@@/' |
+    "       \ awk -F '@@@' '/[0-9]{10}/ { printf("\%s; \%s\n", strftime("\%Y-\%m-\%d \%H:\%M:\%S", $1), $2) }' |
+    "       \ head -n 5000
+    if a:0 == 1
+      let l:exe_com = 'v/' . a:1 . '/d'
+      execute l:exe_com
+    endif
+    norm G
+    setlocal nomodified
+  endfunction
+
+  " filter by strings given by the argument
+  command! -nargs=? ShellHistory :call s:showShellHistory(<f-args>)
+endif
+
+" :Profileコマンド実行後、そのあとに実行される関数、あるいは読み込まれるスクリプトファイルを対象に、
+" ~/profile.txtにプロファイル情報を書き出す
+" ref: https://zenn.dev/kato_k/articles/vim-tips-no004
+command! Profile call s:command_profile()
+function! s:command_profile() abort
+  profile start ~/profile.txt
+  profile func *
+  profile file *
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SECTION: start up
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " ref: https://qiita.com/yasunori-kirin0418/items/4672919be73a524afb47
 " Disable default plugins {{{
 " Fast Startup Settings!!
@@ -61,9 +117,6 @@ endif
 " main version
 let s:main_jetpack_dir = stdpath('data') .. '/site/pack/jetpack/main/'
 
-" load hook post sources
-execute 'source ' .. expand('$XDG_CONFIG_HOME/nvim/lazysource.vim')
-
 " manage plugins by jetpack
 " plugins {{{
 packadd vim-jetpack
@@ -102,7 +155,6 @@ call jetpack#add('lambdalisue/kensaku-command.vim')
 call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin
 
 " lua plugin
-call jetpack#add('kevinhwang91/nvim-bqf')
 call jetpack#add('nvim-lualine/lualine.nvim')
 
 " lazy
@@ -345,6 +397,9 @@ call jetpack#add('posva/vim-vue', {
 call jetpack#add('mattn/vim-sqlfmt', {
       \ 'on_ft': ['sql']
       \ })
+call jetpack#add('lambdalisue/gina.vim', {
+      \ 'on_cmd': ['Gina']
+      \ })
 call jetpack#end()
 " plugins END }}}
 
@@ -384,10 +439,8 @@ nnoremap <Space>gb :Git blame<CR>
 nnoremap <Space>ga :Git add %<CR>
 nnoremap <silent> <Space>gl :Git log %<CR>
 
-let g:sonictemplate_vim_template_dir = [
-      \ expand('$GOPATH/src/github.com/maguroguma/go-competitive/template'),
-      \ expand('$DOTFILES_DIR/nvim/sonic-template'),
-      \]
+nnoremap <Space>gp <cmd>Gina patch<CR>
+nnoremap <Space>gs <cmd>Gina status<CR>
 
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
 
@@ -669,31 +722,6 @@ xnoremap <Space>! "by:let res = "Execute: " .@b . "\n"<CR>:let res = res . syste
 " ビジュアルモードで選択中の文字列を特定のコマンドに渡す
 xnoremap <Space>e <Esc>gv"zy:<C-u>echo "<C-r>z"
 
-" FIXME: sedのエラーを回避したい（Vim scriptで全部やるべき）
-" show zsh command history
-if getftype(expand('$HISTFILE')) != ""
-  function! s:showShellHistory(...)
-    execute 'botright' 10 'new'
-    setlocal nobuflisted bufhidden=unload buftype=nofile
-    silent read !cat $HISTFILE | cut -b 16- | head -n 5000
-    " silent read !cat $HISTFILE |
-    "       \ grep '^:' |
-    "       \ cut -b 3-12 -b 16- |
-    "       \ sed -r '2,$s/([0-9]{10})/\1@@@/' |
-    "       \ awk -F '@@@' '/[0-9]{10}/ { printf("\%s; \%s\n", strftime("\%Y-\%m-\%d \%H:\%M:\%S", $1), $2) }' |
-    "       \ head -n 5000
-    if a:0 == 1
-      let l:exe_com = 'v/' . a:1 . '/d'
-      execute l:exe_com
-    endif
-    norm G
-    setlocal nomodified
-  endfunction
-
-  " filter by strings given by the argument
-  command! -nargs=? ShellHistory :call s:showShellHistory(<f-args>)
-endif
-
 " nkfコマンドが実行可能な場合
 " 行Visualで指定した範囲に対して `nkf -Z0` （全角英数字・記号→半角に変換）を行う
 if executable('nkf')
@@ -849,12 +877,12 @@ set hlsearch
 
 " 独自定義highlight
 highlight CursorLine ctermbg=238
-highlight Visual cterm=bold ctermbg=darkblue ctermfg=NONE
+highlight Visual cterm=bold ctermbg=24 ctermfg=NONE
 " highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
 " highlight StatusLineNC ctermbg=193
 highlight NonText    ctermbg=None ctermfg=239 guibg=NONE guifg=None
 highlight SpecialKey ctermbg=None ctermfg=239 guibg=NONE guifg=None
-highlight Folded ctermbg=Green ctermfg=Gray
+highlight Folded ctermbg=8 ctermfg=15
 highlight Search ctermbg=44 ctermfg=0
 highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
 
@@ -902,7 +930,6 @@ augroup vimrc-auto-cursorline
   endfunction
 augroup END
 
-execute 'set shell=' .. expand('$SHELL')
 set title
 set wildmenu
 set history=200
@@ -1080,16 +1107,6 @@ augroup MyXML
   autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
 augroup END
 
-" :Profileコマンド実行後、そのあとに実行される関数、あるいは読み込まれるスクリプトファイルを対象に、
-" ~/profile.txtにプロファイル情報を書き出す
-" ref: https://zenn.dev/kato_k/articles/vim-tips-no004
-command! Profile call s:command_profile()
-function! s:command_profile() abort
-  profile start ~/profile.txt
-  profile func *
-  profile file *
-endfunction
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " lua scripts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1097,9 +1114,6 @@ set completeopt=menu,menuone,noselect
 set pumheight=20
 
 nmap <Space>v <cmd>AerialToggle<CR>
-
-" jetpack利用時は先頭に追加するようにする
-execute 'set runtimepath^=' .. expand('$XDG_DATA_HOME/nvim/site/pack/jetpack/nvim-treesitter')
 
 """
 " PLUGSETTING: rlane/pounce.nvim
@@ -1110,9 +1124,8 @@ vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
 
 lua << EOF
--- PLUGSETTING: kevinhwang91/nvim-bqf
+-- formatting quickfix view
 local fn = vim.fn
-
 function _G.qftf(info)
     local items
     local ret = {}
@@ -1154,53 +1167,7 @@ function _G.qftf(info)
     end
     return ret
 end
-
 vim.o.qftf = '{info -> v:lua._G.qftf(info)}'
-
--- Adapt fzf's delimiter in nvim-bqf
-vim.cmd([[
-    hi BqfPreviewBorder guifg=#50a14f ctermfg=71
-    hi link BqfPreviewRange Search
-]])
-
-require('bqf').setup({
-    auto_enable = true,
-    auto_resize_height = true, -- highly recommended enable
-    preview = {
-        win_height = 30,
-        win_vheight = 30,
-        delay_syntax = 80,
-        border_chars = {'┃', '┃', '━', '━', '┏', '┓', '┗', '┛', '█'},
-        should_preview_cb = function(bufnr)
-            local ret = true
-            local bufname = vim.api.nvim_buf_get_name(bufnr)
-            local fsize = vim.fn.getfsize(bufname)
-            if fsize > 100 * 1024 then
-                -- skip file size greater than 100k
-                ret = false
-            elseif bufname:match('^fugitive://') then
-                -- skip fugitive buffer
-                ret = false
-            end
-            return ret
-        end
-    },
-    -- make `drop` and `tab drop` to become preferred
-    func_map = {
-        drop = 'o',
-        openc = 'O',
-        split = '<C-s>',
-        tabdrop = '<C-t>',
-        tabc = '',
-        ptogglemode = 'z,',
-    },
-    filter = {
-        fzf = {
-            action_for = {['ctrl-s'] = 'split', ['ctrl-t'] = 'tab drop'},
-            extra_opts = {'--bind', 'ctrl-o:toggle-all', '--prompt', '> '}
-        }
-    }
-})
 
 require('lualine').setup {
   options = {

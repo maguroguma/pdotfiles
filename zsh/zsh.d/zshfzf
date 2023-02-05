@@ -63,6 +63,7 @@ function ghq-fzf() {
 zle -N ghq-fzf
 bindkey '^]' ghq-fzf
 
+# tmuxで複数ペイン同時に起動したいので、fzf-tmuxは使わない
 function cdr-fzf() {
     local selected_dir=$(cdr -l | awk '{ print $2 }' | fzf)
     if [ -n "$selected_dir" ]; then

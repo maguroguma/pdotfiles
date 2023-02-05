@@ -3,6 +3,38 @@ if exists('g:loaded_maguroguma_nvim_setting')
 endif
 let g:loaded_maguroguma_nvim_setting = 1
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SECTION: depeding on environment
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let s:histfile_path = expand('~/.local/state/zsh_history')
+if filereadable(s:histfile_path)
+  " source
+  function! s:list_command_history() abort
+    let l:hist_com = 'cat ' .. s:histfile_path .. ' | cut -b 16- | head -n 5000'
+    let l:res = system(l:hist_com)
+    return reverse(split(l:res, "\n"))
+  endfunction
+  " sink
+  function! s:insert_target(shell_command) abort
+    call setline(line("."), a:shell_command)
+  endfunction
+  command! HCommand call fzf#run(fzf#wrap({
+    \ 'source': s:list_command_history(),
+    \ 'sink': funcref('s:insert_target'),
+    \ 'options': '--ansi --prompt "replace current line> "',
+  \ }))
+  nnoremap <silent> R :HCommand<CR>
+else
+  echoerr '[ERROR] cannot read command history file: ' .. s:histfile_path
+endif
+
+set shell=/bin/zsh
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SECTION: start up
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " ref: https://qiita.com/yasunori-kirin0418/items/4672919be73a524afb47
 " Disable default plugins {{{
 " Fast Startup Settings!!
@@ -105,21 +137,6 @@ command! -bang -nargs=? -complete=dir Files
     \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
     \   <bang>0)
 
-" source
-function! s:list_command_history() abort
-  let l:res = system("cat $HISTFILE | cut -b 16- | head -n 5000")
-  return reverse(split(l:res, "\n"))
-endfunction
-" sink
-function! s:insert_target(shell_command) abort
-  call setline(line("."), a:shell_command)
-endfunction
-command! HCommand call fzf#run(fzf#wrap({
-  \ 'source': s:list_command_history(),
-  \ 'sink': funcref('s:insert_target'),
-  \ 'options': '--ansi --prompt "replace current line> "',
-\ }))
-
 " popup window
 let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
 
@@ -128,7 +145,6 @@ let g:fzf_preview_window = []
 
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <Space>q :History:<CR>
-nnoremap <silent> R :HCommand<CR>
 
 nmap ' <cmd>Pounce<CR>
 vmap ' <cmd>Pounce<CR>
@@ -231,7 +247,6 @@ set hlsearch
 " https://loumo.jp/archives/10503
 autocmd FileType text :set formatoptions=q
 
-execute 'set shell=' .. expand('$SHELL')
 set title
 set wildmenu
 set history=200
@@ -239,13 +254,16 @@ set helplang=ja
 
 set hidden
 
+" 独自定義highlight
 highlight CursorLine ctermbg=238
-highlight Visual cterm=bold ctermbg=darkblue ctermfg=NONE
-highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
-highlight StatusLineNC ctermbg=193
-highlight Folded ctermbg=Green ctermfg=Gray
+highlight Visual cterm=bold ctermbg=24 ctermfg=NONE
+" highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
+" highlight StatusLineNC ctermbg=193
 highlight NonText    ctermbg=None ctermfg=239 guibg=NONE guifg=None
 highlight SpecialKey ctermbg=None ctermfg=239 guibg=NONE guifg=None
+highlight Folded ctermbg=8 ctermfg=15
+highlight Search ctermbg=44 ctermfg=0
+highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: mapping

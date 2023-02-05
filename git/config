@@ -1,6 +1,6 @@
 [core]
+  editor = "nvim -u ~/.config/nvim/minimal.init.vim"
   excludesfile = ~/.config/git/ignore
-  editor = "nvim -u $XDG_CONFIG_HOME/nvim/minimal.init.vim"
   pager = delta
   quotepath = false
 
@@ -27,10 +27,6 @@
   lg = log --graph --all --decorate
   today = log --oneline --since='12 hour ago'
   cancel = reset --soft HEAD^
-#  dp = diff --no-prefix
-#  dsp = diff --cached --no-prefix
-#  graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
-# https://qiita.com/hajimeni/items/73d2155fc59e152630c4
   delete-merged-branch = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|main'|xargs git branch -d; };f"
   push-f = push --force-with-lease --force-if-includes
   clean-confirm = clean -dn

@@ -1,17 +1,130 @@
+let s:treesitter_scripts =<< END
+lua << EOF
+-- PLUGSETTING: nvim-treesitter/nvim-treesitter
+require'nvim-treesitter.configs'.setup {
+  parser_install_dir = vim.fn.expand("$XDG_DATA_HOME/nvim/site/pack/jetpack/nvim-treesitter"),
+}
+EOF
+END
+let g:jetpack_treesitter_scripts = join(s:treesitter_scripts, "\n")
+
+let s:fzf_scripts =<< END
+"""
+" commands
+"""
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(
+    \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
+    \   <bang>0)
+
+command! -bang -nargs=? -complete=dir Buffers
+    \ call fzf#vim#buffers(
+    \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
+    \   <bang>0)
+
+" deletes buffers by fzf
+" ref: https://github.com/junegunn/fzf.vim/pull/733#issuecomment-559720813
+function! s:list_buffers()
+  redir => list
+  silent ls
+  redir END
+  return split(list, "\n")
+endfunction
+
+function! s:list_buffers_customized()
+  redir => list
+  silent ls
+  redir END
+
+  let l:res = []
+  let l:raw_lines = split(list, "\n")
+  for l:raw_line in raw_lines
+    let l:elems = split(l:raw_line)
+    let l:custom_line = l:elems[0] . "\t" . substitute(l:elems[2], '"', "", "g")
+    call add(l:res, l:custom_line)
+  endfor
+ return l:res
+endfunction
+
+function! s:delete_buffers(lines)
+  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
+endfunction
+
+command! BD call fzf#run(fzf#wrap({
+  \ 'source': s:list_buffers_customized(),
+  \ 'sink*': { lines -> s:delete_buffers(lines) },
+  \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept --prompt "delete(close) buffers> "'
+\ }))
+
+"""
+" custom git show with fugitive.vim
+"""
+" source
+function! s:list_commits() abort
+  let l:res = system('git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --color=always')
+  return split(l:res, "\n")
+endfunction
+" sink
+function! s:select_commits(commit_hash) abort
+  let l:list = split(a:commit_hash, ' ')
+  let l:execute_command = 'Git show ' . l:list[1] . ':%'
+  execute l:execute_command
+endfunction
+command! GShow call fzf#run(fzf#wrap({
+  \ 'source': s:list_commits(),
+  \ 'sink': funcref('s:select_commits'),
+  \ 'options': '--ansi --prompt "git show of the buffer> "',
+\ }))
+
+"""
+" custom insert command from history
+"""
+" source
+function! s:list_command_history() abort
+  let l:res = system("cat $HISTFILE | cut -b 16- | head -n 5000")
+  return reverse(split(l:res, "\n"))
+endfunction
+" sink
+function! s:insert_target(shell_command) abort
+  call setline(line("."), a:shell_command)
+endfunction
+command! HCommand call fzf#run(fzf#wrap({
+  \ 'source': s:list_command_history(),
+  \ 'sink': funcref('s:insert_target'),
+  \ 'options': '--ansi --prompt "replace current line> "',
+\ }))
+
+"""
+" layouts, styles
+"""
+
+" popup window
+let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
+
+" Empty value to disable preview window altogether
+let g:fzf_preview_window = []
+
+nnoremap <silent> , :Marks<CR>
+nnoremap <silent> <Space>h :Helptags<CR>
+nnoremap <silent> <Space>gf :GitFiles?<CR>
+nnoremap <silent> <Space>q :History:<CR>
+nnoremap <silent> <Space>bd :BD<CR>
+END
+let g:jetpack_fzf_scripts = join(s:fzf_scripts, "\n")
+
 let s:memolist_scripts =<< END
 let g:memolist_path = expand("$GOPATH/src/github.com/maguroguma/memolist")
-" suffix type (default markdown)
 let g:memolist_memo_suffix = "md"
-" date format (default %Y-%m-%d %H:%M)
 let g:memolist_memo_date = "%Y-%m-%d %H:%M"
-" tags prompt (default 0)
 let g:memolist_prompt_tags = 1
-" categories prompt (default 0)
 let g:memolist_prompt_categories = 1
-" use fzf (default 0)
 let g:memolist_fzf = 1
 END
 let g:jetpack_memolist_scripts = join(s:memolist_scripts, "\n")
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SECTION: depeding on environment
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let s:gitsigns_scripts =<< END
 lua << EOF
@@ -331,127 +444,6 @@ augroup END
 END
 let g:jetpack_fern_scripts = join(s:fern_scripts, "\n")
 
-let s:fzf_scripts =<< END
-"""
-" commands
-"""
-command! Fmru FZFMru
-command! FZFMru call fzf#run({
-            \  'source':  v:oldfiles,
-            \  'sink':    'e',
-            \  'options': '-m -x +s',
-            \  'down':    '40%'})
-
-" fzf
-" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-
-command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(
-    \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
-    \   <bang>0)
-
-command! -bang -nargs=? -complete=dir Buffers
-    \ call fzf#vim#buffers(
-    \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
-    \   <bang>0)
-
-" deletes buffers by fzf
-" ref: https://github.com/junegunn/fzf.vim/pull/733#issuecomment-559720813
-function! s:list_buffers()
-  redir => list
-  silent ls
-  redir END
-  return split(list, "\n")
-endfunction
-
-function! s:list_buffers_customized()
-  redir => list
-  silent ls
-  redir END
-
-  let l:res = []
-  let l:raw_lines = split(list, "\n")
-  for l:raw_line in raw_lines
-    let l:elems = split(l:raw_line)
-    let l:custom_line = l:elems[0] . "\t" . substitute(l:elems[2], '"', "", "g")
-    call add(l:res, l:custom_line)
-  endfor
- return l:res
-endfunction
-
-function! s:delete_buffers(lines)
-  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
-endfunction
-
-command! BD call fzf#run(fzf#wrap({
-  \ 'source': s:list_buffers_customized(),
-  \ 'sink*': { lines -> s:delete_buffers(lines) },
-  \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept --prompt "delete(close) buffers> "'
-\ }))
-
-"""
-" custom git show with fugitive.vim
-"""
-" source
-function! s:list_commits() abort
-  let l:res = system('git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --color=always')
-  return split(l:res, "\n")
-endfunction
-" sink
-function! s:select_commits(commit_hash) abort
-  let l:list = split(a:commit_hash, ' ')
-  let l:execute_command = 'Git show ' . l:list[1] . ':%'
-  execute l:execute_command
-endfunction
-command! GShow call fzf#run(fzf#wrap({
-  \ 'source': s:list_commits(),
-  \ 'sink': funcref('s:select_commits'),
-  \ 'options': '--ansi --prompt "git show of the buffer> "',
-\ }))
-
-"""
-" custom insert command from history
-"""
-" source
-function! s:list_command_history() abort
-  let l:res = system("cat $HISTFILE | cut -b 16- | head -n 5000")
-  return reverse(split(l:res, "\n"))
-endfunction
-" sink
-function! s:insert_target(shell_command) abort
-  call setline(line("."), a:shell_command)
-endfunction
-command! HCommand call fzf#run(fzf#wrap({
-  \ 'source': s:list_command_history(),
-  \ 'sink': funcref('s:insert_target'),
-  \ 'options': '--ansi --prompt "replace current line> "',
-\ }))
-
-"""
-" layouts, styles
-"""
-
-" popup window
-let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
-
-" Empty value to disable preview window altogether
-let g:fzf_preview_window = []
-
-nnoremap <silent> , :Marks<CR>
-nnoremap <silent> <Space>h :Helptags<CR>
-nnoremap <silent> <Space>gf :GitFiles?<CR>
-nnoremap <silent> <Space>q :History:<CR>
-nnoremap <silent> <Space>gs :GShow<CR>
-nnoremap <silent> <Space>bd :BD<CR>
-END
-let g:jetpack_fzf_scripts = join(s:fzf_scripts, "\n")
-
 let s:pounce_scripts =<< END
 highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#FFAF60
 highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#E27878
@@ -612,16 +604,6 @@ require("better_escape").setup {
 EOF
 END
 let g:jetpack_better_escape_scripts = join(s:better_escape_scripts, "\n")
-
-let s:treesitter_scripts =<< END
-lua << EOF
--- PLUGSETTING: nvim-treesitter/nvim-treesitter
-require'nvim-treesitter.configs'.setup {
-  parser_install_dir = vim.fn.expand("$XDG_DATA_HOME/nvim/site/pack/jetpack/nvim-treesitter"),
-}
-EOF
-END
-let g:jetpack_treesitter_scripts = join(s:treesitter_scripts, "\n")
 
 let s:committia_scripts =<< END
 " https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
@@ -929,6 +911,7 @@ let g:jetpack_bookmarks_scripts = join(s:bookmarks_scripts, "\n")
 let s:better_whitespace_scripts =<< END
 let g:better_whitespace_filetypes_blacklist = ['diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'fugitive', 'defx']
 let g:better_whitespace_ctermcolor = '12'
+highlight ExtraWhitespace ctermbg=159
 END
 let g:jetpack_better_whitespace_scripts = join(s:better_whitespace_scripts, "\n")
 

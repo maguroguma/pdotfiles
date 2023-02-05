@@ -1,3 +1,9 @@
+if command -v nvim &>/dev/null; then
+    export EDITOR="nvim -u $XDG_CONFIG_HOME/nvim/minimal.init.vim"
+else
+    export EDITOR="vim"
+fi
+
 #############################
 # key bindings
 #############################
@@ -239,11 +245,6 @@ zstyle ':chpwd:*' recent-dirs-pushd true
 # environmental values
 #############################
 export LANG=ja_JP.UTF-8
-if command -v nvim &>/dev/null; then
-    export EDITOR="nvim -u $XDG_CONFIG_HOME/nvim/minimal.init.vim"
-else
-    export EDITOR="vim"
-fi
 
 # dotfiles
 export DOTFILES_DIR=$HOME/dotfiles
@@ -323,7 +324,6 @@ alias ..='cd ..'
 alias mv='mv -i'
 alias cp='cp -i'
 alias c='clear'
-alias relogin='exec $SHELL -l'
 alias lined_path="echo $PATH | tr ':' '\n'"
 if [ -e "$HISTFILE" ]; then
     alias shell-history='cat $HISTFILE | cut -b 16- | head -n 5000'
