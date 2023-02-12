@@ -313,11 +313,14 @@ path=(
 # basic
 if command -v nvim &>/dev/null; then
     alias v='nvim'
-    alias vi='nvim'
-    alias vim='nvim'
+    alias vi='vim'
     alias vimdiff='nvim -d'
 else
     echo "neovim is not executable."
+fi
+if command -v vim-startuptime; then
+    alias vst-main-100='vim-startuptime -count 100 -vimpath nvim'
+    alias vst-mini-100='vim-startuptime -count 100 -vimpath nvim -- --cmd "source $XDG_CONFIG_HOME/nvim/minimal.init.vim"'
 fi
 alias rm='rm -i'
 alias ..='cd ..'

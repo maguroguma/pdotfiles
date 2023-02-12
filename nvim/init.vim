@@ -89,7 +89,7 @@ let g:loaded_getscriptPlugin    = v:true
 " Disable other plugins
 let g:loaded_man                = v:true
 let g:loaded_matchit            = v:true
-let g:loaded_matchparen         = v:true
+" let g:loaded_matchparen         = v:true
 let g:loaded_shada_plugin       = v:true
 let g:loaded_spellfile_plugin   = v:true
 let g:loaded_tutor_mode_plugin  = v:true
@@ -132,7 +132,6 @@ call jetpack#add('vim-jp/vital.vim')
 call jetpack#add('vim-jp/vimdoc-ja')
 call jetpack#add('ryanoasis/vim-devicons')
 call jetpack#add('editorconfig/editorconfig-vim')
-call jetpack#add('vim-scripts/autodate.vim') " add automatic updating date format
 call jetpack#add('w0ng/vim-hybrid') " vim theme
 
 " DO NOT lazy load
@@ -206,7 +205,6 @@ call jetpack#add('fatih/vim-go', {
       \ 'on_ft': 'go',
       \ 'hook_post_source': g:jetpack_vim_go_scripts
       \ })
-" better <C-a> and <C-x>
 call jetpack#add('monaqa/dial.nvim', {
       \ 'on_cmd': ['DialIncrement', 'DialDecrement'],
       \ 'hook_post_source': g:jetpack_dial_scripts
@@ -439,8 +437,9 @@ nnoremap <Space>gb :Git blame<CR>
 nnoremap <Space>ga :Git add %<CR>
 nnoremap <silent> <Space>gl :Git log %<CR>
 
+set diffopt+=vertical
 nnoremap <Space>gp <cmd>Gina patch<CR>
-nnoremap <Space>gs <cmd>Gina status<CR>
+nnoremap <Space>gs <cmd>Gina status --opener=vsplit<CR>
 
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
 
@@ -465,9 +464,6 @@ let g:gh_line_map_default = 0
 let g:gh_line_blame_map_default = 0
 let g:gh_line_map = '<Space>gh'
 
-let autodate_format="%Y-%m-%d %H:%M:%S"
-inoremap <C-a>lc Last Change: 2022-08-14 17:06:15.
-
 nmap <Space>mm <cmd>BookmarkToggle<CR>
 nmap <Space>mi <cmd>BookmarkAnnotate<CR>
 nmap <Space>ma <cmd>BookmarkShowAll<CR>
@@ -488,6 +484,7 @@ nnoremap <Space>mn  :MemoNew<CR>
 nnoremap <Space>ml  :MemoList<CR>
 nnoremap <Space>mg  :MemoGrep<CR>
 
+set termguicolors
 set background=dark
 colorscheme hybrid
 
@@ -593,8 +590,11 @@ let g:fuzzy_motion_labels = [
       \ 'B'
       \]
 highlight FuzzyMotionMatch ctermfg=159 ctermbg=240
+highlight FuzzyMotionMatch guifg=#caedfc guibg=#565657
 highlight FuzzyMotionChar cterm=bold ctermfg=207
+highlight FuzzyMotionChar gui=bold guifg=#ee8bf7
 highlight FuzzyMotionSubChar cterm=bold ctermfg=44
+highlight FuzzyMotionSubChar gui=bold guifg=#2bb2e3
 " highlight FuzzyMotionShade ctermfg=0 ctermbg=0
 let g:fuzzy_motion_matchers = ['fzf', 'kensaku']
 cnoremap <C-a><CR> <Plug>(kensaku-search-replace)<CR>
@@ -647,6 +647,8 @@ function g:TerminalDay()
   norm a
 endfunction
 tnoremap <C-a>day <C-\><C-n>:call g:TerminalDay()<CR>
+" 汎用デバッグ用
+inoremap <C-a>tengu <C-r>='👺 >'<CR>
 
 " markdownのコードスニペット
 function! g:ReadTripleBackQuotes(lang_text)
@@ -877,18 +879,43 @@ set hlsearch
 
 " 独自定義highlight
 highlight CursorLine ctermbg=238
-highlight Visual cterm=bold ctermbg=24 ctermfg=NONE
+highlight CursorLine guibg=#383838
+highlight Visual cterm=bold ctermfg=NONE ctermbg=24
+highlight Visual gui=bold guifg=NONE guibg=#11607d
 " highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
 " highlight StatusLineNC ctermbg=193
-highlight NonText    ctermbg=None ctermfg=239 guibg=NONE guifg=None
-highlight SpecialKey ctermbg=None ctermfg=239 guibg=NONE guifg=None
-highlight Folded ctermbg=8 ctermfg=15
-highlight Search ctermbg=44 ctermfg=0
+highlight NonText    ctermfg=239 ctermbg=None
+highlight NonText    guifg=#3d3d3d guibg=None
+highlight SpecialKey ctermfg=239 ctermbg=None
+highlight SpecialKey guifg=#3d3d3d guibg=None
+highlight Folded ctermfg=15 ctermbg=8
+highlight Folded guifg=#fff9e6 guibg=#586358
+highlight Search ctermfg=0 ctermbg=44
+highlight Search guifg=#021f02 guibg=#43c5d9
 highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
+highlight IncSearch gui=bold guifg=#021f02 guibg=#43c5d9
 
 " nvim-cmp
+" cui setting
 highlight! CmpItemAbbrMatch cterm=bold ctermbg=NONE ctermfg=44
 highlight! CmpItemAbbrMatchFuzzy ctermbg=NONE ctermfg=27
+" gui setting
+" gray
+highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
+" blue
+highlight! CmpItemAbbrMatch guibg=NONE guifg=#569CD6
+highlight! link CmpItemAbbrMatchFuzzy CmpItemAbbrMatch
+" light blue
+highlight! CmpItemKindVariable guibg=NONE guifg=#9CDCFE
+highlight! link CmpItemKindInterface CmpItemKindVariable
+highlight! link CmpItemKindText CmpItemKindVariable
+" pink
+highlight! CmpItemKindFunction guibg=NONE guifg=#C586C0
+highlight! link CmpItemKindMethod CmpItemKindFunction
+" front
+highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
+highlight! link CmpItemKindProperty CmpItemKindKeyword
+highlight! link CmpItemKindUnit CmpItemKindKeyword
 
 " txtファイルで自動改行を防ぐ
 " https://loumo.jp/archives/10503

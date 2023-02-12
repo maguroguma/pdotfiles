@@ -65,7 +65,7 @@ let g:loaded_getscriptPlugin    = v:true
 " Disable other plugins
 let g:loaded_man                = v:true
 let g:loaded_matchit            = v:true
-let g:loaded_matchparen         = v:true
+" let g:loaded_matchparen         = v:true
 let g:loaded_shada_plugin       = v:true
 let g:loaded_spellfile_plugin   = v:true
 let g:loaded_tutor_mode_plugin  = v:true
@@ -198,6 +198,9 @@ endif
 " SECTION: set options
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+set termguicolors
+colorscheme duskfox
+
 set nocompatible
 syntax enable
 
@@ -256,14 +259,21 @@ set hidden
 
 " 独自定義highlight
 highlight CursorLine ctermbg=238
-highlight Visual cterm=bold ctermbg=24 ctermfg=NONE
+highlight CursorLine guibg=#383838
+highlight Visual cterm=bold ctermfg=NONE ctermbg=24
+highlight Visual gui=bold guifg=NONE guibg=#11607d
 " highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
 " highlight StatusLineNC ctermbg=193
-highlight NonText    ctermbg=None ctermfg=239 guibg=NONE guifg=None
-highlight SpecialKey ctermbg=None ctermfg=239 guibg=NONE guifg=None
-highlight Folded ctermbg=8 ctermfg=15
-highlight Search ctermbg=44 ctermfg=0
+highlight NonText    ctermfg=239 ctermbg=None
+highlight NonText    guifg=#3d3d3d guibg=None
+highlight SpecialKey ctermfg=239 ctermbg=None
+highlight SpecialKey guifg=#3d3d3d guibg=None
+highlight Folded ctermfg=15 ctermbg=8
+highlight Folded guifg=#fff9e6 guibg=#586358
+highlight Search ctermfg=0 ctermbg=44
+highlight Search guifg=#021f02 guibg=#43c5d9
 highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
+highlight IncSearch gui=bold guifg=#021f02 guibg=#43c5d9
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: mapping
@@ -385,8 +395,6 @@ cnoremap <c-p> <up>
 " toggle
 nnoremap <Space>n :<C-u>set number!<CR>
 nnoremap <Space>W :<C-u>set wrap!<CR>
-
-colorscheme duskfox
 
 augroup git-semantic-commit-message
   autocmd! *

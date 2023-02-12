@@ -445,10 +445,14 @@ END
 let g:jetpack_fern_scripts = join(s:fern_scripts, "\n")
 
 let s:pounce_scripts =<< END
-highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#FFAF60
-highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236 gui=underline,bold guifg=#555555 guibg=#E27878
-highlight PounceAccept     cterm=underline,bold ctermfg=184 ctermbg=236 gui=underline,bold guifg=#FFAF60 guibg=#555555
-highlight PounceAcceptBest cterm=underline,bold ctermfg=196 ctermbg=236 gui=underline,bold guifg=#EE2513 guibg=#555555
+highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236
+highlight PounceMatch      gui=underline,bold guifg=#555555 guibg=#FFAF60
+highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236
+highlight PounceGap        gui=underline,bold guifg=#555555 guibg=#E27878
+highlight PounceAccept     cterm=underline,bold ctermfg=184 ctermbg=236
+highlight PounceAccept     gui=underline,bold guifg=#FFAF60 guibg=#555555
+highlight PounceAcceptBest cterm=underline,bold ctermfg=196 ctermbg=236
+highlight PounceAcceptBest gui=underline,bold guifg=#EE2513 guibg=#555555
 
 lua << EOF
 require'pounce'.setup{
@@ -755,8 +759,11 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 
 " original(from vim-jp)
 " https://vim-jp.slack.com/archives/CQ88WB7B3/p1659323660504669
-highlight CocMenuSel ctermbg=18 guibg=#082A4B cterm=BOLD
-highlight CocSearch cterm=bold ctermfg=44 guifg=#18A3FF
+" NOTE: なぜかguiの方は色設定がうまくできない
+highlight CocMenuSel cterm=bold ctermbg=18
+highlight CocMenuSel gui=bold
+highlight CocSearch cterm=bold ctermfg=44
+highlight CocSearch gui=bold
 
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
@@ -912,6 +919,7 @@ let s:better_whitespace_scripts =<< END
 let g:better_whitespace_filetypes_blacklist = ['diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'fugitive', 'defx']
 let g:better_whitespace_ctermcolor = '12'
 highlight ExtraWhitespace ctermbg=159
+highlight ExtraWhitespace guibg=#caedfc
 END
 let g:jetpack_better_whitespace_scripts = join(s:better_whitespace_scripts, "\n")
 
