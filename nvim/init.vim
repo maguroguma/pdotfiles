@@ -126,6 +126,7 @@ call jetpack#add('tani/vim-jetpack', { 'opt': 1 })
 " common library
 call jetpack#add('vim-denops/denops.vim')
 call jetpack#add('nvim-lua/plenary.nvim')
+call jetpack#add('MunifTanjim/nui.nvim')
 call jetpack#add('Shougo/vimproc.vim', { 'build' : 'make' })
 call jetpack#add('vim-jp/vital.vim')
 
@@ -166,7 +167,7 @@ call jetpack#add('glidenote/memolist.vim', {
       \ 'hook_post_source': g:jetpack_memolist_scripts
       \ })
 call jetpack#add('lewis6991/gitsigns.nvim', {
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files'],
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
       \ 'hook_post_source': g:jetpack_gitsigns_scripts
       \ })
 call jetpack#add('hrsh7th/nvim-cmp', {
@@ -186,7 +187,7 @@ call jetpack#add('hrsh7th/cmp-cmdline', {
       \ 'hook_post_source': g:jetpack_cmp_scripts
       \ })
 call jetpack#add('nvim-tree/nvim-web-devicons', {
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen']
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Neotree']
       \ })
 call jetpack#add('nvim-tree/nvim-tree.lua', {
       \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen'],
@@ -398,6 +399,13 @@ call jetpack#add('mattn/vim-sqlfmt', {
 call jetpack#add('lambdalisue/gina.vim', {
       \ 'on_cmd': ['Gina']
       \ })
+call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
+      \ 'branch': 'v2.x',
+      \ 'on_cmd': ['Neotree'],
+      \ 'depends': 'nvim-tree/nvim-web-devicons',
+      \ 'hook_post_source': g:jetpack_neotree_scripts
+      \ })
+
 call jetpack#end()
 " plugins END }}}
 
@@ -430,6 +438,8 @@ imap <C-a><tab> <plug>(fzf-maps-i)
 nmap <silent> <C-f> <cmd>NvimTreeToggle<CR>
 nmap <silent> f <cmd>NvimTreeOpen .<CR>
 nmap <silent> <C-h> <cmd>execute 'NvimTreeOpen ' . expand('%:p:h')<CR>
+
+nnoremap <silent> <C-f> <cmd>Neotree reveal<CR>
 
 nnoremap <silent> <Space>gc :GCheckoutThis<CR>
 nnoremap <Space>gd :Git diff %<CR>
@@ -890,10 +900,10 @@ highlight SpecialKey ctermfg=239 ctermbg=None
 highlight SpecialKey guifg=#3d3d3d guibg=None
 highlight Folded ctermfg=15 ctermbg=8
 highlight Folded guifg=#fff9e6 guibg=#586358
-highlight Search ctermfg=0 ctermbg=44
-highlight Search guifg=#021f02 guibg=#43c5d9
-highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
-highlight IncSearch gui=bold guifg=#021f02 guibg=#43c5d9
+" highlight Search ctermfg=0 ctermbg=44
+" highlight Search guifg=#021f02 guibg=#43c5d9
+" highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
+" highlight IncSearch gui=bold guifg=#021f02 guibg=#43c5d9
 
 " nvim-cmp
 " cui setting
