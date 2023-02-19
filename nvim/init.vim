@@ -146,6 +146,8 @@ call jetpack#add('mattn/vim-sonictemplate')
 call jetpack#add('thinca/vim-partedit')
 call jetpack#add('previm/previm')
 call jetpack#add('kana/vim-textobj-user')
+call jetpack#add('shinespark/vim-list2tree') " make directory tree format txt from markdown lists
+call jetpack#add('AndrewRadev/linediff.vim')
 
 " depends on denops
 call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper
@@ -321,9 +323,6 @@ call jetpack#add('kyoh86/vim-ripgrep', {
 call jetpack#add('tyru/capture.vim', {
       \ 'on_cmd': ['Capture']
       \ })
-call jetpack#add('AndrewRadev/linediff.vim', {
-      \ 'on_cmd': ['Linediff']
-      \ })
 call jetpack#add('moll/vim-bbye', {
       \ 'on_cmd': ['Bdelete']
       \ })
@@ -385,7 +384,7 @@ call jetpack#add('alvan/vim-closetag', {
       \ 'on_ft': ['html', 'vue', 'html.twig']
       \ })
 call jetpack#add('ap/vim-css-color', {
-      \ 'on_ft': ['html', 'vue', 'html.twig']
+      \ 'on_ft': ['html', 'vue', 'html.twig', 'vim', 'lua']
       \ })
 call jetpack#add('jsborjesson/vim-uppercase-sql', {
       \ 'on_ft': ['sql']
@@ -404,6 +403,9 @@ call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
       \ 'on_cmd': ['Neotree'],
       \ 'depends': 'nvim-tree/nvim-web-devicons',
       \ 'hook_post_source': g:jetpack_neotree_scripts
+      \ })
+call jetpack#add('kuuote/vim-fuzzyhistory', {
+      \ 'on_map': '<Plug>(fuzzy-history)'
       \ })
 
 call jetpack#end()
@@ -493,6 +495,8 @@ nmap ss <cmd>ChooseWin<CR>
 nnoremap <Space>mn  :MemoNew<CR>
 nnoremap <Space>ml  :MemoList<CR>
 nnoremap <Space>mg  :MemoGrep<CR>
+
+nmap <Space>/ <Plug>(fuzzy-history)
 
 set termguicolors
 set background=dark

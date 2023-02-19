@@ -1043,7 +1043,7 @@ require("neo-tree").setup({
       ["w"] = "open_with_window_picker",
       --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
       ["h"] = "close_node",
-      ["z"] = "close_all_nodes",
+      ["z"] = "noop",
       --["Z"] = "expand_all_nodes",
       ["a"] = { 
         "add",
