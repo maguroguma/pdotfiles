@@ -161,10 +161,6 @@ call jetpack#add('nvim-lualine/lualine.nvim')
 call jetpack#add('gen740/SmoothCursor.nvim')
 
 " lazy
-call jetpack#add('tpope/vim-fugitive', {
-      \ 'on_cmd': ['Git', 'GCheckoutThis'],
-      \ 'hook_post_source': g:jetpack_fugitive_scripts
-      \ })
 call jetpack#add('glidenote/memolist.vim', {
       \ 'on_cmd': ['MemoNew', 'MemoList', 'MemoGrep'],
       \ 'hook_post_source': g:jetpack_memolist_scripts
@@ -267,7 +263,7 @@ call jetpack#add('nvim-treesitter/nvim-treesitter', {
       \ 'hook_post_source': g:jetpack_treesitter_scripts
       \ })
 call jetpack#add('rhysd/committia.vim', {
-      \ 'on_ft': ['gitcommit', 'git'],
+      \ 'on_ft': ['gitcommit', 'git', 'gina-commit'],
       \ 'hook_post_source': g:jetpack_committia_scripts
       \ })
 call jetpack#add('neoclide/coc.nvim', {
@@ -397,7 +393,8 @@ call jetpack#add('mattn/vim-sqlfmt', {
       \ 'on_ft': ['sql']
       \ })
 call jetpack#add('lambdalisue/gina.vim', {
-      \ 'on_cmd': ['Gina']
+      \ 'on_cmd': ['Gina', 'GinaCheckoutThis'],
+      \ 'hook_post_source': g:jetpack_gina_scripts
       \ })
 call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
       \ 'branch': 'v2.x',
@@ -444,15 +441,19 @@ nmap <silent> <C-h> <cmd>execute 'NvimTreeOpen ' . expand('%:p:h')<CR>
 
 nnoremap <silent> <C-f> <cmd>Neotree reveal<CR>
 
-nnoremap <silent> <Space>gc :GCheckoutThis<CR>
-nnoremap <Space>gd :Git diff %<CR>
-nnoremap <Space>gb :Git blame<CR>
-nnoremap <Space>ga :Git add %<CR>
-nnoremap <silent> <Space>gl :Git log %<CR>
-
 set diffopt+=vertical
+" 現在のバッファ
+nnoremap <Space>ga <cmd>Gina add %<CR>
+nnoremap <Space>gu <cmd>Gina reset HEAD %<CR>
+nnoremap <Space>gc <cmd>GinaCheckoutThis<CR>
+" 全体
 nnoremap <Space>gp <cmd>Gina patch<CR>
 nnoremap <Space>gs <cmd>Gina status --opener=vsplit<CR>
+command! GinaDiff Gina diff --opener=vsplit
+command! GinaDiffStaged Gina diff --staged --opener=vsplit
+nnoremap <Space>gl <cmd>Gina log<CR>
+nnoremap <Space>gb <cmd>Gina blame<CR>
+command! GinaCommitVsplit Gina commit --opener=vsplit
 
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
 
@@ -1261,21 +1262,23 @@ autocmd({ 'ModeChanged' }, {
   callback = function()
     local current_mode = vim.fn.mode()
     if current_mode == 'n' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#8aa872' })
-      vim.fn.sign_define('smoothcursor', { text = '' })
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#a356ba' })
+      vim.fn.sign_define('smoothcursor', { text = '●' })
     elseif current_mode == 'v' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#bf616a' })
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#dee356' })
       vim.fn.sign_define('smoothcursor', { text = '' })
     elseif current_mode == 'V' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#bf616a' })
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#dee356' })
       vim.fn.sign_define('smoothcursor', { text = '' })
     elseif current_mode == '�' then
       vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#bf616a' })
       vim.fn.sign_define('smoothcursor', { text = '' })
     elseif current_mode == 'i' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#668aab' })
-      vim.fn.sign_define('smoothcursor', { text = '' })
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#43e849' })
+      vim.fn.sign_define('smoothcursor', { text = '' })
     end
   end,
 })
 EOF
+
+

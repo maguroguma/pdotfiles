@@ -57,7 +57,7 @@ command! BD call fzf#run(fzf#wrap({
 \ }))
 
 """
-" custom git show with fugitive.vim
+" custom git show with gina.vim
 """
 " source
 function! s:list_commits() abort
@@ -67,10 +67,10 @@ endfunction
 " sink
 function! s:select_commits(commit_hash) abort
   let l:list = split(a:commit_hash, ' ')
-  let l:execute_command = 'Git show ' . l:list[1] . ':%'
+  let l:execute_command = 'Gina show ' . l:list[1] . ':%'
   execute l:execute_command
 endfunction
-command! GShow call fzf#run(fzf#wrap({
+command! GinaShow call fzf#run(fzf#wrap({
   \ 'source': s:list_commits(),
   \ 'sink': funcref('s:select_commits'),
   \ 'options': '--ansi --prompt "git show of the buffer> "',
@@ -175,20 +175,6 @@ require('gitsigns').setup {
 EOF
 END
 let g:jetpack_gitsigns_scripts = join(s:gitsigns_scripts, "\n")
-
-let s:fugitive_scripts =<< END
-" 現在のバッファのファイルをcheckoutする
-function! s:gitCheckoutThis()
-  let l:confirm_msg = 'You checkout this buffer file, OK?'
-  let l:is_ok = confirm(l:confirm_msg, "y yes\nn no")
-  if l:is_ok != 1
-    return
-  endif
-  :Git checkout %
-endfunction
-command! GCheckoutThis :call s:gitCheckoutThis()
-END
-let g:jetpack_fugitive_scripts = join(s:fugitive_scripts, "\n")
 
 let s:cmp_scripts =<< END
 lua << EOF
@@ -613,18 +599,18 @@ let s:committia_scripts =<< END
 " https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
 nnoremap ZZ <cmd>call g:SelectType()<CR>
 function! g:SelectType() abort
-  if &filetype !=? "gitcommit"
+  if &filetype ==? "gitcommit" || &filetype ==? "gina-commit"
+    let line = substitute(getline('.'), '^#\s*', '', 'g') " 最初の '# ' を除く
+    let arr = split(line, ' ')
+    let title = printf('%s: %s ', arr[0], arr[1])
+
+    silent! normal! "_dip
+    silent! put! =title
+    silent! startinsert!
+  else
     echoerr 'This is not gitcommit buffer!'
     return
   endif
-
-  let line = substitute(getline('.'), '^#\s*', '', 'g') " 最初の '# ' を除く
-  let arr = split(line, ' ')
-  let title = printf('%s: %s ', arr[0], arr[1])
-
-  silent! normal! "_dip
-  silent! put! =title
-  silent! startinsert!
 endfunction
 END
 let g:jetpack_committia_scripts = join(s:committia_scripts, "\n")
@@ -1154,3 +1140,17 @@ require("neo-tree").setup({
 EOF
 END
 let g:jetpack_neotree_scripts = join(s:neotree_scripts, "\n")
+
+let s:gina_scripts =<< END
+" 現在のバッファのファイルをcheckoutする
+function! s:gitCheckoutThis()
+  let l:confirm_msg = 'You checkout this buffer file, OK?'
+  let l:is_ok = confirm(l:confirm_msg, "y yes\nn no")
+  if l:is_ok != 1
+    return
+  endif
+  :Gina checkout %
+endfunction
+command! GinaCheckoutThis :call s:gitCheckoutThis()
+END
+let g:jetpack_gina_scripts = join(s:gina_scripts, "\n")
