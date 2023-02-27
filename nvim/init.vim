@@ -140,7 +140,6 @@ call jetpack#add('lambdalisue/readablefold.vim')
 call jetpack#add('Yggdroot/indentLine')
 call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('luochen1990/rainbow')
-call jetpack#add('ruanyl/vim-gh-line')
 call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
 call jetpack#add('mattn/vim-sonictemplate')
 call jetpack#add('thinca/vim-partedit')
@@ -393,7 +392,7 @@ call jetpack#add('mattn/vim-sqlfmt', {
       \ 'on_ft': ['sql']
       \ })
 call jetpack#add('lambdalisue/gina.vim', {
-      \ 'on_cmd': ['Gina', 'GinaCheckoutThis'],
+      \ 'on_cmd': ['Gina'],
       \ 'hook_post_source': g:jetpack_gina_scripts
       \ })
 call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
@@ -454,6 +453,7 @@ command! GinaDiffStaged Gina diff --staged --opener=vsplit
 nnoremap <Space>gl <cmd>Gina log<CR>
 nnoremap <Space>gb <cmd>Gina blame<CR>
 command! GinaCommitVsplit Gina commit --opener=vsplit
+command! GinaBrowseThis Gina browse --exact HEAD:%
 
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
 
@@ -473,10 +473,6 @@ nnoremap <Space>s <cmd>Spectre<CR>
 
 nmap  <C-a>  <cmd>DialIncrement<CR>
 nmap  <C-x>  <cmd>DialDecrement<CR>
-
-let g:gh_line_map_default = 0
-let g:gh_line_blame_map_default = 0
-let g:gh_line_map = '<Space>gh'
 
 nmap <Space>mm <cmd>BookmarkToggle<CR>
 nmap <Space>mi <cmd>BookmarkAnnotate<CR>

@@ -1152,5 +1152,7 @@ function! s:gitCheckoutThis()
   :Gina checkout %
 endfunction
 command! GinaCheckoutThis :call s:gitCheckoutThis()
+command! -range GinaBrowseThese <line1>,<line2>Gina browse --exact HEAD:%
+let g:gina#command#blame#formatter#format = "%su%=on %au %ti %ma%in"
 END
 let g:jetpack_gina_scripts = join(s:gina_scripts, "\n")
