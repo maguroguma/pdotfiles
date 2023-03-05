@@ -406,6 +406,15 @@ alias tks='tmux kill-server'
 alias tls='tmux ls'
 alias tns='tmux new -s'
 
+# diff
+alias diff-dir='diff -rq'
+alias diff-unified='diff --unified'
+alias diff-side-by-side='diff --side-by-side'
+
+# tar
+alias tar-comp='tar -zcf'
+alias tar-decomp='tar -zxf'
+
 # ubuntu
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'

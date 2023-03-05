@@ -158,15 +158,12 @@ call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin
 " lua plugin
 call jetpack#add('nvim-lualine/lualine.nvim')
 call jetpack#add('gen740/SmoothCursor.nvim')
+call jetpack#add('lewis6991/gitsigns.nvim')
 
 " lazy
 call jetpack#add('glidenote/memolist.vim', {
       \ 'on_cmd': ['MemoNew', 'MemoList', 'MemoGrep'],
       \ 'hook_post_source': g:jetpack_memolist_scripts
-      \ })
-call jetpack#add('lewis6991/gitsigns.nvim', {
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
-      \ 'hook_post_source': g:jetpack_gitsigns_scripts
       \ })
 call jetpack#add('hrsh7th/nvim-cmp', {
       \ 'on_event': 'CmdlineEnter'
@@ -448,8 +445,10 @@ nnoremap <Space>gc <cmd>GinaCheckoutThis<CR>
 " 全体
 nnoremap <Space>gp <cmd>Gina patch<CR>
 nnoremap <Space>gs <cmd>Gina status --opener=vsplit<CR>
-command! GinaDiff Gina diff --opener=vsplit
-command! GinaDiffStaged Gina diff --staged --opener=vsplit
+command! GinaDiffAll Gina diff --opener=vsplit
+command! GinaDiffStagedAll Gina diff --staged --opener=vsplit
+nnoremap <Space>gd <cmd>Gina diff --opener=vsplit :%<CR>
+nnoremap <Space>gD <cmd>Gina diff --opener=vsplit --staged :%<CR>
 nnoremap <Space>gl <cmd>Gina log<CR>
 nnoremap <Space>gb <cmd>Gina blame<CR>
 command! GinaCommitVsplit Gina commit --opener=vsplit
@@ -1146,6 +1145,27 @@ augroup MyXML
   autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
 augroup END
 
+" help-curwin
+command -bar -nargs=? -complete=help H execute s:HelpCurwin(<q-args>)
+let s:did_open_help = v:false
+
+function s:HelpCurwin(subject) abort
+  let mods = 'silent noautocmd keepalt'
+  if !s:did_open_help
+    execute mods .. ' help'
+    execute mods .. ' helpclose'
+    let s:did_open_help = v:true
+  endif
+  " ヘルプのままだとneovimではエラーになる
+  " ref: https://github.com/neovim/neovim/issues/14847
+  " if !getcompletion(a:subject, 'help')->empty()
+  if !empty(getcompletion(a:subject, 'help'))
+    execute mods .. ' edit ' .. &helpfile
+    set buftype=help
+  endif
+  return 'help ' .. a:subject
+endfunction
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " lua scripts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1275,6 +1295,49 @@ autocmd({ 'ModeChanged' }, {
     end
   end,
 })
+
+-- PLUGSETTING: lewis6991/gitsigns.nvim
+require('gitsigns').setup {
+  signs = {
+    add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+    change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+  },
+  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
+  numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
+  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
+  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+  watch_gitdir = {
+    interval = 1000,
+    follow_files = true
+  },
+  attach_to_untracked = true,
+  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+  current_line_blame_opts = {
+    virt_text = true,
+    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+    delay = 1000,
+    ignore_whitespace = false,
+  },
+  current_line_blame_formatter_opts = {
+    relative_time = false
+  },
+  sign_priority = 6,
+  update_debounce = 100,
+  status_formatter = nil, -- Use default
+  max_file_length = 40000,
+  preview_config = {
+    -- Options passed to nvim_open_win
+    border = 'single',
+    style = 'minimal',
+    relative = 'cursor',
+    row = 0,
+    col = 1
+  },
+  yadm = {
+    enable = false
+  },
+}
 EOF
-
-
