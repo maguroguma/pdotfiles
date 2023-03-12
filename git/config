@@ -1,5 +1,5 @@
 [core]
-  editor = "nvim -u ~/.config/nvim/minimal.init.vim"
+  editor = "nvim"
   excludesfile = ~/.config/git/ignore
   pager = delta
   quotepath = false

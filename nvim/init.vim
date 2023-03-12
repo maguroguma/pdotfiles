@@ -1103,7 +1103,7 @@ nnoremap <C-o> <C-o>zz
 nnoremap <C-i> <C-i>zz
 
 " save, load
-nnoremap <Space>w :w<CR>
+nnoremap <Space><Space> :w<CR>
 nnoremap <Space>e :e!<CR>
 
 " yank, paste
@@ -1137,7 +1137,7 @@ cnoremap <c-p> <up>
 
 " toggle
 nnoremap <Space>n :<C-u>set number!<CR>
-nnoremap <Space>W :<C-u>set wrap!<CR>
+nnoremap <Space>w :<C-u>set wrap!<CR>
 
 augroup MyXML
   autocmd!
@@ -1304,6 +1304,7 @@ require('gitsigns').setup {
     delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
     topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
     changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    untracked    = { text = '┆' },
   },
   signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
   numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
