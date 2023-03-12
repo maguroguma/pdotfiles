@@ -1103,7 +1103,7 @@ nnoremap <C-o> <C-o>zz
 nnoremap <C-i> <C-i>zz
 
 " save, load
-nnoremap <Space><Space> :w<CR>
+nnoremap <Space>w :w<CR>
 nnoremap <Space>e :e!<CR>
 
 " yank, paste
@@ -1137,7 +1137,7 @@ cnoremap <c-p> <up>
 
 " toggle
 nnoremap <Space>n :<C-u>set number!<CR>
-nnoremap <Space>w :<C-u>set wrap!<CR>
+nnoremap <Space><Space> :<C-u>set wrap!<CR>
 
 augroup MyXML
   autocmd!
