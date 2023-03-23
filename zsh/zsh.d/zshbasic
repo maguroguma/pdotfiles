@@ -4,6 +4,8 @@ else
     export EDITOR="vim"
 fi
 
+export MANPAGER="nvim -c ASMANPAGER -u $XDG_CONFIG_HOME/nvim/minimal.init.vim"
+
 #############################
 # key bindings
 #############################

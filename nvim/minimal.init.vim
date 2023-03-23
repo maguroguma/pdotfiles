@@ -106,6 +106,7 @@ call jetpack#add('max397574/better-escape.nvim')
 call jetpack#add('m4xshen/autoclose.nvim') " substitute of lexima
 call jetpack#add('rhysd/committia.vim')
 call jetpack#add('hotwatermorning/auto-git-diff')
+call jetpack#add('lambdalisue/vim-manpager')
 
 call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('markonm/traces.vim') " realize live substitute

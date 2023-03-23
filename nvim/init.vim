@@ -147,6 +147,7 @@ call jetpack#add('previm/previm')
 call jetpack#add('kana/vim-textobj-user')
 call jetpack#add('shinespark/vim-list2tree') " make directory tree format txt from markdown lists
 call jetpack#add('AndrewRadev/linediff.vim')
+call jetpack#add('lambdalisue/vim-manpager')
 
 " depends on denops
 call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper
