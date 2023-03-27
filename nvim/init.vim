@@ -395,7 +395,7 @@ call jetpack#add('lambdalisue/gina.vim', {
       \ })
 call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
       \ 'branch': 'v2.x',
-      \ 'on_cmd': ['Neotree'],
+      \ 'on_cmd': ['Neotree', 'NeoTreeReveal'],
       \ 'depends': 'nvim-tree/nvim-web-devicons',
       \ 'hook_post_source': g:jetpack_neotree_scripts
       \ })
@@ -436,7 +436,10 @@ nmap <silent> <C-f> <cmd>NvimTreeToggle<CR>
 nmap <silent> f <cmd>NvimTreeOpen .<CR>
 nmap <silent> <C-h> <cmd>execute 'NvimTreeOpen ' . expand('%:p:h')<CR>
 
-nnoremap <silent> <C-f> <cmd>Neotree reveal<CR>
+" FIXME: Neotree revealが壊れてしまったので、deprecatedの方を使うことにする
+" nnoremap <silent> <C-f> <cmd>Neotree reveal<CR>
+" nnoremap <silent> <C-f> <cmd>Neotree reveal float<CR>
+nnoremap <silent> <C-f> <cmd>NeoTreeReveal<CR>
 
 set diffopt+=vertical
 " 現在のバッファ
@@ -611,6 +614,8 @@ highlight FuzzyMotionSubChar gui=bold guifg=#2bb2e3
 let g:fuzzy_motion_matchers = ['fzf', 'kensaku']
 cnoremap <C-a><CR> <Plug>(kensaku-search-replace)<CR>
 
+command! ChatGPT :Butler
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -704,7 +709,7 @@ augroup vimrc-auto-mkdir  " {{{
 augroup END  " }}}
 
 " terminal modeにおけるnormal modeへの移行
-tnoremap <C-e> <C-\><C-n>
+tnoremap <C-\> <C-\><C-n>
 
 " 参考: https://github.com/uga-rosa/dotfiles/blob/main/.config/nvim/plugin/term.vim
 let s:termname = "nvim_terminal"
