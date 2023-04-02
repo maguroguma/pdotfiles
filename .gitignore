@@ -26,13 +26,14 @@
 !scripts/comma.sh
 !scripts/create-gh-link.sh
 !scripts/date-to-ts.sh
-!scripts/ggrks.sh
+!scripts/kensaku.sh
 !scripts/mru-branch-list.sh
 !scripts/my-ascii.sh
 !scripts/print256colours.sh
 !scripts/refresh-mv.sh
 !scripts/s-quote.sh
 !scripts/ts-to-date.sh
+!scripts/gogithub.sh
 
 !tmux/tmux-session-fzf
 !tmux/tmux.conf

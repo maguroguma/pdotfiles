@@ -155,6 +155,7 @@ call jetpack#add('lambdalisue/kensaku.vim') " search Japanese by megemo
 call jetpack#add('lambdalisue/kensaku-search.vim')
 call jetpack#add('lambdalisue/kensaku-command.vim')
 call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin
+call jetpack#add('yuki-yano/ai-review.nvim') " ai-review by using ChatGPT
 
 " lua plugin
 call jetpack#add('nvim-lualine/lualine.nvim')
