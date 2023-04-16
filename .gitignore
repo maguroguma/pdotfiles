@@ -8,6 +8,8 @@
 !_docs/setup_linux.sh
 !_docs/setup_macos.sh
 
+!_ai_works/update_branch_protection_rules.sh
+
 !git/git_template/hooks/pre-push
 !git/config
 !git/ignore

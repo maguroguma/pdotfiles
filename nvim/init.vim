@@ -244,7 +244,7 @@ call jetpack#add('rlane/pounce.nvim', {
       \ 'hook_post_source': g:jetpack_pounce_scripts
       \ })
 call jetpack#add('folke/todo-comments.nvim', {
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files'],
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
       \ 'hook_post_source': g:jetpack_todo_comments_scripts
       \ })
 call jetpack#add('stevearc/aerial.nvim', {
@@ -257,7 +257,7 @@ call jetpack#add('max397574/better-escape.nvim', {
       \ 'hook_post_source': g:jetpack_better_escape_scripts
       \ })
 call jetpack#add('nvim-treesitter/nvim-treesitter', {
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files'],
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
       \ 'hook_post_source': g:jetpack_treesitter_scripts
       \ })
 call jetpack#add('rhysd/committia.vim', {
@@ -266,7 +266,7 @@ call jetpack#add('rhysd/committia.vim', {
       \ })
 call jetpack#add('neoclide/coc.nvim', {
       \ 'branch': 'release',
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files'],
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
       \ 'hook_post_source': g:jetpack_coc_scripts
       \ })
 call jetpack#add('cohama/lexima.vim', {
@@ -394,8 +394,9 @@ call jetpack#add('lambdalisue/gina.vim', {
       \ 'on_cmd': ['Gina'],
       \ 'hook_post_source': g:jetpack_gina_scripts
       \ })
+" FIXME: tag: 2.51
 call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
-      \ 'branch': 'v2.x',
+      \ 'tag': '2.51',
       \ 'on_cmd': ['Neotree', 'NeoTreeReveal'],
       \ 'depends': 'nvim-tree/nvim-web-devicons',
       \ 'hook_post_source': g:jetpack_neotree_scripts
@@ -437,10 +438,7 @@ nmap <silent> <C-f> <cmd>NvimTreeToggle<CR>
 nmap <silent> f <cmd>NvimTreeOpen .<CR>
 nmap <silent> <C-h> <cmd>execute 'NvimTreeOpen ' . expand('%:p:h')<CR>
 
-" FIXME: Neotree revealが壊れてしまったので、deprecatedの方を使うことにする
-" nnoremap <silent> <C-f> <cmd>Neotree reveal<CR>
-" nnoremap <silent> <C-f> <cmd>Neotree reveal float<CR>
-nnoremap <silent> <C-f> <cmd>NeoTreeReveal<CR>
+nnoremap <silent> <C-f> <cmd>Neotree reveal<CR>
 
 set diffopt+=vertical
 " 現在のバッファ
