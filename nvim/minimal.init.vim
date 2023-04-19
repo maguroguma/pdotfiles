@@ -200,7 +200,6 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set termguicolors
-colorscheme duskfox
 
 set nocompatible
 syntax enable
@@ -445,3 +444,5 @@ require("better_escape").setup {
 
 require("autoclose").setup({})
 EOF
+
+colorscheme dayfox

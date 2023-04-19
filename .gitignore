@@ -24,6 +24,8 @@
 !nvim/init.vim
 !nvim/lazysource.vim
 !nvim/minimal.init.vim
+# copilot.vim
+nvim/pack/
 
 !scripts/comma.sh
 !scripts/create-gh-link.sh

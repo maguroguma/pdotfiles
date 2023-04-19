@@ -3,6 +3,12 @@ if exists('g:loaded_maguroguma_nvim_setting')
 endif
 let g:loaded_maguroguma_nvim_setting = 1
 
+" copilot.vim setting
+let s:copilot_setting_file = expand('$XDG_CONFIG_HOME/nvim/copilot-setting.vim')
+if filereadable(s:copilot_setting_file)
+  execute 'source ' . s:copilot_setting_file
+endif
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: depeding on environment
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -134,6 +140,7 @@ call jetpack#add('vim-jp/vimdoc-ja')
 call jetpack#add('ryanoasis/vim-devicons')
 call jetpack#add('editorconfig/editorconfig-vim')
 call jetpack#add('w0ng/vim-hybrid') " vim theme
+call jetpack#add('navarasu/onedark.nvim') " vim theme
 
 " DO NOT lazy load
 call jetpack#add('lambdalisue/readablefold.vim')
@@ -499,8 +506,6 @@ nnoremap <Space>mg  :MemoGrep<CR>
 nmap <Space>/ <Plug>(fuzzy-history)
 
 set termguicolors
-set background=dark
-colorscheme hybrid
 
 noremap <Space>u :UndotreeToggle<CR>
 
@@ -1347,3 +1352,17 @@ require('gitsigns').setup {
   },
 }
 EOF
+
+function! s:colorschemeLightOnedark()
+  set background=light
+  colorscheme onedark
+endfunction
+command! -nargs=0 LightOnedark call s:colorschemeLightOnedark()
+
+function! s:colorschemeDarkHybrid()
+  set background=dark
+  colorscheme hybrid
+endfunction
+command! -nargs=0 DarkHybrid call s:colorschemeDarkHybrid()
+
+LightOnedark
