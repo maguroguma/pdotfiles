@@ -139,8 +139,8 @@ call jetpack#add('vim-jp/vital.vim')
 call jetpack#add('vim-jp/vimdoc-ja')
 call jetpack#add('ryanoasis/vim-devicons')
 call jetpack#add('editorconfig/editorconfig-vim')
-call jetpack#add('w0ng/vim-hybrid') " vim theme
-call jetpack#add('navarasu/onedark.nvim') " vim theme
+call jetpack#add('w0ng/vim-hybrid') " colorscheme
+call jetpack#add('navarasu/onedark.nvim') " colorscheme
 
 " DO NOT lazy load
 call jetpack#add('lambdalisue/readablefold.vim')
@@ -506,6 +506,8 @@ nnoremap <Space>mg  :MemoGrep<CR>
 nmap <Space>/ <Plug>(fuzzy-history)
 
 set termguicolors
+set background=dark
+colorscheme hybrid
 
 noremap <Space>u :UndotreeToggle<CR>
 
@@ -1364,5 +1366,3 @@ function! s:colorschemeDarkHybrid()
   colorscheme hybrid
 endfunction
 command! -nargs=0 DarkHybrid call s:colorschemeDarkHybrid()
-
-LightOnedark
