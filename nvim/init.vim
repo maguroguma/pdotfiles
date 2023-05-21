@@ -163,6 +163,7 @@ call jetpack#add('lambdalisue/kensaku-search.vim')
 call jetpack#add('lambdalisue/kensaku-command.vim')
 call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin
 call jetpack#add('yuki-yano/ai-review.nvim') " ai-review by using ChatGPT
+call jetpack#add('skanehira/denops-translate.vim') " deepl translation
 
 " lua plugin
 call jetpack#add('nvim-lualine/lualine.nvim')
@@ -411,6 +412,9 @@ call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
 call jetpack#add('kuuote/vim-fuzzyhistory', {
       \ 'on_map': '<Plug>(fuzzy-history)'
       \ })
+call jetpack#add('chrisbra/csv.vim', {
+      \ 'on_ft': ['csv']
+      \ })
 
 call jetpack#end()
 " plugins END }}}
@@ -452,15 +456,15 @@ set diffopt+=vertical
 nnoremap <Space>ga <cmd>Gina add %<CR>
 nnoremap <Space>gu <cmd>Gina reset HEAD %<CR>
 nnoremap <Space>gc <cmd>GinaCheckoutThis<CR>
+nnoremap <Space>gd <cmd>Gina diff --opener=vsplit :%<CR>
+nnoremap <Space>gD <cmd>Gina diff --opener=vsplit --staged :%<CR>
 " 全体
 nnoremap <Space>gp <cmd>Gina patch<CR>
 nnoremap <Space>gs <cmd>Gina status --opener=vsplit<CR>
-command! GinaDiffAll Gina diff --opener=vsplit
-command! GinaDiffStagedAll Gina diff --staged --opener=vsplit
-nnoremap <Space>gd <cmd>Gina diff --opener=vsplit :%<CR>
-nnoremap <Space>gD <cmd>Gina diff --opener=vsplit --staged :%<CR>
 nnoremap <Space>gl <cmd>Gina log<CR>
 nnoremap <Space>gb <cmd>Gina blame<CR>
+command! GinaDiffAll Gina diff --opener=vsplit
+command! GinaDiffStagedAll Gina diff --staged --opener=vsplit
 command! GinaCommitVsplit Gina commit --opener=vsplit
 command! GinaBrowseThis Gina browse --exact HEAD:%
 
@@ -851,6 +855,14 @@ endfunction
 command! -nargs=0 MyVimGrep :call s:grep_cur_dir()
 nnoremap <Space>gr <cmd>MyVimGrep<CR>
 
+function! ReverseLines() range
+    let l:lines = getline(a:firstline, a:lastline)
+    call reverse(l:lines)
+    call setline(a:firstline, l:lines)
+endfunction
+
+command! -range -nargs=0 Reverse :<line1>,<line2>call ReverseLines()
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -861,8 +873,8 @@ syntax enable
 set mouse=n
 
 " fold
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+set foldmethod=syntax
+" set foldexpr=nvim_treesitter#foldexpr()
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
 
@@ -871,6 +883,10 @@ set backspace=indent,eol,start
 
 " 検索した際に最後の語句の次に最初の語句にループしないようにする
 set nowrapscan
+
+autocmd FileType * set wrap
+autocmd FileType neo-tree set nowrap
+autocmd FileType aerial set nowrap
 
 set fenc=utf-8
 set encoding=utf8
