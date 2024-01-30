@@ -1,7 +1,5 @@
-echo "[zshzplug] load settings"
-
 # zplug
-export ZPLUG_HOME=$HOME/.zplug
+export ZPLUG_HOME=$XDG_CONFIG_HOME/.zplug
 source $ZPLUG_HOME/init.zsh
 
 # (1) プラグインを定義する
@@ -18,3 +16,5 @@ if ! zplug check --verbose; then
 fi
 
 zplug load --verbose
+
+echo "\e[33m[$(basename $0)]\e[0m\t\e[32mloaded\e[0m"

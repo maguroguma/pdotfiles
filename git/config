@@ -1,6 +1,6 @@
 [core]
-  excludesfile = ~/.gitignore
-  editor = "nvim -u $HOME/.config/nvim/minimal.init.vim"
+  editor = "nvim"
+  excludesfile = ~/.config/git/ignore
   pager = delta
   quotepath = false
 
@@ -19,7 +19,7 @@
   email = part7steelballrun.to.8@gmail.com
 
 [commit]
-  template = ~/.gitmessage
+  template = ~/.config/git/message
   verbose = true
 
 [alias]
@@ -27,10 +27,6 @@
   lg = log --graph --all --decorate
   today = log --oneline --since='12 hour ago'
   cancel = reset --soft HEAD^
-#  dp = diff --no-prefix
-#  dsp = diff --cached --no-prefix
-#  graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
-# https://qiita.com/hajimeni/items/73d2155fc59e152630c4
   delete-merged-branch = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|main'|xargs git branch -d; };f"
   push-f = push --force-with-lease --force-if-includes
   clean-confirm = clean -dn

@@ -1,5 +1,68 @@
+if exists('g:loaded_maguroguma_nvim_setting')
+  finish
+endif
+let g:loaded_maguroguma_nvim_setting = 1
+
+" copilot.vim setting
+let s:copilot_setting_file = expand('$XDG_CONFIG_HOME/nvim/copilot-setting.vim')
+if filereadable(s:copilot_setting_file)
+  execute 'source ' . s:copilot_setting_file
+endif
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SECTION: initialize
+" SECTION: depeding on environment
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" load hook post sources
+execute 'source ' .. expand('$XDG_CONFIG_HOME/nvim/lazysource.vim')
+
+let g:sonictemplate_vim_template_dir = [
+      \ expand('$GOPATH/src/github.com/maguroguma/go-competitive/template'),
+      \ expand('$DOTFILES_DIR/nvim/sonic-template'),
+      \]
+
+execute 'set shell=' .. expand('$SHELL')
+
+" jetpack利用時は先頭に追加するようにする
+execute 'set runtimepath^=' .. expand('$XDG_DATA_HOME/nvim/site/pack/jetpack/nvim-treesitter')
+
+" FIXME: sedのエラーを回避したい（Vim scriptで全部やるべき）
+" show zsh command history
+if getftype(expand('$HISTFILE')) != ""
+  function! s:showShellHistory(...)
+    execute 'botright' 10 'new'
+    setlocal nobuflisted bufhidden=unload buftype=nofile
+    silent read !cat $HISTFILE | cut -b 16- | head -n 5000
+    " silent read !cat $HISTFILE |
+    "       \ grep '^:' |
+    "       \ cut -b 3-12 -b 16- |
+    "       \ sed -r '2,$s/([0-9]{10})/\1@@@/' |
+    "       \ awk -F '@@@' '/[0-9]{10}/ { printf("\%s; \%s\n", strftime("\%Y-\%m-\%d \%H:\%M:\%S", $1), $2) }' |
+    "       \ head -n 5000
+    if a:0 == 1
+      let l:exe_com = 'v/' . a:1 . '/d'
+      execute l:exe_com
+    endif
+    norm G
+    setlocal nomodified
+  endfunction
+
+  " filter by strings given by the argument
+  command! -nargs=? ShellHistory :call s:showShellHistory(<f-args>)
+endif
+
+" :Profileコマンド実行後、そのあとに実行される関数、あるいは読み込まれるスクリプトファイルを対象に、
+" ~/profile.txtにプロファイル情報を書き出す
+" ref: https://zenn.dev/kato_k/articles/vim-tips-no004
+command! Profile call s:command_profile()
+function! s:command_profile() abort
+  profile start ~/profile.txt
+  profile func *
+  profile file *
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SECTION: start up
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " ref: https://qiita.com/yasunori-kirin0418/items/4672919be73a524afb47
@@ -32,7 +95,7 @@ let g:loaded_getscriptPlugin    = v:true
 " Disable other plugins
 let g:loaded_man                = v:true
 let g:loaded_matchit            = v:true
-let g:loaded_matchparen         = v:true
+" let g:loaded_matchparen         = v:true
 let g:loaded_shada_plugin       = v:true
 let g:loaded_spellfile_plugin   = v:true
 let g:loaded_tutor_mode_plugin  = v:true
@@ -43,11 +106,6 @@ let g:did_indent_on             = v:true
 let g:did_load_ftplugin         = v:true
 let g:loaded_rrhelper           = v:true
 " }}}
-
-if exists('g:loaded_maguroguma_nvim_setting')
-  finish
-endif
-let g:loaded_maguroguma_nvim_setting = 1
 
 " Automatic installation on startup(neovim + vim)
 let s:jetpackfile = stdpath('data') .. '/site/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim'
@@ -69,47 +127,295 @@ let s:main_jetpack_dir = stdpath('data') .. '/site/pack/jetpack/main/'
 " plugins {{{
 packadd vim-jetpack
 call jetpack#begin(s:main_jetpack_dir)
-call jetpack#load_toml(expand('$HOME/.config/nvim/dein.toml'))
-call jetpack#add('nathom/filetype.nvim')
+call jetpack#add('tani/vim-jetpack', { 'opt': 1 })
 
 " common library
 call jetpack#add('vim-denops/denops.vim')
 call jetpack#add('nvim-lua/plenary.nvim')
+call jetpack#add('MunifTanjim/nui.nvim')
 call jetpack#add('Shougo/vimproc.vim', { 'build' : 'make' })
 call jetpack#add('vim-jp/vital.vim')
 
 call jetpack#add('vim-jp/vimdoc-ja')
 call jetpack#add('ryanoasis/vim-devicons')
 call jetpack#add('editorconfig/editorconfig-vim')
-call jetpack#add('vim-scripts/autodate.vim') " add automatic updating date format
-call jetpack#add('w0ng/vim-hybrid') " vim theme
+call jetpack#add('w0ng/vim-hybrid') " colorscheme
+call jetpack#add('navarasu/onedark.nvim') " colorscheme
 
 " DO NOT lazy load
 call jetpack#add('lambdalisue/readablefold.vim')
 call jetpack#add('Yggdroot/indentLine')
 call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('luochen1990/rainbow')
-call jetpack#add('ruanyl/vim-gh-line')
 call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
 call jetpack#add('mattn/vim-sonictemplate')
 call jetpack#add('thinca/vim-partedit')
 call jetpack#add('previm/previm')
-call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper(depends on denops)
-call jetpack#add('lambdalisue/kensaku.vim') " search Japanese by megemo(depends on denops)
+call jetpack#add('kana/vim-textobj-user')
+call jetpack#add('shinespark/vim-list2tree') " make directory tree format txt from markdown lists
+call jetpack#add('AndrewRadev/linediff.vim')
+call jetpack#add('lambdalisue/vim-manpager')
+
+" depends on denops
+call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper
+call jetpack#add('lambdalisue/kensaku.vim') " search Japanese by megemo
 call jetpack#add('lambdalisue/kensaku-search.vim')
 call jetpack#add('lambdalisue/kensaku-command.vim')
-call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin(depends on denops)
-call jetpack#add('kana/vim-textobj-user')
+call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin
+call jetpack#add('yuki-yano/ai-review.nvim') " ai-review by using ChatGPT
+call jetpack#add('skanehira/denops-translate.vim') " deepl translation
 
 " lua plugin
-call jetpack#add('kevinhwang91/nvim-bqf')
 call jetpack#add('nvim-lualine/lualine.nvim')
+call jetpack#add('gen740/SmoothCursor.nvim')
+call jetpack#add('lewis6991/gitsigns.nvim')
 
-" nvim-cmp
-call jetpack#add('hrsh7th/cmp-buffer')
-call jetpack#add('hrsh7th/cmp-path')
-call jetpack#add('hrsh7th/cmp-cmdline')
-call jetpack#add('hrsh7th/nvim-cmp')
+" lazy
+call jetpack#add('glidenote/memolist.vim', {
+      \ 'on_cmd': ['MemoNew', 'MemoList', 'MemoGrep'],
+      \ 'hook_post_source': g:jetpack_memolist_scripts
+      \ })
+call jetpack#add('hrsh7th/nvim-cmp', {
+      \ 'on_event': 'CmdlineEnter'
+      \ })
+call jetpack#add('hrsh7th/cmp-buffer', {
+      \ 'on_event': 'CmdlineEnter',
+      \ 'depends': 'hrsh7th/nvim-cmp'
+      \ })
+call jetpack#add('hrsh7th/cmp-path', {
+      \ 'on_event': 'CmdlineEnter',
+      \ 'depends': 'hrsh7th/nvim-cmp'
+      \ })
+call jetpack#add('hrsh7th/cmp-cmdline', {
+      \ 'on_event': 'CmdlineEnter',
+      \ 'depends': 'hrsh7th/nvim-cmp',
+      \ 'hook_post_source': g:jetpack_cmp_scripts
+      \ })
+call jetpack#add('nvim-tree/nvim-web-devicons', {
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Neotree']
+      \ })
+call jetpack#add('nvim-tree/nvim-tree.lua', {
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen'],
+      \ 'depends': 'nvim-tree/nvim-web-devicons',
+      \ 'hook_post_source': g:jetpack_nvim_tree_scripts
+      \ })
+call jetpack#add('mbbill/undotree', {
+      \ 'on_cmd': ['UndotreeToggle'],
+      \ 'hook_post_source': g:jetpack_undotree_scripts
+      \ })
+call jetpack#add('voldikss/vim-floaterm', {
+      \ 'on_cmd': ['FloatermToggle'],
+      \ 'hook_post_source': g:jetpack_floaterm_scripts
+      \ })
+call jetpack#add('fatih/vim-go', {
+      \ 'on_ft': 'go',
+      \ 'hook_post_source': g:jetpack_vim_go_scripts
+      \ })
+call jetpack#add('monaqa/dial.nvim', {
+      \ 'on_cmd': ['DialIncrement', 'DialDecrement'],
+      \ 'hook_post_source': g:jetpack_dial_scripts
+      \ })
+call jetpack#add('lambdalisue/fern.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'hook_post_source': g:jetpack_fern_scripts
+      \ })
+call jetpack#add('lambdalisue/fern-git-status.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'depends': 'lambdalisue/fern.vim'
+      \ })
+call jetpack#add('lambdalisue/nerdfont.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'depends': 'lambdalisue/fern.vim'
+      \ })
+call jetpack#add('lambdalisue/fern-renderer-nerdfont.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'depends': 'lambdalisue/fern.vim'
+      \ })
+call jetpack#add('lambdalisue/glyph-palette.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'depends': 'lambdalisue/fern.vim'
+      \ })
+call jetpack#add('lambdalisue/fern-hijack.vim', {
+      \ 'on_cmd': 'Fern',
+      \ 'depends': 'lambdalisue/fern.vim'
+      \ })
+call jetpack#add('junegunn/fzf', {
+      \ 'on_cmd': ['Files', 'HCommand', 'Buffers', 'MemoList']
+      \ })
+call jetpack#add('junegunn/fzf.vim', {
+      \ 'depends': 'junegunn/fzf',
+      \ 'on_cmd': ['Files', 'HCommand', 'Buffers', 'MemoList'],
+      \ 'hook_post_source': g:jetpack_fzf_scripts
+      \ })
+call jetpack#add('rlane/pounce.nvim', {
+      \ 'on_cmd': ['Pounce'],
+      \ 'hook_post_source': g:jetpack_pounce_scripts
+      \ })
+call jetpack#add('folke/todo-comments.nvim', {
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
+      \ 'hook_post_source': g:jetpack_todo_comments_scripts
+      \ })
+call jetpack#add('stevearc/aerial.nvim', {
+      \ 'depends': 'nvim-tree/nvim-web-devicons',
+      \ 'on_cmd': ['AerialToggle'],
+      \ 'hook_post_source': g:jetpack_aerial_scripts
+      \ })
+call jetpack#add('max397574/better-escape.nvim', {
+      \ 'on_event': 'InsertEnter',
+      \ 'hook_post_source': g:jetpack_better_escape_scripts
+      \ })
+call jetpack#add('nvim-treesitter/nvim-treesitter', {
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
+      \ 'hook_post_source': g:jetpack_treesitter_scripts
+      \ })
+call jetpack#add('rhysd/committia.vim', {
+      \ 'on_ft': ['gitcommit', 'git', 'gina-commit'],
+      \ 'hook_post_source': g:jetpack_committia_scripts
+      \ })
+call jetpack#add('neoclide/coc.nvim', {
+      \ 'branch': 'release',
+      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
+      \ 'hook_post_source': g:jetpack_coc_scripts
+      \ })
+call jetpack#add('cohama/lexima.vim', {
+      \ 'depends': 'neoclide/coc.nvim',
+      \ 'on_event': 'InsertEnter',
+      \ 'hook_post_source': g:jetpack_lexima_scripts
+      \ })
+" better asterisk behavior
+call jetpack#add('haya14busa/vim-asterisk', {
+      \ 'on_map': '<Plug>(asterisk',
+      \ 'on_event': 'CmdlineEnter'
+      \ })
+call jetpack#add('kevinhwang91/nvim-hlslens', {
+      \ 'depends': 'haya14busa/vim-asterisk',
+      \ 'on_map': '<Plug>(asterisk',
+      \ 'on_event': 'CmdlineEnter',
+      \ 'hook_post_source': g:jetpack_hlslens_scripts
+      \ })
+call jetpack#add('mattn/emmet-vim', {
+      \ 'on_ft': ['html', 'vue', 'html.twig'],
+      \ 'hook_post_source': g:jetpack_emmet_scripts
+      \ })
+call jetpack#add('heavenshell/vim-jsdoc', {
+      \ 'on_ft': ['javascript', 'javascript.jsx','typescript'],
+      \ 'build': 'make install',
+      \ 'hook_post_source': g:jetpack_jsdoc_scripts
+      \ })
+call jetpack#add('t9md/vim-choosewin', {
+      \ 'on_cmd': 'ChooseWin',
+      \ 'hook_post_source': g:jetpack_choosewin_scripts
+      \ })
+call jetpack#add('MattesGroeger/vim-bookmarks', {
+      \ 'on_cmd': ['BookmarkToggle', 'BookmarkAnnotate', 'BookmarkShowAll', 'BookmarkClear', 'BookmarkClearAll', 'BookmarkMoveUp', 'BookmarkMoveDown', 'BookmarkMoveToLine'],
+      \ 'hook_post_source': g:jetpack_bookmarks_scripts
+      \ })
+call jetpack#add('ntpeters/vim-better-whitespace', {
+      \ 'on_event': ['CursorHold', 'CursorMoved'],
+      \ 'hook_post_source': g:jetpack_better_whitespace_scripts
+      \ })
+call jetpack#add('machakann/vim-highlightedyank', {
+      \ 'on_event': ['CursorHold', 'CursorMoved'],
+      \ 'hook_post_source': g:jetpack_highlightedyank_scripts
+      \ })
+call jetpack#add('kyoh86/vim-ripgrep', {
+      \ 'on_cmd': 'Ripgrep',
+      \ 'hook_post_source': g:jetpack_ripgrep_scripts
+      \ })
+" read vim command result to buffer
+call jetpack#add('tyru/capture.vim', {
+      \ 'on_cmd': ['Capture']
+      \ })
+call jetpack#add('moll/vim-bbye', {
+      \ 'on_cmd': ['Bdelete']
+      \ })
+call jetpack#add('mattn/vim-maketable', {
+      \ 'on_ft': ['md', 'markdown']
+      \ })
+call jetpack#add('jodosha/vim-godebug', {
+      \ 'on_ft': 'go'
+      \ })
+" automatic closing of quotes, parenthesis, brackets, etc.
+call jetpack#add('Raimondi/delimitMate', {
+      \ 'on_event': 'InsertEnter'
+      \ })
+call jetpack#add('windwp/nvim-spectre', {
+      \ 'on_cmd': 'Spectre'
+      \ })
+call jetpack#add('simeji/winresizer', {
+      \ 'on_cmd': 'WinResizerStartResize'
+      \ })
+" for commenting on vue SFC
+call jetpack#add('tomtom/tcomment_vim', {
+      \ 'on_event': ['CursorHold', 'CursorMoved']
+      \ })
+call jetpack#add('vim-test/vim-test', {
+      \ 'on_cmd': ['TestFile', 'TestNearest']
+      \ })
+" mark colors to words and sentences
+call jetpack#add('t9md/vim-quickhl', {
+      \ 'on_map': '<Plug>(quickhl'
+      \ })
+" realize live substitute
+call jetpack#add('markonm/traces.vim', {
+      \ 'on_event': 'CmdlineEnter'
+      \ })
+call jetpack#add('tyru/open-browser.vim', {
+      \ 'on_map': '<Plug>(openbrowser-smart-search)'
+      \ })
+call jetpack#add('monaqa/modesearch.vim', {
+      \ 'on_map': '<Plug>(modesearch-'
+      \ })
+" require coc-ultisnips if used with coc.nvim
+call jetpack#add('sirver/ultisnips', {
+      \ 'on_event': 'InsertEnter'
+      \ })
+call jetpack#add('mtdl9/vim-log-highlighting', {
+      \ 'on_ft': ['log']
+      \ })
+" show git diff on git rebase
+call jetpack#add('hotwatermorning/auto-git-diff', {
+      \ 'on_ft': ['gitcommit', 'git']
+      \ })
+call jetpack#add('mzlogin/vim-markdown-toc', {
+      \ 'on_ft': ['md', 'markdown']
+      \ })
+call jetpack#add('iamcco/mathjax-support-for-mkdp', {
+      \ 'on_ft': ['md', 'markdown']
+      \ })
+call jetpack#add('alvan/vim-closetag', {
+      \ 'on_ft': ['html', 'vue', 'html.twig']
+      \ })
+call jetpack#add('ap/vim-css-color', {
+      \ 'on_ft': ['html', 'vue', 'html.twig', 'vim', 'lua']
+      \ })
+call jetpack#add('jsborjesson/vim-uppercase-sql', {
+      \ 'on_ft': ['sql']
+      \ })
+call jetpack#add('posva/vim-vue', {
+      \ 'on_ft': ['vue']
+      \ })
+call jetpack#add('mattn/vim-sqlfmt', {
+      \ 'on_ft': ['sql']
+      \ })
+call jetpack#add('lambdalisue/gina.vim', {
+      \ 'on_cmd': ['Gina'],
+      \ 'hook_post_source': g:jetpack_gina_scripts
+      \ })
+" FIXME: tag: 2.51
+call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
+      \ 'tag': '2.51',
+      \ 'on_cmd': ['Neotree', 'NeoTreeReveal'],
+      \ 'depends': 'nvim-tree/nvim-web-devicons',
+      \ 'hook_post_source': g:jetpack_neotree_scripts
+      \ })
+call jetpack#add('kuuote/vim-fuzzyhistory', {
+      \ 'on_map': '<Plug>(fuzzy-history)'
+      \ })
+call jetpack#add('chrisbra/csv.vim', {
+      \ 'on_ft': ['csv']
+      \ })
+
 call jetpack#end()
 " plugins END }}}
 
@@ -143,16 +449,24 @@ nmap <silent> <C-f> <cmd>NvimTreeToggle<CR>
 nmap <silent> f <cmd>NvimTreeOpen .<CR>
 nmap <silent> <C-h> <cmd>execute 'NvimTreeOpen ' . expand('%:p:h')<CR>
 
-nnoremap <silent> <Space>gc :GCheckoutThis<CR>
-nnoremap <Space>gd :Git diff %<CR>
-nnoremap <Space>gb :Git blame<CR>
-nnoremap <Space>ga :Git add %<CR>
-nnoremap <silent> <Space>gl :Git log %<CR>
+nnoremap <silent> <C-f> <cmd>Neotree reveal<CR>
 
-let g:sonictemplate_vim_template_dir = [
-      \ expand('$GOPATH') . '/src/github.com/maguroguma/go-competitive/template',
-      \ expand('$DOTFILES_DIR') . '/nvim/sonic-template',
-      \]
+set diffopt+=vertical
+" 現在のバッファ
+nnoremap <Space>ga <cmd>Gina add %<CR>
+nnoremap <Space>gu <cmd>Gina reset HEAD %<CR>
+nnoremap <Space>gc <cmd>GinaCheckoutThis<CR>
+nnoremap <Space>gd <cmd>Gina diff --opener=vsplit :%<CR>
+nnoremap <Space>gD <cmd>Gina diff --opener=vsplit --staged :%<CR>
+" 全体
+nnoremap <Space>gp <cmd>Gina patch<CR>
+nnoremap <Space>gs <cmd>Gina status --opener=vsplit<CR>
+nnoremap <Space>gl <cmd>Gina log<CR>
+nnoremap <Space>gb <cmd>Gina blame<CR>
+command! GinaDiffAll Gina diff --opener=vsplit
+command! GinaDiffStagedAll Gina diff --staged --opener=vsplit
+command! GinaCommitVsplit Gina commit --opener=vsplit
+command! GinaBrowseThis Gina browse --exact HEAD:%
 
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
 
@@ -172,13 +486,6 @@ nnoremap <Space>s <cmd>Spectre<CR>
 
 nmap  <C-a>  <cmd>DialIncrement<CR>
 nmap  <C-x>  <cmd>DialDecrement<CR>
-
-let g:gh_line_map_default = 0
-let g:gh_line_blame_map_default = 0
-let g:gh_line_map = '<Space>gh'
-
-let autodate_format="%Y-%m-%d %H:%M:%S"
-inoremap <C-a>lc Last Change: 2022-08-14 17:06:15.
 
 nmap <Space>mm <cmd>BookmarkToggle<CR>
 nmap <Space>mi <cmd>BookmarkAnnotate<CR>
@@ -200,6 +507,9 @@ nnoremap <Space>mn  :MemoNew<CR>
 nnoremap <Space>ml  :MemoList<CR>
 nnoremap <Space>mg  :MemoGrep<CR>
 
+nmap <Space>/ <Plug>(fuzzy-history)
+
+set termguicolors
 set background=dark
 colorscheme hybrid
 
@@ -305,11 +615,16 @@ let g:fuzzy_motion_labels = [
       \ 'B'
       \]
 highlight FuzzyMotionMatch ctermfg=159 ctermbg=240
+highlight FuzzyMotionMatch guifg=#caedfc guibg=#565657
 highlight FuzzyMotionChar cterm=bold ctermfg=207
+highlight FuzzyMotionChar gui=bold guifg=#ee8bf7
 highlight FuzzyMotionSubChar cterm=bold ctermfg=44
+highlight FuzzyMotionSubChar gui=bold guifg=#2bb2e3
 " highlight FuzzyMotionShade ctermfg=0 ctermbg=0
 let g:fuzzy_motion_matchers = ['fzf', 'kensaku']
 cnoremap <C-a><CR> <Plug>(kensaku-search-replace)<CR>
+
+command! ChatGPT :Butler
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
@@ -359,6 +674,8 @@ function g:TerminalDay()
   norm a
 endfunction
 tnoremap <C-a>day <C-\><C-n>:call g:TerminalDay()<CR>
+" 汎用デバッグ用
+inoremap <C-a>tengu <C-r>='👺 >'<CR>
 
 " markdownのコードスニペット
 function! g:ReadTripleBackQuotes(lang_text)
@@ -402,7 +719,7 @@ augroup vimrc-auto-mkdir  " {{{
 augroup END  " }}}
 
 " terminal modeにおけるnormal modeへの移行
-tnoremap <C-e> <C-\><C-n>
+tnoremap <C-\> <C-\><C-n>
 
 " 参考: https://github.com/uga-rosa/dotfiles/blob/main/.config/nvim/plugin/term.vim
 let s:termname = "nvim_terminal"
@@ -433,31 +750,6 @@ xnoremap <Space>! "by:let res = "Execute: " .@b . "\n"<CR>:let res = res . syste
 " vim-jp
 " ビジュアルモードで選択中の文字列を特定のコマンドに渡す
 xnoremap <Space>e <Esc>gv"zy:<C-u>echo "<C-r>z"
-
-" FIXME: sedのエラーを回避したい（Vim scriptで全部やるべき）
-" show zsh command history
-if getftype(expand('$HOME') . '/.zhistory') != ""
-  function! s:showShellHistory(...)
-    execute 'botright' 10 'new'
-    setlocal nobuflisted bufhidden=unload buftype=nofile
-    silent read !cat $HOME/.zhistory | cut -b 16- | head -n 5000
-    " silent read !cat $HOME/.zhistory |
-    "       \ grep '^:' |
-    "       \ cut -b 3-12 -b 16- |
-    "       \ sed -r '2,$s/([0-9]{10})/\1@@@/' |
-    "       \ awk -F '@@@' '/[0-9]{10}/ { printf("\%s; \%s\n", strftime("\%Y-\%m-\%d \%H:\%M:\%S", $1), $2) }' |
-    "       \ head -n 5000
-    if a:0 == 1
-      let l:exe_com = 'v/' . a:1 . '/d'
-      execute l:exe_com
-    endif
-    norm G
-    setlocal nomodified
-  endfunction
-
-  " filter by strings given by the argument
-  command! -nargs=? ShellHistory :call s:showShellHistory(<f-args>)
-endif
 
 " nkfコマンドが実行可能な場合
 " 行Visualで指定した範囲に対して `nkf -Z0` （全角英数字・記号→半角に変換）を行う
@@ -563,6 +855,14 @@ endfunction
 command! -nargs=0 MyVimGrep :call s:grep_cur_dir()
 nnoremap <Space>gr <cmd>MyVimGrep<CR>
 
+function! ReverseLines() range
+    let l:lines = getline(a:firstline, a:lastline)
+    call reverse(l:lines)
+    call setline(a:firstline, l:lines)
+endfunction
+
+command! -range -nargs=0 Reverse :<line1>,<line2>call ReverseLines()
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -573,8 +873,8 @@ syntax enable
 set mouse=n
 
 " fold
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+set foldmethod=syntax
+" set foldexpr=nvim_treesitter#foldexpr()
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
 
@@ -583,6 +883,10 @@ set backspace=indent,eol,start
 
 " 検索した際に最後の語句の次に最初の語句にループしないようにする
 set nowrapscan
+
+autocmd FileType * set wrap
+autocmd FileType neo-tree set nowrap
+autocmd FileType aerial set nowrap
 
 set fenc=utf-8
 set encoding=utf8
@@ -614,18 +918,43 @@ set hlsearch
 
 " 独自定義highlight
 highlight CursorLine ctermbg=238
-highlight Visual cterm=bold ctermbg=darkblue ctermfg=NONE
+highlight CursorLine guibg=#383838
+highlight Visual cterm=bold ctermfg=NONE ctermbg=24
+highlight Visual gui=bold guifg=NONE guibg=#11607d
 " highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
 " highlight StatusLineNC ctermbg=193
-highlight NonText    ctermbg=None ctermfg=239 guibg=NONE guifg=None
-highlight SpecialKey ctermbg=None ctermfg=239 guibg=NONE guifg=None
-highlight Folded ctermbg=Green ctermfg=Gray
-highlight Search ctermbg=44 ctermfg=0
-highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
+highlight NonText    ctermfg=239 ctermbg=None
+highlight NonText    guifg=#3d3d3d guibg=None
+highlight SpecialKey ctermfg=239 ctermbg=None
+highlight SpecialKey guifg=#3d3d3d guibg=None
+highlight Folded ctermfg=15 ctermbg=8
+highlight Folded guifg=#fff9e6 guibg=#586358
+" highlight Search ctermfg=0 ctermbg=44
+" highlight Search guifg=#021f02 guibg=#43c5d9
+" highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
+" highlight IncSearch gui=bold guifg=#021f02 guibg=#43c5d9
 
 " nvim-cmp
+" cui setting
 highlight! CmpItemAbbrMatch cterm=bold ctermbg=NONE ctermfg=44
 highlight! CmpItemAbbrMatchFuzzy ctermbg=NONE ctermfg=27
+" gui setting
+" gray
+highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
+" blue
+highlight! CmpItemAbbrMatch guibg=NONE guifg=#569CD6
+highlight! link CmpItemAbbrMatchFuzzy CmpItemAbbrMatch
+" light blue
+highlight! CmpItemKindVariable guibg=NONE guifg=#9CDCFE
+highlight! link CmpItemKindInterface CmpItemKindVariable
+highlight! link CmpItemKindText CmpItemKindVariable
+" pink
+highlight! CmpItemKindFunction guibg=NONE guifg=#C586C0
+highlight! link CmpItemKindMethod CmpItemKindFunction
+" front
+highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
+highlight! link CmpItemKindProperty CmpItemKindKeyword
+highlight! link CmpItemKindUnit CmpItemKindKeyword
 
 " txtファイルで自動改行を防ぐ
 " https://loumo.jp/archives/10503
@@ -667,7 +996,6 @@ augroup vimrc-auto-cursorline
   endfunction
 augroup END
 
-set shell=/bin/zsh
 set title
 set wildmenu
 set history=200
@@ -751,6 +1079,7 @@ nnoremap <Space> <Nop>
 
 " command line window
 nnoremap Q q:
+nnoremap ? q/
 
 " cursor move
 nnoremap j gj
@@ -836,13 +1165,34 @@ cnoremap <c-p> <up>
 
 " toggle
 nnoremap <Space>n :<C-u>set number!<CR>
-nnoremap <Space>W :<C-u>set wrap!<CR>
+nnoremap <Space><Space> :<C-u>set wrap!<CR>
 
 augroup MyXML
   autocmd!
   autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
   autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
 augroup END
+
+" help-curwin
+command -bar -nargs=? -complete=help H execute s:HelpCurwin(<q-args>)
+let s:did_open_help = v:false
+
+function s:HelpCurwin(subject) abort
+  let mods = 'silent noautocmd keepalt'
+  if !s:did_open_help
+    execute mods .. ' help'
+    execute mods .. ' helpclose'
+    let s:did_open_help = v:true
+  endif
+  " ヘルプのままだとneovimではエラーになる
+  " ref: https://github.com/neovim/neovim/issues/14847
+  " if !getcompletion(a:subject, 'help')->empty()
+  if !empty(getcompletion(a:subject, 'help'))
+    execute mods .. ' edit ' .. &helpfile
+    set buftype=help
+  endif
+  return 'help ' .. a:subject
+endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " lua scripts
@@ -851,9 +1201,6 @@ set completeopt=menu,menuone,noselect
 set pumheight=20
 
 nmap <Space>v <cmd>AerialToggle<CR>
-
-" jetpack利用時は先頭に追加するようにする
-set runtimepath^=~/.local/share/nvim/site/pack/jetpack/nvim-treesitter
 
 """
 " PLUGSETTING: rlane/pounce.nvim
@@ -864,91 +1211,8 @@ vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
 
 lua << EOF
--- Set up nvim-cmp.
-local cmp = require'cmp'
-
-local kind_icons = {
-  Text = "",
-  Method = "",
-  Function = "",
-  Constructor = "",
-  Field = "",
-  Variable = "",
-  Class = "ﴯ",
-  Interface = "",
-  Module = "",
-  Property = "ﰠ",
-  Unit = "",
-  Value = "",
-  Enum = "",
-  Keyword = "",
-  Snippet = "",
-  Color = "",
-  File = "",
-  Reference = "",
-  Folder = "",
-  EnumMember = "",
-  Constant = "",
-  Struct = "",
-  Event = "",
-  Operator = "",
-  TypeParameter = ""
-}
-
-cmp.setup {
-  formatting = {
-    format = function(entry, vim_item)
-      -- Kind icons
-      vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
-      -- Source
-      vim_item.menu = ({
-        buffer = "[Buffer]",
-        nvim_lsp = "[LSP]",
-        luasnip = "[LuaSnip]",
-        nvim_lua = "[Lua]",
-        latex_symbols = "[LaTeX]",
-      })[entry.source.name]
-      return vim_item
-    end
-  },
-}
-
--- Set configuration for specific filetype.
-cmp.setup.filetype('gitcommit', {
-  sources = cmp.config.sources({
-    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-  }, {
-    { name = 'buffer' },
-  })
-})
-
--- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
--- cmp.setup.cmdline({ '/', '?' }, {
---   mapping = cmp.mapping.preset.cmdline(),
---   sources = {
---     { name = 'buffer' }
---   },
---   view = {
---     entries = {name = 'custom', selection_order = 'near_cursor' }
---   },
--- })
-
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    { name = 'cmdline' }
-  }),
-  view = {
-    entries = {name = 'custom', selection_order = 'near_cursor' }
-  },
-})
-
--- PLUGSETTING: kevinhwang91/nvim-bqf
+-- formatting quickfix view
 local fn = vim.fn
-
 function _G.qftf(info)
     local items
     local ret = {}
@@ -990,53 +1254,7 @@ function _G.qftf(info)
     end
     return ret
 end
-
 vim.o.qftf = '{info -> v:lua._G.qftf(info)}'
-
--- Adapt fzf's delimiter in nvim-bqf
-vim.cmd([[
-    hi BqfPreviewBorder guifg=#50a14f ctermfg=71
-    hi link BqfPreviewRange Search
-]])
-
-require('bqf').setup({
-    auto_enable = true,
-    auto_resize_height = true, -- highly recommended enable
-    preview = {
-        win_height = 30,
-        win_vheight = 30,
-        delay_syntax = 80,
-        border_chars = {'┃', '┃', '━', '━', '┏', '┓', '┗', '┛', '█'},
-        should_preview_cb = function(bufnr)
-            local ret = true
-            local bufname = vim.api.nvim_buf_get_name(bufnr)
-            local fsize = vim.fn.getfsize(bufname)
-            if fsize > 100 * 1024 then
-                -- skip file size greater than 100k
-                ret = false
-            elseif bufname:match('^fugitive://') then
-                -- skip fugitive buffer
-                ret = false
-            end
-            return ret
-        end
-    },
-    -- make `drop` and `tab drop` to become preferred
-    func_map = {
-        drop = 'o',
-        openc = 'O',
-        split = '<C-s>',
-        tabdrop = '<C-t>',
-        tabc = '',
-        ptogglemode = 'z,',
-    },
-    filter = {
-        fzf = {
-            action_for = {['ctrl-s'] = 'split', ['ctrl-t'] = 'tab drop'},
-            extra_opts = {'--bind', 'ctrl-o:toggle-all', '--prompt', '> '}
-        }
-    }
-})
 
 require('lualine').setup {
   options = {
@@ -1079,4 +1297,88 @@ require('lualine').setup {
     lualine_z = {}
   },
 }
+
+-- SmoothCursor.nvim
+require('smoothcursor').setup()
+local autocmd = vim.api.nvim_create_autocmd
+
+autocmd({ 'ModeChanged' }, {
+  callback = function()
+    local current_mode = vim.fn.mode()
+    if current_mode == 'n' then
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#a356ba' })
+      vim.fn.sign_define('smoothcursor', { text = '●' })
+    elseif current_mode == 'v' then
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#dee356' })
+      vim.fn.sign_define('smoothcursor', { text = '' })
+    elseif current_mode == 'V' then
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#dee356' })
+      vim.fn.sign_define('smoothcursor', { text = '' })
+    elseif current_mode == '�' then
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#bf616a' })
+      vim.fn.sign_define('smoothcursor', { text = '' })
+    elseif current_mode == 'i' then
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#43e849' })
+      vim.fn.sign_define('smoothcursor', { text = '' })
+    end
+  end,
+})
+
+-- PLUGSETTING: lewis6991/gitsigns.nvim
+require('gitsigns').setup {
+  signs = {
+    add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+    change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    untracked    = { text = '┆' },
+  },
+  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
+  numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
+  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
+  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+  watch_gitdir = {
+    interval = 1000,
+    follow_files = true
+  },
+  attach_to_untracked = true,
+  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+  current_line_blame_opts = {
+    virt_text = true,
+    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+    delay = 1000,
+    ignore_whitespace = false,
+  },
+  current_line_blame_formatter_opts = {
+    relative_time = false
+  },
+  sign_priority = 6,
+  update_debounce = 100,
+  status_formatter = nil, -- Use default
+  max_file_length = 40000,
+  preview_config = {
+    -- Options passed to nvim_open_win
+    border = 'single',
+    style = 'minimal',
+    relative = 'cursor',
+    row = 0,
+    col = 1
+  },
+  yadm = {
+    enable = false
+  },
+}
 EOF
+
+function! s:colorschemeLightOnedark()
+  set background=light
+  colorscheme onedark
+endfunction
+command! -nargs=0 LightOnedark call s:colorschemeLightOnedark()
+
+function! s:colorschemeDarkHybrid()
+  set background=dark
+  colorscheme hybrid
+endfunction
+command! -nargs=0 DarkHybrid call s:colorschemeDarkHybrid()

@@ -1,5 +1,38 @@
+if exists('g:loaded_maguroguma_nvim_setting')
+  finish
+endif
+let g:loaded_maguroguma_nvim_setting = 1
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SECTION: initialize
+" SECTION: depeding on environment
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let s:histfile_path = expand('~/.local/state/zsh_history')
+if filereadable(s:histfile_path)
+  " source
+  function! s:list_command_history() abort
+    let l:hist_com = 'cat ' .. s:histfile_path .. ' | cut -b 16- | head -n 5000'
+    let l:res = system(l:hist_com)
+    return reverse(split(l:res, "\n"))
+  endfunction
+  " sink
+  function! s:insert_target(shell_command) abort
+    call setline(line("."), a:shell_command)
+  endfunction
+  command! HCommand call fzf#run(fzf#wrap({
+    \ 'source': s:list_command_history(),
+    \ 'sink': funcref('s:insert_target'),
+    \ 'options': '--ansi --prompt "replace current line> "',
+  \ }))
+  nnoremap <silent> R :HCommand<CR>
+else
+  echoerr '[ERROR] cannot read command history file: ' .. s:histfile_path
+endif
+
+set shell=/bin/zsh
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SECTION: start up
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " ref: https://qiita.com/yasunori-kirin0418/items/4672919be73a524afb47
@@ -32,7 +65,7 @@ let g:loaded_getscriptPlugin    = v:true
 " Disable other plugins
 let g:loaded_man                = v:true
 let g:loaded_matchit            = v:true
-let g:loaded_matchparen         = v:true
+" let g:loaded_matchparen         = v:true
 let g:loaded_shada_plugin       = v:true
 let g:loaded_spellfile_plugin   = v:true
 let g:loaded_tutor_mode_plugin  = v:true
@@ -43,11 +76,6 @@ let g:did_indent_on             = v:true
 let g:did_load_ftplugin         = v:true
 let g:loaded_rrhelper           = v:true
 " }}}
-
-if exists('g:loaded_maguroguma_nvim_setting')
-  finish
-endif
-let g:loaded_maguroguma_nvim_setting = 1
 
 " Automatic installation on startup(neovim + vim)
 let s:jetpackfile = stdpath('data') .. '/site/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim'
@@ -78,6 +106,7 @@ call jetpack#add('max397574/better-escape.nvim')
 call jetpack#add('m4xshen/autoclose.nvim') " substitute of lexima
 call jetpack#add('rhysd/committia.vim')
 call jetpack#add('hotwatermorning/auto-git-diff')
+call jetpack#add('lambdalisue/vim-manpager')
 
 call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('markonm/traces.vim') " realize live substitute
@@ -109,21 +138,6 @@ command! -bang -nargs=? -complete=dir Files
     \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
     \   <bang>0)
 
-" source
-function! s:list_command_history() abort
-  let l:res = system("cat $HOME/.zhistory | cut -b 16- | head -n 5000")
-  return reverse(split(l:res, "\n"))
-endfunction
-" sink
-function! s:insert_target(shell_command) abort
-  call setline(line("."), a:shell_command)
-endfunction
-command! HCommand call fzf#run(fzf#wrap({
-  \ 'source': s:list_command_history(),
-  \ 'sink': funcref('s:insert_target'),
-  \ 'options': '--ansi --prompt "replace current line> "',
-\ }))
-
 " popup window
 let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
 
@@ -132,7 +146,6 @@ let g:fzf_preview_window = []
 
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <Space>q :History:<CR>
-nnoremap <silent> R :HCommand<CR>
 
 nmap ' <cmd>Pounce<CR>
 vmap ' <cmd>Pounce<CR>
@@ -186,6 +199,8 @@ endif
 " SECTION: set options
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+set termguicolors
+
 set nocompatible
 syntax enable
 
@@ -235,7 +250,6 @@ set hlsearch
 " https://loumo.jp/archives/10503
 autocmd FileType text :set formatoptions=q
 
-set shell=/bin/zsh
 set title
 set wildmenu
 set history=200
@@ -243,13 +257,23 @@ set helplang=ja
 
 set hidden
 
+" 独自定義highlight
 highlight CursorLine ctermbg=238
-highlight Visual cterm=bold ctermbg=darkblue ctermfg=NONE
-highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
-highlight StatusLineNC ctermbg=193
-highlight Folded ctermbg=Green ctermfg=Gray
-highlight NonText    ctermbg=None ctermfg=239 guibg=NONE guifg=None
-highlight SpecialKey ctermbg=None ctermfg=239 guibg=NONE guifg=None
+highlight CursorLine guibg=#383838
+highlight Visual cterm=bold ctermfg=NONE ctermbg=24
+highlight Visual gui=bold guifg=NONE guibg=#11607d
+" highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
+" highlight StatusLineNC ctermbg=193
+highlight NonText    ctermfg=239 ctermbg=None
+highlight NonText    guifg=#3d3d3d guibg=None
+highlight SpecialKey ctermfg=239 ctermbg=None
+highlight SpecialKey guifg=#3d3d3d guibg=None
+highlight Folded ctermfg=15 ctermbg=8
+highlight Folded guifg=#fff9e6 guibg=#586358
+highlight Search ctermfg=0 ctermbg=44
+highlight Search guifg=#021f02 guibg=#43c5d9
+highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
+highlight IncSearch gui=bold guifg=#021f02 guibg=#43c5d9
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: mapping
@@ -282,7 +306,8 @@ nnoremap t <Nop>
 nnoremap <Space> <Nop>
 
 " macro
-" nnoremap Q q
+nnoremap Q q:
+nnoremap ? q/
 
 " cursor move
 nnoremap j gj
@@ -371,8 +396,6 @@ cnoremap <c-p> <up>
 nnoremap <Space>n :<C-u>set number!<CR>
 nnoremap <Space>W :<C-u>set wrap!<CR>
 
-colorscheme duskfox
-
 augroup git-semantic-commit-message
   autocmd! *
   " https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
@@ -421,3 +444,5 @@ require("better_escape").setup {
 
 require("autoclose").setup({})
 EOF
+
+colorscheme dayfox

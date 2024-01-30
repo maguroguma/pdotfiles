@@ -1,5 +1,3 @@
-echo "[zshfzf] load settings"
-
 # setup fzf
 export FZF_HOME=$HOME/.fzf
 if [[ ! "$PATH" == */.fzf/bin* ]]; then
@@ -18,7 +16,7 @@ export FZF_CTRL_T_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 # export FZF_CTRL_T_OPTS='--preview "bat  --color=always --style=header,grid --line-range :100 {} || cat {}"'
 export FZF_CTRL_T_OPTS=''
 
-# tmux popup
+# fzf with tmux popup
 export FZF_TMUX=1
 export FZF_TMUX_OPTS="-w 95% -h 95%"
 
@@ -31,8 +29,6 @@ function nvim_open() {
     fi
 }
 bindkey -s '^v' 'nvim_open\n'
-
-alias t='tmux-session-fzf.sh'
 
 # zsh; needs setopt re_match_pcre. You can, of course, adapt it to your own shell easily.
 tmuxkillf () {
@@ -50,13 +46,15 @@ tmuxkillf () {
 zle -N tmuxkillf
 bindkey '^k' tmuxkillf
 
+# tmuxで複数ペイン同時に起動したいので、fzf-tmuxは使わない
 function ghq-fzf() {
   # bat > catの優先度で使う
   # ref: https://wonderwall.hatenablog.com/entry/2017/10/06/063000
   local batcom="bat --color=always --style=header,grid --line-range :80 $(ghq root)/{}/README.*"
   local defaultcom="cat $(ghq root)/{}/README.*"
   local src=$(
-    ghq list | fzf-tmux -w 95% -h 95% --preview "(${batcom} || ${defaultcom}) 2> /dev/null | head -500" --prompt="ghq list> "
+    # ghq list | fzf-tmux -w 95% -h 95% --preview "(${batcom} || ${defaultcom}) 2> /dev/null | head -500" --prompt="ghq list> "
+    ghq list | fzf --prompt="ghq list> "
   )
   if [ -n "$src" ]; then
     BUFFER="cd $(ghq root)/$src"
@@ -66,6 +64,19 @@ function ghq-fzf() {
 }
 zle -N ghq-fzf
 bindkey '^]' ghq-fzf
+
+# tmuxで複数ペイン同時に起動したいので、fzf-tmuxは使わない
+function cdr-fzf() {
+    local selected_dir=$(cdr -l | awk '{ print $2 }' | fzf)
+    if [ -n "$selected_dir" ]; then
+        BUFFER="cd ${selected_dir}"
+        zle accept-line
+    fi
+    # zle clear-screen
+    zle -R -c
+}
+zle -N cdr-fzf
+bindkey '^acd' cdr-fzf
 
 # GIT heart FZF
 # https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236
@@ -106,7 +117,7 @@ _gt() {
   git tag --sort -version:refname |
   fzf-down --multi --preview-window right:70% \
     --prompt="tag> " \
-    --preview 'git show --color=always {}'
+    --preview 'git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" {1}'
 }
 
 # git log -> commit hash
@@ -176,3 +187,5 @@ bind-git-helper() {
 }
 bind-git-helper f b t r h s m v
 unset -f bind-git-helper
+
+echo "\e[33m[$(basename $0)]\e[0m\t\e[32mloaded\e[0m"

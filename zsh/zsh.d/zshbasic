@@ -1,11 +1,14 @@
-echo "[zshbasic] load settings"
+if command -v nvim &>/dev/null; then
+    export EDITOR="nvim -u $XDG_CONFIG_HOME/nvim/minimal.init.vim"
+else
+    export EDITOR="vim"
+fi
+
+export MANPAGER="nvim -c ASMANPAGER -u $XDG_CONFIG_HOME/nvim/minimal.init.vim"
 
 #############################
 # key bindings
 #############################
-# キーの受付時間を1秒にする
-export KEYTIMEOUT=100
-
 # vi mode
 bindkey -v
 bindkey -M viins 'jj' vi-cmd-mode
@@ -39,6 +42,14 @@ today-for-zle() {
 }
 zle -N today-for-zle
 bindkey '^aday' today-for-zle
+
+# 標準出力・エラー両方をファイルにも出力する
+std-out-and-err-to-file() {
+    zle reset-prompt
+    LBUFFER+="2>&1 | tee "
+}
+zle -N std-out-and-err-to-file
+bindkey '^atee' std-out-and-err-to-file
 
 # command line zle
 autoload -Uz edit-command-line
@@ -147,7 +158,7 @@ zle -N self-insert url-quote-magic
 # 不要なコマンドをhistoryから除外する
 zshaddhistory() {
     local line="${1%%$'\n'}"
-    [[ ! "$line" =~ "^(cd|lazygit|ls|c|v|gc|gf|glo|gpoH|gs|ta|tks)($| )" ]]
+    [[ ! "$line" =~ "^(cd|lazygit|ls|c|v|gc|gf|glo|gpoH|gpoh|gs|ta|tks)($| )" ]]
 }
 
 #############################
@@ -180,7 +191,6 @@ fpath=(~/.zsh/completion $fpath)
 zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
-
 #############################
 # prompt setting
 #############################
@@ -198,11 +208,12 @@ zstyle ':vcs_info:*' actionformats '[%b|%a]'
 precmd () {
   # 1行あける
   print
+
   # カレントディレクトリ
-  local left='%B%K{153}%{\e[38;5;18m%}(%~)%{\e[m%}%k%b'
+  local left='%B%K{14}%{\e[38;5;18m%}  %~ %{\e[m%}%k%K{15}%F{14}%k%b'
   # バージョン管理されてた場合、ブランチ名
   vcs_info
-  local right="%B%K{153} %{\e[38;5;32m%}${vcs_info_msg_0_}%{\e[m%}%k%b%B%K{153} %{\e[38;5;18m%}%DT%*%{\e[m%} %k%b"
+  local right="%B%K{15}%{\e[38;5;32m%}  ${vcs_info_msg_0_} %{\e[m%}%k%K{2}%F{15}%f%k%b%B%K{2}%{\e[38;5;18m%}  %DT%* %{\e[m%}%k%F{2}%f%b"
   # スペースの長さを計算
   # テキストを装飾する場合、エスケープシーケンスをカウントしないようにする
   local invisible='%([BSUbfksu]|([FK]|){*})'
@@ -219,59 +230,109 @@ TRAPALRM() {
 }
 
 #############################
+# cdr: https://wada811.blogspot.com/2014/09/zsh-cdr.html
+#############################
+
+# cdr, add-zsh-hook を有効にする
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
+
+# cdr の設定
+zstyle ':completion:*' recent-dirs-insert both
+zstyle ':chpwd:*' recent-dirs-max 500
+zstyle ':chpwd:*' recent-dirs-default true
+zstyle ':chpwd:*' recent-dirs-file "$XDG_CACHE_HOME/chpwd-recent-dirs"
+zstyle ':chpwd:*' recent-dirs-pushd true
+
+#############################
 # environmental values
 #############################
 export LANG=ja_JP.UTF-8
-export EDITOR="nvim -u $HOME/.config/nvim/minimal.init.vim"
 
 # dotfiles
 export DOTFILES_DIR=$HOME/dotfiles
-export PATH=$PATH:$DOTFILES_DIR/scripts
-export PATH=$PATH:$HOME/mybin
+path=(
+    "$path[@]"
+    "$DOTFILES_DIR/scripts"(N-/)
+    "$HOME/mybin"(N-/)
+)
 
 # zsh
-export HISTFILE=~/.zhistory
+export KEYTIMEOUT=100
+export HISTFILE=$XDG_STATE_HOME/zsh_history
 export HISTSIZE=100000
 export SAVEHIST=1000000
 export CLICOLOR=true
 export LSCOLORS='exfxcxdxbxGxDxabagacad'
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
 
+# tmux
+path=(
+    "$path[@]"
+    "$XDG_CONFIG_HOME/tmux"(N-/)
+)
+
 # go
 export GOPATH=$HOME/go
 export GOBIN=$HOME/go/bin
 export GO111MODULE=on
-export PATH=$PATH:/usr/local/opt/go/libexec/bin
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:/usr/local/go/bin
-export PATH=/opt/homebrew/opt/openssl@3/bin:$PATH
 export GOCOMPE=$GOPATH/src/github.com/maguroguma/go-competitive
+path=(
+    "$path[@]"
+    "$GOPATH/bin"(N-/)
+    "/usr/local/opt/go/libexec/bin"(N-/)
+    "/usr/local/go/bin"(N-/)
+)
+
+# openssl
+path=(
+    "/opt/homebrew/opt/openssl@3/bin"(N-/)
+    "$path[@]"
+)
 
 # yarn
-export PATH=$HOME/.yarn/bin:$PATH
-export PATH=$HOME/.config/yarn/global/node_modules/.bin:$PATH
+path=(
+    "$HOME/.yarn/bin"(N-/)
+    "$HOME/.config/yarn/global/node_modules/.bin"(N-/)
+    "$path[@]"
+)
 
 # deno
 export DENO_INSTALL=$HOME/.deno
-export PATH=$DENO_INSTALL/bin:$PATH
+path=(
+    "$DENO_INSTALL/bin"(N-/)
+    "$path[@]"
+)
+
+# rust
+path=(
+    "$path[@]"
+    "$HOME/.local/bin"(N-/)
+)
 
 #############################
 # alias
 #############################
 # basic
-alias v='nvim'
-alias vi='nvim'
-alias vim='nvim'
-alias vimdiff='nvim -d'
+if command -v nvim &>/dev/null; then
+    alias v='nvim'
+    alias vi='vim'
+    alias vimdiff='nvim -d'
+else
+    echo "neovim is not executable."
+fi
+if command -v vim-startuptime &>/dev/null; then
+    alias vst-main-100='vim-startuptime -count 100 -vimpath nvim'
+    alias vst-mini-100='vim-startuptime -count 100 -vimpath nvim -- --cmd "source $XDG_CONFIG_HOME/nvim/minimal.init.vim"'
+fi
 alias rm='rm -i'
 alias ..='cd ..'
 alias mv='mv -i'
 alias cp='cp -i'
 alias c='clear'
-alias relogin='exec $SHELL -l'
 alias lined_path="echo $PATH | tr ':' '\n'"
-if [ -e "$HOME/.zhistory" ]; then
-    alias shell-history='cat $HOME/.zhistory | cut -b 16- | head -n 5000'
+if [ -e "$HISTFILE" ]; then
+    alias shell-history='cat $HISTFILE | cut -b 16- | head -n 5000'
 fi
 alias hw='hostname;whoami'
 alias rgf='rg --files-with-matches'
@@ -316,7 +377,7 @@ alias gcheck-ignored='git ls-files -io --exclude-standard'
 alias gm='git merge'
 alias gms='git merge --squash'
 # push
-alias gpoH='git push origin HEAD'
+alias gpoh='git push origin HEAD'
 # reset
 alias gu='git reset HEAD'
 # status
@@ -347,6 +408,15 @@ alias tks='tmux kill-server'
 alias tls='tmux ls'
 alias tns='tmux new -s'
 
+# diff
+alias diff-dir='diff -rq'
+alias diff-unified='diff --unified'
+alias diff-side-by-side='diff --side-by-side'
+
+# tar
+alias tar-comp='tar -zcf'
+alias tar-decomp='tar -zxf'
+
 # ubuntu
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
@@ -361,3 +431,5 @@ case "$OSTYPE" in
         (( ${+commands[gxargs]} )) && alias xargs='gxargs'
     ;;
 esac
+
+echo "\e[33m[$(basename $0)]\e[0m\t\e[32mloaded\e[0m"
