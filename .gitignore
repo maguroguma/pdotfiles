@@ -24,6 +24,7 @@
 !nvim/init.vim
 !nvim/lazysource.vim
 !nvim/minimal.init.vim
+!nvim/lua/myconfig.lua
 # copilot.vim
 nvim/pack/
 
