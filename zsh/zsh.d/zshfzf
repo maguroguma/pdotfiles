@@ -188,4 +188,9 @@ bind-git-helper() {
 bind-git-helper f b t r h s m v
 unset -f bind-git-helper
 
+# jqのライブクエリ: jqz sample.json
+jqz() {
+    echo '' | fzf --print-query --preview "cat $1 | jq {q}"
+}
+
 echo "\e[33m[$(basename $0)]\e[0m\t\e[32mloaded\e[0m"

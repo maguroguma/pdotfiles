@@ -102,8 +102,6 @@ call jetpack#add('tani/vim-jetpack', { 'opt': 1 })
 call jetpack#add('junegunn/fzf')
 call jetpack#add('junegunn/fzf.vim')
 call jetpack#add('rlane/pounce.nvim')
-call jetpack#add('max397574/better-escape.nvim')
-call jetpack#add('m4xshen/autoclose.nvim') " substitute of lexima
 call jetpack#add('rhysd/committia.vim')
 call jetpack#add('hotwatermorning/auto-git-diff')
 call jetpack#add('lambdalisue/vim-manpager')
@@ -297,7 +295,7 @@ highlight IncSearch gui=bold guifg=#021f02 guibg=#43c5d9
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " esc
-" inoremap <silent> jj <ESC> " better-escapeプラグインに委譲
+inoremap <silent> jj <ESC>
 
 " prefix
 nnoremap s <Nop>
@@ -361,7 +359,6 @@ nnoremap <C-i> <C-i>zz
 " save, load
 nnoremap <Space>w :w<CR>
 nnoremap <Space>e :e!<CR>
-nnoremap <C-m> :wq<CR>
 
 " yank, paste
 vmap <Space>y "+y
@@ -428,21 +425,10 @@ require'pounce'.setup{
   multi_window = true,
   debug = false,
 }
-
--- PLUGSETTING: max397574/better-escape.nvim
--- lua, default settings
-require("better_escape").setup {
-    mapping = {"jj", "jk", "kj"}, -- a table with mappings to use
-    timeout = 200, -- the time in which the keys must be hit in ms. Use option timeoutlen by default
-    clear_empty_lines = false, -- clear line after escaping if there is only whitespace
-    keys = "<Esc>", -- keys used for escaping, if it is a function will use the result everytime
-    -- example(recommended)
-    -- keys = function()
-    --   return vim.api.nvim_win_get_cursor(0)[2] > 1 and '<esc>l' or '<esc>'
-    -- end,
-}
-
-require("autoclose").setup({})
 EOF
+
+" normal, insertともに<CR>で終了するようにする
+nnoremap <CR> :wq<CR>
+inoremap <CR> <Esc>:wq<CR>
 
 colorscheme dayfox

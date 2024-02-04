@@ -35,6 +35,8 @@
   sec-scan-history = secrets --scan-history
   sec-register-aws = secrets --register-aws
   gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
+  prev = reset HEAD^
+  # TODO: tagをいい感じに自動作成するサブコマンドを作る
 
 [ghq]
   root = ~/go/src

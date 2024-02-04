@@ -382,14 +382,17 @@ let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
 " Empty value to disable preview window altogether
 let g:fzf_preview_window = []
 
-nnoremap <silent> , :Marks<CR>
+" short map
+nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> ; :Buffers<CR>
+nnoremap <silent> , :GitFiles?<CR>
+nnoremap <silent> R :HCommand<CR>
+nnoremap <silent> <C-]> :Marks<CR>
+" long map
 nnoremap <silent> <Space>h :Helptags<CR>
 nnoremap <silent> <Space>gf :GitFiles?<CR>
 nnoremap <silent> <Space>q :History:<CR>
 nnoremap <silent> <Space>bd :BD<CR>
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> R :HCommand<CR>
-nnoremap <silent> ; :Buffers<CR>
 nmap <Space><tab> <plug>(fzf-maps-n)
 xmap <Space><tab> <plug>(fzf-maps-x)
 omap <Space><tab> <plug>(fzf-maps-o)
@@ -435,6 +438,8 @@ command! GinaDiffAll Gina diff --opener=vsplit
 command! GinaDiffStagedAll Gina diff --staged --opener=vsplit
 command! GinaCommitVsplit Gina commit --opener=vsplit
 command! GinaBrowseThis Gina browse --exact HEAD:%
+" TODO: gina blameの左側を大きくしたい
+" TODO: GinaBrowseThisでrefを指定できるようにしたい
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: luochen1990/rainbow
