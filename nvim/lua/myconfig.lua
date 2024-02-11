@@ -43,6 +43,7 @@ function _G.qftf(info)
 end
 vim.o.qftf = '{info -> v:lua._G.qftf(info)}'
 
+-- PLUGSETTING: lualine
 require('lualine').setup {
   options = {
     section_separators = '', component_separators = '',
@@ -85,7 +86,7 @@ require('lualine').setup {
   },
 }
 
--- SmoothCursor.nvim
+-- PLUGSETTING: SmoothCursor.nvim
 require('smoothcursor').setup()
 local autocmd = vim.api.nvim_create_autocmd
 
@@ -164,7 +165,7 @@ require('gitsigns').setup {
 -- PERF:
 -- HACK:
 -- WARNING:
-  require("todo-comments").setup {
+require("todo-comments").setup {
   signs = true, -- show icons in the signs column
   sign_priority = 8, -- sign priority
   -- keywords recognized as todo comments
@@ -220,7 +221,7 @@ require('gitsigns').setup {
   },
 }
 
--- nvim-hlslens
+-- PLUGSETTING: nvim-hlslens
 require('hlslens').setup({
     nearest_only = true
 })
@@ -473,7 +474,7 @@ require("neo-tree").setup({
   }
 })
 
--- Set up nvim-cmp.
+-- PLUGSETTING: nvim-cmp
 local cmp = require'cmp'
 
 local kind_icons = {
@@ -555,9 +556,50 @@ cmp.setup.cmdline(':', {
   },
 })
 
+-- PLUGSETTING: pounce
 require'pounce'.setup{
   accept_keys = "HJKLYUIOPNMQWERTASDFGZXCVB",
   accept_best_key = "<enter>",
   multi_window = true,
   debug = false,
 }
+
+-- PLUGSETTING: mvllow/modes.nvim
+require('modes').setup({
+  colors = {
+    copy = "#f5c359",
+    delete = "#c75c6a",
+    insert = "#78ccc5",
+    -- visual = "#9745be",
+    visual = "#f5c359",
+  },
+
+  -- Set opacity for cursorline and number background
+  line_opacity = 0.2,
+
+  -- Enable cursor highlights
+  set_cursor = true,
+
+  -- Enable cursorline initially, and disable cursorline for inactive windows
+  -- or ignored filetypes
+  set_cursorline = true,
+
+  -- Enable line number highlights to match cursorline
+  set_number = true,
+
+  -- Disable modes highlights in specified filetypes
+  -- Please PR commonly ignored filetypes
+  ignore_filetypes = { 'NvimTree', 'TelescopePrompt' }
+})
+
+-- PLUGSETTING: stevearc/aerial.nvim
+require("aerial").setup({
+  -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+  on_attach = function(bufnr)
+    -- Jump forwards/backwards with '{' and '}'
+    vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+    vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+  end,
+})
+-- You probably also want to set a keymap to toggle aerial
+vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")

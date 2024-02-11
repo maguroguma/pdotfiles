@@ -136,13 +136,13 @@ call jetpack#add('navarasu/onedark.nvim') " colorscheme
 
 " DO NOT lazy load
 call jetpack#add('lambdalisue/readablefold.vim')
-call jetpack#add('Yggdroot/indentLine')
+call jetpack#add('Yggdroot/indentLine') " NOTE: archived on Jul 29, 2023
 call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('luochen1990/rainbow')
 call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
 call jetpack#add('previm/previm')
 call jetpack#add('kana/vim-textobj-user')
-call jetpack#add('shinespark/vim-list2tree') " make directory tree format txt from markdown lists
+call jetpack#add('shinespark/vim-list2tree') " NOTE: (m) make directory tree format txt from markdown lists
 call jetpack#add('AndrewRadev/linediff.vim')
 call jetpack#add('lambdalisue/vim-manpager')
 
@@ -159,10 +159,10 @@ call jetpack#add('lewis6991/gitsigns.nvim')
 
 " lazy
 call jetpack#add('glidenote/memolist.vim')
-call jetpack#add('hrsh7th/nvim-cmp')
 call jetpack#add('hrsh7th/cmp-buffer')
 call jetpack#add('hrsh7th/cmp-path')
 call jetpack#add('hrsh7th/cmp-cmdline')
+call jetpack#add('hrsh7th/nvim-cmp')
 
 call jetpack#add('nvim-tree/nvim-web-devicons')
 
@@ -184,7 +184,9 @@ call jetpack#add('junegunn/fzf.vim')
 call jetpack#add('rlane/pounce.nvim')
 call jetpack#add('folke/todo-comments.nvim')
 
-call jetpack#add('nvim-treesitter/nvim-treesitter')
+call jetpack#add('nvim-treesitter/nvim-treesitter', {
+      \ 'do': ':TSUpdate'
+      \ })
 call jetpack#add('rhysd/committia.vim', {
       \ 'on_ft': ['gitcommit', 'git', 'gina-commit'],
       \ })
@@ -228,14 +230,11 @@ call jetpack#add('tyru/open-browser.vim')
 call jetpack#add('mtdl9/vim-log-highlighting', {
       \ 'on_ft': ['log']
       \ })
-" show git diff on git rebase
+" NOTE: (m) show git diff on git rebase
 call jetpack#add('hotwatermorning/auto-git-diff', {
       \ 'on_ft': ['gitcommit', 'git']
       \ })
 call jetpack#add('mzlogin/vim-markdown-toc', {
-      \ 'on_ft': ['md', 'markdown']
-      \ })
-call jetpack#add('iamcco/mathjax-support-for-mkdp', {
       \ 'on_ft': ['md', 'markdown']
       \ })
 call jetpack#add('alvan/vim-closetag', {
@@ -244,9 +243,6 @@ call jetpack#add('alvan/vim-closetag', {
 call jetpack#add('ap/vim-css-color', {
       \ 'on_ft': ['html', 'vue', 'html.twig', 'vim', 'lua']
       \ })
-call jetpack#add('jsborjesson/vim-uppercase-sql', {
-      \ 'on_ft': ['sql']
-      \ })
 call jetpack#add('posva/vim-vue', {
       \ 'on_ft': ['vue']
       \ })
@@ -254,15 +250,17 @@ call jetpack#add('mattn/vim-sqlfmt', {
       \ 'on_ft': ['sql']
       \ })
 call jetpack#add('lambdalisue/gina.vim')
-
-" NOTE: tag: 2.51 が必要かも
 call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
       \ 'branch': 'v3.x',
       \ })
-
 call jetpack#add('chrisbra/csv.vim', {
       \ 'on_ft': ['csv']
       \ })
+
+" 2024
+call jetpack#add('mvllow/modes.nvim')
+call jetpack#add('stevearc/aerial.nvim')
+call jetpack#add('MattesGroeger/vim-bookmarks')
 
 call jetpack#end()
 " plugins END }}}
@@ -373,6 +371,15 @@ command! HCommand call fzf#run(fzf#wrap({
 \ }))
 
 """
+" easy MRU
+"""
+command! Fmru FZFMru
+command! FZFMru call fzf#run(fzf#wrap({
+  \ 'source': v:oldfiles,
+  \ 'sink': 'e',
+\}))
+
+"""
 " layouts, styles
 """
 
@@ -393,6 +400,7 @@ nnoremap <silent> <Space>h :Helptags<CR>
 nnoremap <silent> <Space>gf :GitFiles?<CR>
 nnoremap <silent> <Space>q :History:<CR>
 nnoremap <silent> <Space>bd :BD<CR>
+" show maps map
 nmap <Space><tab> <plug>(fzf-maps-n)
 xmap <Space><tab> <plug>(fzf-maps-x)
 omap <Space><tab> <plug>(fzf-maps-o)
@@ -419,27 +427,49 @@ function! s:gitCheckoutThis()
   endif
   :Gina checkout %
 endfunction
-command! GinaCheckoutThis :call s:gitCheckoutThis()
-command! -range GinaBrowseThese <line1>,<line2>Gina browse --exact HEAD:%
-let g:gina#command#blame#formatter#format = "%su%=on %au %ti %ma%in"
 nnoremap <Space>ga <cmd>Gina add %<CR>
 nnoremap <Space>gu <cmd>Gina reset HEAD %<CR>
 nnoremap <Space>gc <cmd>GinaCheckoutThis<CR>
-nnoremap <Space>gd <cmd>Gina diff --opener=vsplit :%<CR>
-nnoremap <Space>gD <cmd>Gina diff --opener=vsplit --staged :%<CR>
+nnoremap <Space>gd <cmd>Gina diff :%<CR>
+nnoremap <Space>gD <cmd>Gina diff --staged :%<CR>
 
 " 全体
 nnoremap <Space>gp <cmd>Gina patch<CR>
-nnoremap <Space>gs <cmd>Gina status --opener=vsplit<CR>
+nnoremap <Space>gs <cmd>Gina status<CR>
 nnoremap <Space>gl <cmd>Gina log<CR>
-nnoremap <Space>gb <cmd>Gina blame<CR>
+nnoremap <Space>gb <cmd>execute 'Gina blame --width=' . (&columns / 2)<CR>
 
-command! GinaDiffAll Gina diff --opener=vsplit
-command! GinaDiffStagedAll Gina diff --staged --opener=vsplit
+function! BrowseRevision(revision)
+  if a:revision == ''
+    let l:revision = 'HEAD'
+  else
+    let l:revision = a:revision
+  endif
+
+  let l:cmd = 'Gina browse --exact ' . l:revision . ':%'
+  execute l:cmd
+  echo '[RUN] ' . l:cmd
+endfunction
+
+function! BrowseRevisionRange(line1, line2, revision)
+  if a:revision == ''
+    let l:revision = 'HEAD'
+  else
+    let l:revision = a:revision
+  endif
+
+  let l:cmd = a:line1 . ',' . a:line2 . 'Gina browse --exact ' . l:revision . ':%'
+  execute l:cmd
+  echo '[RUN] ' . l:cmd
+endfunction
+
+command! GinaDiffAll Gina diff
+command! GinaDiffStagedAll Gina diff --staged
 command! GinaCommitVsplit Gina commit --opener=vsplit
-command! GinaBrowseThis Gina browse --exact HEAD:%
-" TODO: gina blameの左側を大きくしたい
-" TODO: GinaBrowseThisでrefを指定できるようにしたい
+command! GinaCheckoutThis :call s:gitCheckoutThis()
+command! -nargs=? GinaBrowseThis :call BrowseRevision(<q-args>)
+command! -range -nargs=? GinaBrowseThese :call BrowseRevisionRange(<line1>, <line2>, <q-args>)
+let g:gina#command#blame#formatter#format = "%su%=on %au %ti %ma%in"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: luochen1990/rainbow
@@ -1000,6 +1030,24 @@ inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#confirm()
 " helpより
 inoremap <silent><expr> <CR> coc#pum#visible() ? "\<CR>" :
       \ "\<C-g>u\<C-r>=lexima#expand('<LT>CR>', 'i')\<CR><C-r>=coc#on_enter()\<CR>"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: MattesGroeger/vim-bookmarks
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:bookmark_no_default_key_mappings = 1
+let g:bookmark_save_per_working_dir = 1
+
+nmap mm <Plug>BookmarkToggle
+" nmap <Leader>i <Plug>BookmarkAnnotate
+nmap ml <Plug>BookmarkShowAll
+" nmap <Leader>j <Plug>BookmarkNext
+" nmap <Leader>k <Plug>BookmarkPrev
+" nmap <Leader>c <Plug>BookmarkClear
+" nmap <Leader>x <Plug>BookmarkClearAll
+" nmap <Leader>kk <Plug>BookmarkMoveUp
+" nmap <Leader>jj <Plug>BookmarkMoveDown
+" nmap <Leader>g <Plug>BookmarkMoveToLine
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: lua scripts

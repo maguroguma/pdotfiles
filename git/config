@@ -36,7 +36,8 @@
   sec-register-aws = secrets --register-aws
   gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
   prev = reset HEAD^
-  # TODO: tagをいい感じに自動作成するサブコマンドを作る
+  save-tag = "!f() { git tag "LOCAL-$(date +%Y%m%d-%H%M%S)" $1; }; f"
+  wip-commit = "!f() { git commit -m "WIP-$(date +%Y%m%d-%H%M%S)" $1; }; f"
 
 [ghq]
   root = ~/go/src
