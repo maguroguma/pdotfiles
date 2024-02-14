@@ -145,6 +145,20 @@ let g:fzf_preview_window = []
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <Space>q :History:<CR>
 
+function! s:paste_file_paths(strings)
+    let l:original_a = getreg('a')
+    let l:joined_strings = join(a:strings, ' ')
+    call setreg('a', l:joined_strings)
+    normal! "ap
+    call setreg('a', l:original_a)
+endfunction
+command! FzfPasteFilePaths call fzf#run(fzf#wrap({
+  \ 'source': 'find .',
+  \ 'sink*': { lines -> s:paste_file_paths(lines) },
+  \ 'options': '--multi --ansi --prompt "replace current line> "',
+\ }))
+nnoremap <silent> F :FzfPasteFilePaths<CR>
+
 nmap ' <cmd>Pounce<CR>
 vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>

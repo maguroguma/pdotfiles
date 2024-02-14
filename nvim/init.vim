@@ -406,6 +406,29 @@ xmap <Space><tab> <plug>(fzf-maps-x)
 omap <Space><tab> <plug>(fzf-maps-o)
 imap <C-a><tab> <plug>(fzf-maps-i)
 
+" Global line completion (not just open buffers. ripgrep required.)
+inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
+  \ 'prefix': '^.*$',
+  \ 'source': 'rg -n ^ --color always',
+  \ 'options': '--ansi --delimiter : --nth 3..',
+  \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }
+\}))
+
+function! s:paste_file_paths(strings)
+    let l:original_a = getreg('a')
+    let l:joined_strings = join(a:strings, ' ')
+    call setreg('a', l:joined_strings)
+    normal! "ap
+    call setreg('a', l:original_a)
+endfunction
+command! FzfPasteFilePaths call fzf#run(fzf#wrap({
+  \ 'source': 'find .',
+  \ 'sink*': { lines -> s:paste_file_paths(lines) },
+  \ 'options': '--multi --ansi --prompt "replace current line> "',
+\ }))
+
+nnoremap <silent> F :FzfPasteFilePaths<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: nvim-neo-tree/neo-tree.nvim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
