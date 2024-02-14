@@ -429,6 +429,13 @@ command! FzfPasteFilePaths call fzf#run(fzf#wrap({
 
 nnoremap <silent> F :FzfPasteFilePaths<CR>
 
+" Path completion with custom source command
+inoremap <expr> <c-f> fzf#vim#complete#path('find .')
+" inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+
+" Word completion with custom spec with popup layout option
+" inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: nvim-neo-tree/neo-tree.nvim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

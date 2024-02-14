@@ -158,6 +158,7 @@ command! FzfPasteFilePaths call fzf#run(fzf#wrap({
   \ 'options': '--multi --ansi --prompt "replace current line> "',
 \ }))
 nnoremap <silent> F :FzfPasteFilePaths<CR>
+inoremap <expr> <c-f> fzf#vim#complete#path('find .')
 
 nmap ' <cmd>Pounce<CR>
 vmap ' <cmd>Pounce<CR>
