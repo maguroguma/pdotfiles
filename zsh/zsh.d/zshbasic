@@ -380,6 +380,7 @@ alias gcho='git checkout'
 alias gc='git commit'
 alias gcm='git commit -m'
 alias gcam='git commit --amend'
+alias gcf='git commit --fixup'
 # config
 alias gc-list='git config -l'
 # diff

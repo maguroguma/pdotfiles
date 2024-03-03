@@ -22,6 +22,9 @@
   template = ~/.config/git/message
   verbose = true
 
+[rebase]
+  autosquash = true
+
 [alias]
   unstage = reset HEAD
   lg = log --graph --all --decorate
