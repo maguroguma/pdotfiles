@@ -464,7 +464,7 @@ nnoremap <Space>gd <cmd>Gina diff :%<CR>
 nnoremap <Space>gD <cmd>Gina diff --staged :%<CR>
 
 " 全体
-nnoremap <Space>gp <cmd>Gina patch<CR>
+nnoremap <Space>gp <cmd>Gina patch --oneside<CR>
 nnoremap <Space>gs <cmd>Gina status<CR>
 nnoremap <Space>gl <cmd>Gina log<CR>
 nnoremap <Space>gb <cmd>execute 'Gina blame --width=' . (&columns / 2)<CR>
@@ -497,8 +497,11 @@ command! GinaDiffAll Gina diff
 command! GinaDiffStagedAll Gina diff --staged
 command! GinaCommitVsplit Gina commit --opener=vsplit
 command! GinaCheckoutThis :call s:gitCheckoutThis()
+
+" 引数として branch 等の ref を取れる（デフォルトは現在の ref となる）
 command! -nargs=? GinaBrowseThis :call BrowseRevision(<q-args>)
 command! -range -nargs=? GinaBrowseThese :call BrowseRevisionRange(<line1>, <line2>, <q-args>)
+
 let g:gina#command#blame#formatter#format = "%su%=on %au %ti %ma%in"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1638,6 +1641,9 @@ nnoremap s= <C-w>=
 nnoremap so <C-w>_<C-w>|
 nnoremap sO <C-w>=
 nnoremap sq :<C-u>confirm quit<CR>
+
+" tab
+nnoremap tq <cmd>tabclose<CR>
 
 " buffer
 nnoremap <C-o> <C-o>zz
