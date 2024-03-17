@@ -1356,6 +1356,26 @@ endfunction
 
 command! -range -nargs=0 Reverse :<line1>,<line2>call ReverseLines()
 
+" TODOリスト
+" 参考: https://qiita.com/naoty_k/items/56eddc9b76fe630f9be7
+inoremap <C-a>tl <C-r>='- [ ]'<CR>
+
+" todoリストのon/offを切り替える
+nnoremap <buffer> <Space>x :call ToggleCheckbox()<CR>
+vnoremap <buffer> <Space>x :call ToggleCheckbox()<CR>
+
+" 選択行のチェックボックスを切り替える
+function! ToggleCheckbox()
+  let l:line = getline('.')
+  if l:line =~ '\-\s\[\s\]'
+    let l:result = substitute(l:line, '-\s\[\s\]', '- [x]', '')
+    call setline('.', l:result)
+  elseif l:line =~ '\-\s\[x\]'
+    let l:result = substitute(l:line, '-\s\[x\]', '- [ ]', '')
+    call setline('.', l:result)
+  end
+endfunction
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
