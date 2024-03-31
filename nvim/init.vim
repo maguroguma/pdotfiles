@@ -600,8 +600,8 @@ let g:undotree_DiffpanelHeight = 8      " diffウィンドウの行数
 
 nnoremap <C-s> <Cmd>FloatermToggle<CR>
 " 参考: https://github.com/yutkat/dotfiles/blob/28e8df61c39727fa85d3f289343eb60feffd29d8/.config/nvim/rc/pluginconfig/vim-floaterm.vim
-let g:floaterm_height = 0.95
-let g:floaterm_width = 0.95
+let g:floaterm_height = 0.99
+let g:floaterm_width = 0.99
 augroup vimrc_floaterm
   autocmd!
   autocmd User FloatermOpen tnoremap <buffer> <silent> <C-s> <C-\><C-n>:FloatermToggle<CR>
@@ -1378,6 +1378,8 @@ function! ToggleCheckbox()
     call setline('.', l:result)
   end
 endfunction
+
+command! -range=% SplitPeriods <line1>,<line2>s/。/。\r/g
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options

@@ -39,6 +39,7 @@ nvim/pack/
 !scripts/s-quote.sh
 !scripts/ts-to-date.sh
 !scripts/gogithub.sh
+!scripts/github_compare.sh
 
 !tmux/tmux-session-fzf
 !tmux/tmux.conf

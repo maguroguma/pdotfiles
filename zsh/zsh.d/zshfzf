@@ -127,8 +127,8 @@ _gh() {
   fzf-down --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
     --header 'Press CTRL-S to toggle sort' \
     --prompt="hash> " \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always' |
-  grep -o "[a-f0-9]\{7,\}"
+    --preview 'grep -o "\b[a-f0-9]\{7\}\b" <<< {} | xargs git show --color=always' |
+  grep -o "\b[a-f0-9]\{7\}\b"
 }
 
 # git remote -v -> remote repository
