@@ -435,6 +435,7 @@ alias ta='tmux a'
 alias tks='tmux kill-server'
 alias tls='tmux ls'
 alias tns='tmux new -s'
+alias tcapture='tmux capture-pane -pS - > ./tmux-capture-pane-$(date +%Y%m%d-%H%M%S)'
 
 # diff
 alias diff-dir='diff -rq'

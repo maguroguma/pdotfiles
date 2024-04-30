@@ -1381,6 +1381,24 @@ endfunction
 
 command! -range=% SplitPeriods <line1>,<line2>s/。/。\r/g
 
+function! EncloseWithParens(left, right)
+    " 選択範囲の開始と終了を取得
+    let start = getpos("'<")
+    let end = getpos("'>")
+
+    " 終了位置に後ろの括弧を挿入
+    call setpos('.', end)
+    execute "normal! a" . a:right
+
+    " 開始位置に前の括弧を挿入
+    call setpos('.', start)
+    execute "normal! i" . a:left
+endfunction
+
+" 全角丸括弧で囲むためのマッピング
+xnoremap gs :call EncloseWithParens('（', '）')<CR>
+xnoremap gS :call EncloseWithParens('「', '」')<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

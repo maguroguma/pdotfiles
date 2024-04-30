@@ -40,6 +40,7 @@ nvim/pack/
 !scripts/ts-to-date.sh
 !scripts/gogithub.sh
 !scripts/github_compare.sh
+!scripts/search_github_PR.sh
 
 !tmux/tmux-session-fzf
 !tmux/tmux.conf

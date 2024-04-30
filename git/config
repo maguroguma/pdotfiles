@@ -41,6 +41,7 @@
   prev = reset HEAD^
   save-tag = "!f() { git tag "LOCAL-$(date +%Y-%m-%d-%H%M)" $1; }; f"
   wip-commit = "!f() { git commit -m "WIP-$(date +%Y%m%d-%H%M%S)" $1; }; f"
+  detach-branch = checkout @^0
 
 [ghq]
   root = ~/go/src
@@ -54,6 +55,15 @@
 [delta]
   navigate = true  # use n and N to move between diff sections
   line-numbers = true
+
+[init]
+  defaultBranch = main
+
+[rerere]
+  enabled = true
+
+[branch]
+  sort = -committerdate
 
 [secrets]
 	providers = git secrets --aws-provider
