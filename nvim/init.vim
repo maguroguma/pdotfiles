@@ -136,7 +136,7 @@ call jetpack#add('navarasu/onedark.nvim') " colorscheme
 
 " DO NOT lazy load
 call jetpack#add('lambdalisue/readablefold.vim')
-call jetpack#add('Yggdroot/indentLine') " NOTE: archived on Jul 29, 2023
+" call jetpack#add('Yggdroot/indentLine') " NOTE: archived on Jul 29, 2023
 call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('luochen1990/rainbow')
 call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
@@ -207,7 +207,7 @@ call jetpack#add('ntpeters/vim-better-whitespace')
 call jetpack#add('machakann/vim-highlightedyank')
 " read vim command result to buffer
 call jetpack#add('tyru/capture.vim')
-call jetpack#add('moll/vim-bbye')
+" call jetpack#add('moll/vim-bbye')
 call jetpack#add('mattn/vim-maketable', {
       \ 'on_ft': ['md', 'markdown']
       \ })
@@ -261,6 +261,9 @@ call jetpack#add('chrisbra/csv.vim', {
 call jetpack#add('mvllow/modes.nvim')
 call jetpack#add('stevearc/aerial.nvim')
 call jetpack#add('MattesGroeger/vim-bookmarks')
+call jetpack#add('shellRaining/hlchunk.nvim')
+call jetpack#add('kazhala/close-buffers.nvim')
+call jetpack#add('Wansmer/treesj')
 
 call jetpack#end()
 " plugins END }}}
@@ -544,8 +547,11 @@ nnoremap <Space>s <cmd>Spectre<CR>
 " PLUGSETTING: moll/vim-bbye
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nnoremap <Space>d <C-u>:Bdelete<CR>
-nnoremap <Space>D <C-u>:bufdo :Bdelete<CR>
+" nnoremap <Space>d <C-u>:Bdelete<CR>
+" nnoremap <Space>D <C-u>:bufdo :Bdelete<CR>
+
+nnoremap <Space>d <cmd>BDelete this<CR>
+nnoremap <Space>D <cmd>BDelete hidden<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: t9md/vim-choosewin
@@ -1123,6 +1129,14 @@ highlight PounceAcceptBest cterm=underline,bold ctermfg=196 ctermbg=236
 highlight PounceAcceptBest gui=underline,bold guifg=#EE2513 guibg=#555555
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: Wansmer/treesj
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nnoremap <Space>t <cmd>TSJToggle<CR>
+" nnoremap <Space>s <cmd>TSJSplit<CR>
+" nnoremap <Space>j <cmd>TSJJoin<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -1624,10 +1638,6 @@ inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
-nnoremap <Space>j 10gj
-nnoremap <Space>k 10gk
-vnoremap <Space>j 10gj
-vnoremap <Space>k 10gk
 nnoremap J 10gj
 nnoremap K 10gk
 vnoremap J 10gj
@@ -1680,6 +1690,12 @@ vmap <Space>P "+P
 nmap <Space>y "+y
 nmap <Space>p "+p
 nmap <Space>P "+P
+vmap gy "+y
+vmap gp "+p
+vmap gP "+P
+nmap gy "+y
+nmap gp "+p
+nmap gP "+P
 nnoremap <Space>Y ggVG"+y
 nnoremap <Space>= ggVG=
 
