@@ -1410,8 +1410,11 @@ function! EncloseWithParens(left, right)
 endfunction
 
 " 全角丸括弧で囲むためのマッピング
-xnoremap gs :call EncloseWithParens('（', '）')<CR>
-xnoremap gS :call EncloseWithParens('「', '」')<CR>
+xnoremap g( :call EncloseWithParens('（', '）')<CR>
+xnoremap g) :call EncloseWithParens('（', '）')<CR>
+xnoremap gs :call EncloseWithParens('「', '」')<CR>
+xnoremap g[ :call EncloseWithParens('【', '】')<CR>
+xnoremap g] :call EncloseWithParens('【', '】')<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options

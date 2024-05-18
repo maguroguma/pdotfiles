@@ -617,4 +617,6 @@ require('close_buffers').setup({
 })
 
 -- PLUGSETTING: Wansmer/treesj
-require('treesj').setup({})
+require('treesj').setup({
+  use_default_keymaps = false,
+})

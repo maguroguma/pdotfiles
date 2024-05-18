@@ -103,8 +103,8 @@ _gf() {
 # branch list -> branch
 _gb() {
   is_in_git_repo || return
-  git branch -a --color=always | grep -v '/HEAD\s' | sort |
-  fzf-down --ansi --multi --tac --preview-window right:70% \
+  git branch -a --color=always | grep -v '/HEAD\s' |
+  fzf-down --ansi --multi --preview-window right:70% \
   --prompt="branch> " \
     --preview 'git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1)' |
   sed 's/^..//' | cut -d' ' -f1 |
