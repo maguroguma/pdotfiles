@@ -25,8 +25,12 @@
 !nvim/lazysource.vim
 !nvim/minimal.init.vim
 !nvim/lua/myconfig.lua
-# copilot.vim
+
+# plugins for copilot
 nvim/pack/
+# copilot.vim
+# copilot.lua, CopilotChat.nvim
+!nvim/lua/copilot-setting.lua.base
 
 !scripts/comma.sh
 !scripts/create-gh-link.sh

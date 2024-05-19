@@ -1097,6 +1097,12 @@ set pumheight=20
 
 lua require('myconfig')
 
+" copilot.lua, CopilotChat.nvim setting
+let s:copilot_setting_file = expand('$XDG_CONFIG_HOME/nvim/lua/copilot-setting.lua')
+if filereadable(s:copilot_setting_file)
+  lua require('copilot-setting')
+endif
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: rlane/pounce.nvim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

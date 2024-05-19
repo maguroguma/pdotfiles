@@ -1,0 +1,116 @@
+-- PLUGSETTING: zbirenbaum/copilot.lua
+require('copilot').setup({
+  panel = {
+    enabled = true,
+    auto_refresh = false,
+    keymap = {
+      jump_prev = "[[",
+      jump_next = "]]",
+      accept = "<CR>",
+      refresh = "gr",
+      open = "<M-CR>"
+    },
+    layout = {
+      position = "bottom", -- | top | left | right
+      ratio = 0.4
+    },
+  },
+  suggestion = {
+    enabled = true,
+    auto_trigger = true, -- default: false
+    debounce = 75,
+    keymap = {
+      accept = "<C-k>", -- default : <M-l>
+      accept_word = false,
+      accept_line = false,
+      next = "<C-p>",
+      prev = "<C-o>",
+      dismiss = "<C-]>",
+    },
+  },
+  filetypes = {
+    yaml = true,
+    markdown = true,
+    help = true,
+    gitcommit = true,
+    gitrebase = true,
+    lua = true,
+    vim = true,
+    javascript = true,
+    typescript = true,
+    vue = true,
+    go = true,
+    ["*"] = false,
+  },
+  copilot_node_command = 'node', -- Node.js version must be > 18.x
+  server_opts_overrides = {},
+})
+
+-- PLUGSETTING: CopilotC-Nvim/CopilotChat.nvim
+require("CopilotChat").setup {
+  debug = true, -- Enable debugging
+  -- See Configuration section for rest
+
+  prompts = {
+    Explain = {
+      prompt = '/COPILOT_EXPLAIN 選択部分のコードについて説明してください。',
+    },
+    -- Review = {
+    --   prompt = '/COPILOT_REVIEW Review the selected code.',
+    --   callback = function(response, source)
+    --     -- see config.lua for implementation
+    --   end,
+    -- },
+    Fix = {
+      prompt = '/COPILOT_GENERATE このコードには問題があります。バグを修正したコードに書き換えてください。',
+    },
+    Optimize = {
+      prompt = '/COPILOT_GENERATE 選択部分のコードを最適化し、パフォーマンスと可読性を向上させてください。',
+    },
+    Docs = {
+      prompt = '/COPILOT_GENERATE 選択部分のコードのドキュメントを書いてください。具体的には、「ドキュメントをコメントとして追加した、元のコードを含むコードブロック」で回答してください。また、使用するプログラミング言語に最も適したドキュメントスタイルを使用してください（例：JavaScriptのJSDoc、Pythonのdocstringsなど）',
+    },
+    Tests = {
+      prompt = '/COPILOT_GENERATE 選択部分のコードの、単体テストを書いてください。',
+    },
+    -- FixDiagnostic = {
+    --   prompt = 'Please assist with the following diagnostic issue in file:',
+    --   selection = select.diagnostics,
+    -- },
+    -- Commit = {
+    --   prompt = 'Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.',
+    --   selection = select.gitdiff,
+    -- },
+    -- CommitStaged = {
+    --   prompt = 'Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.',
+    --   selection = function(source)
+    --     return select.gitdiff(source, true)
+    --   end,
+    -- },
+  },
+
+  window = {
+    layout = 'horizontal', -- 'vertical', 'horizontal', 'float', 'replace'
+  },
+}
+
+-- バッファの内容全体を使って Copilot とチャットする
+function CopilotChatBuffer()
+  local input = vim.fn.input("Quick Chat: ")
+  if input ~= "" then
+    require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+  end
+end
+
+-- normal
+vim.api.nvim_set_keymap("n", "<leader>cco", "<cmd>CopilotChatOpen<cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>cct", "<cmd>CopilotChatToggle<cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>ccs", "<cmd>CopilotChatStop<cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>ccr", "<cmd>CopilotChatReset<cr>", { noremap = true, silent = true })
+
+-- visual
+vim.api.nvim_set_keymap('v', '<leader>cce', ':CopilotChatExplain<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<leader>ccd', ':CopilotChatDocs<CR>', { noremap = true, silent = true })
+
+-- Copilot Chat Quick: 現在のバッファを入力にして Copilot とチャットする
+vim.api.nvim_set_keymap("n", "<leader>ccq", "<cmd>lua CopilotChatBuffer()<cr>", { noremap = true, silent = true })
