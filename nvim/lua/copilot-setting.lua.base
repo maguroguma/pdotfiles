@@ -51,6 +51,10 @@ require("CopilotChat").setup {
   debug = true, -- Enable debugging
   -- See Configuration section for rest
 
+  question_header = '## 🙋🙋🙋 User 🙋🙋🙋', -- Header to use for user questions
+  answer_header = '## 🤖🤖🤖 Copilot 🤖🤖🤖', -- Header to use for AI answers
+  error_header = '## ⚠️⚠️⚠️ Error ⚠️⚠️⚠️', -- Header to use for errors
+
   prompts = {
     Explain = {
       prompt = '/COPILOT_EXPLAIN 選択部分のコードについて説明してください。',
@@ -91,6 +95,42 @@ require("CopilotChat").setup {
 
   window = {
     layout = 'horizontal', -- 'vertical', 'horizontal', 'float', 'replace'
+  },
+
+  -- default mappings
+  mappings = {
+    complete = {
+      detail = 'Use @<Tab> or /<Tab> for options.',
+      insert ='<Tab>',
+    },
+    close = {
+      normal = 'q',
+      insert = '<Nop>'
+    },
+    reset = {
+      normal ='<C-l>',
+      insert = '<Nop>'
+    },
+    submit_prompt = {
+      normal = '<CR>',
+      insert = '<Nop>'
+    },
+    accept_diff = {
+      normal = '<C-y>',
+      insert = '<Nop>'
+    },
+    yank_diff = {
+      normal = 'gy',
+    },
+    show_diff = {
+      normal = 'gd'
+    },
+    show_system_prompt = {
+      normal = 'gp'
+    },
+    show_user_selection = {
+      normal = 'gs'
+    },
   },
 }
 
