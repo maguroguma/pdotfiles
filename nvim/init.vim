@@ -471,6 +471,8 @@ nnoremap <Space>gp <cmd>Gina patch --oneside<CR>
 nnoremap <Space>gs <cmd>Gina status<CR>
 nnoremap <Space>gl <cmd>Gina log<CR>
 nnoremap <Space>gb <cmd>execute 'Gina blame --width=' . (&columns / 2)<CR>
+nnoremap <Space>Gd <cmd>Gina diff<CR>
+nnoremap <Space>GD <cmd>Gina diff --staged<CR>
 
 function! BrowseRevision(revision)
   if a:revision == ''
@@ -498,7 +500,8 @@ endfunction
 
 command! GinaDiffAll Gina diff
 command! GinaDiffStagedAll Gina diff --staged
-command! GinaCommitVsplit Gina commit --opener=vsplit
+command! GinaCommit Gina commit --opener=vsplit
+command! GinaCommitAmend Gina commit --amend --opener=vsplit
 command! GinaCheckoutThis :call s:gitCheckoutThis()
 
 " 引数として branch 等の ref を取れる（デフォルトは現在の ref となる）
@@ -536,6 +539,40 @@ map g# <Plug>(asterisk-gz#)
 
 nmap M <Plug>(quickhl-manual-this)
 xmap M <Plug>(quickhl-manual-this)
+
+let g:quickhl_manual_keywords = [
+      \ 'FACT:',
+      \ 'IMO:',
+      \]
+let g:quickhl_manual_enable_at_startup = 1
+let g:quickhl_manual_colors = [
+      \ "cterm=bold ctermfg=12 ctermbg=64  gui=bold guibg=#FFC300 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=5   gui=bold guibg=#0070e0 guifg=#ffffff",
+      \ "cterm=bold ctermfg=16 ctermbg=153 gui=bold guibg=#0a7383 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=1   gui=bold guibg=#a07040 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=2   gui=bold guibg=#4070a0 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=3   gui=bold guibg=#40a070 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=4   gui=bold guibg=#70a040 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=6   gui=bold guibg=#007020 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=21  gui=bold guibg=#d4a00d guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=22  gui=bold guibg=#06287e guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=45  gui=bold guibg=#5b3674 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=16  gui=bold guibg=#4c8f2f guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=50  gui=bold guibg=#1060a0 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=56  gui=bold guibg=#a0b0c0 guifg=black",
+      \ "cterm=bold ctermfg=8  ctermbg=60  gui=bold guibg=#FF5733 guifg=#ffffff",
+      \ "cterm=bold ctermfg=9  ctermbg=61  gui=bold guibg=#C70039 guifg=#ffffff",
+      \ "cterm=bold ctermfg=10 ctermbg=62  gui=bold guibg=#900C3F guifg=#ffffff",
+      \ "cterm=bold ctermfg=11 ctermbg=63  gui=bold guibg=#581845 guifg=#ffffff",
+      \ "cterm=bold ctermfg=12 ctermbg=64  gui=bold guibg=#7F00FF guifg=#ffffff",
+      \ "cterm=bold ctermfg=13 ctermbg=65  gui=bold guibg=#FF007F guifg=#ffffff",
+      \ "cterm=bold ctermfg=14 ctermbg=66  gui=bold guibg=#00FFFF guifg=#000000",
+      \ "cterm=bold ctermfg=15 ctermbg=67  gui=bold guibg=#FFFF00 guifg=#000000",
+      \ "cterm=bold ctermfg=16 ctermbg=68  gui=bold guibg=#FF7F00 guifg=#ffffff",
+      \ "cterm=bold ctermfg=17 ctermbg=69  gui=bold guibg=#7FFF00 guifg=#000000",
+      \ "cterm=bold ctermfg=18 ctermbg=70  gui=bold guibg=#00FF00 guifg=#000000",
+      \ "cterm=bold ctermfg=19 ctermbg=71  gui=bold guibg=#007FFF guifg=#ffffff",
+      \ ]
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: windwp/nvim-spectre
