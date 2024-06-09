@@ -70,3 +70,5 @@ nvim/pack/
 !.zshenv
 !README.md
 !vifmrc
+
+!lazygit/config.yml
