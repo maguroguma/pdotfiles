@@ -39,6 +39,7 @@ require('copilot').setup({
     javascript = true,
     typescript = true,
     vue = true,
+    html = true,
     go = true,
     ["*"] = false,
   },

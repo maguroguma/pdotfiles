@@ -141,7 +141,6 @@ call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('luochen1990/rainbow')
 call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
 call jetpack#add('previm/previm')
-call jetpack#add('kana/vim-textobj-user')
 call jetpack#add('shinespark/vim-list2tree') " NOTE: (m) make directory tree format txt from markdown lists
 call jetpack#add('AndrewRadev/linediff.vim')
 call jetpack#add('lambdalisue/vim-manpager')
@@ -574,6 +573,8 @@ let g:quickhl_manual_colors = [
       \ "cterm=bold ctermfg=19 ctermbg=71  gui=bold guibg=#007FFF guifg=#ffffff",
       \ ]
 
+nnoremap <Space>M :QuickhlManualAdd! <C-r>/<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: windwp/nvim-spectre
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -663,81 +664,6 @@ nmap <C-e> <cmd>WinResizerStartResize<CR>
 
 let g:previm_open_cmd = 'open -a Google\ Chrome'
 nnoremap <silent> <Space>mp <cmd>PrevimOpen<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: kana/vim-textobj-user
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-call textobj#user#plugin('datetime', {
-\   'date': {
-\     'pattern': '\<\d\d\d\d-\d\d-\d\d\>',
-\     'select': ['ad', 'id'],
-\   },
-\   'time': {
-\     'pattern': '\<\d\d:\d\d:\d\d\>',
-\     'select': ['at', 'it'],
-\   },
-\ })
-
-call textobj#user#plugin('braces', {
-\   'angle': {
-\     'pattern': ['<<', '>>'],
-\     'select-a': 'aA',
-\     'select-i': 'iA',
-\   },
-\ })
-
-" japanese brackets
-call textobj#user#plugin('jparentheses', {
-\   'jparentheses': {
-\     'pattern': ['（', '）'],
-\     'select-a': 'aj(',
-\     'select-i': 'ij(',
-\   },
-\ })
-call textobj#user#plugin('jsquarebrackets', {
-\   'jsquarebrackets': {
-\     'pattern': ['【', '】'],
-\     'select-a': 'aj[',
-\     'select-i': 'ij[',
-\   },
-\ })
-call textobj#user#plugin('jquotation', {
-\   'jquotation': {
-\     'pattern': ['「', '」'],
-\     'select-a': 'ajb',
-\     'select-i': 'ijb',
-\   },
-\ })
-
-call textobj#user#plugin('line', {
-\   '-': {
-\     'select-a-function': 'CurrentLineA',
-\     'select-a': 'al',
-\     'select-i-function': 'CurrentLineI',
-\     'select-i': 'il',
-\   },
-\ })
-
-function! CurrentLineA()
-  normal! 0
-  let head_pos = getpos('.')
-  normal! $
-  let tail_pos = getpos('.')
-  return ['v', head_pos, tail_pos]
-endfunction
-
-function! CurrentLineI()
-  normal! ^
-  let head_pos = getpos('.')
-  normal! g_
-  let tail_pos = getpos('.')
-  let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
-  return
-  \ non_blank_char_exists_p
-  \ ? ['v', head_pos, tail_pos]
-  \ : 0
-endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: yuki-yano/fuzzy-motion.vim
@@ -1459,6 +1385,19 @@ xnoremap gs :call EncloseWithParens('「', '」')<CR>
 xnoremap g[ :call EncloseWithParens('【', '】')<CR>
 xnoremap g] :call EncloseWithParens('【', '】')<CR>
 
+" 和集合を検索する
+" カーソル下のワードを検索パターンに追加
+nnoremap <Space>* :call AddSearchWord()<CR>
+
+function! AddSearchWord()
+    let l:word = expand('<cword>')
+    if @/ == ''
+        let @/ = '\<' . l:word . '\>'
+    else
+        let @/ .= '\|\<' . l:word . '\>'
+    endif
+endfunction
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1697,7 +1636,12 @@ vnoremap L $
 nnoremap <C-l> $
 vnoremap <C-l> $
 
+" concat
+nnoremap <C-j> J
+vnoremap <C-j> J
+
 " search
+" nzz, Nzz は、現在 lua プラグインに寄せている
 " nnoremap n nzz
 " nnoremap N Nzz
 nnoremap <ESC><ESC> :nohlsearch<CR>

@@ -40,7 +40,7 @@
   gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
   prev = reset HEAD^
   save-tag = "!f() { git tag "LOCAL-$(date +%Y-%m-%d-%H%M)" $1; }; f"
-  wip-commit = "!f() { git commit -m "WIP-$(date +%Y%m%d-%H%M%S)" $1; }; f"
+  wip-commit = "!f() { git commit -m "WIP-$(date +%Y-%m-%d-%H%M)" $1; }; f"
   detach-branch = checkout @^0
 
 [ghq]
@@ -63,7 +63,7 @@
   enabled = true
 
 [branch]
-  sort = -committerdate
+	sort = -committerdate
 
 [secrets]
 	providers = git secrets --aws-provider
@@ -72,3 +72,6 @@
 	patterns = (\"|')?(AWS|aws|Aws)?_?(ACCOUNT|account|Account)_?(ID|id|Id)?(\"|')?\\s*(:|=>|=)\\s*(\"|')?[0-9]{4}\\-?[0-9]{4}\\-?[0-9]{4}(\"|')?
 	allowed = AKIAIOSFODNN7EXAMPLE
 	allowed = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+
+[column]
+	ui = auto

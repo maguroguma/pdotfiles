@@ -370,10 +370,12 @@ alias ga='git add'
 alias gau='git add -u'
 # branch
 alias gb='git branch'
-alias gbD='git branch -D'
 alias gba='git branch --all'
 alias gbd='git branch --delete'
+alias gbD='git branch -D'
 alias gbvv='git branch -vv'
+alias gb-set-upstream='git branch -u'
+alias gb-unset-upstream='git branch --unset-upstream'
 # checkout
 alias gcho='git checkout'
 # commit

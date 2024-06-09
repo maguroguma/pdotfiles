@@ -158,6 +158,9 @@ require('gitsigns').setup {
   },
 }
 
+vim.keymap.set("n", "gn", "<cmd>Gitsigns next_hunk<CR>")
+vim.keymap.set("n", "gN", "<cmd>Gitsigns prev_hunk<CR>")
+
 -- PLUGSETTING: folke/todo-comments.nvim
 -- FIXME:
 -- TODO:
