@@ -1494,6 +1494,7 @@ highlight! link CmpItemKindUnit CmpItemKindKeyword
 " txtファイルで自動改行を防ぐ
 " https://loumo.jp/archives/10503
 autocmd FileType text :set formatoptions=q
+autocmd FileType gitcommit :set formatoptions=q
 
 " set cursorlineの設定
 " https://thinca.hatenablog.com/entry/20090530/1243615055

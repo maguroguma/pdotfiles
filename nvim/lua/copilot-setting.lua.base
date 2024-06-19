@@ -114,7 +114,7 @@ require("CopilotChat").setup {
     },
     submit_prompt = {
       normal = '<CR>',
-      insert = '<Nop>'
+      insert = '<CR>'
     },
     accept_diff = {
       normal = '<C-y>',
