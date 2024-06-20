@@ -644,8 +644,8 @@ let g:undotree_DiffpanelHeight = 8      " diffウィンドウの行数
 
 nnoremap <C-s> <Cmd>FloatermToggle<CR>
 " 参考: https://github.com/yutkat/dotfiles/blob/28e8df61c39727fa85d3f289343eb60feffd29d8/.config/nvim/rc/pluginconfig/vim-floaterm.vim
-let g:floaterm_height = 0.99
-let g:floaterm_width = 0.99
+let g:floaterm_height = 0.97
+let g:floaterm_width = 0.98
 augroup vimrc_floaterm
   autocmd!
   autocmd User FloatermOpen tnoremap <buffer> <silent> <C-s> <C-\><C-n>:FloatermToggle<CR>
@@ -1421,6 +1421,7 @@ set nowrapscan
 
 autocmd FileType * set wrap
 autocmd FileType neo-tree set nowrap
+autocmd FileType qf set nowrap
 autocmd FileType * set foldmethod=expr
 
 set fenc=utf-8
@@ -1662,6 +1663,7 @@ nnoremap s= <C-w>=
 nnoremap so <C-w>_<C-w>|
 nnoremap sO <C-w>=
 nnoremap sq :<C-u>confirm quit<CR>
+nnoremap sQ :<C-u>confirm qall<CR>
 
 " tab
 nnoremap tq <cmd>tabclose<CR>
