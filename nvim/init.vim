@@ -263,6 +263,7 @@ call jetpack#add('MattesGroeger/vim-bookmarks')
 call jetpack#add('shellRaining/hlchunk.nvim')
 call jetpack#add('kazhala/close-buffers.nvim')
 call jetpack#add('Wansmer/treesj')
+call jetpack#add('thinca/vim-qfreplace')
 
 call jetpack#end()
 " plugins END }}}

@@ -86,12 +86,27 @@ require("CopilotChat").setup {
     --   prompt = 'Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.',
     --   selection = select.gitdiff,
     -- },
-    -- CommitStaged = {
-    --   prompt = 'Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.',
-    --   selection = function(source)
-    --     return select.gitdiff(source, true)
-    --   end,
-    -- },
+    CommitStaged = {
+      prompt = [[Write commit message for the change with commitizen convention.
+Make sure the title has maximum **50 characters** and message is wrapped at **72 characters**.
+Wrap the whole message in code block with language gitcommit.
+
+Also, please use the following word and emoji as prefix for the title:
+
+feat ✨      feature
+fix 🐛       bug fix
+deps ➕      add dependencies
+deps ➖      remove dependencies
+breaking 💥  breaking changes
+docs 📝      documentation
+style 💄     formatting, missing semi colons, etc
+refactor ♻️   refactoring
+test ✅      when adding missing tests
+chore ✏️      maintain
+
+また、タイトルの prefix はそのままとして、タイトルとメッセージを日本語に翻訳したバージョンも出力してください。
+]],
+    },
   },
 
   window = {
@@ -113,8 +128,8 @@ require("CopilotChat").setup {
       insert = '<Nop>'
     },
     submit_prompt = {
-      normal = '<CR>',
-      insert = '<CR>'
+      normal = '<C-j>',
+      insert = '<C-j>'
     },
     accept_diff = {
       normal = '<C-y>',
@@ -148,6 +163,7 @@ vim.api.nvim_set_keymap("n", "<leader>cco", "<cmd>CopilotChatOpen<cr>", { norema
 vim.api.nvim_set_keymap("n", "<leader>cct", "<cmd>CopilotChatToggle<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>ccs", "<cmd>CopilotChatStop<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>ccr", "<cmd>CopilotChatReset<cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>ccc", "<cmd>CopilotChatCommitStaged<cr>", { noremap = true, silent = true })
 
 -- visual
 vim.api.nvim_set_keymap('v', '<leader>cce', ':CopilotChatExplain<CR>', { noremap = true, silent = true })
