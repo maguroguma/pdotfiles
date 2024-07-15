@@ -619,3 +619,13 @@ require('close_buffers').setup({
 require('treesj').setup({
   use_default_keymaps = false,
 })
+
+-- PLUGSETTING: folke/noice.nvim
+require('noice').setup({
+  cmdline = {
+    view = "cmdline_popup",
+    opts = {
+      position = { row = '40%', col = '50%' },
+    },
+  }
+})

@@ -264,6 +264,8 @@ call jetpack#add('shellRaining/hlchunk.nvim')
 call jetpack#add('kazhala/close-buffers.nvim')
 call jetpack#add('Wansmer/treesj')
 call jetpack#add('thinca/vim-qfreplace')
+call jetpack#add('rhysd/clever-f.vim')
+call jetpack#add('folke/noice.nvim')
 
 call jetpack#end()
 " plugins END }}}
@@ -1105,6 +1107,12 @@ highlight PounceAcceptBest gui=underline,bold guifg=#EE2513 guibg=#555555
 nnoremap <Space>t <cmd>TSJToggle<CR>
 " nnoremap <Space>s <cmd>TSJSplit<CR>
 " nnoremap <Space>j <cmd>TSJJoin<CR>
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: rhysd/clever-f.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:clever_f_smart_case = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
@@ -1396,6 +1404,34 @@ function! AddSearchWord()
         let @/ = '\<' . l:word . '\>'
     else
         let @/ .= '\|\<' . l:word . '\>'
+    endif
+endfunction
+
+" カレントバッファのパスを取得する
+function! YankCurrentBufferFileRelativePath()
+  let l:relative_path = expand("%")
+  let l:cur_lnumber = line(".")
+  let l:res = l:relative_path . "#L" . l:cur_lnumber
+  redir @" | echo l:res | redir END
+  redir @+ | echo l:res | redir END
+endfunction
+function! YankCurrentBufferFileFullPath()
+  let l:full_path = expand("%:p")
+  let l:cur_lnumber = line(".")
+  let l:res = l:full_path . "#L" . l:cur_lnumber
+  redir @" | echo l:res | redir END
+  redir @+ | echo l:res | redir END
+endfunction
+command! YankBufferPath :call YankCurrentBufferFileRelativePath()
+command! YankBufferPathFully :call YankCurrentBufferFileFullPath()
+
+" 120 文字ガイド
+execute "set colorcolumn=" . join(range(121, 9999), ',')
+function! ToggleColorColumn()
+    if &colorcolumn == ''
+        execute "set colorcolumn=" . join(range(121, 9999), ',')
+    else
+        set colorcolumn=
     endif
 endfunction
 
@@ -1713,8 +1749,9 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
 " toggle
-nnoremap <Space>n :<C-u>set number!<CR>
+nnoremap <Space>nn :<C-u>set number!<CR>
 nnoremap <Space><Space> :<C-u>set wrap!<CR>
+nnoremap <Space>nc :<C-u>call ToggleColorColumn()<CR>
 
 augroup MyXML
   autocmd!

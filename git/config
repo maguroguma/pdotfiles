@@ -42,6 +42,8 @@
   save-tag = "!f() { git tag "LOCAL-$(date +%Y-%m-%d-%H%M)" $1; }; f"
   wip-commit = "!f() { git commit -m "WIP-$(date +%Y-%m-%d-%H%M)" $1; }; f"
   detach-branch = checkout @^0
+  log-search = log -S
+  log-grep = log -G
 
 [ghq]
   root = ~/go/src
