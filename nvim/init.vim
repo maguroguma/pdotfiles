@@ -395,16 +395,16 @@ let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
 let g:fzf_preview_window = []
 
 " short map
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> ; :Buffers<CR>
-nnoremap <silent> , :GitFiles?<CR>
-nnoremap <silent> R :HCommand<CR>
-nnoremap <silent> <C-]> :Marks<CR>
+nnoremap <silent> <C-p> <cmd>Files<CR>
+nnoremap <silent> ; <cmd>Buffers<CR>
+nnoremap <silent> , <cmd>GitFiles?<CR>
+nnoremap <silent> R <cmd>HCommand<CR>
+nnoremap <silent> <C-]> <cmd>Marks<CR>
 " long map
-nnoremap <silent> <Space>h :Helptags<CR>
-nnoremap <silent> <Space>gf :GitFiles?<CR>
-nnoremap <silent> <Space>q :History:<CR>
-nnoremap <silent> <Space>bd :BD<CR>
+nnoremap <silent> <Space>h <cmd>Helptags<CR>
+nnoremap <silent> <Space>gf <cmd>GitFiles?<CR>
+nnoremap <silent> <Space>q <cmd>History:<CR>
+nnoremap <silent> <Space>bd <cmd>BD<CR>
 " show maps map
 nmap <Space><tab> <plug>(fzf-maps-n)
 xmap <Space><tab> <plug>(fzf-maps-x)
@@ -431,8 +431,6 @@ command! FzfPasteFilePaths call fzf#run(fzf#wrap({
   \ 'sink*': { lines -> s:paste_file_paths(lines) },
   \ 'options': '--multi --ansi --prompt "replace current line> "',
 \ }))
-
-nnoremap <silent> F :FzfPasteFilePaths<CR>
 
 " Path completion with custom source command
 inoremap <expr> <c-f> fzf#vim#complete#path('find .')
@@ -588,9 +586,6 @@ nnoremap <Space>s <cmd>Spectre<CR>
 " PLUGSETTING: moll/vim-bbye
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" nnoremap <Space>d <C-u>:Bdelete<CR>
-" nnoremap <Space>D <C-u>:bufdo :Bdelete<CR>
-
 nnoremap <Space>d <cmd>BDelete this<CR>
 nnoremap <Space>D <cmd>BDelete hidden<CR>
 
@@ -609,9 +604,9 @@ let g:choosewin_label = 'HJKLYUIONM'
 " PLUGSETTING: glidenote/memolist.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nnoremap <Space>mn  :MemoNew<CR>
-nnoremap <Space>ml  :MemoList<CR>
-nnoremap <Space>mg  :MemoGrep<CR>
+nnoremap <Space>mn  <cmd>MemoNew<CR>
+nnoremap <Space>ml  <cmd>MemoList<CR>
+nnoremap <Space>mg  <cmd>MemoGrep<CR>
 
 let g:memolist_path = expand("$GOPATH/src/github.com/maguroguma/memolist")
 let g:memolist_memo_suffix = "md"
@@ -632,7 +627,7 @@ colorscheme hybrid
 " PLUGSETTING: mbbill/undotree
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-noremap <Space>u :UndotreeToggle<CR>
+noremap <Space>u <cmd>UndotreeToggle<CR>
 let g:undotree_WindowLayout = 2         " undotreeは左側/diffは下にウィンドウ幅で表示
 let g:undotree_ShortIndicators = 1      " 時間単位は短く表示
 let g:undotree_SplitWidth = 40          " undotreeのウィンドウ幅
@@ -645,13 +640,13 @@ let g:undotree_DiffpanelHeight = 8      " diffウィンドウの行数
 " PLUGSETTING: voldikss/vim-floaterm
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nnoremap <C-s> <Cmd>FloatermToggle<CR>
+nnoremap <C-s> <cmd>FloatermToggle<CR>
 " 参考: https://github.com/yutkat/dotfiles/blob/28e8df61c39727fa85d3f289343eb60feffd29d8/.config/nvim/rc/pluginconfig/vim-floaterm.vim
 let g:floaterm_height = 0.97
 let g:floaterm_width = 0.98
 augroup vimrc_floaterm
   autocmd!
-  autocmd User FloatermOpen tnoremap <buffer> <silent> <C-s> <C-\><C-n>:FloatermToggle<CR>
+  autocmd User FloatermOpen tnoremap <buffer> <silent> <C-s> <C-\><C-n><cmd>FloatermToggle<CR>
   autocmd QuitPre * FloatermKill!
 augroup END
 
@@ -738,7 +733,7 @@ function! s:build_go_files()
     call go#cmd#Build(0)
   endif
 endfunction
-autocmd FileType go nmap <Space>b :<C-u>call <SID>build_go_files()<CR>
+autocmd FileType go nmap <Space>b <cmd>call <SID>build_go_files()<CR>
 autocmd FileType go nmap <Space>c <Plug>(go-coverage-toggle)
 
 " ハイライト
@@ -853,7 +848,7 @@ nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
 " K -> gh
-nnoremap <silent> gh :call ShowDocumentation()<CR>
+nnoremap <silent> gh <cmd>call ShowDocumentation()<CR>
 
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
@@ -1148,11 +1143,12 @@ if executable('jq')
   command! -bar -bang -range=% -nargs=? Jq  <line1>,<line2>call s:jq(<bang>0, <f-args>)
 endif
 
-" 今日の日付
 inoremap <C-a>day <C-r>=strftime("%Y-%m-%d")<CR>
 cnoremap <C-a>day <C-r>=strftime("%Y-%m-%d")<CR>
-" 現在時刻
 inoremap <C-a>time <C-r>=strftime("%Y-%m-%d %T")<CR>
+inoremap <C-a>tengu TENGU 👺 >
+inoremap <C-a>sr <strong><span style="color:red;"></span></strong>
+
 " fzfで日付を入力したい
 function g:TerminalDay()
   let l:temp = @z
@@ -1161,9 +1157,7 @@ function g:TerminalDay()
   let @z = l:temp
   norm a
 endfunction
-tnoremap <C-a>day <C-\><C-n>:call g:TerminalDay()<CR>
-" 汎用デバッグ用
-inoremap <C-a>tengu <C-r>='👺 >'<CR>
+tnoremap <C-a>day <C-\><C-n><cmd>call g:TerminalDay()<CR>
 
 " markdownのコードスニペット
 function! g:ReadTripleBackQuotes(lang_text)
@@ -1174,7 +1168,7 @@ function! g:ReadTripleBackQuotes(lang_text)
   let @a = tmp
 endfunction
 command! -nargs=1 TripleBackQuotes :call g:ReadTripleBackQuotes(<f-args>)
-nnoremap <Space>` :call g:ReadTripleBackQuotes("")<CR>
+nnoremap <Space>` <cmd>call g:ReadTripleBackQuotes("")<CR>
 
 " ファイル・バッファのエンコーディング
 command! OpenAsSjis :edit ++encoding=sjis<CR>
@@ -1356,8 +1350,7 @@ command! -range -nargs=0 Reverse :<line1>,<line2>call ReverseLines()
 inoremap <C-a>tl <C-r>='- [ ]'<CR>
 
 " todoリストのon/offを切り替える
-nnoremap <buffer> <Space>x :call ToggleCheckbox()<CR>
-vnoremap <buffer> <Space>x :call ToggleCheckbox()<CR>
+nnoremap <buffer> <Space>x <cmd>call ToggleCheckbox()<CR>
 
 " 選択行のチェックボックスを切り替える
 function! ToggleCheckbox()
@@ -1396,7 +1389,7 @@ xnoremap g] :call EncloseWithParens('【', '】')<CR>
 
 " 和集合を検索する
 " カーソル下のワードを検索パターンに追加
-nnoremap <Space>* :call AddSearchWord()<CR>
+nnoremap <Space>* <cmd>call AddSearchWord()<CR>
 
 function! AddSearchWord()
     let l:word = expand('<cword>')
@@ -1683,11 +1676,11 @@ vnoremap <C-j> J
 " nzz, Nzz は、現在 lua プラグインに寄せている
 " nnoremap n nzz
 " nnoremap N Nzz
-nnoremap <ESC><ESC> :nohlsearch<CR>
+nnoremap <ESC><ESC> <cmd>nohlsearch<CR>
 
 " window
-nnoremap s- :<C-u>sp<CR>
-nnoremap s<Bar> :<C-u>vs<CR>
+nnoremap s- <cmd>split<CR>
+nnoremap s<Bar> <cmd>vsplit<CR>
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
 nnoremap sl <C-w>l
@@ -1699,8 +1692,8 @@ nnoremap sH <C-w>H
 nnoremap s= <C-w>=
 nnoremap so <C-w>_<C-w>|
 nnoremap sO <C-w>=
-nnoremap sq :<C-u>confirm quit<CR>
-nnoremap sQ :<C-u>confirm qall<CR>
+nnoremap sq <cmd>confirm quit<CR>
+nnoremap sQ <cmd>confirm qall<CR>
 
 " tab
 nnoremap tq <cmd>tabclose<CR>
@@ -1710,8 +1703,8 @@ nnoremap <C-o> <C-o>zz
 nnoremap <C-i> <C-i>zz
 
 " save, load
-nnoremap <Space>w :w<CR>
-nnoremap <Space>e :e!<CR>
+nnoremap <Space>w <cmd>write<CR>
+nnoremap <Space>e <cmd>edit!<CR>
 
 " yank, paste
 vmap <Space>y "+y
@@ -1749,9 +1742,9 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
 " toggle
-nnoremap <Space>nn :<C-u>set number!<CR>
-nnoremap <Space><Space> :<C-u>set wrap!<CR>
-nnoremap <Space>nc :<C-u>call ToggleColorColumn()<CR>
+nnoremap <Space>nn <cmd>set number!<CR>
+nnoremap <Space><Space> <cmd>set wrap!<CR>
+nnoremap <Space>nc <cmd>call ToggleColorColumn()<CR>
 
 augroup MyXML
   autocmd!
