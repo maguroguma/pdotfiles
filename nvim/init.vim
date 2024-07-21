@@ -266,6 +266,7 @@ call jetpack#add('Wansmer/treesj')
 call jetpack#add('thinca/vim-qfreplace')
 call jetpack#add('rhysd/clever-f.vim')
 call jetpack#add('folke/noice.nvim')
+call jetpack#add('rcarriga/nvim-notify')
 
 call jetpack#end()
 " plugins END }}}
@@ -964,7 +965,6 @@ let g:coc_global_extensions = [
       \ 'coc-prettier',
       \ 'coc-pyright',
       \ 'coc-tsserver',
-      \ 'coc-ultisnips',
       \ 'coc-vetur',
       \ 'coc-html',
       \ 'coc-css',

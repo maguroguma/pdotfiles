@@ -44,7 +44,17 @@ end
 vim.o.qftf = '{info -> v:lua._G.qftf(info)}'
 
 -- PLUGSETTING: lualine
-require('lualine').setup {
+-- ref: https://www.reddit.com/r/neovim/comments/xy0tu1/cmdheight0_recording_macros_message/
+function _G.show_macro_recording()
+    local recording_register = vim.fn.reg_recording()
+    if recording_register == "" then
+        return ""
+    else
+        return "Recording @" .. recording_register
+    end
+end
+local lualine = require('lualine')
+lualine.setup {
   options = {
     section_separators = '', component_separators = '',
     theme = 'dracula',
@@ -68,7 +78,12 @@ require('lualine').setup {
     },
     lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'branch'},
-    lualine_z = {}
+    lualine_z = {
+      {
+        "macro-recording",
+        fmt = show_macro_recording,
+      },
+    }
   },
   inactive_sections = {
     lualine_a = {},
@@ -85,6 +100,34 @@ require('lualine').setup {
     lualine_z = {}
   },
 }
+vim.api.nvim_create_autocmd("RecordingEnter", {
+    callback = function()
+        lualine.refresh({
+            place = { "statusline" },
+        })
+    end,
+})
+
+vim.api.nvim_create_autocmd("RecordingLeave", {
+    callback = function()
+        -- This is going to seem really weird!
+        -- Instead of just calling refresh we need to wait a moment because of the nature of
+        -- `vim.fn.reg_recording`. If we tell lualine to refresh right now it actually will
+        -- still show a recording occuring because `vim.fn.reg_recording` hasn't emptied yet.
+        -- So what we need to do is wait a tiny amount of time (in this instance 50 ms) to
+        -- ensure `vim.fn.reg_recording` is purged before asking lualine to refresh.
+        local timer = vim.loop.new_timer()
+        timer:start(
+            50,
+            0,
+            vim.schedule_wrap(function()
+                lualine.refresh({
+                    place = { "statusline" },
+                })
+            end)
+        )
+    end,
+})
 
 -- PLUGSETTING: SmoothCursor.nvim
 require('smoothcursor').setup()
@@ -627,5 +670,13 @@ require('noice').setup({
     opts = {
       position = { row = '40%', col = '50%' },
     },
-  }
+  },
 })
+
+-- PLUGSETTING: rcarriga/nvim-notify
+require('notify').setup({
+  timeout = 1000,
+})
+vim.cmd [[ autocmd RecordingEnter * lua require('notify')(show_macro_recording()) ]]
+vim.cmd [[ autocmd RecordingLeave * lua require('notify')('Recording macro stopped') ]]
+vim.keymap.set("n", "nd", "<cmd>lua require('notify').dismiss()<CR>")
