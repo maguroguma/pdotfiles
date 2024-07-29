@@ -679,4 +679,4 @@ require('notify').setup({
 })
 vim.cmd [[ autocmd RecordingEnter * lua require('notify')(show_macro_recording()) ]]
 vim.cmd [[ autocmd RecordingLeave * lua require('notify')('Recording macro stopped') ]]
-vim.keymap.set("n", "nd", "<cmd>lua require('notify').dismiss()<CR>")
+vim.keymap.set("n", "<Space>nd", "<cmd>lua require('notify').dismiss()<CR>")
