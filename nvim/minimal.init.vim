@@ -109,6 +109,7 @@ call jetpack#add('lambdalisue/vim-manpager')
 call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('markonm/traces.vim') " realize live substitute
 call jetpack#add('EdenEast/nightfox.nvim')
+call jetpack#add('rhysd/clever-f.vim')
 call jetpack#end()
 
 " Automatic plugin installation on startup
@@ -163,6 +164,10 @@ inoremap <expr> <c-f> fzf#vim#complete#path('find .')
 nmap ' <cmd>Pounce<CR>
 vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
+
+let g:clever_f_smart_case = 1
+let g:clever_f_use_migemo = 1
+let g:clever_f_chars_match_any_signs = ';'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
