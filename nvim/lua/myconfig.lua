@@ -563,6 +563,12 @@ cmp.setup {
       return vim_item
     end
   },
+  sources = {
+    { name = 'skkeleton' }
+  },
+  view = {
+    entries = 'native'
+  }
 }
 
 -- Set configuration for specific filetype.
@@ -680,3 +686,6 @@ require('notify').setup({
 vim.cmd [[ autocmd RecordingEnter * lua require('notify')(show_macro_recording()) ]]
 vim.cmd [[ autocmd RecordingLeave * lua require('notify')('Recording macro stopped') ]]
 vim.keymap.set("n", "<Space>nd", "<cmd>lua require('notify').dismiss()<CR>")
+
+-- PLUGSETTING: delphinus/skkeleton_indicator.nvim
+require("skkeleton_indicator").setup {}

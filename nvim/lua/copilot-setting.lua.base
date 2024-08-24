@@ -20,10 +20,10 @@ require('copilot').setup({
     auto_trigger = true, -- default: false
     debounce = 75,
     keymap = {
-      accept = "<C-k>", -- default : <M-l>
+      accept = "<M-l>", -- default : <M-l>
       accept_word = false,
       accept_line = false,
-      next = "<C-p>",
+      next = "<Nop>",
       prev = "<C-o>",
       dismiss = "<C-]>",
     },

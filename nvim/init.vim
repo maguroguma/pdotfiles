@@ -267,6 +267,9 @@ call jetpack#add('thinca/vim-qfreplace')
 call jetpack#add('rhysd/clever-f.vim')
 call jetpack#add('folke/noice.nvim')
 call jetpack#add('rcarriga/nvim-notify')
+call jetpack#add('vim-skk/skkeleton')
+call jetpack#add('delphinus/skkeleton_indicator.nvim')
+call jetpack#add('rinx/cmp-skkeleton')
 
 call jetpack#end()
 " plugins END }}}
@@ -1025,7 +1028,7 @@ endfunction
 call SetupLexima()
 
 " cocの補完をEnterで決定する（leximaの設定を上書きする）
-inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#confirm()
+inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " helpより
 inoremap <silent><expr> <CR> coc#pum#visible() ? "\<CR>" :
@@ -1102,7 +1105,7 @@ highlight PounceAcceptBest gui=underline,bold guifg=#EE2513 guibg=#555555
 nnoremap <Space>t <cmd>TSJToggle<CR>
 " nnoremap <Space>s <cmd>TSJSplit<CR>
 " nnoremap <Space>j <cmd>TSJJoin<CR>
-"
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: rhysd/clever-f.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1111,6 +1114,27 @@ let g:clever_f_smart_case = 1
 let g:clever_f_use_migemo = 1
 " let g:clever_f_mark_char_color = 'FuzzyMotionChar'
 let g:clever_f_chars_match_any_signs = ';'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: vim-skk/skkeleton
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+call skkeleton#config({ 'globalDictionaries': [
+      \ '~/.skk/SKK-JISYO.L',
+      \ '~/.skk/SKK-JISYO.emoji.utf8',
+      \ '~/.skk/SKK-JISYO.fullname',
+      \ '~/.skk/SKK-JISYO.geo',
+      \ '~/.skk/SKK-JISYO.jinmei',
+      \ '~/.skk/SKK-JISYO.law',
+      \ '~/.skk/SKK-JISYO.propernoun',
+      \ '~/.skk/SKK-JISYO.station',
+      \ ] })
+imap <C-j> <Plug>(skkeleton-enable)
+cmap <C-j> <Plug>(skkeleton-enable)
+tmap <C-j> <Plug>(skkeleton-enable)
+
+call add(g:skkeleton#mapped_keys, '<C-l>')
+call skkeleton#register_keymap('input', '<C-l>', 'zenkaku')
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
@@ -1775,4 +1799,3 @@ function s:HelpCurwin(subject) abort
   endif
   return 'help ' .. a:subject
 endfunction
-
