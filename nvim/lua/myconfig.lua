@@ -563,12 +563,6 @@ cmp.setup {
       return vim_item
     end
   },
-  sources = {
-    { name = 'skkeleton' }
-  },
-  view = {
-    entries = 'native'
-  }
 }
 
 -- Set configuration for specific filetype.

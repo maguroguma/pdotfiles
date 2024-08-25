@@ -269,7 +269,6 @@ call jetpack#add('folke/noice.nvim')
 call jetpack#add('rcarriga/nvim-notify')
 call jetpack#add('vim-skk/skkeleton')
 call jetpack#add('delphinus/skkeleton_indicator.nvim')
-call jetpack#add('rinx/cmp-skkeleton')
 
 call jetpack#end()
 " plugins END }}}
@@ -1028,8 +1027,9 @@ endfunction
 call SetupLexima()
 
 " cocの補完をEnterで決定する（leximaの設定を上書きする）
-inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#confirm()
+"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
 " helpより
 inoremap <silent><expr> <CR> coc#pum#visible() ? "\<CR>" :
       \ "\<C-g>u\<C-r>=lexima#expand('<LT>CR>', 'i')\<CR><C-r>=coc#on_enter()\<CR>"
@@ -1134,7 +1134,7 @@ cmap <C-j> <Plug>(skkeleton-enable)
 tmap <C-j> <Plug>(skkeleton-enable)
 
 call add(g:skkeleton#mapped_keys, '<C-l>')
-call skkeleton#register_keymap('input', '<C-l>', 'zenkaku')
+call skkeleton#register_keymap('input', '<C-l>', 'disable')
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
