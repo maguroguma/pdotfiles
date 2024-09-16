@@ -72,3 +72,5 @@ nvim/pack/
 !vifmrc
 
 !lazygit/config.yml
+
+!karabiner/karabiner.json
