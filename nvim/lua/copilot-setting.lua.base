@@ -20,7 +20,7 @@ require('copilot').setup({
     auto_trigger = true, -- default: false
     debounce = 75,
     keymap = {
-      accept = "<C-k>", -- default : <M-l>
+      accept = "<C-k><C-k>", -- default : <M-l>
       accept_word = false,
       accept_line = false,
       next = "<Nop>",

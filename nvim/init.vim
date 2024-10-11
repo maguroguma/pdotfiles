@@ -1027,8 +1027,8 @@ endfunction
 call SetupLexima()
 
 " cocの補完をEnterで決定する（leximaの設定を上書きする）
-" inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#confirm()
-"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <C-k><C-j> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " helpより
 inoremap <silent><expr> <CR> coc#pum#visible() ? "\<CR>" :
@@ -1119,22 +1119,29 @@ let g:clever_f_chars_match_any_signs = ';'
 " PLUGSETTING: vim-skk/skkeleton
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-call skkeleton#config({ 'globalDictionaries': [
-      \ '~/.skk/SKK-JISYO.L',
-      \ '~/.skk/SKK-JISYO.emoji.utf8',
-      \ '~/.skk/SKK-JISYO.fullname',
-      \ '~/.skk/SKK-JISYO.geo',
-      \ '~/.skk/SKK-JISYO.jinmei',
-      \ '~/.skk/SKK-JISYO.law',
-      \ '~/.skk/SKK-JISYO.propernoun',
-      \ '~/.skk/SKK-JISYO.station',
-      \ ] })
+call skkeleton#config(
+      \ {
+      \ 'globalDictionaries': [
+        \ '~/.skk/SKK-JISYO.L',
+        \ '~/.skk/SKK-JISYO.emoji.utf8',
+        \ '~/.skk/SKK-JISYO.fullname',
+        \ '~/.skk/SKK-JISYO.geo',
+        \ '~/.skk/SKK-JISYO.jinmei',
+        \ '~/.skk/SKK-JISYO.law',
+        \ '~/.skk/SKK-JISYO.propernoun',
+        \ '~/.skk/SKK-JISYO.station',
+      \ ],
+      \ 'immediatelyCancel': v:false,
+      \})
 imap <C-j> <Plug>(skkeleton-enable)
 cmap <C-j> <Plug>(skkeleton-enable)
 tmap <C-j> <Plug>(skkeleton-enable)
 
-call add(g:skkeleton#mapped_keys, '<C-l>')
-call skkeleton#register_keymap('input', '<C-l>', 'disable')
+augroup skkeleton-coc
+  autocmd!
+  autocmd User skkeleton-enable-pre let b:coc_suggest_disable = v:true
+  autocmd User skkeleton-disable-pre let b:coc_suggest_disable = v:false
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
