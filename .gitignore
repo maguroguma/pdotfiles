@@ -24,8 +24,13 @@
 !nvim/init.vim
 !nvim/lazysource.vim
 !nvim/minimal.init.vim
-# copilot.vim
+!nvim/lua/myconfig.lua
+
+# plugins for copilot
 nvim/pack/
+# copilot.vim
+# copilot.lua, CopilotChat.nvim
+!nvim/lua/copilot-setting.lua.base
 
 !scripts/comma.sh
 !scripts/create-gh-link.sh
@@ -38,6 +43,9 @@ nvim/pack/
 !scripts/s-quote.sh
 !scripts/ts-to-date.sh
 !scripts/gogithub.sh
+!scripts/github_compare.sh
+!scripts/search_github_PR.sh
+!scripts/tmpspace.sh
 
 !tmux/tmux-session-fzf
 !tmux/tmux.conf
@@ -63,3 +71,7 @@ nvim/pack/
 !.zshenv
 !README.md
 !vifmrc
+
+!lazygit/config.yml
+
+!karabiner/karabiner.json

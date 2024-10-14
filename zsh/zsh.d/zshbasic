@@ -204,6 +204,19 @@ zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
 zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
 
+# ({upstream branchにのみ存在するコミット数}-{現在のbranchにのみ存在するコミット数})
+function git_upstream_diff_num() {
+    local branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+    if [ -n "$branch" ]; then
+        local commits=$(git rev-list --count --left-right @{upstream}...HEAD 2> /dev/null)
+        if [ -n "$commits" ]; then
+            echo "(${commits//$'\t'/-})"
+        else
+            echo "(diff error)"
+        fi
+    fi
+}
+
 # 複数行のプロンプト
 precmd () {
   # 1行あける
@@ -213,7 +226,11 @@ precmd () {
   local left='%B%K{14}%{\e[38;5;18m%}  %~ %{\e[m%}%k%K{15}%F{14}%k%b'
   # バージョン管理されてた場合、ブランチ名
   vcs_info
-  local right="%B%K{15}%{\e[38;5;32m%}  ${vcs_info_msg_0_} %{\e[m%}%k%K{2}%F{15}%f%k%b%B%K{2}%{\e[38;5;18m%}  %DT%* %{\e[m%}%k%F{2}%f%b"
+  local diffnum='$(git_upstream_diff_num)'
+  local right="%B%K{15}%{\e[38;5;32m%}  ${vcs_info_msg_0_} \
+%{\e[38;5;18m%}${diffnum} \
+%{\e[m%}\
+%k%K{2}%F{15}%f%k%b%B%K{2}%{\e[38;5;18m%}  %DT%* %{\e[m%}%k%F{2}%f%b"
   # スペースの長さを計算
   # テキストを装飾する場合、エスケープシーケンスをカウントしないようにする
   local invisible='%([BSUbfksu]|([FK]|){*})'
@@ -290,6 +307,12 @@ path=(
     "$path[@]"
 )
 
+# curl
+path=(
+    "/opt/homebrew/opt/curl/bin"(N-/)
+    "$path[@]"
+)
+
 # yarn
 path=(
     "$HOME/.yarn/bin"(N-/)
@@ -347,19 +370,24 @@ alias ga='git add'
 alias gau='git add -u'
 # branch
 alias gb='git branch'
-alias gbD='git branch -D'
 alias gba='git branch --all'
 alias gbd='git branch --delete'
+alias gbD='git branch -D'
+alias gbvv='git branch -vv'
+alias gb-set-upstream='git branch -u'
+alias gb-unset-upstream='git branch --unset-upstream'
 # checkout
 alias gcho='git checkout'
 # commit
 alias gc='git commit'
 alias gcm='git commit -m'
 alias gcam='git commit --amend'
+alias gcf='git commit --fixup'
 # config
 alias gc-list='git config -l'
 # diff
 alias gd='git diff'
+alias gdn='git diff --name-only'
 alias gdi='git diff --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change'
 alias gds='git diff --staged'
 alias gdsi='git diff --staged --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change'
@@ -378,10 +406,12 @@ alias gm='git merge'
 alias gms='git merge --squash'
 # push
 alias gpoh='git push origin HEAD'
+alias gpuoh='git push -u origin HEAD'
 # reset
 alias gu='git reset HEAD'
 # status
 alias gs='git status --short'
+alias gS='git status'
 # tag
 alias gt='git tag'
 alias gta='git tag -a'
@@ -407,6 +437,7 @@ alias ta='tmux a'
 alias tks='tmux kill-server'
 alias tls='tmux ls'
 alias tns='tmux new -s'
+alias tcapture='tmux capture-pane -pS - > ./tmux-capture-pane-$(date +%Y%m%d-%H%M%S)'
 
 # diff
 alias diff-dir='diff -rq'
@@ -422,6 +453,9 @@ alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
 alias tmux-copy='tmux save-buffer - | pbcopy'
 
+# brew
+alias brew-deps-tree='brew deps --tree --installed'
+
 # GNU系ツールに置き換える
 case "$OSTYPE" in
     darwin*)
@@ -431,5 +465,40 @@ case "$OSTYPE" in
         (( ${+commands[gxargs]} )) && alias xargs='gxargs'
     ;;
 esac
+
+# go updater
+# update_go() {
+#   echo Looking up latest version
+#   local path=/download/src/to
+#   local go_path=$path/go
+#   local version=$(go version 2> /dev/null | sed -e "s/^.*\(go[0-9.]\+\).*/\1/g");
+#   local latest_version=$(curl --silent https://go.dev/VERSION?m=text)
+#   if [[ "$version" == "$latest_version" ]]; then
+#     echo "Local go version $version is the most recent release"
+#     return 0
+#   fi
+#   local archive_uri=https://go.dev/dl/$latest_version.linux-amd64.tar.gz
+#   local archive=$path/$latest_version.tar.gz
+#   curl -L $archive_uri > "$archive"
+#   [[ -d "$go_path" ]] && rm -rf $go_path
+#   mkdir -p $go_path
+#   tar -C $path -xzf $archive && rm $archive
+# }
+
+git-grep-history() {
+  if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
+    echo "使用法: git-grep-history \"<検索したい文字列>\" [\"<ファイルパターン>\"]"
+    return 1
+  fi
+
+  local search_string="$1"
+
+  if [ "$#" -eq 2 ]; then
+    local file_pattern="$2"
+    git --no-pager grep "$search_string" $(git rev-list --all) -- $file_pattern
+  else
+    git --no-pager grep "$search_string" $(git rev-list --all)
+  fi
+}
 
 echo "\e[33m[$(basename $0)]\e[0m\t\e[32mloaded\e[0m"

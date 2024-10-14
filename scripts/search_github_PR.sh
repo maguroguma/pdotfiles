@@ -29,6 +29,18 @@ fi
 # 末尾の ".git" を取り除く
 remote_url=$(echo "$remote_url" | sed 's/\.git$//')
 
+### gogithub.sh との差分
+
+# 引数が1つでない場合はエラーメッセージを表示して終了
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <string>"
+    exit 1
+fi
+# 引数を変数に格納
+hash_str="$1"
+remote_url="$remote_url/pulls?q=${hash_str}"
+###
+
 # プロンプトでURLを確認し、ブラウザでオープンするかどうかの確認を行う
 echo "URL to open: ${remote_url}"
 read -p "Do you want to open this URL in your browser? (y/n): " -n 1 -r

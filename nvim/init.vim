@@ -13,14 +13,6 @@ endif
 " SECTION: depeding on environment
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" load hook post sources
-execute 'source ' .. expand('$XDG_CONFIG_HOME/nvim/lazysource.vim')
-
-let g:sonictemplate_vim_template_dir = [
-      \ expand('$GOPATH/src/github.com/maguroguma/go-competitive/template'),
-      \ expand('$DOTFILES_DIR/nvim/sonic-template'),
-      \]
-
 execute 'set shell=' .. expand('$SHELL')
 
 " jetpack利用時は先頭に追加するようにする
@@ -144,26 +136,20 @@ call jetpack#add('navarasu/onedark.nvim') " colorscheme
 
 " DO NOT lazy load
 call jetpack#add('lambdalisue/readablefold.vim')
-call jetpack#add('Yggdroot/indentLine')
+" call jetpack#add('Yggdroot/indentLine') " NOTE: archived on Jul 29, 2023
 call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('luochen1990/rainbow')
 call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
-call jetpack#add('mattn/vim-sonictemplate')
-call jetpack#add('thinca/vim-partedit')
 call jetpack#add('previm/previm')
-call jetpack#add('kana/vim-textobj-user')
-call jetpack#add('shinespark/vim-list2tree') " make directory tree format txt from markdown lists
+call jetpack#add('shinespark/vim-list2tree') " NOTE: (m) make directory tree format txt from markdown lists
 call jetpack#add('AndrewRadev/linediff.vim')
 call jetpack#add('lambdalisue/vim-manpager')
 
 " depends on denops
-call jetpack#add('lambdalisue/butler.vim') " ChatGPT wrapper
 call jetpack#add('lambdalisue/kensaku.vim') " search Japanese by megemo
 call jetpack#add('lambdalisue/kensaku-search.vim')
 call jetpack#add('lambdalisue/kensaku-command.vim')
 call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin
-call jetpack#add('yuki-yano/ai-review.nvim') " ai-review by using ChatGPT
-call jetpack#add('skanehira/denops-translate.vim') " deepl translation
 
 " lua plugin
 call jetpack#add('nvim-lualine/lualine.nvim')
@@ -171,164 +157,56 @@ call jetpack#add('gen740/SmoothCursor.nvim')
 call jetpack#add('lewis6991/gitsigns.nvim')
 
 " lazy
-call jetpack#add('glidenote/memolist.vim', {
-      \ 'on_cmd': ['MemoNew', 'MemoList', 'MemoGrep'],
-      \ 'hook_post_source': g:jetpack_memolist_scripts
-      \ })
-call jetpack#add('hrsh7th/nvim-cmp', {
-      \ 'on_event': 'CmdlineEnter'
-      \ })
-call jetpack#add('hrsh7th/cmp-buffer', {
-      \ 'on_event': 'CmdlineEnter',
-      \ 'depends': 'hrsh7th/nvim-cmp'
-      \ })
-call jetpack#add('hrsh7th/cmp-path', {
-      \ 'on_event': 'CmdlineEnter',
-      \ 'depends': 'hrsh7th/nvim-cmp'
-      \ })
-call jetpack#add('hrsh7th/cmp-cmdline', {
-      \ 'on_event': 'CmdlineEnter',
-      \ 'depends': 'hrsh7th/nvim-cmp',
-      \ 'hook_post_source': g:jetpack_cmp_scripts
-      \ })
-call jetpack#add('nvim-tree/nvim-web-devicons', {
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Neotree']
-      \ })
-call jetpack#add('nvim-tree/nvim-tree.lua', {
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen'],
-      \ 'depends': 'nvim-tree/nvim-web-devicons',
-      \ 'hook_post_source': g:jetpack_nvim_tree_scripts
-      \ })
-call jetpack#add('mbbill/undotree', {
-      \ 'on_cmd': ['UndotreeToggle'],
-      \ 'hook_post_source': g:jetpack_undotree_scripts
-      \ })
-call jetpack#add('voldikss/vim-floaterm', {
-      \ 'on_cmd': ['FloatermToggle'],
-      \ 'hook_post_source': g:jetpack_floaterm_scripts
-      \ })
+call jetpack#add('glidenote/memolist.vim')
+call jetpack#add('hrsh7th/cmp-buffer')
+call jetpack#add('hrsh7th/cmp-path')
+call jetpack#add('hrsh7th/cmp-cmdline')
+call jetpack#add('hrsh7th/nvim-cmp')
+
+call jetpack#add('nvim-tree/nvim-web-devicons')
+
+call jetpack#add('mbbill/undotree')
+call jetpack#add('voldikss/vim-floaterm')
 call jetpack#add('fatih/vim-go', {
       \ 'on_ft': 'go',
-      \ 'hook_post_source': g:jetpack_vim_go_scripts
       \ })
-call jetpack#add('monaqa/dial.nvim', {
-      \ 'on_cmd': ['DialIncrement', 'DialDecrement'],
-      \ 'hook_post_source': g:jetpack_dial_scripts
-      \ })
-call jetpack#add('lambdalisue/fern.vim', {
-      \ 'on_cmd': 'Fern',
-      \ 'hook_post_source': g:jetpack_fern_scripts
-      \ })
-call jetpack#add('lambdalisue/fern-git-status.vim', {
-      \ 'on_cmd': 'Fern',
-      \ 'depends': 'lambdalisue/fern.vim'
-      \ })
-call jetpack#add('lambdalisue/nerdfont.vim', {
-      \ 'on_cmd': 'Fern',
-      \ 'depends': 'lambdalisue/fern.vim'
-      \ })
-call jetpack#add('lambdalisue/fern-renderer-nerdfont.vim', {
-      \ 'on_cmd': 'Fern',
-      \ 'depends': 'lambdalisue/fern.vim'
-      \ })
-call jetpack#add('lambdalisue/glyph-palette.vim', {
-      \ 'on_cmd': 'Fern',
-      \ 'depends': 'lambdalisue/fern.vim'
-      \ })
-call jetpack#add('lambdalisue/fern-hijack.vim', {
-      \ 'on_cmd': 'Fern',
-      \ 'depends': 'lambdalisue/fern.vim'
-      \ })
-call jetpack#add('junegunn/fzf', {
-      \ 'on_cmd': ['Files', 'HCommand', 'Buffers', 'MemoList']
-      \ })
-call jetpack#add('junegunn/fzf.vim', {
-      \ 'depends': 'junegunn/fzf',
-      \ 'on_cmd': ['Files', 'HCommand', 'Buffers', 'MemoList'],
-      \ 'hook_post_source': g:jetpack_fzf_scripts
-      \ })
-call jetpack#add('rlane/pounce.nvim', {
-      \ 'on_cmd': ['Pounce'],
-      \ 'hook_post_source': g:jetpack_pounce_scripts
-      \ })
-call jetpack#add('folke/todo-comments.nvim', {
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
-      \ 'hook_post_source': g:jetpack_todo_comments_scripts
-      \ })
-call jetpack#add('stevearc/aerial.nvim', {
-      \ 'depends': 'nvim-tree/nvim-web-devicons',
-      \ 'on_cmd': ['AerialToggle'],
-      \ 'hook_post_source': g:jetpack_aerial_scripts
-      \ })
-call jetpack#add('max397574/better-escape.nvim', {
-      \ 'on_event': 'InsertEnter',
-      \ 'hook_post_source': g:jetpack_better_escape_scripts
-      \ })
+
+call jetpack#add('lambdalisue/fern.vim')
+call jetpack#add('lambdalisue/fern-git-status.vim')
+call jetpack#add('lambdalisue/nerdfont.vim')
+call jetpack#add('lambdalisue/fern-renderer-nerdfont.vim')
+call jetpack#add('lambdalisue/glyph-palette.vim')
+call jetpack#add('lambdalisue/fern-hijack.vim')
+
+call jetpack#add('junegunn/fzf')
+call jetpack#add('junegunn/fzf.vim')
+call jetpack#add('rlane/pounce.nvim')
+call jetpack#add('folke/todo-comments.nvim')
+
 call jetpack#add('nvim-treesitter/nvim-treesitter', {
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
-      \ 'hook_post_source': g:jetpack_treesitter_scripts
+      \ 'do': ':TSUpdate'
       \ })
 call jetpack#add('rhysd/committia.vim', {
       \ 'on_ft': ['gitcommit', 'git', 'gina-commit'],
-      \ 'hook_post_source': g:jetpack_committia_scripts
       \ })
+
 call jetpack#add('neoclide/coc.nvim', {
       \ 'branch': 'release',
-      \ 'on_cmd': ['NvimTreeToggle', 'NvimTreeOpen', 'Files', 'Neotree'],
-      \ 'hook_post_source': g:jetpack_coc_scripts
       \ })
-call jetpack#add('cohama/lexima.vim', {
-      \ 'depends': 'neoclide/coc.nvim',
-      \ 'on_event': 'InsertEnter',
-      \ 'hook_post_source': g:jetpack_lexima_scripts
-      \ })
+call jetpack#add('cohama/lexima.vim')
+
 " better asterisk behavior
-call jetpack#add('haya14busa/vim-asterisk', {
-      \ 'on_map': '<Plug>(asterisk',
-      \ 'on_event': 'CmdlineEnter'
-      \ })
-call jetpack#add('kevinhwang91/nvim-hlslens', {
-      \ 'depends': 'haya14busa/vim-asterisk',
-      \ 'on_map': '<Plug>(asterisk',
-      \ 'on_event': 'CmdlineEnter',
-      \ 'hook_post_source': g:jetpack_hlslens_scripts
-      \ })
+call jetpack#add('haya14busa/vim-asterisk')
+call jetpack#add('kevinhwang91/nvim-hlslens')
 call jetpack#add('mattn/emmet-vim', {
       \ 'on_ft': ['html', 'vue', 'html.twig'],
-      \ 'hook_post_source': g:jetpack_emmet_scripts
       \ })
-call jetpack#add('heavenshell/vim-jsdoc', {
-      \ 'on_ft': ['javascript', 'javascript.jsx','typescript'],
-      \ 'build': 'make install',
-      \ 'hook_post_source': g:jetpack_jsdoc_scripts
-      \ })
-call jetpack#add('t9md/vim-choosewin', {
-      \ 'on_cmd': 'ChooseWin',
-      \ 'hook_post_source': g:jetpack_choosewin_scripts
-      \ })
-call jetpack#add('MattesGroeger/vim-bookmarks', {
-      \ 'on_cmd': ['BookmarkToggle', 'BookmarkAnnotate', 'BookmarkShowAll', 'BookmarkClear', 'BookmarkClearAll', 'BookmarkMoveUp', 'BookmarkMoveDown', 'BookmarkMoveToLine'],
-      \ 'hook_post_source': g:jetpack_bookmarks_scripts
-      \ })
-call jetpack#add('ntpeters/vim-better-whitespace', {
-      \ 'on_event': ['CursorHold', 'CursorMoved'],
-      \ 'hook_post_source': g:jetpack_better_whitespace_scripts
-      \ })
-call jetpack#add('machakann/vim-highlightedyank', {
-      \ 'on_event': ['CursorHold', 'CursorMoved'],
-      \ 'hook_post_source': g:jetpack_highlightedyank_scripts
-      \ })
-call jetpack#add('kyoh86/vim-ripgrep', {
-      \ 'on_cmd': 'Ripgrep',
-      \ 'hook_post_source': g:jetpack_ripgrep_scripts
-      \ })
+call jetpack#add('t9md/vim-choosewin')
+call jetpack#add('ntpeters/vim-better-whitespace')
+call jetpack#add('machakann/vim-highlightedyank')
 " read vim command result to buffer
-call jetpack#add('tyru/capture.vim', {
-      \ 'on_cmd': ['Capture']
-      \ })
-call jetpack#add('moll/vim-bbye', {
-      \ 'on_cmd': ['Bdelete']
-      \ })
+call jetpack#add('tyru/capture.vim')
+" call jetpack#add('moll/vim-bbye')
 call jetpack#add('mattn/vim-maketable', {
       \ 'on_ft': ['md', 'markdown']
       \ })
@@ -336,51 +214,26 @@ call jetpack#add('jodosha/vim-godebug', {
       \ 'on_ft': 'go'
       \ })
 " automatic closing of quotes, parenthesis, brackets, etc.
-call jetpack#add('Raimondi/delimitMate', {
-      \ 'on_event': 'InsertEnter'
-      \ })
-call jetpack#add('windwp/nvim-spectre', {
-      \ 'on_cmd': 'Spectre'
-      \ })
-call jetpack#add('simeji/winresizer', {
-      \ 'on_cmd': 'WinResizerStartResize'
-      \ })
+call jetpack#add('Raimondi/delimitMate')
+" easy grep tool
+call jetpack#add('windwp/nvim-spectre')
+call jetpack#add('simeji/winresizer')
 " for commenting on vue SFC
-call jetpack#add('tomtom/tcomment_vim', {
-      \ 'on_event': ['CursorHold', 'CursorMoved']
-      \ })
-call jetpack#add('vim-test/vim-test', {
-      \ 'on_cmd': ['TestFile', 'TestNearest']
-      \ })
+call jetpack#add('tomtom/tcomment_vim')
+call jetpack#add('vim-test/vim-test')
 " mark colors to words and sentences
-call jetpack#add('t9md/vim-quickhl', {
-      \ 'on_map': '<Plug>(quickhl'
-      \ })
+call jetpack#add('t9md/vim-quickhl')
 " realize live substitute
-call jetpack#add('markonm/traces.vim', {
-      \ 'on_event': 'CmdlineEnter'
-      \ })
-call jetpack#add('tyru/open-browser.vim', {
-      \ 'on_map': '<Plug>(openbrowser-smart-search)'
-      \ })
-call jetpack#add('monaqa/modesearch.vim', {
-      \ 'on_map': '<Plug>(modesearch-'
-      \ })
-" require coc-ultisnips if used with coc.nvim
-call jetpack#add('sirver/ultisnips', {
-      \ 'on_event': 'InsertEnter'
-      \ })
+call jetpack#add('markonm/traces.vim')
+call jetpack#add('tyru/open-browser.vim')
 call jetpack#add('mtdl9/vim-log-highlighting', {
       \ 'on_ft': ['log']
       \ })
-" show git diff on git rebase
+" NOTE: (m) show git diff on git rebase
 call jetpack#add('hotwatermorning/auto-git-diff', {
       \ 'on_ft': ['gitcommit', 'git']
       \ })
 call jetpack#add('mzlogin/vim-markdown-toc', {
-      \ 'on_ft': ['md', 'markdown']
-      \ })
-call jetpack#add('iamcco/mathjax-support-for-mkdp', {
       \ 'on_ft': ['md', 'markdown']
       \ })
 call jetpack#add('alvan/vim-closetag', {
@@ -389,32 +242,34 @@ call jetpack#add('alvan/vim-closetag', {
 call jetpack#add('ap/vim-css-color', {
       \ 'on_ft': ['html', 'vue', 'html.twig', 'vim', 'lua']
       \ })
-call jetpack#add('jsborjesson/vim-uppercase-sql', {
-      \ 'on_ft': ['sql']
-      \ })
 call jetpack#add('posva/vim-vue', {
       \ 'on_ft': ['vue']
       \ })
 call jetpack#add('mattn/vim-sqlfmt', {
       \ 'on_ft': ['sql']
       \ })
-call jetpack#add('lambdalisue/gina.vim', {
-      \ 'on_cmd': ['Gina'],
-      \ 'hook_post_source': g:jetpack_gina_scripts
-      \ })
-" FIXME: tag: 2.51
+call jetpack#add('lambdalisue/gina.vim')
 call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
-      \ 'tag': '2.51',
-      \ 'on_cmd': ['Neotree', 'NeoTreeReveal'],
-      \ 'depends': 'nvim-tree/nvim-web-devicons',
-      \ 'hook_post_source': g:jetpack_neotree_scripts
-      \ })
-call jetpack#add('kuuote/vim-fuzzyhistory', {
-      \ 'on_map': '<Plug>(fuzzy-history)'
+      \ 'branch': 'v3.x',
       \ })
 call jetpack#add('chrisbra/csv.vim', {
       \ 'on_ft': ['csv']
       \ })
+
+" 2024
+call jetpack#add('mvllow/modes.nvim')
+call jetpack#add('stevearc/aerial.nvim')
+call jetpack#add('MattesGroeger/vim-bookmarks')
+call jetpack#add('shellRaining/hlchunk.nvim')
+call jetpack#add('kazhala/close-buffers.nvim')
+call jetpack#add('Wansmer/treesj')
+call jetpack#add('thinca/vim-qfreplace')
+call jetpack#add('rhysd/clever-f.vim')
+call jetpack#add('folke/noice.nvim')
+call jetpack#add('rcarriga/nvim-notify')
+call jetpack#add('vim-skk/skkeleton')
+call jetpack#add('delphinus/skkeleton_indicator.nvim')
+call jetpack#add('will133/vim-dirdiff')
 
 call jetpack#end()
 " plugins END }}}
@@ -432,179 +287,389 @@ filetype plugin indent on
 let mapleader = "\<Space>"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SECTION: plugin map
+" SECTION: main settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Snippets, Commits, BCommits, Commands
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> R :HCommand<CR>
-nnoremap <silent> ; :Buffers<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: junegunn/fzf.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+"""
+" commands
+"""
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(
+    \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
+    \   <bang>0)
+
+command! -bang -nargs=? -complete=dir Buffers
+    \ call fzf#vim#buffers(
+    \   <q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}),
+    \   <bang>0)
+
+" deletes buffers by fzf
+" ref: https://github.com/junegunn/fzf.vim/pull/733#issuecomment-559720813
+function! s:list_buffers()
+  redir => list
+  silent ls
+  redir END
+  return split(list, "\n")
+endfunction
+
+function! s:list_buffers_customized()
+  redir => list
+  silent ls
+  redir END
+
+  let l:res = []
+  let l:raw_lines = split(list, "\n")
+  for l:raw_line in raw_lines
+    let l:elems = split(l:raw_line)
+    let l:custom_line = l:elems[0] . "\t" . substitute(l:elems[2], '"', "", "g")
+    call add(l:res, l:custom_line)
+  endfor
+ return l:res
+endfunction
+
+function! s:delete_buffers(lines)
+  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
+endfunction
+
+command! BD call fzf#run(fzf#wrap({
+  \ 'source': s:list_buffers_customized(),
+  \ 'sink*': { lines -> s:delete_buffers(lines) },
+  \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept --prompt "delete(close) buffers> "'
+\ }))
+
+"""
+" custom git show with gina.vim
+"""
+" source
+function! s:list_commits() abort
+  let l:res = system('git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --color=always')
+  return split(l:res, "\n")
+endfunction
+" sink
+function! s:select_commits(commit_hash) abort
+  let l:list = split(a:commit_hash, ' ')
+  let l:execute_command = 'Gina show ' . l:list[1] . ':%'
+  execute l:execute_command
+endfunction
+command! GinaShow call fzf#run(fzf#wrap({
+  \ 'source': s:list_commits(),
+  \ 'sink': funcref('s:select_commits'),
+  \ 'options': '--ansi --prompt "git show of the buffer> "',
+\ }))
+
+"""
+" custom insert command from history
+"""
+" source
+function! s:list_command_history() abort
+  let l:res = system("cat $HISTFILE | cut -b 16- | head -n 5000")
+  return reverse(split(l:res, "\n"))
+endfunction
+" sink
+function! s:insert_target(shell_command) abort
+  call setline(line("."), a:shell_command)
+endfunction
+command! HCommand call fzf#run(fzf#wrap({
+  \ 'source': s:list_command_history(),
+  \ 'sink': funcref('s:insert_target'),
+  \ 'options': '--ansi --prompt "replace current line> "',
+\ }))
+
+"""
+" easy MRU
+"""
+command! Fmru FZFMru
+command! FZFMru call fzf#run(fzf#wrap({
+  \ 'source': v:oldfiles,
+  \ 'sink': 'e',
+\}))
+
+"""
+" layouts, styles
+"""
+
+" popup window
+let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
+
+" Empty value to disable preview window altogether
+let g:fzf_preview_window = []
+
+" short map
+nnoremap <silent> <C-p> <cmd>Files<CR>
+nnoremap <silent> ; <cmd>Buffers<CR>
+nnoremap <silent> , <cmd>GitFiles?<CR>
+nnoremap <silent> R <cmd>HCommand<CR>
+nnoremap <silent> <C-]> <cmd>Marks<CR>
+" long map
+nnoremap <silent> <Space>h <cmd>Helptags<CR>
+nnoremap <silent> <Space>gf <cmd>GitFiles?<CR>
+nnoremap <silent> <Space>q <cmd>History:<CR>
+nnoremap <silent> <Space>bd <cmd>BD<CR>
+" show maps map
 nmap <Space><tab> <plug>(fzf-maps-n)
 xmap <Space><tab> <plug>(fzf-maps-x)
 omap <Space><tab> <plug>(fzf-maps-o)
 imap <C-a><tab> <plug>(fzf-maps-i)
 
-nmap <silent> <C-f> <cmd>NvimTreeToggle<CR>
-nmap <silent> f <cmd>NvimTreeOpen .<CR>
-nmap <silent> <C-h> <cmd>execute 'NvimTreeOpen ' . expand('%:p:h')<CR>
+" Global line completion (not just open buffers. ripgrep required.)
+inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
+  \ 'prefix': '^.*$',
+  \ 'source': 'rg -n ^ --color always',
+  \ 'options': '--ansi --delimiter : --nth 3..',
+  \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }
+\}))
+
+function! s:paste_file_paths(strings)
+    let l:original_a = getreg('a')
+    let l:joined_strings = join(a:strings, ' ')
+    call setreg('a', l:joined_strings)
+    normal! "ap
+    call setreg('a', l:original_a)
+endfunction
+command! FzfPasteFilePaths call fzf#run(fzf#wrap({
+  \ 'source': 'find .',
+  \ 'sink*': { lines -> s:paste_file_paths(lines) },
+  \ 'options': '--multi --ansi --prompt "replace current line> "',
+\ }))
+
+" Path completion with custom source command
+inoremap <expr> <c-f> fzf#vim#complete#path('find .')
+" inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+
+" Word completion with custom spec with popup layout option
+" inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: nvim-neo-tree/neo-tree.nvim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 nnoremap <silent> <C-f> <cmd>Neotree reveal<CR>
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: lambdalisue/gina.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 set diffopt+=vertical
 " 現在のバッファ
+" 現在のバッファのファイルをcheckoutする
+function! s:gitCheckoutThis()
+  let l:confirm_msg = 'You checkout this buffer file, OK?'
+  let l:is_ok = confirm(l:confirm_msg, "y yes\nn no")
+  if l:is_ok != 1
+    return
+  endif
+  :Gina checkout %
+endfunction
 nnoremap <Space>ga <cmd>Gina add %<CR>
 nnoremap <Space>gu <cmd>Gina reset HEAD %<CR>
 nnoremap <Space>gc <cmd>GinaCheckoutThis<CR>
-nnoremap <Space>gd <cmd>Gina diff --opener=vsplit :%<CR>
-nnoremap <Space>gD <cmd>Gina diff --opener=vsplit --staged :%<CR>
+nnoremap <Space>gd <cmd>Gina diff :%<CR>
+nnoremap <Space>gD <cmd>Gina diff --staged :%<CR>
+
 " 全体
-nnoremap <Space>gp <cmd>Gina patch<CR>
-nnoremap <Space>gs <cmd>Gina status --opener=vsplit<CR>
+nnoremap <Space>gp <cmd>Gina patch --oneside<CR>
+nnoremap <Space>gs <cmd>Gina status<CR>
 nnoremap <Space>gl <cmd>Gina log<CR>
-nnoremap <Space>gb <cmd>Gina blame<CR>
-command! GinaDiffAll Gina diff --opener=vsplit
-command! GinaDiffStagedAll Gina diff --staged --opener=vsplit
-command! GinaCommitVsplit Gina commit --opener=vsplit
-command! GinaBrowseThis Gina browse --exact HEAD:%
+nnoremap <Space>gb <cmd>execute 'Gina blame --width=' . (&columns / 2)<CR>
+nnoremap <Space>Gd <cmd>Gina diff<CR>
+nnoremap <Space>GD <cmd>Gina diff --staged<CR>
+
+function! BrowseRevision(revision)
+  if a:revision == ''
+    let l:revision = 'HEAD'
+  else
+    let l:revision = a:revision
+  endif
+
+  let l:cmd = 'Gina browse --exact ' . l:revision . ':%'
+  execute l:cmd
+  echo '[RUN] ' . l:cmd
+endfunction
+
+function! BrowseRevisionRange(line1, line2, revision)
+  if a:revision == ''
+    let l:revision = 'HEAD'
+  else
+    let l:revision = a:revision
+  endif
+
+  let l:cmd = a:line1 . ',' . a:line2 . 'Gina browse --exact ' . l:revision . ':%'
+  execute l:cmd
+  echo '[RUN] ' . l:cmd
+endfunction
+
+command! GinaDiffAll Gina diff
+command! GinaDiffStagedAll Gina diff --staged
+command! GinaCommit Gina commit --opener=vsplit
+command! GinaCommitAmend Gina commit --amend --opener=vsplit
+command! GinaCheckoutThis :call s:gitCheckoutThis()
+
+" 引数として branch 等の ref を取れる（デフォルトは現在の ref となる）
+command! -nargs=? GinaBrowseThis :call BrowseRevision(<q-args>)
+command! -range -nargs=? GinaBrowseThese :call BrowseRevisionRange(<line1>, <line2>, <q-args>)
+
+let g:gina#command#blame#formatter#format = "%su%=on %au %ti %ma%in"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: luochen1990/rainbow
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: tyru/open-browser.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: haya14busa/vim-asterisk
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 map *  <Plug>(asterisk-z*)
 map #  <Plug>(asterisk-z#)
 map g* <Plug>(asterisk-gz*)
 map g# <Plug>(asterisk-gz#)
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: t9md/vim-quickhl
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 nmap M <Plug>(quickhl-manual-this)
 xmap M <Plug>(quickhl-manual-this)
 
+let g:quickhl_manual_keywords = [
+      \ 'FACT:',
+      \ 'IMO:',
+      \]
+let g:quickhl_manual_enable_at_startup = 1
+let g:quickhl_manual_colors = [
+      \ "cterm=bold ctermfg=12 ctermbg=64  gui=bold guibg=#FFC300 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=5   gui=bold guibg=#0070e0 guifg=#ffffff",
+      \ "cterm=bold ctermfg=16 ctermbg=153 gui=bold guibg=#0a7383 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=1   gui=bold guibg=#a07040 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=2   gui=bold guibg=#4070a0 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=3   gui=bold guibg=#40a070 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=4   gui=bold guibg=#70a040 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=6   gui=bold guibg=#007020 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=21  gui=bold guibg=#d4a00d guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=22  gui=bold guibg=#06287e guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=45  gui=bold guibg=#5b3674 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=16  gui=bold guibg=#4c8f2f guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=50  gui=bold guibg=#1060a0 guifg=#ffffff",
+      \ "cterm=bold ctermfg=7  ctermbg=56  gui=bold guibg=#a0b0c0 guifg=black",
+      \ "cterm=bold ctermfg=8  ctermbg=60  gui=bold guibg=#FF5733 guifg=#ffffff",
+      \ "cterm=bold ctermfg=9  ctermbg=61  gui=bold guibg=#C70039 guifg=#ffffff",
+      \ "cterm=bold ctermfg=10 ctermbg=62  gui=bold guibg=#900C3F guifg=#ffffff",
+      \ "cterm=bold ctermfg=11 ctermbg=63  gui=bold guibg=#581845 guifg=#ffffff",
+      \ "cterm=bold ctermfg=12 ctermbg=64  gui=bold guibg=#7F00FF guifg=#ffffff",
+      \ "cterm=bold ctermfg=13 ctermbg=65  gui=bold guibg=#FF007F guifg=#ffffff",
+      \ "cterm=bold ctermfg=14 ctermbg=66  gui=bold guibg=#00FFFF guifg=#000000",
+      \ "cterm=bold ctermfg=15 ctermbg=67  gui=bold guibg=#FFFF00 guifg=#000000",
+      \ "cterm=bold ctermfg=16 ctermbg=68  gui=bold guibg=#FF7F00 guifg=#ffffff",
+      \ "cterm=bold ctermfg=17 ctermbg=69  gui=bold guibg=#7FFF00 guifg=#000000",
+      \ "cterm=bold ctermfg=18 ctermbg=70  gui=bold guibg=#00FF00 guifg=#000000",
+      \ "cterm=bold ctermfg=19 ctermbg=71  gui=bold guibg=#007FFF guifg=#ffffff",
+      \ ]
+
+nnoremap <Space>M :QuickhlManualAdd! <C-r>/<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: windwp/nvim-spectre
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 nnoremap <Space>s <cmd>Spectre<CR>
 
-nmap  <C-a>  <cmd>DialIncrement<CR>
-nmap  <C-x>  <cmd>DialDecrement<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: moll/vim-bbye
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nmap <Space>mm <cmd>BookmarkToggle<CR>
-nmap <Space>mi <cmd>BookmarkAnnotate<CR>
-nmap <Space>ma <cmd>BookmarkShowAll<CR>
-nmap <Space>mc <cmd>BookmarkClear<CR>
-nmap <Space>mx <cmd>BookmarkClearAll<CR>
-nmap <Space>mkk <cmd>BookmarkMoveUp<CR>
-nmap <Space>mjj <cmd>BookmarkMoveDown<CR>
-nmap <Space>mg <cmd>BookmarkMoveToLine<CR>
-" require coc-fzf-preview
-nnoremap <Space>mf <cmd>CocCommand fzf-preview.Bookmarks<CR>
+nnoremap <Space>d <cmd>BDelete this<CR>
+nnoremap <Space>D <cmd>BDelete hidden<CR>
 
-nnoremap <Space>d <C-u>:Bdelete<CR>
-nnoremap <Space>D <C-u>:bufdo :Bdelete<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: t9md/vim-choosewin
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 nmap ss <cmd>ChooseWin<CR>
+" オーバーレイ機能を有効にしたい場合
+let g:choosewin_overlay_enable          = 1
+" オーバーレイ・フォントをマルチバイト文字を含むバッファでも綺麗に表示する。
+let g:choosewin_overlay_clear_multibyte = 1
+let g:choosewin_label = 'HJKLYUIONM'
 
-nnoremap <Space>mn  :MemoNew<CR>
-nnoremap <Space>ml  :MemoList<CR>
-nnoremap <Space>mg  :MemoGrep<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: glidenote/memolist.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nmap <Space>/ <Plug>(fuzzy-history)
+nnoremap <Space>mn  <cmd>MemoNew<CR>
+nnoremap <Space>ml  <cmd>MemoList<CR>
+nnoremap <Space>mg  <cmd>MemoGrep<CR>
+
+let g:memolist_path = expand("$GOPATH/src/github.com/maguroguma/memolist")
+let g:memolist_memo_suffix = "md"
+let g:memolist_memo_date = "%Y-%m-%d %H:%M"
+let g:memolist_prompt_tags = 1
+let g:memolist_prompt_categories = 1
+let g:memolist_fzf = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: w0ng/vim-hybrid
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set termguicolors
 set background=dark
 colorscheme hybrid
 
-noremap <Space>u :UndotreeToggle<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: mbbill/undotree
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nnoremap <C-s> <Cmd>FloatermToggle<CR>
+noremap <Space>u <cmd>UndotreeToggle<CR>
+let g:undotree_WindowLayout = 2         " undotreeは左側/diffは下にウィンドウ幅で表示
+let g:undotree_ShortIndicators = 1      " 時間単位は短く表示
+let g:undotree_SplitWidth = 40          " undotreeのウィンドウ幅
+let g:undotree_SetFocusWhenToggle = 1   " undotreeを開いたらフォーカスする
+"let g:undotree_DiffAutoOpen = 0         " diffウィンドウは起動時無効
+let g:undotree_DiffpanelHeight = 8      " diffウィンドウの行数
+"let g:undotree_HighlightChangedText = 0 " 変更箇所のハイライト無効
 
-nmap g/ <Plug>(modesearch-slash)
-nmap g? <Plug>(modesearch-question)
-cmap <C-x> <Plug>(modesearch-toggle-mode)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: voldikss/vim-floaterm
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:partedit#auto_prefix = v:false
+nnoremap <C-s> <cmd>FloatermToggle<CR>
+" 参考: https://github.com/yutkat/dotfiles/blob/28e8df61c39727fa85d3f289343eb60feffd29d8/.config/nvim/rc/pluginconfig/vim-floaterm.vim
+let g:floaterm_height = 0.97
+let g:floaterm_width = 0.98
+augroup vimrc_floaterm
+  autocmd!
+  autocmd User FloatermOpen tnoremap <buffer> <silent> <C-s> <C-\><C-n><cmd>FloatermToggle<CR>
+  autocmd QuitPre * FloatermKill!
+augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: simeji/winresizer
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 nmap <C-e> <cmd>WinResizerStartResize<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: previm/previm
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:previm_open_cmd = 'open -a Google\ Chrome'
 nnoremap <silent> <Space>mp <cmd>PrevimOpen<CR>
 
-let g:UltiSnipsExpandTrigger = '<c-j>'
-let g:UltiSnipsJumpForwardTrigger = '<c-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
-let g:UltiSnipsEditSplit = 'vertical'
-" let g:UltiSnipsSnippetDirectories = ['']
-
-" kana/vim-textobj-user setting
-call textobj#user#plugin('datetime', {
-\   'date': {
-\     'pattern': '\<\d\d\d\d-\d\d-\d\d\>',
-\     'select': ['ad', 'id'],
-\   },
-\   'time': {
-\     'pattern': '\<\d\d:\d\d:\d\d\>',
-\     'select': ['at', 'it'],
-\   },
-\ })
-
-call textobj#user#plugin('braces', {
-\   'angle': {
-\     'pattern': ['<<', '>>'],
-\     'select-a': 'aA',
-\     'select-i': 'iA',
-\   },
-\ })
-
-" japanese brackets
-call textobj#user#plugin('jparentheses', {
-\   'jparentheses': {
-\     'pattern': ['（', '）'],
-\     'select-a': 'aj(',
-\     'select-i': 'ij(',
-\   },
-\ })
-call textobj#user#plugin('jsquarebrackets', {
-\   'jsquarebrackets': {
-\     'pattern': ['【', '】'],
-\     'select-a': 'aj[',
-\     'select-i': 'ij[',
-\   },
-\ })
-call textobj#user#plugin('jquotation', {
-\   'jquotation': {
-\     'pattern': ['「', '」'],
-\     'select-a': 'ajb',
-\     'select-i': 'ijb',
-\   },
-\ })
-
-call textobj#user#plugin('line', {
-\   '-': {
-\     'select-a-function': 'CurrentLineA',
-\     'select-a': 'al',
-\     'select-i-function': 'CurrentLineI',
-\     'select-i': 'il',
-\   },
-\ })
-
-function! CurrentLineA()
-  normal! 0
-  let head_pos = getpos('.')
-  normal! $
-  let tail_pos = getpos('.')
-  return ['v', head_pos, tail_pos]
-endfunction
-
-function! CurrentLineI()
-  normal! ^
-  let head_pos = getpos('.')
-  normal! g_
-  let tail_pos = getpos('.')
-  let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
-  return
-  \ non_blank_char_exists_p
-  \ ? ['v', head_pos, tail_pos]
-  \ : 0
-endfunction
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: yuki-yano/fuzzy-motion.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:fuzzy_motion_labels = [
       \ 'H', 'J', 'K', 'L', 'Y',
@@ -624,7 +689,459 @@ highlight FuzzyMotionSubChar gui=bold guifg=#2bb2e3
 let g:fuzzy_motion_matchers = ['fzf', 'kensaku']
 cnoremap <C-a><CR> <Plug>(kensaku-search-replace)<CR>
 
-command! ChatGPT :Butler
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: machakann/vim-highlightedyank
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:highlightedyank_highlight_duration = 500
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: ntpeters/vim-better-whitespace
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:better_whitespace_filetypes_blacklist = ['diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'fugitive', 'defx']
+let g:better_whitespace_ctermcolor = '12'
+highlight ExtraWhitespace ctermbg=159
+highlight ExtraWhitespace guibg=#caedfc
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: mattn/emmet-vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:user_emmet_leader_key='<C-e>'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: fatih/vim-go
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+let g:go_fmt_command = "goimports"
+" LSPに任せる機能をOFFにする
+let g:go_def_mapping_enabled = 0
+let g:go_doc_keywordprg_enabled = 0
+
+" autocmd FileType go nmap <Space>b  <Plug>(go-build)
+autocmd FileType go nmap <Space>r  <Plug>(go-run)
+autocmd FileType go nmap <Space>t  <Plug>(go-test)
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+autocmd FileType go nmap <Space>b <cmd>call <SID>build_go_files()<CR>
+autocmd FileType go nmap <Space>c <Plug>(go-coverage-toggle)
+
+" ハイライト
+" :help go-settings
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_generate_tags = 1
+
+" let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+let g:go_metalinter_autosave = 0
+" オートで実行するものは選定できる
+" let g:go_metalinter_autosave_enabled = ['vet', 'golint']
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: rhysd/committia.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
+nnoremap ZZ <cmd>call g:SelectType()<CR>
+function! g:SelectType() abort
+  if &filetype ==? "gitcommit" || &filetype ==? "gina-commit"
+    let line = substitute(getline('.'), '^#\s*', '', 'g') " 最初の '# ' を除く
+    let arr = split(line, ' ')
+    let title = printf('%s: %s ', arr[0], arr[1])
+
+    silent! normal! "_dip
+    silent! put! =title
+    silent! startinsert!
+  else
+    echoerr 'This is not gitcommit buffer!'
+    return
+  endif
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: lambdalisue/fern.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" nmap <C-f> :<C-u>Fern . -reveal=%<CR>
+let g:fern#renderer = "nerdfont"
+let g:fern#renderer#nerdfont#indent_markers = 1
+
+function! s:init_fern() abort
+  " Use 'select' instead of 'edit' for default 'open' action
+  " nmap <buffer> <Plug>(fern-action-open) <Plug>(fern-action-open:select)
+endfunction
+
+augroup fern-custom
+  autocmd! *
+  autocmd FileType fern call s:init_fern()
+augroup END
+
+augroup my-glyph-palette
+  autocmd! *
+  autocmd FileType fern call glyph_palette#apply()
+  autocmd FileType nerdtree,startify call glyph_palette#apply()
+augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: neoclide/coc.nvim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Some servers have issues with backup files, see #649.
+set nobackup
+set nowritebackup
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <C-n>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" NOTE: leximaの設定で変更する
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+" inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gh <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+" K -> gh
+nnoremap <silent> gh <cmd>call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <Space>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <Space>f  <Plug>(coc-format-selected)
+nmap <Space>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Applying codeAction to the selected region.
+" Example: `<Space>aap` for current paragraph
+xmap <Space>a  <Plug>(coc-codeaction-selected)
+nmap <Space>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <Space>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+" nmap <Space>qf  <Plug>(coc-fix-current)
+
+" Run the Code Lens action on the current line.
+nmap <Space>cl  <Plug>(coc-codelens-action)
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+" xmap if <Plug>(coc-funcobj-i)
+" omap if <Plug>(coc-funcobj-i)
+" xmap af <Plug>(coc-funcobj-a)
+" omap af <Plug>(coc-funcobj-a)
+" xmap ic <Plug>(coc-classobj-i)
+" omap ic <Plug>(coc-classobj-i)
+" xmap ac <Plug>(coc-classobj-a)
+" omap ac <Plug>(coc-classobj-a)
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+" if has('nvim-0.4.0') || has('patch-8.2.0750')
+"   nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+"   nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+"   inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+"   inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+"   vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+"   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+" endif
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of language server.
+" nmap <silent> <C-s> <Plug>(coc-range-select)
+" xmap <silent> <C-s> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocActionAsync('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+" original(from vim-jp)
+" https://vim-jp.slack.com/archives/CQ88WB7B3/p1659323660504669
+highlight CocMenuSel cterm=bold ctermbg=18
+highlight CocMenuSel gui=bold
+highlight CocMenuSel guibg=#525151
+highlight CocSearch cterm=bold ctermfg=44
+highlight CocSearch gui=bold
+highlight CocSearch guifg=#C586C0
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" " Mappings for CoCList
+" " Show all diagnostics.
+" nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" " Manage extensions.
+" nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" " Show commands.
+" nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" " Find symbol of current document.
+" nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" " Search workspace symbols.
+" nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" " Do default action for next item.
+" nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" " Do default action for previous item.
+" nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" " Resume latest coc list.
+" nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+"""
+" coc extensions
+"""
+let g:coc_global_extensions = [
+      \ 'coc-json',
+      \ 'coc-prettier',
+      \ 'coc-pyright',
+      \ 'coc-tsserver',
+      \ 'coc-vetur',
+      \ 'coc-html',
+      \ 'coc-css',
+      \ 'coc-yaml',
+      \ 'coc-sh',
+      \ 'coc-word',
+      \ 'coc-syntax',
+      \ 'coc-docker',
+      \ 'coc-tailwindcss',
+      \ 'coc-deno',
+      \ 'coc-fzf-preview',
+      \ 'coc-vimlsp',
+      \ ]
+
+" fzf-preview
+let g:fzf_preview_floating_window_rate = 0.9
+
+"""
+" node path
+"""
+" let g:coc_node_path = '/path/to/node'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: cohama/lexima.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" yuki-yanoさんのスクリプトを参考に
+" https://github.com/yuki-yano/dotfiles/blob/1c865f70c5ca3c2b4b59181c30bdb69ac6a0870a/.vimrc
+" '\%#' はカーソル位置を表す
+function! s:setup_lexima_insert() abort
+  let s:rules = []
+
+  "" markdown
+  let s:rules += [
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\%#',                        'input': '<C-w><CR>',                         },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\%#',                    'input': '<C-w><C-w><CR>',                    },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s*-\s\w.*\%#',                 'input': '<CR>-<Space>',                      },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\[\%#\]',                    'input': '<End><C-w><C-w><C-w><CR>',          },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\[\%#\]',                'input': '<End><C-w><C-w><C-w><C-w><CR>',     },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^-\s\[\(\s\|x\)\]\s\%#',         'input': '<C-w><C-w><C-w><CR>',               },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s\+-\s\[\(\s\|x\)\]\s\%#',     'input': '<C-w><C-w><C-w><C-w><CR>',          },
+  \ { 'filetype': 'markdown', 'char': '<CR>',    'at': '^\s*-\s\[\(\s\|x\)\]\s\w.*\%#',  'input': '<CR>-<Space>[]<Space><Left><Left>', },
+  \ ]
+  "" markdown(original)
+  let s:rules += [
+  \ { 'filetype': 'markdown', 'char': '<Space>', 'at': '\[\%#', 'input': '<Space>'},
+  \ ]
+
+  for s:rule in s:rules
+    call lexima#add_rule(s:rule)
+  endfor
+endfunction
+
+function! SetupLexima() abort
+  call s:setup_lexima_insert()
+endfunction
+
+call SetupLexima()
+
+" cocの補完をEnterで決定する（leximaの設定を上書きする）
+inoremap <silent><expr> <C-k><C-j> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" helpより
+inoremap <silent><expr> <CR> coc#pum#visible() ? "\<CR>" :
+      \ "\<C-g>u\<C-r>=lexima#expand('<LT>CR>', 'i')\<CR><C-r>=coc#on_enter()\<CR>"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: MattesGroeger/vim-bookmarks
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:bookmark_no_default_key_mappings = 1
+let g:bookmark_save_per_working_dir = 1
+
+nmap mm <Plug>BookmarkToggle
+" nmap <Leader>i <Plug>BookmarkAnnotate
+nmap ml <Plug>BookmarkShowAll
+" nmap <Leader>j <Plug>BookmarkNext
+" nmap <Leader>k <Plug>BookmarkPrev
+" nmap <Leader>c <Plug>BookmarkClear
+" nmap <Leader>x <Plug>BookmarkClearAll
+" nmap <Leader>kk <Plug>BookmarkMoveUp
+" nmap <Leader>jj <Plug>BookmarkMoveDown
+" nmap <Leader>g <Plug>BookmarkMoveToLine
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SECTION: lua scripts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set completeopt=menu,menuone,noselect
+set pumheight=20
+
+lua require('myconfig')
+
+" copilot.lua, CopilotChat.nvim setting
+let s:copilot_setting_file = expand('$XDG_CONFIG_HOME/nvim/lua/copilot-setting.lua')
+if filereadable(s:copilot_setting_file)
+  lua require('copilot-setting')
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: rlane/pounce.nvim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" nmap ' <cmd>Pounce<CR>
+nmap ' <cmd>FuzzyMotion<CR>
+vmap ' <cmd>Pounce<CR>
+omap g' <cmd>Pounce<CR>
+
+function! s:colorschemeLightOnedark()
+  set background=light
+  colorscheme onedark
+endfunction
+command! -nargs=0 LightOnedark call s:colorschemeLightOnedark()
+
+function! s:colorschemeDarkHybrid()
+  set background=dark
+  colorscheme hybrid
+endfunction
+command! -nargs=0 DarkHybrid call s:colorschemeDarkHybrid()
+
+" pounce
+highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236
+highlight PounceMatch      gui=underline,bold guifg=#555555 guibg=#FFAF60
+highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236
+highlight PounceGap        gui=underline,bold guifg=#555555 guibg=#E27878
+highlight PounceAccept     cterm=underline,bold ctermfg=184 ctermbg=236
+highlight PounceAccept     gui=underline,bold guifg=#FFAF60 guibg=#555555
+highlight PounceAcceptBest cterm=underline,bold ctermfg=196 ctermbg=236
+highlight PounceAcceptBest gui=underline,bold guifg=#EE2513 guibg=#555555
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: Wansmer/treesj
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nnoremap <Space>t <cmd>TSJToggle<CR>
+" nnoremap <Space>s <cmd>TSJSplit<CR>
+" nnoremap <Space>j <cmd>TSJJoin<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: rhysd/clever-f.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:clever_f_smart_case = 1
+let g:clever_f_use_migemo = 1
+" let g:clever_f_mark_char_color = 'FuzzyMotionChar'
+let g:clever_f_chars_match_any_signs = ';'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: vim-skk/skkeleton
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+call skkeleton#config(
+      \ {
+      \ 'globalDictionaries': [
+        \ '~/.skk/SKK-JISYO.L',
+        \ '~/.skk/SKK-JISYO.fullname',
+        \ '~/.skk/SKK-JISYO.geo',
+        \ '~/.skk/SKK-JISYO.jinmei',
+        \ '~/.skk/SKK-JISYO.law',
+        \ '~/.skk/SKK-JISYO.propernoun',
+        \ '~/.skk/SKK-JISYO.station',
+      \ ],
+      \ 'immediatelyCancel': v:false,
+      \})
+imap <C-j> <Plug>(skkeleton-enable)
+cmap <C-j> <Plug>(skkeleton-enable)
+tmap <C-j> <Plug>(skkeleton-enable)
+
+augroup skkeleton-coc
+  autocmd!
+  autocmd User skkeleton-enable-pre let b:coc_suggest_disable = v:true
+  autocmd User skkeleton-disable-pre let b:coc_suggest_disable = v:false
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
@@ -660,11 +1177,12 @@ if executable('jq')
   command! -bar -bang -range=% -nargs=? Jq  <line1>,<line2>call s:jq(<bang>0, <f-args>)
 endif
 
-" 今日の日付
 inoremap <C-a>day <C-r>=strftime("%Y-%m-%d")<CR>
 cnoremap <C-a>day <C-r>=strftime("%Y-%m-%d")<CR>
-" 現在時刻
 inoremap <C-a>time <C-r>=strftime("%Y-%m-%d %T")<CR>
+inoremap <C-a>tengu TENGU 👺 >
+inoremap <C-a>sr <strong><span style="color:red;"></span></strong>
+
 " fzfで日付を入力したい
 function g:TerminalDay()
   let l:temp = @z
@@ -673,9 +1191,7 @@ function g:TerminalDay()
   let @z = l:temp
   norm a
 endfunction
-tnoremap <C-a>day <C-\><C-n>:call g:TerminalDay()<CR>
-" 汎用デバッグ用
-inoremap <C-a>tengu <C-r>='👺 >'<CR>
+tnoremap <C-a>day <C-\><C-n><cmd>call g:TerminalDay()<CR>
 
 " markdownのコードスニペット
 function! g:ReadTripleBackQuotes(lang_text)
@@ -686,7 +1202,7 @@ function! g:ReadTripleBackQuotes(lang_text)
   let @a = tmp
 endfunction
 command! -nargs=1 TripleBackQuotes :call g:ReadTripleBackQuotes(<f-args>)
-nnoremap <Space>` :call g:ReadTripleBackQuotes("")<CR>
+nnoremap <Space>` <cmd>call g:ReadTripleBackQuotes("")<CR>
 
 " ファイル・バッファのエンコーディング
 command! OpenAsSjis :edit ++encoding=sjis<CR>
@@ -863,6 +1379,89 @@ endfunction
 
 command! -range -nargs=0 Reverse :<line1>,<line2>call ReverseLines()
 
+" TODOリスト
+" 参考: https://qiita.com/naoty_k/items/56eddc9b76fe630f9be7
+inoremap <C-a>tl <C-r>='- [ ]'<CR>
+
+" todoリストのon/offを切り替える
+nnoremap <buffer> <Space>x <cmd>call ToggleCheckbox()<CR>
+
+" 選択行のチェックボックスを切り替える
+function! ToggleCheckbox()
+  let l:line = getline('.')
+  if l:line =~ '\-\s\[\s\]'
+    let l:result = substitute(l:line, '-\s\[\s\]', '- [x]', '')
+    call setline('.', l:result)
+  elseif l:line =~ '\-\s\[x\]'
+    let l:result = substitute(l:line, '-\s\[x\]', '- [ ]', '')
+    call setline('.', l:result)
+  end
+endfunction
+
+command! -range=% SplitPeriods <line1>,<line2>s/。/。\r/g
+
+function! EncloseWithParens(left, right)
+    " 選択範囲の開始と終了を取得
+    let start = getpos("'<")
+    let end = getpos("'>")
+
+    " 終了位置に後ろの括弧を挿入
+    call setpos('.', end)
+    execute "normal! a" . a:right
+
+    " 開始位置に前の括弧を挿入
+    call setpos('.', start)
+    execute "normal! i" . a:left
+endfunction
+
+" 全角丸括弧で囲むためのマッピング
+xnoremap g( :call EncloseWithParens('（', '）')<CR>
+xnoremap g) :call EncloseWithParens('（', '）')<CR>
+xnoremap gs :call EncloseWithParens('「', '」')<CR>
+xnoremap g[ :call EncloseWithParens('【', '】')<CR>
+xnoremap g] :call EncloseWithParens('【', '】')<CR>
+
+" 和集合を検索する
+" カーソル下のワードを検索パターンに追加
+nnoremap <Space>* <cmd>call AddSearchWord()<CR>
+
+function! AddSearchWord()
+    let l:word = expand('<cword>')
+    if @/ == ''
+        let @/ = '\<' . l:word . '\>'
+    else
+        let @/ .= '\|\<' . l:word . '\>'
+    endif
+endfunction
+
+" カレントバッファのパスを取得する
+function! YankCurrentBufferFileRelativePath()
+  let l:relative_path = expand("%")
+  let l:cur_lnumber = line(".")
+  let l:res = l:relative_path . "#L" . l:cur_lnumber
+  redir @" | echo l:res | redir END
+  redir @+ | echo l:res | redir END
+endfunction
+function! YankCurrentBufferFileFullPath()
+  let l:full_path = expand("%:p")
+  let l:cur_lnumber = line(".")
+  let l:res = l:full_path . "#L" . l:cur_lnumber
+  redir @" | echo l:res | redir END
+  redir @+ | echo l:res | redir END
+endfunction
+command! YankBufferPath :call YankCurrentBufferFileRelativePath()
+command! YankBufferPathFully :call YankCurrentBufferFileFullPath()
+
+" 120 文字ガイド
+execute "set colorcolumn=" . join(range(121, 9999), ',')
+function! ToggleColorColumn()
+    if &colorcolumn == ''
+        execute "set colorcolumn=" . join(range(121, 9999), ',')
+    else
+        set colorcolumn=
+    endif
+endfunction
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -873,8 +1472,8 @@ syntax enable
 set mouse=n
 
 " fold
-set foldmethod=syntax
-" set foldexpr=nvim_treesitter#foldexpr()
+set foldmethod=manual
+set foldexpr=nvim_treesitter#foldexpr()
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
 
@@ -886,7 +1485,8 @@ set nowrapscan
 
 autocmd FileType * set wrap
 autocmd FileType neo-tree set nowrap
-autocmd FileType aerial set nowrap
+autocmd FileType qf set nowrap
+autocmd FileType * set foldmethod=manual
 
 set fenc=utf-8
 set encoding=utf8
@@ -959,6 +1559,7 @@ highlight! link CmpItemKindUnit CmpItemKindKeyword
 " txtファイルで自動改行を防ぐ
 " https://loumo.jp/archives/10503
 autocmd FileType text :set formatoptions=q
+autocmd FileType gitcommit :set formatoptions=q
 
 " set cursorlineの設定
 " https://thinca.hatenablog.com/entry/20090530/1243615055
@@ -1069,7 +1670,7 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " esc
-" inoremap <silent> jj <ESC> " better-escapeプラグインに委譲
+inoremap <silent> jj <ESC> " better-escapeプラグインに委譲
 
 " prefix
 nnoremap s <Nop>
@@ -1088,10 +1689,6 @@ inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
-nnoremap <Space>j 10gj
-nnoremap <Space>k 10gk
-vnoremap <Space>j 10gj
-vnoremap <Space>k 10gk
 nnoremap J 10gj
 nnoremap K 10gk
 vnoremap J 10gj
@@ -1105,14 +1702,19 @@ vnoremap L $
 nnoremap <C-l> $
 vnoremap <C-l> $
 
+" concat
+nnoremap <C-j> J
+vnoremap <C-j> J
+
 " search
+" nzz, Nzz は、現在 lua プラグインに寄せている
 " nnoremap n nzz
 " nnoremap N Nzz
-nnoremap <ESC><ESC> :nohlsearch<CR>
+nnoremap <ESC><ESC> <cmd>nohlsearch<CR>
 
 " window
-nnoremap s- :<C-u>sp<CR>
-nnoremap s<Bar> :<C-u>vs<CR>
+nnoremap s- <cmd>split<CR>
+nnoremap s<Bar> <cmd>vsplit<CR>
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
 nnoremap sl <C-w>l
@@ -1124,15 +1726,19 @@ nnoremap sH <C-w>H
 nnoremap s= <C-w>=
 nnoremap so <C-w>_<C-w>|
 nnoremap sO <C-w>=
-nnoremap sq :<C-u>confirm quit<CR>
+nnoremap sq <cmd>confirm quit<CR>
+nnoremap sQ <cmd>confirm qall<CR>
+
+" tab
+nnoremap tq <cmd>tabclose<CR>
 
 " buffer
 nnoremap <C-o> <C-o>zz
 nnoremap <C-i> <C-i>zz
 
 " save, load
-nnoremap <Space>w :w<CR>
-nnoremap <Space>e :e!<CR>
+nnoremap <Space>w <cmd>write<CR>
+nnoremap <Space>e <cmd>edit!<CR>
 
 " yank, paste
 vmap <Space>y "+y
@@ -1141,6 +1747,12 @@ vmap <Space>P "+P
 nmap <Space>y "+y
 nmap <Space>p "+p
 nmap <Space>P "+P
+vmap gy "+y
+vmap gp "+p
+vmap gP "+P
+nmap gy "+y
+nmap gp "+p
+nmap gP "+P
 nnoremap <Space>Y ggVG"+y
 nnoremap <Space>= ggVG=
 
@@ -1164,8 +1776,9 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
 " toggle
-nnoremap <Space>n :<C-u>set number!<CR>
-nnoremap <Space><Space> :<C-u>set wrap!<CR>
+nnoremap <Space>nn <cmd>set number!<CR>
+nnoremap <Space><Space> <cmd>set wrap!<CR>
+nnoremap <Space>nc <cmd>call ToggleColorColumn()<CR>
 
 augroup MyXML
   autocmd!
@@ -1193,192 +1806,3 @@ function s:HelpCurwin(subject) abort
   endif
   return 'help ' .. a:subject
 endfunction
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" lua scripts
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set completeopt=menu,menuone,noselect
-set pumheight=20
-
-nmap <Space>v <cmd>AerialToggle<CR>
-
-"""
-" PLUGSETTING: rlane/pounce.nvim
-"""
-" nmap ' <cmd>Pounce<CR>
-nmap ' <cmd>FuzzyMotion<CR>
-vmap ' <cmd>Pounce<CR>
-omap g' <cmd>Pounce<CR>
-
-lua << EOF
--- formatting quickfix view
-local fn = vim.fn
-function _G.qftf(info)
-    local items
-    local ret = {}
-    if info.quickfix == 1 then
-        items = fn.getqflist({id = info.id, items = 0}).items
-    else
-        items = fn.getloclist(info.winid, {id = info.id, items = 0}).items
-    end
-    local limit = 31
-    local fname_fmt1, fname_fmt2 = '%-' .. limit .. 's', '…%.' .. (limit - 1) .. 's'
-    local valid_fmt = '%s │%5d:%-3d│%s %s'
-    for i = info.start_idx, info.end_idx do
-        local e = items[i]
-        local fname = ''
-        local str
-        if e.valid == 1 then
-            if e.bufnr > 0 then
-                fname = fn.bufname(e.bufnr)
-                if fname == '' then
-                    fname = '[No Name]'
-                else
-                    fname = fname:gsub('^' .. vim.env.HOME, '~')
-                end
-                -- char in fname may occur more than 1 width, ignore this issue in order to keep performance
-                if #fname <= limit then
-                    fname = fname_fmt1:format(fname)
-                else
-                    fname = fname_fmt2:format(fname:sub(1 - limit))
-                end
-            end
-            local lnum = e.lnum > 99999 and -1 or e.lnum
-            local col = e.col > 999 and -1 or e.col
-            local qtype = e.type == '' and '' or ' ' .. e.type:sub(1, 1):upper()
-            str = valid_fmt:format(fname, lnum, col, qtype, e.text)
-        else
-            str = e.text
-        end
-        table.insert(ret, str)
-    end
-    return ret
-end
-vim.o.qftf = '{info -> v:lua._G.qftf(info)}'
-
-require('lualine').setup {
-  options = {
-    section_separators = '', component_separators = '',
-    theme = 'dracula',
-  },
-  sections = {
-    lualine_a = {'mode'},
-    lualine_b = {'location'},
-    lualine_c = {
-      {
-        'filename',
-        path = 1,
-        shorting_target = 40,
-        newfile_status = true,   -- Display new file status (new file means no write after created)
-        symbols = {
-          modified = '[+]',      -- Text to show when the file is modified.
-          readonly = '[-RO]',      -- Text to show when the file is non-modifiable or readonly.
-          unnamed = '[No Name]', -- Text to show for unnamed buffers.
-          newfile = '[New]',     -- Text to show for new created file before first writting
-        },
-      },
-    },
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
-    lualine_y = {'branch'},
-    lualine_z = {}
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {
-      {
-        'filename',
-        path = 1,
-        shorting_target = 40,
-      },
-    },
-    lualine_x = {'location'},
-    lualine_y = {},
-    lualine_z = {}
-  },
-}
-
--- SmoothCursor.nvim
-require('smoothcursor').setup()
-local autocmd = vim.api.nvim_create_autocmd
-
-autocmd({ 'ModeChanged' }, {
-  callback = function()
-    local current_mode = vim.fn.mode()
-    if current_mode == 'n' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#a356ba' })
-      vim.fn.sign_define('smoothcursor', { text = '●' })
-    elseif current_mode == 'v' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#dee356' })
-      vim.fn.sign_define('smoothcursor', { text = '' })
-    elseif current_mode == 'V' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#dee356' })
-      vim.fn.sign_define('smoothcursor', { text = '' })
-    elseif current_mode == '�' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#bf616a' })
-      vim.fn.sign_define('smoothcursor', { text = '' })
-    elseif current_mode == 'i' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#43e849' })
-      vim.fn.sign_define('smoothcursor', { text = '' })
-    end
-  end,
-})
-
--- PLUGSETTING: lewis6991/gitsigns.nvim
-require('gitsigns').setup {
-  signs = {
-    add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
-    change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-    delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
-    changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
-    untracked    = { text = '┆' },
-  },
-  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
-  numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
-  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
-  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
-  watch_gitdir = {
-    interval = 1000,
-    follow_files = true
-  },
-  attach_to_untracked = true,
-  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
-  current_line_blame_opts = {
-    virt_text = true,
-    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-    delay = 1000,
-    ignore_whitespace = false,
-  },
-  current_line_blame_formatter_opts = {
-    relative_time = false
-  },
-  sign_priority = 6,
-  update_debounce = 100,
-  status_formatter = nil, -- Use default
-  max_file_length = 40000,
-  preview_config = {
-    -- Options passed to nvim_open_win
-    border = 'single',
-    style = 'minimal',
-    relative = 'cursor',
-    row = 0,
-    col = 1
-  },
-  yadm = {
-    enable = false
-  },
-}
-EOF
-
-function! s:colorschemeLightOnedark()
-  set background=light
-  colorscheme onedark
-endfunction
-command! -nargs=0 LightOnedark call s:colorschemeLightOnedark()
-
-function! s:colorschemeDarkHybrid()
-  set background=dark
-  colorscheme hybrid
-endfunction
-command! -nargs=0 DarkHybrid call s:colorschemeDarkHybrid()
