@@ -45,6 +45,7 @@ nvim/pack/
 !scripts/gogithub.sh
 !scripts/github_compare.sh
 !scripts/search_github_PR.sh
+!scripts/tmpspace.sh
 
 !tmux/tmux-session-fzf
 !tmux/tmux.conf

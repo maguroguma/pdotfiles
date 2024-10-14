@@ -269,6 +269,7 @@ call jetpack#add('folke/noice.nvim')
 call jetpack#add('rcarriga/nvim-notify')
 call jetpack#add('vim-skk/skkeleton')
 call jetpack#add('delphinus/skkeleton_indicator.nvim')
+call jetpack#add('will133/vim-dirdiff')
 
 call jetpack#end()
 " plugins END }}}
@@ -1123,7 +1124,6 @@ call skkeleton#config(
       \ {
       \ 'globalDictionaries': [
         \ '~/.skk/SKK-JISYO.L',
-        \ '~/.skk/SKK-JISYO.emoji.utf8',
         \ '~/.skk/SKK-JISYO.fullname',
         \ '~/.skk/SKK-JISYO.geo',
         \ '~/.skk/SKK-JISYO.jinmei',
@@ -1472,7 +1472,7 @@ syntax enable
 set mouse=n
 
 " fold
-set foldmethod=expr
+set foldmethod=manual
 set foldexpr=nvim_treesitter#foldexpr()
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
@@ -1486,7 +1486,7 @@ set nowrapscan
 autocmd FileType * set wrap
 autocmd FileType neo-tree set nowrap
 autocmd FileType qf set nowrap
-autocmd FileType * set foldmethod=expr
+autocmd FileType * set foldmethod=manual
 
 set fenc=utf-8
 set encoding=utf8

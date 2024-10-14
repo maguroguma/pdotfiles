@@ -128,8 +128,7 @@ chore ✏️      maintain
       insert = '<Nop>'
     },
     submit_prompt = {
-      normal = '<C-j>',
-      insert = '<C-j>'
+      normal = '<CR>',
     },
     accept_diff = {
       normal = '<C-y>',
