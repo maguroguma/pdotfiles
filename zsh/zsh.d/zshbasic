@@ -383,6 +383,10 @@ alias gc='git commit'
 alias gcm='git commit -m'
 alias gcam='git commit --amend'
 alias gcf='git commit --fixup'
+alias gcfwip='git commit --fixup $(git log -1 --pretty=format:"%H" --grep="^fixup\!" --invert-grep)'
+# rebase
+alias gri='git rebase --interactive'
+alias grias='git rebase --interactive --autosquash'
 # config
 alias gc-list='git config -l'
 # diff
