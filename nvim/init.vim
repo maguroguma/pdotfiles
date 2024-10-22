@@ -371,7 +371,7 @@ function! s:list_command_history() abort
 endfunction
 " sink
 function! s:insert_target(shell_command) abort
-  call setline(line("."), a:shell_command)
+  execute 'normal! i' . a:shell_command
 endfunction
 command! HCommand call fzf#run(fzf#wrap({
   \ 'source': s:list_command_history(),
@@ -422,6 +422,8 @@ inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
   \ 'options': '--ansi --delimiter : --nth 3..',
   \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }
 \}))
+
+inoremap <C-a>R <cmd>HCommand<CR>
 
 function! s:paste_file_paths(strings)
     let l:original_a = getreg('a')

@@ -17,7 +17,7 @@ if filereadable(s:histfile_path)
   endfunction
   " sink
   function! s:insert_target(shell_command) abort
-    call setline(line("."), a:shell_command)
+    execute 'normal! i' . a:shell_command
   endfunction
   command! HCommand call fzf#run(fzf#wrap({
     \ 'source': s:list_command_history(),
@@ -25,6 +25,7 @@ if filereadable(s:histfile_path)
     \ 'options': '--ansi --prompt "replace current line> "',
   \ }))
   nnoremap <silent> R :HCommand<CR>
+  inoremap <C-a>R <cmd>HCommand<CR>
 else
   echoerr '[ERROR] cannot read command history file: ' .. s:histfile_path
 endif
