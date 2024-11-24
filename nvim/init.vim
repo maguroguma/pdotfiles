@@ -1599,6 +1599,16 @@ augroup vimrc-auto-cursorline
   endfunction
 augroup END
 
+" https://zenn.dev/vim_jp/articles/2024-10-07-vim-insert-uppercase
+" <C-w> の前に関数の評価が行われる
+function s:toupper_prev_word()
+  let col = getpos('.')[2]
+  let substring = getline('.')[0:col-1]
+  let word = matchstr(substring, '\v<(\k(<)@!)*$')
+  return toupper(word)
+endfunction
+inoremap <expr> <C-a>u "<C-w>" .. <SID>toupper_prev_word()
+
 set title
 set wildmenu
 set history=200
