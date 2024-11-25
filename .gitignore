@@ -32,20 +32,18 @@ nvim/pack/
 # copilot.lua, CopilotChat.nvim
 !nvim/lua/copilot-setting.lua.base
 
-!scripts/comma.sh
-!scripts/create-gh-link.sh
 !scripts/date-to-ts.sh
-!scripts/kensaku.sh
+!scripts/github_compare.sh
+!scripts/github_go.sh
+!scripts/github_search_PR.sh
+!scripts/google.sh
 !scripts/mru-branch-list.sh
 !scripts/my-ascii.sh
 !scripts/print256colours.sh
 !scripts/refresh-mv.sh
 !scripts/s-quote.sh
-!scripts/ts-to-date.sh
-!scripts/gogithub.sh
-!scripts/github_compare.sh
-!scripts/search_github_PR.sh
 !scripts/tmpspace.sh
+!scripts/ts-to-date.sh
 
 !tmux/tmux-session-fzf
 !tmux/tmux.conf
