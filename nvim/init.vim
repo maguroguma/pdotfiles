@@ -1281,46 +1281,6 @@ endif
 
 command! -nargs=? TrimWhiteSpaces :%s/\s\+$//g
 
-function! s:buildGitHubPRSearchURL(...)
-  " GitHub PR search link
-  " FIXME: カバーできていないケースが多そう（ghq -pで取得したリポジトリだと上手く行かない）
-  let l:shell_one_liner = 'git remote -v | '
-        \ . 'grep "github" | '
-        \ . 'cut -d":" -f2 | '
-        \ . 'cut -d"." -f1 | '
-        \ . 'sort | uniq | '
-        \ . 'awk ''{ printf "https://github.com/%s/pulls?q=is:pr is:closed ", $1 }'''
-  let l:command_result = system(l:shell_one_liner)
-
-  " word on the cursor
-  let l:temp = @z
-  norm "zyiw
-  let l:search_word = @z
-  let @z = l:temp
-
-  " build query URL and assign it to the default and clipboard registers
-  let l:goal = l:command_result . l:search_word
-  let @" = l:goal
-  let @+ = l:goal
-
-  " interactive question whether open it by your default browser
-  let l:confirm_msg = 'Open it by browser? -> ' . '"' . l:goal . '"'
-  let l:is_open_browser = confirm(l:confirm_msg, "y yes\nn no")
-  if l:is_open_browser != 1
-    return
-  endif
-  if executable('open')
-    let l:open_command = 'open ' . "'" . l:goal . "'"
-    call system(l:open_command)
-  elseif executable('xdg-open')
-    let l:open_command = 'xdg-open ' . "'" . l:goal . "'"
-    call system(l:open_command)
-  else
-    echo 'failed to open'
-  endif
-endfunction
-command! -nargs=? GitHubPRSearchURL :call s:buildGitHubPRSearchURL(<f-args>)
-
 if executable('trans')
   function! s:printToTempBuffer(exe_command)
     execute 'botright' 10 'new'
@@ -1608,6 +1568,125 @@ function s:toupper_prev_word()
   return toupper(word)
 endfunction
 inoremap <expr> <C-a>u "<C-w>" .. <SID>toupper_prev_word()
+
+" 現在行の blame で得られるコミットハッシュをクリップボードにヤンクする
+function! GitBlameCurrentLine()
+  let l:current_line = line('.')
+  let l:current_file = expand('%:p')
+
+  " git blame コマンドを実行
+  let l:command = 'git blame -L '.l:current_line.','.l:current_line.' '.shellescape(l:current_file)
+  let l:result = system(l:command)
+
+  " エラーの場合は処理を中断
+  if v:shell_error != 0
+    echoerr 'Error: This file is not under git management or the command failed.'
+    return
+  endif
+
+  " 結果からコミットハッシュを抽出（1列目がハッシュ）
+  let l:commit_hash = matchstr(l:result, '^\S\+')
+
+  " ハッシュを表示
+  let @+ = l:commit_hash
+  echo 'Commit Hash copied to clipboard: '.l:commit_hash
+endfunction
+command! GitBlameLine call GitBlameCurrentLine()
+nnoremap <Space>gh <cmd>GitBlameLine<CR>
+
+function! s:GetGitHubRepoInfo()
+  try
+    " リモートリポジトリのURLを取得
+    let l:remote_url = system('git config --get remote.origin.url')
+
+    " エラーの場合は処理を中断
+    if v:shell_error != 0 || l:remote_url == ''
+      echoerr 'Error: Unable to retrieve the remote URL. Ensure this is a git repository.'
+      return ['', '']
+    endif
+
+    " 改行を削除
+    let l:remote_url = substitute(l:remote_url, '\n', '', '')
+    " 末尾の .git を削除
+    let l:remote_url = substitute(l:remote_url, '\.git$', '', '')
+
+    " リモートURLを解析してユーザー名とリポジトリ名を取得
+    if l:remote_url =~ '^https://github.com/'
+      let l:match = matchlist(l:remote_url, 'https://github.com/\([^/]\+\)/\([^/]\+\)$')
+    elseif l:remote_url =~ '^git@github.com:'
+      let l:match = matchlist(l:remote_url, 'git@github.com:\([^/]\+\)/\([^/]\+\)$')
+    else
+      echoerr 'Error: Unsupported remote URL format.'
+      return ['', '']
+    endif
+
+    " マッチ結果からユーザー名とリポジトリ名を返す
+    if len(l:match) >= 3
+      return [l:match[1], l:match[2]]
+    else
+      echoerr 'Error: Failed to parse remote URL.'
+      return ['', '']
+    endif
+  catch
+    echoerr 'An unexpected error occurred while retrieving GitHub repo info.'
+    return ['', '']
+  endtry
+endfunction
+
+function! GitHubSearchPR()
+  try
+    let l:current_line = line('.')
+    let l:current_file = expand('%:p')
+
+    " git blame コマンドを実行
+    let l:command = 'git blame -L '.l:current_line.','.l:current_line.' '.shellescape(l:current_file)
+    let l:result = system(l:command)
+
+    " エラーの場合は処理を中断
+    if v:shell_error != 0
+      echoerr 'Error: This file is not under git management or the command failed.'
+      return
+    endif
+
+    " 結果からコミットハッシュを抽出
+    let l:commit_hash = matchstr(l:result, '^\S\+')
+
+    " GitHub リポジトリ情報を取得
+    let l:repo_info = s:GetGitHubRepoInfo()
+    let l:github_user = l:repo_info[0]
+    let l:github_repo = l:repo_info[1]
+
+    " ユーザー名またはリポジトリ名が取得できない場合
+    if l:github_user == '' || l:github_repo == ''
+      echoerr 'Error: Could not determine GitHub repository info.'
+      return
+    endif
+
+    " PR 検索用の URL を作成
+    let l:github_url = 'https://github.com/'.l:github_user.'/'.l:github_repo.'/pulls?q='.l:commit_hash
+    echo 'GitHub PR Search URL: '.l:github_url
+    let @+ = l:github_url
+    echo 'URL copied to clipboard: '.l:github_url
+
+    " confirm を使用してブラウザで開くか確認
+    if confirm('Open in browser? -> '.l:github_url, "&Yes\n&No", 1) == 1
+      call system('xdg-open '.shellescape(l:github_url))
+      echo 'Opening in browser...'
+      if has('mac') || has('macunix')
+          call system('open '.shellescape(l:github_url))
+      elseif has('unix')
+          call system('xdg-open '.shellescape(l:github_url))
+      elseif has('win32') || has('win64')
+          call system('start '.shellescape(l:github_url))
+      else
+          echoerr 'Error: Unable to detect platform for opening URL.'
+      endif
+    endif
+  catch
+    echoerr 'An unexpected error occurred.'
+  endtry
+endfunction
+command! GitHubSearchPR call GitHubSearchPR()
 
 set title
 set wildmenu
