@@ -409,6 +409,7 @@ alias gcheck-ignored='git ls-files -io --exclude-standard'
 alias gm='git merge'
 alias gms='git merge --squash'
 # push
+alias gp='git push'
 alias gpoh='git push origin HEAD'
 alias gpuoh='git push -u origin HEAD'
 # reset

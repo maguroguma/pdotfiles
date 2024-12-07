@@ -1133,6 +1133,7 @@ call skkeleton#config(
         \ '~/.skk/SKK-JISYO.propernoun',
         \ '~/.skk/SKK-JISYO.station',
       \ ],
+      \ 'eggLikeNewline': v:true,
       \ 'immediatelyCancel': v:false,
       \})
 imap <C-j> <Plug>(skkeleton-enable)

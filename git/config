@@ -77,3 +77,6 @@
 
 [column]
 	ui = auto
+
+[push]
+	autoSetupRemote = true
