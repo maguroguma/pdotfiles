@@ -376,7 +376,7 @@ endfunction
 command! HCommand call fzf#run(fzf#wrap({
   \ 'source': s:list_command_history(),
   \ 'sink': funcref('s:insert_target'),
-  \ 'options': '--ansi --prompt "replace current line> "',
+  \ 'options': '--ansi --prompt "insert command> "',
 \ }))
 
 """
@@ -423,8 +423,6 @@ inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
   \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }
 \}))
 
-inoremap <C-a>R <cmd>HCommand<CR>
-
 function! s:paste_file_paths(strings)
     let l:original_a = getreg('a')
     let l:joined_strings = join(a:strings, ' ')
@@ -439,8 +437,10 @@ command! FzfPasteFilePaths call fzf#run(fzf#wrap({
 \ }))
 
 " Path completion with custom source command
-inoremap <expr> <c-f> fzf#vim#complete#path('find .')
-" inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+" inoremap <expr> <c-f> fzf#vim#complete#path('find .')
+inoremap <expr> <C-a>f fzf#vim#complete#path('rg --files')
+" Shell history completion
+inoremap <C-a>R <cmd>HCommand<CR>
 
 " Word completion with custom spec with popup layout option
 " inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
