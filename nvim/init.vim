@@ -1435,7 +1435,7 @@ syntax enable
 set mouse=n
 
 " fold
-set foldmethod=manual
+set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
