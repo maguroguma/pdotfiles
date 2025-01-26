@@ -1449,7 +1449,7 @@ set nowrapscan
 autocmd FileType * set wrap
 autocmd FileType neo-tree set nowrap
 autocmd FileType qf set nowrap
-autocmd FileType * set foldmethod=manual
+" autocmd FileType * set foldmethod=manual
 
 set fenc=utf-8
 set encoding=utf8
