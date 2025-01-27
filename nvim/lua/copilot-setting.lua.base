@@ -160,18 +160,26 @@ end
 -- 英語翻訳用のカスタムコマンド
 vim.api.nvim_create_user_command(
   'CopilotChatTranslateToEn', -- コマンド名
-  function(opts)
-    -- 実際に実行したいコマンドの組み立て
-    local command = string.format(
-      ':CopilotChat 「%s」は英語で何になりますか。',
-      opts.args
-    )
-    -- コマンドを実行
-    vim.cmd(command)
+  function()
+    -- インタラクティブ入力を開始
+    vim.ui.input({ prompt = '翻訳する文字列を入力してください: ' }, function(input)
+      -- 入力がキャンセルされた場合は処理を中断
+      if input == nil or input == '' then
+        print('キャンセルされました。')
+        return
+      end
+      -- 実行するコマンドを組み立てる
+      local command = string.format(
+        ':CopilotChat 「%s」は英語で何になりますか？',
+        input
+      )
+      -- コマンドを実行
+      vim.cmd(command)
+    end)
   end,
   {
-    nargs = 1, -- 引数を1つ受け取る
-    desc = "指定された入力を英語に翻訳するカスタムコマンド"
+    nargs = 0, -- 引数は不要（インタラクティブモードで入力を受け付けるため）
+    desc = "インタラクティブモードで翻訳する文字列を入力するカスタムコマンド"
   }
 )
 
@@ -181,7 +189,7 @@ vim.api.nvim_set_keymap("n", "<leader>cco", "<cmd>CopilotChatOpen<cr>", { norema
 vim.api.nvim_set_keymap("n", "<leader>ccs", "<cmd>CopilotChatStop<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>ccr", "<cmd>CopilotChatReset<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>ccc", "<cmd>CopilotChatCommitStaged<cr>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<leader>cct", ":CopilotChatTranslateToEn ", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>cct", "<cmd>CopilotChatTranslateToEn<cr>", { noremap = true, silent = true })
 
 -- visual
 vim.api.nvim_set_keymap('v', '<leader>cce', ':CopilotChatExplain<CR>', { noremap = true, silent = true })
