@@ -415,8 +415,8 @@ alias gpuoh='git push -u origin HEAD'
 # reset
 alias gu='git reset HEAD'
 # status
-alias gs='git status --short'
-alias gS='git status'
+alias gs='git status --short --untracked-files=all'
+alias gS='git status --untracked-files=all'
 # tag
 alias gt='git tag'
 alias gta='git tag -a'

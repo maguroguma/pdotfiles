@@ -1773,6 +1773,7 @@ nnoremap <Space> <Nop>
 " command line window
 nnoremap Q q:
 nnoremap ? q/
+set cmdwinheight=20
 
 " cursor move
 nnoremap j gj
