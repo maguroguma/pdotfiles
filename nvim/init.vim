@@ -266,7 +266,6 @@ call jetpack#add('Wansmer/treesj')
 call jetpack#add('thinca/vim-qfreplace')
 call jetpack#add('rhysd/clever-f.vim')
 call jetpack#add('folke/noice.nvim')
-call jetpack#add('rcarriga/nvim-notify')
 call jetpack#add('vim-skk/skkeleton')
 call jetpack#add('delphinus/skkeleton_indicator.nvim')
 call jetpack#add('will133/vim-dirdiff')
@@ -506,9 +505,11 @@ endfunction
 
 command! GinaDiffAll Gina diff
 command! GinaDiffStagedAll Gina diff --staged
-command! GinaCommit Gina commit --opener=vsplit
-command! GinaCommitAmend Gina commit --amend --opener=vsplit
 command! GinaCheckoutThis :call s:gitCheckoutThis()
+
+" commit は tabnew で開く
+command! GinaCommit tabnew | execute 'Gina commit'
+command! GinaCommitAmend tabnew | execute 'Gina commit --amend'
 
 " 引数として branch 等の ref を取れる（デフォルトは現在の ref となる）
 command! -nargs=? GinaBrowseThis :call BrowseRevision(<q-args>)

@@ -392,7 +392,8 @@ require("neo-tree").setup({
       ["P"] = { "toggle_preview", config = { use_float = true } },
       -- ["l"] = "focus_preview",
       ["S"] = "open_split",
-      ["s"] = "open_vsplit",
+      -- ["s"] = "open_vsplit",
+      ["s"] = "noop",
       -- ["S"] = "split_with_window_picker",
       -- ["s"] = "vsplit_with_window_picker",
       ["t"] = "open_tabnew",
@@ -671,15 +672,10 @@ require('noice').setup({
       position = { row = '40%', col = '50%' },
     },
   },
+  messages = {
+    enabled = false,
+  },
 })
-
--- PLUGSETTING: rcarriga/nvim-notify
-require('notify').setup({
-  timeout = 1000,
-})
-vim.cmd [[ autocmd RecordingEnter * lua require('notify')(show_macro_recording()) ]]
-vim.cmd [[ autocmd RecordingLeave * lua require('notify')('Recording macro stopped') ]]
-vim.keymap.set("n", "<Space>nd", "<cmd>lua require('notify').dismiss()<CR>")
 
 -- PLUGSETTING: delphinus/skkeleton_indicator.nvim
 require("skkeleton_indicator").setup {}
