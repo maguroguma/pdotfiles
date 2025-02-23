@@ -50,17 +50,24 @@ function _G.show_macro_recording()
     if recording_register == "" then
         return ""
     else
-        return "Recording @" .. recording_register
+        return "🎬RECORDING MACRO @" .. recording_register .. "🎬"
     end
 end
 local lualine = require('lualine')
 lualine.setup {
   options = {
-    section_separators = '', component_separators = '',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
     theme = 'dracula',
   },
   sections = {
-    lualine_a = {'mode'},
+    lualine_a = {
+      {
+        "macro-recording",
+        fmt = show_macro_recording,
+      },
+      'mode',
+    },
     lualine_b = {'location'},
     lualine_c = {
       {
@@ -78,12 +85,7 @@ lualine.setup {
     },
     lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'branch'},
-    lualine_z = {
-      {
-        "macro-recording",
-        fmt = show_macro_recording,
-      },
-    }
+    lualine_z = {}
   },
   inactive_sections = {
     lualine_a = {},
@@ -107,7 +109,6 @@ vim.api.nvim_create_autocmd("RecordingEnter", {
         })
     end,
 })
-
 vim.api.nvim_create_autocmd("RecordingLeave", {
     callback = function()
         -- This is going to seem really weird!

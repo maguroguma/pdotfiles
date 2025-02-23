@@ -1080,18 +1080,6 @@ nmap ' <cmd>FuzzyMotion<CR>
 vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
 
-function! s:colorschemeLightOnedark()
-  set background=light
-  colorscheme onedark
-endfunction
-command! -nargs=0 LightOnedark call s:colorschemeLightOnedark()
-
-function! s:colorschemeDarkHybrid()
-  set background=dark
-  colorscheme hybrid
-endfunction
-command! -nargs=0 DarkHybrid call s:colorschemeDarkHybrid()
-
 " pounce
 highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236
 highlight PounceMatch      gui=underline,bold guifg=#555555 guibg=#FFAF60
@@ -1146,6 +1134,28 @@ augroup skkeleton-coc
   autocmd User skkeleton-enable-pre let b:coc_suggest_disable = v:true
   autocmd User skkeleton-disable-pre let b:coc_suggest_disable = v:false
 augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: colorscheme
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! s:colorschemeLightOnedark()
+  set background=light
+  colorscheme onedark
+endfunction
+command! -nargs=0 LightOnedark call s:colorschemeLightOnedark()
+
+function! s:colorschemeDarkHybrid()
+  set background=dark
+  colorscheme hybrid
+endfunction
+command! -nargs=0 DarkHybrid call s:colorschemeDarkHybrid()
+
+" augroup ChangeColorschemeOnMacro
+"   autocmd!
+"   autocmd RecordingEnter * LightOnedark
+"   autocmd RecordingLeave * DarkHybrid
+" augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
@@ -1445,7 +1455,7 @@ set foldlevelstart=100
 set backspace=indent,eol,start
 
 " 検索した際に最後の語句の次に最初の語句にループしないようにする
-set nowrapscan
+" set nowrapscan
 
 autocmd FileType * set wrap
 autocmd FileType neo-tree set nowrap
@@ -1791,10 +1801,10 @@ nnoremap H ^
 vnoremap H ^
 nnoremap L $
 vnoremap L $
-" nnoremap <C-h> ^
-" vnoremap <C-h> ^
-nnoremap <C-l> $
-vnoremap <C-l> $
+nnoremap <C-h> 20h
+vnoremap <C-h> 20h
+nnoremap <C-l> 20l
+vnoremap <C-l> 20l
 
 " concat
 nnoremap <C-j> J
