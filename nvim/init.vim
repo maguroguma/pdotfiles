@@ -269,6 +269,8 @@ call jetpack#add('folke/noice.nvim')
 call jetpack#add('vim-skk/skkeleton')
 call jetpack#add('delphinus/skkeleton_indicator.nvim')
 call jetpack#add('will133/vim-dirdiff')
+call jetpack#add('nacro90/numb.nvim')
+call jetpack#add('atusy/treemonkey.nvim')
 
 call jetpack#end()
 " plugins END }}}
@@ -1135,6 +1137,11 @@ augroup skkeleton-coc
   autocmd User skkeleton-disable-pre let b:coc_suggest_disable = v:false
 augroup END
 
+call skkeleton#register_kanatable('rom', {
+      \ '(' : ['（', ''],
+      \ ')' : ['）', ''],
+      \})
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: colorscheme
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1455,7 +1462,7 @@ set foldlevelstart=100
 set backspace=indent,eol,start
 
 " 検索した際に最後の語句の次に最初の語句にループしないようにする
-" set nowrapscan
+set nowrapscan
 
 autocmd FileType * set wrap
 autocmd FileType neo-tree set nowrap
@@ -1840,6 +1847,13 @@ nnoremap tq <cmd>tabclose<CR>
 nnoremap <C-o> <C-o>zz
 nnoremap <C-i> <C-i>zz
 
+" customize zz
+" ref: https://zenn.dev/vim_jp/articles/67ec77641af3f2
+nmap zz zz<sid>(z1)
+nnoremap <script> <sid>(z1)z zt<sid>(z2)
+nnoremap <script> <sid>(z2)z zb<sid>(z3)
+nnoremap <script> <sid>(z3)z zz<sid>(z1)
+
 " save, load
 nnoremap <Space>w <cmd>write<CR>
 nnoremap <Space>e <cmd>edit!<CR>
@@ -1910,3 +1924,6 @@ function s:HelpCurwin(subject) abort
   endif
   return 'help ' .. a:subject
 endfunction
+
+" 文字コードによる入力
+inoremap <C-v>u <C-r>=nr2char(0x)<Left>

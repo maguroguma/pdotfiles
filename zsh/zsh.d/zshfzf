@@ -121,7 +121,7 @@ _gt() {
 }
 
 # git log -> commit hash
-_gh() {
+_gl() {
   is_in_git_repo || return
   git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
   fzf-down --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
@@ -148,6 +148,7 @@ _gs() {
   cut -d: -f1
 }
 
+# エスケープしつつ改行を省きながら出力する
 join-lines() {
   local item
   while read item; do
@@ -175,6 +176,7 @@ _gr() {
         cut -d' ' -f1
 }
 
+# エスケープバージョン
 # 2個目のキーはctrlなしでも発動するようにする
 bind-git-helper() {
   local c
@@ -185,8 +187,27 @@ bind-git-helper() {
     eval "bindkey '^g$c' fzf-g$c-widget"
   done
 }
-bind-git-helper f b t r h s m v
+bind-git-helper f b t r l s m v
 unset -f bind-git-helper
+
+# original: favorite git commands
+_gg() {
+    is_in_git_repo || return
+    cat $DOTFILES_DIR/zsh/zsh.d/git-commands | fzf-down --prompt="commands> "
+}
+
+# エスケープしないバージョン
+bind-git-helper-unescaped() {
+  local c
+  for c in $@; do
+    eval "fzf-g$c-widget() { local result=\$(_g$c); zle reset-prompt; LBUFFER+=\$result }"
+    eval "zle -N fzf-g$c-widget"
+    eval "bindkey '^g^$c' fzf-g$c-widget"
+    eval "bindkey '^g$c' fzf-g$c-widget"
+  done
+}
+bind-git-helper-unescaped g
+unset -f bind-git-helper-unescaped
 
 # jqのライブクエリ: jqz sample.json
 jqz() {

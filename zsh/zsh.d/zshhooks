@@ -31,3 +31,10 @@ else
 fi
 
 echo "\e[33m[$(basename $0)]\e[0m\t\e[32mloaded\e[0m"
+
+# gh
+if command -v gh &>/dev/null; then
+    eval "$(gh completion -s zsh)"
+else
+    echo "gh is not executable."
+fi

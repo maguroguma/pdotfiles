@@ -1,0 +1,58 @@
+gh pr checkout 
+gh pr view 
+gh pr diff 
+gh pr create
+gh pr status
+gh pr list
+gh repo create 
+
+git branch --all
+git branch --delete
+git branch --delete --force
+git branch --verbose --verbose
+git branch --set-upstream-to 
+git branch --unset-upstream
+
+git commit -m 
+git commit --amend
+git commit --amend --no-edit
+git commit --fixup 
+
+git rebase --interactive 
+git rebase --interactive --autosquash 
+
+git config -l
+
+git diff --name-only
+git diff --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change
+git diff --staged --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change
+
+git grep 
+
+git ls-files -io --exclude-standard
+
+git merge 
+git merge --squash 
+
+git push 
+git push origin HEAD
+git push -u origin HEAD
+git push --force-with-lease --force-if-includes 
+
+git reset HEAD 
+
+git status --short --untracked-files=all
+git status --untracked-files=all
+
+git tag
+git tag -a 
+git tag -d 
+
+git submodule status
+git submodule add 
+git submodule update
+git submodule update --recursive
+
+git worktree add 
+git worktree list
+git worktree prune 

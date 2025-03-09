@@ -27,7 +27,7 @@
 
 [alias]
   unstage = reset HEAD
-  lg = log --graph --all --decorate
+  lg = log --date=short --format='%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)' --graph --color=always
   today = log --oneline --since='12 hour ago'
   cancel = reset --soft HEAD^
   delete-merged-branch = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|main'|xargs git branch -d; };f"
@@ -44,6 +44,9 @@
   detach-branch = checkout @^0
   log-search = log -S
   log-grep = log -G
+  amend = commit --amend
+  append = commit --amend --no-edit
+  fixit = commit --amend --no-edit
 
 [ghq]
   root = ~/go/src

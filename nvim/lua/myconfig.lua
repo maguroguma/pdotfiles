@@ -680,3 +680,14 @@ require('noice').setup({
 
 -- PLUGSETTING: delphinus/skkeleton_indicator.nvim
 require("skkeleton_indicator").setup {}
+
+-- PLUGSETTING: nacro90/numb.nvim
+require('numb').setup()
+
+-- PLUGSETTING: atusy/treemonkey.nvim
+vim.keymap.set({"x", "o"}, "m", function()
+  require("treemonkey").select({
+    ignore_injections = false,
+    highlight = { backdrop = "Comment" }
+  })
+end)

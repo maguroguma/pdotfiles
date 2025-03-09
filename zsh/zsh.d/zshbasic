@@ -27,12 +27,13 @@ zle -N vifm::here
 bindkey '^f' vifm::here
 
 # lazygit
-lazygit::here() {
-    tmux popup -w95% -h95% -E -d "#{pane_current_path}" "lazygit"
-}
-zle -N lazygit::here
-bindkey '^gg' lazygit::here
-bindkey '^g^g' lazygit::here
+# tmux にまかせる
+# lazygit::here() {
+#     tmux popup -w95% -h95% -E -d "#{pane_current_path}" "lazygit"
+# }
+# zle -N lazygit::here
+# bindkey '^gg' lazygit::here
+# bindkey '^g^g' lazygit::here
 
 # today zle
 today-for-zle() {
@@ -364,50 +365,25 @@ alias enja='trans en:ja'
 alias jaen='trans ja:en'
 
 # Git
-alias g='tmux popup -w95% -h95% -E -d "#{pane_current_path}" "lazygit"'
 # add
 alias ga='git add'
 alias gau='git add -u'
-# branch
-alias gb='git branch'
-alias gba='git branch --all'
-alias gbd='git branch --delete'
-alias gbD='git branch -D'
-alias gbvv='git branch -vv'
-alias gb-set-upstream='git branch -u'
-alias gb-unset-upstream='git branch --unset-upstream'
 # checkout
 alias gcho='git checkout'
 # commit
 alias gc='git commit'
 alias gcm='git commit -m'
 alias gcam='git commit --amend'
-alias gcf='git commit --fixup'
-alias gcfwip='git commit --fixup $(git log -1 --pretty=format:"%H" --grep="^fixup\!" --invert-grep)'
-# rebase
-alias gri='git rebase --interactive'
-alias grias='git rebase --interactive --autosquash'
-# config
-alias gc-list='git config -l'
 # diff
 alias gd='git diff'
-alias gdn='git diff --name-only'
-alias gdi='git diff --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change'
 alias gds='git diff --staged'
-alias gdsi='git diff --staged --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change'
 # fetch
 alias gf='git fetch'
 alias gfp='git fetch --prune'
-# grep
-alias gg='git grep'
 # log
-alias glg='git log --graph --all --decorate'
 alias glo='git log --oneline -n 30 --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --color=always --date=format:"%Y/%m/%d %H:%M:%S"'
-# ls-files
-alias gcheck-ignored='git ls-files -io --exclude-standard'
 # merge
 alias gm='git merge'
-alias gms='git merge --squash'
 # push
 alias gp='git push'
 alias gpoh='git push origin HEAD'
@@ -417,15 +393,6 @@ alias gu='git reset HEAD'
 # status
 alias gs='git status --short --untracked-files=all'
 alias gS='git status --untracked-files=all'
-# tag
-alias gt='git tag'
-alias gta='git tag -a'
-alias gtd='git tag -d'
-# submodule
-alias gss='git submodule status'
-alias gsa='git submodule add'
-alias gsu='git submodule update'
-alias gsur='git submodule update --recursive'
 # worktree
 alias gwa='git worktree add'
 alias gwl='git worktree list'
