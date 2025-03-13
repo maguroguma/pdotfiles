@@ -200,6 +200,8 @@ require('gitsigns').setup {
 
 vim.keymap.set("n", "gn", "<cmd>Gitsigns next_hunk<CR>")
 vim.keymap.set("n", "gN", "<cmd>Gitsigns prev_hunk<CR>")
+vim.keymap.set("n", "<Space>gb", "<cmd>Gitsigns blame<CR>")
+vim.keymap.set("n", "gp", "<cmd>Gitsigns preview_hunk_inline<CR>")
 
 -- PLUGSETTING: folke/todo-comments.nvim
 -- FIXME:

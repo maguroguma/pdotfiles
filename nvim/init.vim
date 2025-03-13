@@ -477,7 +477,7 @@ nnoremap <Space>gD <cmd>Gina diff --staged :%<CR>
 nnoremap <Space>gp <cmd>Gina patch --oneside<CR>
 nnoremap <Space>gs <cmd>Gina status<CR>
 nnoremap <Space>gl <cmd>Gina log<CR>
-nnoremap <Space>gb <cmd>execute 'Gina blame --width=' . (&columns / 2)<CR>
+" nnoremap <Space>gb <cmd>execute 'Gina blame --width=' . (&columns / 2)<CR>
 nnoremap <Space>Gd <cmd>Gina diff<CR>
 nnoremap <Space>GD <cmd>Gina diff --staged<CR>
 
@@ -1433,16 +1433,6 @@ endfunction
 command! YankBufferPath :call YankCurrentBufferFileRelativePath()
 command! YankBufferPathFully :call YankCurrentBufferFileFullPath()
 
-" 120 文字ガイド
-execute "set colorcolumn=" . join(range(121, 9999), ',')
-function! ToggleColorColumn()
-    if &colorcolumn == ''
-        execute "set colorcolumn=" . join(range(121, 9999), ',')
-    else
-        set colorcolumn=
-    endif
-endfunction
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1865,12 +1855,6 @@ vmap <Space>P "+P
 nmap <Space>y "+y
 nmap <Space>p "+p
 nmap <Space>P "+P
-vmap gy "+y
-vmap gp "+p
-vmap gP "+P
-nmap gy "+y
-nmap gp "+p
-nmap gP "+P
 nnoremap <Space>Y ggVG"+y
 nnoremap <Space>= ggVG=
 
@@ -1894,9 +1878,19 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
 " toggle
-nnoremap <Space>nn <cmd>set number!<CR>
+nnoremap <Space>n <cmd>windo set number!<CR>
 nnoremap <Space><Space> <cmd>set wrap!<CR>
-nnoremap <Space>nc <cmd>call ToggleColorColumn()<CR>
+command! ToggleColorColumn call ToggleColorColumn()
+
+" 120 文字ガイド
+execute "set colorcolumn=" . join(range(121, 9999), ',')
+function! ToggleColorColumn()
+    if &colorcolumn == ''
+        execute "set colorcolumn=" . join(range(121, 9999), ',')
+    else
+        set colorcolumn=
+    endif
+endfunction
 
 augroup MyXML
   autocmd!
