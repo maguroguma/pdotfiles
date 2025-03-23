@@ -9,6 +9,7 @@ brew install bat
 brew install direnv
 brew install gibo
 brew install ghq
+brew install gh
 brew install wget
 brew install gnu-sed
 brew install gawk
@@ -31,6 +32,9 @@ brew install font-plemol-jp
 brew install font-plemol-jp-nf
 brew install font-plemol-jp-nfj
 brew install font-plemol-jp-hs
+
+brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide imagemagick font-symbols-only-nerd-font
+brew install typos-cli
 
 #########
 # others

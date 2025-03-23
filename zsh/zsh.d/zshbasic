@@ -20,11 +20,27 @@ bindkey -v '^?' backward-delete-char
 bindkey '^[[Z' reverse-menu-complete
 
 # vifm
-vifm::here() {
-    tmux popup -w95% -h95% -E -d "#{pane_current_path}" vifm .
+# tmux にまかせる
+# vifm::here() {
+#     tmux popup -w95% -h95% -E -d "#{pane_current_path}" vifm .
+# }
+# zle -N vifm::here
+# bindkey '^f' vifm::here
+
+function yazi-cd() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
 }
-zle -N vifm::here
-bindkey '^f' vifm::here
+function yazi-cd-zle() {
+    BUFFER="yazi-cd"
+    zle accept-line  # Enter を送信
+}
+zle -N yazi-cd-zle
+bindkey '^f' yazi-cd-zle
 
 # lazygit
 # tmux にまかせる

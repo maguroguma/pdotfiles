@@ -271,6 +271,10 @@ call jetpack#add('delphinus/skkeleton_indicator.nvim')
 call jetpack#add('will133/vim-dirdiff')
 call jetpack#add('nacro90/numb.nvim')
 call jetpack#add('atusy/treemonkey.nvim')
+call jetpack#add('andersevenrud/nvim_context_vt')
+call jetpack#add('nvim-treesitter/nvim-treesitter-context')
+call jetpack#add('stevearc/quicker.nvim')
+call jetpack#add('kevinhwang91/nvim-bqf')
 
 call jetpack#end()
 " plugins END }}}
@@ -406,7 +410,7 @@ nnoremap <silent> , <cmd>GitFiles?<CR>
 nnoremap <silent> R <cmd>HCommand<CR>
 nnoremap <silent> <C-]> <cmd>Marks<CR>
 " long map
-nnoremap <silent> <Space>h <cmd>Helptags<CR>
+" nnoremap <silent> <Space>h <cmd>Helptags<CR>
 nnoremap <silent> <Space>gf <cmd>GitFiles?<CR>
 nnoremap <silent> <Space>q <cmd>History:<CR>
 nnoremap <silent> <Space>bd <cmd>BD<CR>
@@ -1330,10 +1334,10 @@ endif
 autocmd QuickFixCmdPost *grep* cwindow
 
 " ripgrep with vim
-" http://hogeai.hatenablog.com/entry/2018/03/04/201744
+" https://zenn.dev/vim_jp/articles/quickfix-plugins-2025#%3Agrep%E3%81%A7ripgrep%E3%82%92%E4%BD%BF%E3%81%86
 if executable('rg')
-    set grepprg=rg\ --vimgrep\ --no-heading
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
+  let &grepprg = 'rg --vimgrep --smart-case --hidden'
+  set grepformat=%f:%l:%c:%m
 endif
 
 " :grepのショートカット
@@ -1343,14 +1347,14 @@ function! s:grep_cur_dir()
     echo "grep canceled."
     return
   endif
-  let l:command = 'grep ' . l:regexp
+  let l:command = 'grep ' . l:regexp . '| copen'
   execute 'silent ' .. l:command
   if len(getqflist()) == 0
     echoerr 'not found: ' . l:command
   endif
 endfunction
-command! -nargs=0 MyVimGrep :call s:grep_cur_dir()
-nnoremap <Space>gr <cmd>MyVimGrep<CR>
+command! -nargs=0 MyGrepCommand :call s:grep_cur_dir()
+nnoremap <Space>gr <cmd>MyGrepCommand<CR>
 
 function! ReverseLines() range
     let l:lines = getline(a:firstline, a:lastline)
@@ -1878,7 +1882,8 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
 " toggle
-nnoremap <Space>n <cmd>windo set number!<CR>
+nnoremap <Space>n <cmd>windo set number<CR>
+nnoremap <Space>N <cmd>windo set nonumber<CR>
 nnoremap <Space><Space> <cmd>set wrap!<CR>
 command! ToggleColorColumn call ToggleColorColumn()
 
@@ -1921,3 +1926,17 @@ endfunction
 
 " 文字コードによる入力
 inoremap <C-v>u <C-r>=nr2char(0x)<Left>
+
+" マッチ行をすべて a レジスタにヤンクする
+command! -nargs=? YankMatches call YankMatchesToA(<f-args>)
+function! YankMatchesToA(...) abort
+  let @a = ''
+
+  if a:0 >= 1 && !empty(a:1)
+    " パターンが明示された場合
+    execute 'g/' . escape(a:1, '/\') . '/let @a .= getline(".") . "\n"'
+  else
+    " 現在の検索パターンを使用（@/）
+    execute 'g//let @a .= getline(".") . "\n"'
+  endif
+endfunction

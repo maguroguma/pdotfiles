@@ -74,3 +74,6 @@ nvim/pack/
 !lazygit/config.yml
 
 !karabiner/karabiner.json
+
+!yazi/keymap.toml
+!yazi/yazi.toml

@@ -1,48 +1,3 @@
--- formatting quickfix view
-local fn = vim.fn
-function _G.qftf(info)
-    local items
-    local ret = {}
-    if info.quickfix == 1 then
-        items = fn.getqflist({id = info.id, items = 0}).items
-    else
-        items = fn.getloclist(info.winid, {id = info.id, items = 0}).items
-    end
-    local limit = 31
-    local fname_fmt1, fname_fmt2 = '%-' .. limit .. 's', '…%.' .. (limit - 1) .. 's'
-    local valid_fmt = '%s │%5d:%-3d│%s %s'
-    for i = info.start_idx, info.end_idx do
-        local e = items[i]
-        local fname = ''
-        local str
-        if e.valid == 1 then
-            if e.bufnr > 0 then
-                fname = fn.bufname(e.bufnr)
-                if fname == '' then
-                    fname = '[No Name]'
-                else
-                    fname = fname:gsub('^' .. vim.env.HOME, '~')
-                end
-                -- char in fname may occur more than 1 width, ignore this issue in order to keep performance
-                if #fname <= limit then
-                    fname = fname_fmt1:format(fname)
-                else
-                    fname = fname_fmt2:format(fname:sub(1 - limit))
-                end
-            end
-            local lnum = e.lnum > 99999 and -1 or e.lnum
-            local col = e.col > 999 and -1 or e.col
-            local qtype = e.type == '' and '' or ' ' .. e.type:sub(1, 1):upper()
-            str = valid_fmt:format(fname, lnum, col, qtype, e.text)
-        else
-            str = e.text
-        end
-        table.insert(ret, str)
-    end
-    return ret
-end
-vim.o.qftf = '{info -> v:lua._G.qftf(info)}'
-
 -- PLUGSETTING: lualine
 -- ref: https://www.reddit.com/r/neovim/comments/xy0tu1/cmdheight0_recording_macros_message/
 function _G.show_macro_recording()
@@ -196,6 +151,70 @@ require('gitsigns').setup {
     row = 0,
     col = 1
   },
+
+  on_attach = function(bufnr)
+    local gitsigns = require('gitsigns')
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    -- Navigation
+    -- map('n', ']c', function()
+    --   if vim.wo.diff then
+    --     vim.cmd.normal({']c', bang = true})
+    --   else
+    --     gitsigns.nav_hunk('next')
+    --   end
+    -- end)
+    --
+    -- map('n', '[c', function()
+    --   if vim.wo.diff then
+    --     vim.cmd.normal({'[c', bang = true})
+    --   else
+    --     gitsigns.nav_hunk('prev')
+    --   end
+    -- end)
+
+    -- Actions
+    map('n', '<leader>hs', gitsigns.stage_hunk)
+    map('n', '<leader>hr', gitsigns.reset_hunk)
+    map('v', '<leader>hs', function()
+      gitsigns.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+    end)
+
+    map('v', '<leader>hr', function()
+      gitsigns.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+    end)
+    map('n', '<leader>hS', gitsigns.stage_buffer)
+    map('n', '<leader>hR', gitsigns.reset_buffer)
+
+    -- map('n', '<leader>hp', gitsigns.preview_hunk)
+    -- map('n', '<leader>hi', gitsigns.preview_hunk_inline)
+    --
+    -- map('n', '<leader>hb', function()
+    --   gitsigns.blame_line({ full = true })
+    -- end)
+    --
+    -- map('n', '<leader>hd', gitsigns.diffthis)
+    --
+    -- map('n', '<leader>hD', function()
+    --   gitsigns.diffthis('~')
+    -- end)
+    --
+    -- map('n', '<leader>hQ', function() gitsigns.setqflist('all') end)
+    -- map('n', '<leader>hq', gitsigns.setqflist)
+    --
+    -- -- Toggles
+    -- map('n', '<leader>tb', gitsigns.toggle_current_line_blame)
+    -- map('n', '<leader>td', gitsigns.toggle_deleted)
+    -- map('n', '<leader>tw', gitsigns.toggle_word_diff)
+    --
+    -- -- Text object
+    -- map({'o', 'x'}, 'ih', gitsigns.select_hunk)
+  end
 }
 
 vim.keymap.set("n", "gn", "<cmd>Gitsigns next_hunk<CR>")
@@ -651,7 +670,20 @@ require("aerial").setup({
 vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
 
 -- PLUGSETTING: shellRaining/hlchunk.nvim
-require("hlchunk").setup({})
+require("hlchunk").setup({
+  chunk = {
+    enable = true,
+  },
+  indent = {
+    enable = true,
+  },
+  line_num = {
+    enable = true,
+  },
+  blank = {
+    enable = true,
+  },
+})
 
 -- PLUGSETTING: kazhala/close-buffers.nvim
 require('close_buffers').setup({
@@ -693,3 +725,6 @@ vim.keymap.set({"x", "o"}, "m", function()
     highlight = { backdrop = "Comment" }
   })
 end)
+
+-- PLUGSETTING: stevearc/quicker.nvim
+require("quicker").setup()

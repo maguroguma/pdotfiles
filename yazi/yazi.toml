@@ -1,0 +1,4 @@
+[manager]
+# ratio = [ 2, 4, 2 ]
+linemode = "mtime"
+show_hidden = true

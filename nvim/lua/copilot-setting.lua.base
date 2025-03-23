@@ -44,11 +44,14 @@ require('copilot').setup({
     ["*"] = false,
   },
   copilot_node_command = 'node', -- Node.js version must be > 18.x
+  copilot_model = 'gpt-4o-mini',
   server_opts_overrides = {},
 })
 
 -- PLUGSETTING: CopilotC-Nvim/CopilotChat.nvim
 require("CopilotChat").setup {
+  model = 'gpt-4o-mini',
+
   debug = true, -- Enable debugging
   -- See Configuration section for rest
 
@@ -59,6 +62,9 @@ require("CopilotChat").setup {
   prompts = {
     Explain = {
       prompt = '/COPILOT_EXPLAIN 選択部分のコードについて説明してください。',
+    },
+    TranslateEnToJa = {
+      prompt = '/COPILOT_EXPLAIN 選択部分の英語を日本語に訳してください。',
     },
     -- Review = {
     --   prompt = '/COPILOT_REVIEW Review the selected code.',
@@ -193,6 +199,7 @@ vim.api.nvim_set_keymap("n", "<leader>cct", "<cmd>CopilotChatTranslateToEn<cr>",
 
 -- visual
 vim.api.nvim_set_keymap('v', '<leader>cce', ':CopilotChatExplain<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<leader>cct', ':CopilotChatTranslateEnToJa<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<leader>ccd', ':CopilotChatDocs<CR>', { noremap = true, silent = true })
 
 -- Copilot Chat Quick: 現在のバッファを入力にして Copilot とチャットする
