@@ -728,3 +728,9 @@ end)
 
 -- PLUGSETTING: stevearc/quicker.nvim
 require("quicker").setup()
+
+-- PLUGSETTING: nvim-treesitter/nvim-treesitter-context
+vim.api.nvim_set_hl(0, "TreesitterContext", { bold = true, bg = "#282a2e" })
+vim.api.nvim_set_hl(0, "TreesitterContextBottom", { underline = true, bold = true })
+vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bold = true })
+vim.api.nvim_set_hl(0, "TreesitterContextLineNumberBottom", { underline = true, bold = true })
