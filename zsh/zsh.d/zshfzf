@@ -193,7 +193,9 @@ unset -f bind-git-helper
 # original: favorite git commands
 _gg() {
     is_in_git_repo || return
-    cat $DOTFILES_DIR/zsh/zsh.d/git-commands | fzf-down --prompt="commands> "
+    cat $DOTFILES_DIR/zsh/zsh.d/git-commands | \
+        fzf-down --prompt="commands> " | \
+        cut -d'#' -f1
 }
 
 # エスケープしないバージョン

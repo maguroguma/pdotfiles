@@ -165,7 +165,7 @@ call jetpack#add('hrsh7th/nvim-cmp')
 
 call jetpack#add('nvim-tree/nvim-web-devicons')
 
-call jetpack#add('mbbill/undotree')
+" call jetpack#add('mbbill/undotree')
 call jetpack#add('voldikss/vim-floaterm')
 call jetpack#add('fatih/vim-go', {
       \ 'on_ft': 'go',
@@ -271,10 +271,10 @@ call jetpack#add('delphinus/skkeleton_indicator.nvim')
 call jetpack#add('will133/vim-dirdiff')
 call jetpack#add('nacro90/numb.nvim')
 call jetpack#add('atusy/treemonkey.nvim')
-call jetpack#add('andersevenrud/nvim_context_vt')
 call jetpack#add('nvim-treesitter/nvim-treesitter-context')
 call jetpack#add('stevearc/quicker.nvim')
 call jetpack#add('kevinhwang91/nvim-bqf')
+call jetpack#add('jiaoshijie/undotree')
 
 call jetpack#end()
 " plugins END }}}
@@ -385,6 +385,20 @@ command! HCommand call fzf#run(fzf#wrap({
 \ }))
 
 """
+" custom insert command from the custom dictionary file
+"""
+" source
+function! s:list_custom_dictyonary() abort
+  let l:res = system("cat $XDG_CONFIG_HOME/nvim/fzf-any-dictionary")
+  return split(l:res, "\n")
+endfunction
+command! FzfFromCustomFile call fzf#run(fzf#wrap({
+  \ 'source': s:list_custom_dictyonary(),
+  \ 'sink': funcref('s:insert_target'),
+  \ 'options': '--ansi --prompt "insert something> "',
+\ }))
+
+"""
 " easy MRU
 """
 command! Fmru FZFMru
@@ -442,10 +456,11 @@ command! FzfPasteFilePaths call fzf#run(fzf#wrap({
 \ }))
 
 " Path completion with custom source command
-" inoremap <expr> <c-f> fzf#vim#complete#path('find .')
 inoremap <expr> <C-a>f fzf#vim#complete#path('rg --files')
 " Shell history completion
 inoremap <C-a>R <cmd>HCommand<CR>
+" Word completion with custom source command
+inoremap <C-a>F <cmd>FzfFromCustomFile<CR>
 
 " Word completion with custom spec with popup layout option
 " inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
@@ -973,26 +988,24 @@ highlight CocSearch guifg=#C586C0
 " coc extensions
 """
 let g:coc_global_extensions = [
+      \ 'coc-syntax',
+      \ 'coc-word',
       \ 'coc-json',
-      \ 'coc-prettier',
-      \ 'coc-pyright',
-      \ 'coc-tsserver',
-      \ 'coc-vetur',
       \ 'coc-html',
       \ 'coc-css',
-      \ 'coc-yaml',
-      \ 'coc-sh',
-      \ 'coc-word',
-      \ 'coc-syntax',
-      \ 'coc-docker',
+      \ 'coc-prettier',
+      \ 'coc-tsserver',
+      \ 'coc-vetur',
       \ 'coc-tailwindcss',
       \ 'coc-deno',
-      \ 'coc-fzf-preview',
+      \ '@yaegassy/coc-astro',
       \ 'coc-vimlsp',
+      \ 'coc-docker',
+      \ 'coc-yaml',
+      \ 'coc-sh',
+      \ 'coc-pyright',
+      \ 'coc-typos',
       \ ]
-
-" fzf-preview
-let g:fzf_preview_floating_window_rate = 0.9
 
 """
 " node path
@@ -1227,7 +1240,18 @@ function! g:ReadTripleBackQuotes(lang_text)
   let @a = tmp
 endfunction
 command! -nargs=1 TripleBackQuotes :call g:ReadTripleBackQuotes(<f-args>)
-nnoremap <Space>` <cmd>call g:ReadTripleBackQuotes("")<CR>
+
+" マークダウン用のコードブロック囲み関数
+function! SurroundWithCodeBlock() range
+  let l:ext = ""
+  " 言語指定をオプションで聞くバージョンにする場合はコメントを外す
+  " let l:ext = input("言語指定（省略可）: ")
+  execute "normal! `>o```" . l:ext
+  execute "normal! `<O```" . l:ext
+endfunction
+
+autocmd FileType markdown vnoremap <buffer> <Space>` :call SurroundWithCodeBlock()<CR>
+autocmd FileType markdown nnoremap <buffer> <Space>` <cmd>call g:ReadTripleBackQuotes("")<CR>
 
 " ファイル・バッファのエンコーディング
 command! OpenAsSjis :edit ++encoding=sjis<CR>

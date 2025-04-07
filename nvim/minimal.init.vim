@@ -111,6 +111,10 @@ call jetpack#add('machakann/vim-sandwich')
 call jetpack#add('markonm/traces.vim') " realize live substitute
 call jetpack#add('EdenEast/nightfox.nvim')
 call jetpack#add('rhysd/clever-f.vim')
+
+call jetpack#add('vim-denops/denops.vim')
+call jetpack#add('vim-skk/skkeleton')
+call jetpack#add('delphinus/skkeleton_indicator.nvim')
 call jetpack#end()
 
 " Automatic plugin installation on startup
@@ -169,6 +173,35 @@ omap g' <cmd>Pounce<CR>
 let g:clever_f_smart_case = 1
 let g:clever_f_use_migemo = 1
 let g:clever_f_chars_match_any_signs = ';'
+
+call skkeleton#config(
+      \ {
+      \ 'globalDictionaries': [
+        \ '~/.skk/SKK-JISYO.L',
+        \ '~/.skk/SKK-JISYO.fullname',
+        \ '~/.skk/SKK-JISYO.geo',
+        \ '~/.skk/SKK-JISYO.jinmei',
+        \ '~/.skk/SKK-JISYO.law',
+        \ '~/.skk/SKK-JISYO.propernoun',
+        \ '~/.skk/SKK-JISYO.station',
+      \ ],
+      \ 'eggLikeNewline': v:true,
+      \ 'immediatelyCancel': v:false,
+      \})
+imap <C-j> <Plug>(skkeleton-enable)
+cmap <C-j> <Plug>(skkeleton-enable)
+tmap <C-j> <Plug>(skkeleton-enable)
+
+augroup skkeleton-coc
+  autocmd!
+  autocmd User skkeleton-enable-pre let b:coc_suggest_disable = v:true
+  autocmd User skkeleton-disable-pre let b:coc_suggest_disable = v:false
+augroup END
+
+call skkeleton#register_kanatable('rom', {
+      \ '(' : ['（', ''],
+      \ ')' : ['）', ''],
+      \})
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
@@ -439,6 +472,11 @@ highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236 gui=unde
 highlight PounceAccept     cterm=underline,bold ctermfg=184 ctermbg=236 gui=underline,bold guifg=#FFAF60 guibg=#555555
 highlight PounceAcceptBest cterm=underline,bold ctermfg=196 ctermbg=236 gui=underline,bold guifg=#EE2513 guibg=#555555
 
+" normal, insertともに<CR>で終了するようにする
+nnoremap <CR> :wq<CR>
+inoremap <CR> <Esc>:wq<CR>
+
+colorscheme dayfox
 lua <<EOF
 require'pounce'.setup{
   accept_keys = "HJKLYUIOPNMQWERTASDFGZXCVB",
@@ -446,10 +484,6 @@ require'pounce'.setup{
   multi_window = true,
   debug = false,
 }
+
+require("skkeleton_indicator").setup {}
 EOF
-
-" normal, insertともに<CR>で終了するようにする
-nnoremap <CR> :wq<CR>
-inoremap <CR> <Esc>:wq<CR>
-
-colorscheme dayfox

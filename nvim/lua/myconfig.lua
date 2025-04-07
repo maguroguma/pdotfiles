@@ -667,7 +667,7 @@ require("aerial").setup({
   end,
 })
 -- You probably also want to set a keymap to toggle aerial
-vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
+vim.keymap.set("n", "<leader>ae", "<cmd>AerialToggle!<CR>")
 
 -- PLUGSETTING: shellRaining/hlchunk.nvim
 require("hlchunk").setup({
@@ -730,7 +730,11 @@ end)
 require("quicker").setup()
 
 -- PLUGSETTING: nvim-treesitter/nvim-treesitter-context
-vim.api.nvim_set_hl(0, "TreesitterContext", { bold = true, bg = "#282a2e" })
+vim.api.nvim_set_hl(0, "TreesitterContext", { bold = true, bg = "#393b47" })
 vim.api.nvim_set_hl(0, "TreesitterContextBottom", { underline = true, bold = true })
 vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bold = true })
 vim.api.nvim_set_hl(0, "TreesitterContextLineNumberBottom", { underline = true, bold = true })
+
+-- PLUGSETTING: jiaoshijie/undotree
+require('undotree').setup()
+vim.keymap.set('n', '<leader>u', require('undotree').toggle, { noremap = true, silent = true })

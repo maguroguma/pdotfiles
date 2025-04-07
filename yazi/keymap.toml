@@ -8,4 +8,6 @@ prepend_keymap = [
 	{ on = "o", run = "open --interactive", esc = "Open selected files interactively" },
 	{ on = "<S-Enter>", run = "open", desc = "Open selected files" },
 	{ on = "<Enter>", run = "open --interactive", desc = "Open selected files interactively" },
+	{ on = "Q",     run = "quit",               desc = "Quit the process" },
+	{ on = "q",     run = "quit --no-cwd-file", desc = "Quit the process without outputting cwd-file" },
 ]

@@ -20,6 +20,7 @@
         ]
       }
     },
+    // PHP の language server
     "intelephense": {
       "command": "intelephense",
       "args": ["--stdio"],
@@ -51,6 +52,7 @@
     "border": true,
     "borderhighlight": "CocInfoFloat"
   },
+  // coc-prettier の設定
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
     "javascript",
@@ -58,7 +60,8 @@
     "vue",
     "html",
     "json",
-    "typescriptreact"
+    "typescriptreact",
+    "astro"
   ],
   "tailwindCSS.cssLanguages": [
     "css",

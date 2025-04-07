@@ -1,63 +1,67 @@
-gh pr checkout 
-gh pr view 
-gh pr diff 
+gh pr checkout #{PR_num}
 gh pr create
+gh pr create --web
+gh pr view #{branch_name}?
+gh pr view --web #{branch_name}?
+gh pr diff #{branch_name}?
+gh pr diff --web #{branch_name}?
 gh pr status
 gh pr list
+gh pr list --web
 gh repo create 
 
 git branch --all
 git branch --delete
 git branch --delete --force
 git branch --verbose --verbose
-git branch --set-upstream-to 
+git branch --set-upstream-to #{<remote>/<branch>}
 git branch --unset-upstream
 
-git commit -m 
+git commit -m #{message_string}
 git commit --amend
 git commit --amend --no-edit
-git commit --fixup 
+git commit --fixup #{commit_hash}
 
-git rebase --interactive 
-git rebase --interactive --autosquash 
+git rebase --interactive #{commit_hash}
+git rebase --interactive --autosquash #{commit_hash}
 
-git config -l
+git config --list
 
 git diff --name-only
 git diff --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change
 git diff --staged --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change
 
-git grep 
+git grep #{pattern_string}
 
-git ls-files -io --exclude-standard
+git ls-files -io --exclude-standard ### git ignore されている未追跡のファイルをリストする
 
-git merge 
-git merge --squash 
+git merge #{branch_name}
+git merge --squash #{branch_name}
 
-git push 
+git push #{branch_name}?
+git push --force-with-lease --force-if-includes #{branch_name}?
 git push origin HEAD
 git push -u origin HEAD
-git push --force-with-lease --force-if-includes 
 
-git reset HEAD 
+git reset HEAD #{file_name} ### ファイルを unstage する
 
 git status --short --untracked-files=all
 git status --untracked-files=all
 
-git tag
-git tag -a 
-git tag -d 
+git tag --list
+git tag -a '' -m '' ### -a #{tag_name} -m #{message}
+git tag -d #{tag_name}
 
 git submodule status
 git submodule add 
 git submodule update
 git submodule update --recursive
 
-git worktree add 
+git worktree add #{path} #{branch_name}
 git worktree list
-git worktree prune 
+git worktree prune
 
-git log --patch -S 
-git log --patch -G 
-git log -S 
-git log -G 
+git log --patch -S #{pattern_string} ### パターンが変更されたコミットとその差分を表示する
+git log --patch -G #{regex_string} ### パターンが変更されたコミットとその差分を表示する
+git log -S #{pattern_string} ### パターンが変更されたコミットを表示する
+git log -G #{regex_string} ### パターンが変更されたコミットを表示する
