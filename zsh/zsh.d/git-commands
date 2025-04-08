@@ -8,6 +8,7 @@ gh pr diff --web #{branch_name}?
 gh pr status
 gh pr list
 gh pr list --web
+gh pr list --web --state all --search #{pattern}
 gh repo create 
 
 git branch --all
