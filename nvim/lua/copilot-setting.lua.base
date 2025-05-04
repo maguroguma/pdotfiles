@@ -41,16 +41,18 @@ require('copilot').setup({
     vue = true,
     html = true,
     go = true,
+    css = true,
+    astro = true,
     ["*"] = false,
   },
   copilot_node_command = 'node', -- Node.js version must be > 18.x
-  copilot_model = 'gpt-4o-mini',
+  copilot_model = 'gpt-4o',
   server_opts_overrides = {},
 })
 
 -- PLUGSETTING: CopilotC-Nvim/CopilotChat.nvim
 require("CopilotChat").setup {
-  model = 'gpt-4o-mini',
+  model = 'gpt-4o',
 
   debug = true, -- Enable debugging
   -- See Configuration section for rest
@@ -116,7 +118,7 @@ chore ✏️      maintain
   },
 
   window = {
-    layout = 'horizontal', -- 'vertical', 'horizontal', 'float', 'replace'
+    layout = 'vertical', -- 'vertical', 'horizontal', 'float', 'replace'
   },
 
   -- default mappings

@@ -66,6 +66,7 @@ go install github.com/rhysd/vim-startuptime@latest
 go install github.com/x-motemen/ghq@latest
 go install github.com/mattn/chatgpt@latest
 go install github.com/mattn/memo@latest
+go install github.com/umlx5h/gtrash@latest
 # go development tools
 go install golang.org/x/tools/cmd/godoc@latest
 go install github.com/ChimeraCoder/gojson/gojson@latest

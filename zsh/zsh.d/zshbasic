@@ -454,6 +454,13 @@ case "$OSTYPE" in
     ;;
 esac
 
+# gtrash
+if command -v gtrash &>/dev/null; then
+    alias tp='gtrash put' # trash put
+else
+    echo "gtrash is not executable."
+fi
+
 # go updater
 # update_go() {
 #   echo Looking up latest version

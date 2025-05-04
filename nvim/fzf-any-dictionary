@@ -1,1 +1,12 @@
 <a href="https://example.com" target="_blank" rel="noopener noreferrer">アンカーテキスト</a>
+
+# feat ✨      feature
+# fix 🐛       bug fix
+# deps ➕      add dependencies
+# deps ➖      remove dependencies
+# breaking 💥  breaking changes
+# docs 📝      documentation
+# style 💄     formatting, missing semi colons, etc
+# refactor ♻️   refactoring
+# test ✅      when adding missing tests
+# chore ✏️      maintain

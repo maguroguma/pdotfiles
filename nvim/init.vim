@@ -214,7 +214,7 @@ call jetpack#add('jodosha/vim-godebug', {
       \ 'on_ft': 'go'
       \ })
 " automatic closing of quotes, parenthesis, brackets, etc.
-call jetpack#add('Raimondi/delimitMate')
+" call jetpack#add('Raimondi/delimitMate')
 " easy grep tool
 call jetpack#add('windwp/nvim-spectre')
 call jetpack#add('simeji/winresizer')
@@ -236,12 +236,13 @@ call jetpack#add('hotwatermorning/auto-git-diff', {
 call jetpack#add('mzlogin/vim-markdown-toc', {
       \ 'on_ft': ['md', 'markdown']
       \ })
-call jetpack#add('alvan/vim-closetag', {
-      \ 'on_ft': ['html', 'vue', 'html.twig']
-      \ })
-call jetpack#add('ap/vim-css-color', {
-      \ 'on_ft': ['html', 'vue', 'html.twig', 'vim', 'lua']
-      \ })
+" call jetpack#add('alvan/vim-closetag', {
+"       \ 'on_ft': ['html', 'vue', 'html.twig']
+"       \ })
+" call jetpack#add('ap/vim-css-color', {
+"       \ 'on_ft': ['html', 'vue', 'html.twig', 'vim', 'lua', 'css', 'scss', 'astro', 'jsx', 'tsx']
+"       \ })
+call jetpack#add('ap/vim-css-color')
 call jetpack#add('posva/vim-vue', {
       \ 'on_ft': ['vue']
       \ })
@@ -275,6 +276,7 @@ call jetpack#add('nvim-treesitter/nvim-treesitter-context')
 call jetpack#add('stevearc/quicker.nvim')
 call jetpack#add('kevinhwang91/nvim-bqf')
 call jetpack#add('jiaoshijie/undotree')
+call jetpack#add('windwp/nvim-ts-autotag')
 
 call jetpack#end()
 " plugins END }}}
@@ -1015,6 +1017,8 @@ let g:coc_global_extensions = [
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: cohama/lexima.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:lexima_enable_basic_rules = 1
 
 " yuki-yanoさんのスクリプトを参考に
 " https://github.com/yuki-yano/dotfiles/blob/1c865f70c5ca3c2b4b59181c30bdb69ac6a0870a/.vimrc

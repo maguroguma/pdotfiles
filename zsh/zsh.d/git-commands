@@ -49,6 +49,8 @@ git reset HEAD #{file_name} ### ファイルを unstage する
 git status --short --untracked-files=all
 git status --untracked-files=all
 
+git stash branch #{branch_name}
+
 git tag --list
 git tag -a '' -m '' ### -a #{tag_name} -m #{message}
 git tag -d #{tag_name}

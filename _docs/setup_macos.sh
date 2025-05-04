@@ -36,6 +36,16 @@ brew install font-plemol-jp-hs
 brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide imagemagick font-symbols-only-nerd-font
 brew install typos-cli
 
+# JankyBorders (emphasize active window)
+brew tap FelixKratz/formulae
+brew install borders
+
+# window capture
+brew install t-rec
+
+# window operation tool
+brew install --cask swift-shift
+
 #########
 # others
 #########
@@ -53,3 +63,7 @@ echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
 # node(asdf)
 asdf install nodejs latest
 asdf global nodejs latest
+
+# Finder setting
+defaults write com.apple.finder AppleShowAllFiles TRUE
+killall Finder

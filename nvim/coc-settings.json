@@ -61,7 +61,8 @@
     "html",
     "json",
     "typescriptreact",
-    "astro"
+    "astro",
+    "yaml"
   ],
   "tailwindCSS.cssLanguages": [
     "css",

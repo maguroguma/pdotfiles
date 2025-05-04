@@ -78,3 +78,5 @@ nvim/pack/
 
 !yazi/keymap.toml
 !yazi/yazi.toml
+
+!borders/bordersrc
