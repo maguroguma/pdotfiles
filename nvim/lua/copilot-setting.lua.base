@@ -213,3 +213,19 @@ vim.api.nvim_set_keymap('v', '<leader>ccd', ':CopilotChatDocs<CR>', { noremap = 
 -- Copilot Chat Quick: 現在のバッファを入力にして Copilot とチャットする
 vim.api.nvim_set_keymap("n", "<leader>ccq", "<cmd>lua CopilotChatBuffer()<cr>", { noremap = true, silent = true })
 
+require('avante').setup {
+  provider = "copilot",
+
+  windows = {
+    position = "right",
+    width = 40,
+    ask = {
+      floating = true,
+      start_insert = false,
+      border = "rounded"
+    }
+  },
+}
+require('render-markdown').setup({
+  file_types = { "Avante" },
+})

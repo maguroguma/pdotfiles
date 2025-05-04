@@ -278,6 +278,10 @@ call jetpack#add('kevinhwang91/nvim-bqf')
 call jetpack#add('jiaoshijie/undotree')
 call jetpack#add('windwp/nvim-ts-autotag')
 
+" for avante
+call jetpack#add('stevearc/dressing.nvim')
+call jetpack#add('MeanderingProgrammer/render-markdown.nvim')
+call jetpack#add('yetone/avante.nvim', { 'branch': 'main', 'do': 'make' })
 call jetpack#end()
 " plugins END }}}
 
