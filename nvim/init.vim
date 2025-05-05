@@ -281,6 +281,7 @@ call jetpack#add('windwp/nvim-ts-autotag')
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
 call jetpack#add('MeanderingProgrammer/render-markdown.nvim')
+call jetpack#add('ibhagwan/fzf-lua')
 call jetpack#add('yetone/avante.nvim', { 'branch': 'main', 'do': 'make' })
 call jetpack#end()
 " plugins END }}}
@@ -1914,13 +1915,11 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
 " toggle
-nnoremap <Space>n <cmd>windo set number<CR>
-nnoremap <Space>N <cmd>windo set nonumber<CR>
+nnoremap <Space>n <cmd>set number!<CR>
 nnoremap <Space><Space> <cmd>set wrap!<CR>
 command! ToggleColorColumn call ToggleColorColumn()
 
-" 120 文字ガイド
-execute "set colorcolumn=" . join(range(121, 9999), ',')
+" 120 文字ガイドのトグル
 function! ToggleColorColumn()
     if &colorcolumn == ''
         execute "set colorcolumn=" . join(range(121, 9999), ',')

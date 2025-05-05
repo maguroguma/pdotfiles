@@ -14,6 +14,11 @@ lualine.setup {
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
     theme = 'dracula',
+
+    disabled_filetypes = {
+      statusline = { "Avante", "AvanteInput", "AvanteSelectedFiles" },
+      winbar = { "Avante", "AvanteInput", "AvanteSelectedFiles" },
+    },
   },
   sections = {
     lualine_a = {
