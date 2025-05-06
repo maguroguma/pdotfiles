@@ -761,3 +761,31 @@ require('nvim-ts-autotag').setup({
   --   }
   -- }
 })
+
+-- PLUGSETTING: MeanderingProgrammer/render-markdown.nvim
+require('render-markdown').setup({
+  file_types = { "Avante", "markdown" },
+
+  heading = {
+    width = "block",
+    left_pad = 0,
+    right_pad = 4,
+    icons = {},
+  },
+
+  code = {
+    width = "block",
+  },
+
+  render_modes = true,
+})
+
+-- PLUGSETTING: ibhagwan/fzf-lua
+require('fzf-lua').setup({
+  winopts = {
+    height           = 0.6,            -- window height
+    width            = 0.80,            -- window width
+    row              = 0.5,            -- window row position (0=top, 1=bottom)
+    col              = 0.50,            -- window col position (0=left, 1=right)
+  }
+})

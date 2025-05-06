@@ -226,6 +226,3 @@ require('avante').setup {
     }
   },
 }
-require('render-markdown').setup({
-  file_types = { "Avante", "markdown" },
-})

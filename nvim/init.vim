@@ -419,22 +419,26 @@ command! FZFMru call fzf#run(fzf#wrap({
 """
 
 " popup window
-let g:fzf_layout = { 'window': { 'width': 0.5, 'height': 0.4, 'yoffset': 0.5 } }
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.6, 'yoffset': 0.5 } }
 
 " Empty value to disable preview window altogether
 let g:fzf_preview_window = []
 
 " short map
-nnoremap <silent> <C-p> <cmd>Files<CR>
-nnoremap <silent> ; <cmd>Buffers<CR>
-nnoremap <silent> , <cmd>GitFiles?<CR>
-nnoremap <silent> R <cmd>HCommand<CR>
-nnoremap <silent> <C-]> <cmd>Marks<CR>
-" long map
+" nnoremap <silent> <C-p> <cmd>Files<CR>
+" nnoremap <silent> ; <cmd>Buffers<CR>
+" nnoremap <silent> , <cmd>GitFiles?<CR>
+nnoremap <silent> <C-p> <cmd>FzfLua files<CR>
+nnoremap <silent> ; <cmd>FzfLua buffers<CR>
+nnoremap <silent> , <cmd>FzfLua git_status<CR>
+
 " nnoremap <silent> <Space>h <cmd>Helptags<CR>
-nnoremap <silent> <Space>gf <cmd>GitFiles?<CR>
-nnoremap <silent> <Space>q <cmd>History:<CR>
+" nnoremap <silent> <Space>q <cmd>History:<CR>
+nnoremap <silent> <Space>H <cmd>FzfLua helptags<CR>
+nnoremap <silent> <Space>q <cmd>FzfLua command_history<CR>
+
 nnoremap <silent> <Space>bd <cmd>BD<CR>
+
 " show maps map
 nmap <Space><tab> <plug>(fzf-maps-n)
 xmap <Space><tab> <plug>(fzf-maps-x)
