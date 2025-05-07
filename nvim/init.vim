@@ -576,8 +576,10 @@ map g# <Plug>(asterisk-gz#)
 " PLUGSETTING: t9md/vim-quickhl
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nmap M <Plug>(quickhl-manual-this)
-xmap M <Plug>(quickhl-manual-this)
+nmap M <Plug>(quickhl-manual-this-whole-word)
+xmap M <Plug>(quickhl-manual-this-whole-word)
+nmap ma <Plug>(quickhl-manual-this)
+xmap ma <Plug>(quickhl-manual-this)
 
 let g:quickhl_manual_keywords = [
       \ 'FACT:',
