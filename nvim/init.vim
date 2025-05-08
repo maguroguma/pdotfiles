@@ -435,7 +435,10 @@ nnoremap <silent> , <cmd>FzfLua git_status<CR>
 " nnoremap <silent> <Space>h <cmd>Helptags<CR>
 " nnoremap <silent> <Space>q <cmd>History:<CR>
 nnoremap <silent> <Space>H <cmd>FzfLua helptags<CR>
+nnoremap <silent> Q <cmd>FzfLua command_history<CR>
 nnoremap <silent> <Space>q <cmd>FzfLua command_history<CR>
+nnoremap <silent> ? <cmd>FzfLua search_history<CR>
+nnoremap <silent> <Space>/ <cmd>FzfLua search_history<CR>
 
 nnoremap <silent> <Space>bd <cmd>BD<CR>
 
@@ -577,9 +580,8 @@ map g# <Plug>(asterisk-gz#)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 nmap M <Plug>(quickhl-manual-this-whole-word)
-xmap M <Plug>(quickhl-manual-this-whole-word)
+xmap M <Plug>(quickhl-manual-this)
 nmap ma <Plug>(quickhl-manual-this)
-xmap ma <Plug>(quickhl-manual-this)
 
 let g:quickhl_manual_keywords = [
       \ 'FACT:',
@@ -1822,8 +1824,8 @@ nnoremap t <Nop>
 nnoremap <Space> <Nop>
 
 " command line window
-nnoremap Q q:
-nnoremap ? q/
+" nnoremap <Space>q q:
+" nnoremap <Space>/ q/
 set cmdwinheight=20
 
 " cursor move
