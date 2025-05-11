@@ -764,7 +764,7 @@ require('nvim-ts-autotag').setup({
 
 -- PLUGSETTING: MeanderingProgrammer/render-markdown.nvim
 require('render-markdown').setup({
-  file_types = { "Avante", "markdown" },
+  file_types = { "Avante", "markdown", "copilot-chat" },
 
   heading = {
     width = "full",
@@ -775,22 +775,63 @@ require('render-markdown').setup({
 
   code = {
     width = "block",
+    right_pad = 4,
   },
 
   render_modes = true,
 })
 
 -- PLUGSETTING: ibhagwan/fzf-lua
+local actions = require("fzf-lua").actions
 require('fzf-lua').setup({
   winopts = {
-    height           = 0.9,            -- window height
-    width            = 0.75,            -- window width
+    height           = 0.6,            -- window height
+    width            = 0.8,            -- window width
     row              = 0.5,            -- window row position (0=top, 1=bottom)
     col              = 0.5,            -- window col position (0=left, 1=right)
 
     preview = {
+      default = false,
       vertical       = "down:50%",      -- up|down:size
       layout         = "vertical",          -- horizontal|vertical|flex
     },
   },
+  git = {
+    status = {
+      prompt        = 'GitStatus❯ ',
+      actions = {
+        ["right"]  = false,
+        ["left"]   = false,
+        ["ctrl-l"]  = { fn = actions.git_unstage, reload = true },
+        ["ctrl-h"]   = { fn = actions.git_stage, reload = true },
+        ["ctrl-x"] = { fn = actions.git_reset, reload = true },
+      },
+    },
+  },
+  buffers = {
+    prompt            = 'Buffers❯ ',
+  },
 })
+
+-- Neovim Lua: Blink the active window for `duration`秒、`count`回明滅
+local function blink_active_window(duration, count)
+  local win = vim.api.nvim_get_current_win()
+  local original = vim.api.nvim_win_get_option(win, "winhighlight")
+  local blink_hl = "Normal:ErrorMsg"  -- 目立つ色を指定
+
+  for i = 1, count do
+    vim.api.nvim_win_set_option(win, "winhighlight", blink_hl)
+    vim.cmd("redraw")
+    vim.wait(duration * 500)  -- 半周期
+    vim.api.nvim_win_set_option(win, "winhighlight", original)
+    vim.cmd("redraw")
+    vim.wait(duration * 500)
+  end
+end
+
+-- コマンド登録例（1秒間に3回明滅）
+vim.api.nvim_create_user_command("BlinkWindow", function()
+  blink_active_window(0.4, 2)
+end, {})
+
+vim.api.nvim_set_keymap("n", "ss", "<cmd>BlinkWindow<cr>", { noremap = true, silent = true })

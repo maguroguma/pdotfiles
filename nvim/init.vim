@@ -472,6 +472,7 @@ command! FzfPasteFilePaths call fzf#run(fzf#wrap({
 " Path completion with custom source command
 inoremap <expr> <C-a>f fzf#vim#complete#path('rg --files')
 " Shell history completion
+inoremap <C-a>r <cmd>HCommand<CR>
 inoremap <C-a>R <cmd>HCommand<CR>
 " Word completion with custom source command
 inoremap <C-a>F <cmd>FzfFromCustomFile<CR>
@@ -636,7 +637,7 @@ nnoremap <Space>D <cmd>BDelete hidden<CR>
 " PLUGSETTING: t9md/vim-choosewin
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nmap ss <cmd>ChooseWin<CR>
+nmap so <cmd>ChooseWin<CR>
 " オーバーレイ機能を有効にしたい場合
 let g:choosewin_overlay_enable          = 1
 " オーバーレイ・フォントをマルチバイト文字を含むバッファでも綺麗に表示する。
@@ -1870,8 +1871,8 @@ nnoremap sK <C-w>K
 nnoremap sL <C-w>L
 nnoremap sH <C-w>H
 nnoremap s= <C-w>=
-nnoremap so <C-w>_<C-w>|
-nnoremap sO <C-w>=
+" nnoremap so <C-w>_<C-w>|
+" nnoremap sO <C-w>=
 nnoremap sq <cmd>confirm quit<CR>
 nnoremap sQ <cmd>confirm qall<CR>
 
