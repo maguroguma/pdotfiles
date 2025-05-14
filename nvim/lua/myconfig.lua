@@ -13,7 +13,7 @@ lualine.setup {
   options = {
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
-    theme = 'dracula',
+    theme = 'onelight',
 
     disabled_filetypes = {
       statusline = { "Avante", "AvanteInput", "AvanteSelectedFiles" },
@@ -813,25 +813,23 @@ require('fzf-lua').setup({
   },
 })
 
--- Neovim Lua: Blink the active window for `duration`秒、`count`回明滅
 local function blink_active_window(duration, count)
   local win = vim.api.nvim_get_current_win()
   local original = vim.api.nvim_win_get_option(win, "winhighlight")
-  local blink_hl = "Normal:ErrorMsg"  -- 目立つ色を指定
-
+  -- 柔らかい色を使う（例: Visual）
+  local blink_hl = "Normal:Visual"
   for i = 1, count do
     vim.api.nvim_win_set_option(win, "winhighlight", blink_hl)
     vim.cmd("redraw")
-    vim.wait(duration * 500)  -- 半周期
+    vim.wait(duration * 500)
     vim.api.nvim_win_set_option(win, "winhighlight", original)
     vim.cmd("redraw")
     vim.wait(duration * 500)
   end
 end
 
--- コマンド登録例（1秒間に3回明滅）
 vim.api.nvim_create_user_command("BlinkWindow", function()
-  blink_active_window(0.4, 2)
+  blink_active_window(0.5, 1)
 end, {})
 
 vim.api.nvim_set_keymap("n", "ss", "<cmd>BlinkWindow<cr>", { noremap = true, silent = true })

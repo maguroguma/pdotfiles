@@ -664,8 +664,8 @@ let g:memolist_fzf = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set termguicolors
-set background=dark
-colorscheme hybrid
+set background=light
+colorscheme onedark
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: mbbill/undotree
@@ -1533,23 +1533,23 @@ set smartcase
 set incsearch
 set hlsearch
 
-" 独自定義highlight
-highlight CursorLine ctermbg=238
-highlight CursorLine guibg=#383838
-highlight Visual cterm=bold ctermfg=NONE ctermbg=24
-highlight Visual gui=bold guifg=NONE guibg=#11607d
-" highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
-" highlight StatusLineNC ctermbg=193
-highlight NonText    ctermfg=239 ctermbg=None
-highlight NonText    guifg=#3d3d3d guibg=None
-highlight SpecialKey ctermfg=239 ctermbg=None
-highlight SpecialKey guifg=#3d3d3d guibg=None
-highlight Folded ctermfg=15 ctermbg=8
-highlight Folded guifg=#fff9e6 guibg=#586358
-" highlight Search ctermfg=0 ctermbg=44
-" highlight Search guifg=#021f02 guibg=#43c5d9
-" highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
-" highlight IncSearch gui=bold guifg=#021f02 guibg=#43c5d9
+" " 独自定義highlight
+" highlight CursorLine ctermbg=238
+" highlight CursorLine guibg=#383838
+" highlight Visual cterm=bold ctermfg=NONE ctermbg=24
+" highlight Visual gui=bold guifg=NONE guibg=#11607d
+" " highlight StatusLine cterm=bold ctermbg=193 ctermfg=0
+" " highlight StatusLineNC ctermbg=193
+" highlight NonText    ctermfg=239 ctermbg=None
+" highlight NonText    guifg=#3d3d3d guibg=None
+" highlight SpecialKey ctermfg=239 ctermbg=None
+" highlight SpecialKey guifg=#3d3d3d guibg=None
+" highlight Folded ctermfg=15 ctermbg=8
+" highlight Folded guifg=#fff9e6 guibg=#586358
+" " highlight Search ctermfg=0 ctermbg=44
+" " highlight Search guifg=#021f02 guibg=#43c5d9
+" " highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
+" " highlight IncSearch gui=bold guifg=#021f02 guibg=#43c5d9
 
 " nvim-cmp
 " cui setting
