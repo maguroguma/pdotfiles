@@ -13,7 +13,7 @@ lualine.setup {
   options = {
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
-    theme = 'onelight',
+    theme = 'gruvbox_light',
 
     disabled_filetypes = {
       statusline = { "Avante", "AvanteInput", "AvanteSelectedFiles" },
@@ -735,10 +735,10 @@ end)
 require("quicker").setup()
 
 -- PLUGSETTING: nvim-treesitter/nvim-treesitter-context
-vim.api.nvim_set_hl(0, "TreesitterContext", { bold = true, bg = "#393b47" })
-vim.api.nvim_set_hl(0, "TreesitterContextBottom", { underline = true, bold = true })
-vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bold = true })
-vim.api.nvim_set_hl(0, "TreesitterContextLineNumberBottom", { underline = true, bold = true })
+-- vim.api.nvim_set_hl(0, "TreesitterContext", { bold = true, bg = "#393b47" })
+-- vim.api.nvim_set_hl(0, "TreesitterContextBottom", { underline = true, bold = true })
+-- vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bold = true })
+-- vim.api.nvim_set_hl(0, "TreesitterContextLineNumberBottom", { underline = true, bold = true })
 
 -- PLUGSETTING: jiaoshijie/undotree
 require('undotree').setup()

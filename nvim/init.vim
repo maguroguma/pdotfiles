@@ -277,6 +277,7 @@ call jetpack#add('stevearc/quicker.nvim')
 call jetpack#add('kevinhwang91/nvim-bqf')
 call jetpack#add('jiaoshijie/undotree')
 call jetpack#add('windwp/nvim-ts-autotag')
+call jetpack#add('ellisonleao/gruvbox.nvim')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -665,7 +666,7 @@ let g:memolist_fzf = 1
 
 set termguicolors
 set background=light
-colorscheme onedark
+colorscheme gruvbox
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: mbbill/undotree
