@@ -138,7 +138,7 @@ call jetpack#add('navarasu/onedark.nvim') " colorscheme
 call jetpack#add('lambdalisue/readablefold.vim')
 " call jetpack#add('Yggdroot/indentLine') " NOTE: archived on Jul 29, 2023
 call jetpack#add('machakann/vim-sandwich')
-call jetpack#add('luochen1990/rainbow')
+" call jetpack#add('luochen1990/rainbow')
 call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
 call jetpack#add('previm/previm')
 call jetpack#add('shinespark/vim-list2tree') " NOTE: (m) make directory tree format txt from markdown lists
@@ -558,7 +558,7 @@ let g:gina#command#blame#formatter#format = "%su%=on %au %ti %ma%in"
 " PLUGSETTING: luochen1990/rainbow
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
+" let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: tyru/open-browser.vim
@@ -971,12 +971,12 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 
 " original(from vim-jp)
 " https://vim-jp.slack.com/archives/CQ88WB7B3/p1659323660504669
-highlight CocMenuSel cterm=bold ctermbg=18
-highlight CocMenuSel gui=bold
-highlight CocMenuSel guibg=#525151
-highlight CocSearch cterm=bold ctermfg=44
-highlight CocSearch gui=bold
-highlight CocSearch guifg=#C586C0
+" highlight CocMenuSel cterm=bold ctermbg=18
+" highlight CocMenuSel gui=bold
+" highlight CocMenuSel guibg=#525151
+" highlight CocSearch cterm=bold ctermfg=44
+" highlight CocSearch gui=bold
+" highlight CocSearch guifg=#C586C0
 
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
@@ -1119,14 +1119,14 @@ vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
 
 " pounce
-highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236
-highlight PounceMatch      gui=underline,bold guifg=#555555 guibg=#FFAF60
-highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236
-highlight PounceGap        gui=underline,bold guifg=#555555 guibg=#E27878
-highlight PounceAccept     cterm=underline,bold ctermfg=184 ctermbg=236
-highlight PounceAccept     gui=underline,bold guifg=#FFAF60 guibg=#555555
-highlight PounceAcceptBest cterm=underline,bold ctermfg=196 ctermbg=236
-highlight PounceAcceptBest gui=underline,bold guifg=#EE2513 guibg=#555555
+" highlight PounceMatch      cterm=underline,bold ctermfg=49 ctermbg=236
+" highlight PounceMatch      gui=underline,bold guifg=#555555 guibg=#FFAF60
+" highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236
+" highlight PounceGap        gui=underline,bold guifg=#555555 guibg=#E27878
+" highlight PounceAccept     cterm=underline,bold ctermfg=184 ctermbg=236
+" highlight PounceAccept     gui=underline,bold guifg=#FFAF60 guibg=#555555
+" highlight PounceAcceptBest cterm=underline,bold ctermfg=196 ctermbg=236
+" highlight PounceAcceptBest gui=underline,bold guifg=#EE2513 guibg=#555555
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: Wansmer/treesj
@@ -1494,6 +1494,7 @@ set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
+nnoremap sf <cmd>set foldmethod=expr<CR>
 
 " 挿入モードでのバックスペースで改行が削除できない場合に設定する項目
 set backspace=indent,eol,start
@@ -1504,7 +1505,6 @@ set nowrapscan
 autocmd FileType * set wrap
 autocmd FileType neo-tree set nowrap
 autocmd FileType qf set nowrap
-" autocmd FileType * set foldmethod=manual
 
 set fenc=utf-8
 set encoding=utf8
@@ -1552,27 +1552,27 @@ set hlsearch
 " " highlight IncSearch cterm=bold ctermbg=44 ctermfg=0
 " " highlight IncSearch gui=bold guifg=#021f02 guibg=#43c5d9
 
-" nvim-cmp
-" cui setting
-highlight! CmpItemAbbrMatch cterm=bold ctermbg=NONE ctermfg=44
-highlight! CmpItemAbbrMatchFuzzy ctermbg=NONE ctermfg=27
-" gui setting
-" gray
-highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
-" blue
-highlight! CmpItemAbbrMatch guibg=NONE guifg=#569CD6
-highlight! link CmpItemAbbrMatchFuzzy CmpItemAbbrMatch
-" light blue
-highlight! CmpItemKindVariable guibg=NONE guifg=#9CDCFE
-highlight! link CmpItemKindInterface CmpItemKindVariable
-highlight! link CmpItemKindText CmpItemKindVariable
-" pink
-highlight! CmpItemKindFunction guibg=NONE guifg=#C586C0
-highlight! link CmpItemKindMethod CmpItemKindFunction
-" front
-highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
-highlight! link CmpItemKindProperty CmpItemKindKeyword
-highlight! link CmpItemKindUnit CmpItemKindKeyword
+" " nvim-cmp
+" " cui setting
+" highlight! CmpItemAbbrMatch cterm=bold ctermbg=NONE ctermfg=44
+" highlight! CmpItemAbbrMatchFuzzy ctermbg=NONE ctermfg=27
+" " gui setting
+" " gray
+" highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
+" " blue
+" highlight! CmpItemAbbrMatch guibg=NONE guifg=#569CD6
+" highlight! link CmpItemAbbrMatchFuzzy CmpItemAbbrMatch
+" " light blue
+" highlight! CmpItemKindVariable guibg=NONE guifg=#9CDCFE
+" highlight! link CmpItemKindInterface CmpItemKindVariable
+" highlight! link CmpItemKindText CmpItemKindVariable
+" " pink
+" highlight! CmpItemKindFunction guibg=NONE guifg=#C586C0
+" highlight! link CmpItemKindMethod CmpItemKindFunction
+" " front
+" highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
+" highlight! link CmpItemKindProperty CmpItemKindKeyword
+" highlight! link CmpItemKindUnit CmpItemKindKeyword
 
 " txtファイルで自動改行を防ぐ
 " https://loumo.jp/archives/10503

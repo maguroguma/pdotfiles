@@ -98,19 +98,19 @@ autocmd({ 'ModeChanged' }, {
   callback = function()
     local current_mode = vim.fn.mode()
     if current_mode == 'n' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#a356ba' })
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = 'CadetBlue4' })
       vim.fn.sign_define('smoothcursor', { text = '●' })
     elseif current_mode == 'v' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#dee356' })
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = 'CadetBlue4' })
       vim.fn.sign_define('smoothcursor', { text = '' })
     elseif current_mode == 'V' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#dee356' })
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = 'CadetBlue4' })
       vim.fn.sign_define('smoothcursor', { text = '' })
     elseif current_mode == '�' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#bf616a' })
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = 'CadetBlue4' })
       vim.fn.sign_define('smoothcursor', { text = '' })
     elseif current_mode == 'i' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = '#43e849' })
+      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = 'CadetBlue4' })
       vim.fn.sign_define('smoothcursor', { text = '' })
     end
   end,
@@ -771,6 +771,22 @@ require('render-markdown').setup({
     -- left_pad = 0,
     -- right_pad = 4,
     icons = {},
+    backgrounds = {
+        'RenderMarkdownH1Bg',
+        'RenderMarkdownH1Bg',
+        'RenderMarkdownH1Bg',
+        'RenderMarkdownH1Bg',
+        'RenderMarkdownH1Bg',
+        'RenderMarkdownH1Bg',
+    },
+    foregrounds = {
+        'RenderMarkdownH1',
+        'RenderMarkdownH1',
+        'RenderMarkdownH1',
+        'RenderMarkdownH1',
+        'RenderMarkdownH1',
+        'RenderMarkdownH1',
+    },
   },
 
   code = {
@@ -812,6 +828,10 @@ require('fzf-lua').setup({
     prompt            = 'Buffers❯ ',
   },
 })
+-- light theme だとまぶしかったので暗くした MediumSpringGreen -> CadetBlue4
+vim.api.nvim_set_hl(0, "FzfLuaHeaderBind", { fg = "CadetBlue4" })
+vim.api.nvim_set_hl(0, "FzfLuaPathLineNr", { fg = "CadetBlue4" })
+vim.api.nvim_set_hl(0, "FzfLuaTabMarker", { fg = "CadetBlue4" })
 
 local function blink_active_window(duration, count)
   local win = vim.api.nvim_get_current_win()
