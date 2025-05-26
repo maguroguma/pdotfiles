@@ -771,14 +771,14 @@ require('render-markdown').setup({
     -- left_pad = 0,
     -- right_pad = 4,
     icons = {},
-    backgrounds = {
-        'RenderMarkdownH1Bg',
-        'RenderMarkdownH1Bg',
-        'RenderMarkdownH1Bg',
-        'RenderMarkdownH1Bg',
-        'RenderMarkdownH1Bg',
-        'RenderMarkdownH1Bg',
-    },
+    -- backgrounds = {
+    --     'RenderMarkdownH1Bg',
+    --     'RenderMarkdownH1Bg',
+    --     'RenderMarkdownH1Bg',
+    --     'RenderMarkdownH1Bg',
+    --     'RenderMarkdownH1Bg',
+    --     'RenderMarkdownH1Bg',
+    -- },
     foregrounds = {
         'RenderMarkdownH1',
         'RenderMarkdownH1',
@@ -796,6 +796,12 @@ require('render-markdown').setup({
 
   render_modes = true,
 })
+vim.api.nvim_set_hl(0, 'RenderMarkdownH1Bg', { bg = '#b5b37b' }) -- 濃い緑
+vim.api.nvim_set_hl(0, 'RenderMarkdownH2Bg', { bg = '#c5c39b' }) -- 少し薄い緑
+vim.api.nvim_set_hl(0, 'RenderMarkdownH3Bg', { bg = '#d5d39b' }) -- さらに薄い緑
+vim.api.nvim_set_hl(0, 'RenderMarkdownH4Bg', { bg = '#e5e3bb' }) -- 薄い緑
+vim.api.nvim_set_hl(0, 'RenderMarkdownH5Bg', { bg = '#f5f3db' }) -- とても薄い緑
+vim.api.nvim_set_hl(0, 'RenderMarkdownH6Bg', { bg = '#ffffff' }) -- 白
 
 -- PLUGSETTING: ibhagwan/fzf-lua
 local actions = require("fzf-lua").actions
