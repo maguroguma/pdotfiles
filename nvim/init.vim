@@ -1013,7 +1013,6 @@ let g:coc_global_extensions = [
       \ 'coc-prettier',
       \ 'coc-tsserver',
       \ 'coc-vetur',
-      \ 'coc-tailwindcss',
       \ 'coc-deno',
       \ '@yaegassy/coc-astro',
       \ 'coc-vimlsp',
@@ -1022,6 +1021,7 @@ let g:coc_global_extensions = [
       \ 'coc-sh',
       \ 'coc-pyright',
       \ 'coc-typos',
+      \ '@yaegassy/coc-tailwindcss3',
       \ ]
 
 """
@@ -1981,3 +1981,8 @@ function! YankMatchesToA(...) abort
     execute 'g//let @a .= getline(".") . "\n"'
   endif
 endfunction
+
+" 使い捨てのバッファを作るコマンド、nvim 単体で呼び出したときも使い捨てのバッファから始める
+autocmd VimEnter * if argc() == 0 | enew | setlocal buftype=nofile bufhidden=wipe noswapfile | endif
+command! Scratch 10split |  enew | setlocal buftype=nofile bufhidden=wipe noswapfile
+nnoremap S :Scratch<CR>

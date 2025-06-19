@@ -30,7 +30,6 @@ require('copilot').setup({
   },
   filetypes = {
     yaml = true,
-    markdown = true,
     help = true,
     gitcommit = true,
     gitrebase = true,
@@ -43,16 +42,17 @@ require('copilot').setup({
     go = true,
     css = true,
     astro = true,
+    make = true,
     ["*"] = false,
   },
   copilot_node_command = 'node', -- Node.js version must be > 18.x
-  copilot_model = 'gpt-4o',
+  copilot_model = 'claude-sonnet-4',
   server_opts_overrides = {},
 })
 
 -- PLUGSETTING: CopilotC-Nvim/CopilotChat.nvim
 require("CopilotChat").setup {
-  model = 'gpt-4o',
+  model = 'claude-sonnet-4',
   sticky = {
     '説明は、常に日本語でお願いします。',
   },
@@ -226,3 +226,4 @@ require('avante').setup {
     }
   },
 }
+
