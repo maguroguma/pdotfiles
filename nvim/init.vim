@@ -1467,18 +1467,35 @@ function! YankCurrentBufferFileRelativePath()
   let l:relative_path = expand("%")
   let l:cur_lnumber = line(".")
   let l:res = l:relative_path . "#L" . l:cur_lnumber
-  redir @" | echo l:res | redir END
-  redir @+ | echo l:res | redir END
+  let @" = l:res
+  let @+ = l:res
+  echo 'Path copied to clipboard: ' . l:res
 endfunction
 function! YankCurrentBufferFileFullPath()
   let l:full_path = expand("%:p")
   let l:cur_lnumber = line(".")
   let l:res = l:full_path . "#L" . l:cur_lnumber
-  redir @" | echo l:res | redir END
-  redir @+ | echo l:res | redir END
+  let @" = l:res
+  let @+ = l:res
+  echo 'Full path copied to clipboard: ' . l:res
 endfunction
 command! YankBufferPath :call YankCurrentBufferFileRelativePath()
 command! YankBufferPathFully :call YankCurrentBufferFileFullPath()
+
+function! YankVisualRangeWithPath() range
+  let l:relative_path = expand("%:.")
+  let l:start_line = a:firstline
+  let l:end_line = a:lastline
+  let l:res = l:relative_path . ":" . l:start_line . "-" . l:end_line
+  let @+ = l:res
+  let @" = l:res
+  echo 'Range path copied to clipboard: ' . l:res
+endfunction
+command! -range YankRangePath :<line1>,<line2>call YankVisualRangeWithPath()
+
+" ビジュアル選択範囲をファイルパス:行番号形式でヤンク
+" nvim/init.vim:1493-1500
+xnoremap <Space>yp :YankRangePath<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
@@ -1488,6 +1505,9 @@ set nocompatible
 syntax enable
 
 set mouse=n
+
+" システムクリップボードとの連携
+set clipboard+=unnamedplus
 
 " fold
 set foldmethod=expr
@@ -1902,8 +1922,7 @@ vmap <Space>P "+P
 nmap <Space>y "+y
 nmap <Space>p "+p
 nmap <Space>P "+P
-nnoremap <Space>Y ggVG"+y
-nnoremap <Space>= ggVG=
+nnoremap Y ggVG"+y
 
 " blackhole register
 nnoremap x "_x

@@ -35,3 +35,5 @@ $XDG_CACHE_HOME/*
 
 ### vim bookmarks
 .vim-bookmarks
+
+**/.claude/settings.local.json
