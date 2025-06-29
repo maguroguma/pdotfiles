@@ -68,3 +68,5 @@ git log --patch -S #{pattern_string} ### パターンが変更されたコミッ
 git log --patch -G #{regex_string} ### パターンが変更されたコミットとその差分を表示する
 git log -S #{pattern_string} ### パターンが変更されたコミットを表示する
 git log -G #{regex_string} ### パターンが変更されたコミットを表示する
+
+gemini -p "Web Search: "

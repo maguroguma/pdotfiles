@@ -659,7 +659,7 @@ require('modes').setup({
 
   -- Disable modes highlights in specified filetypes
   -- Please PR commonly ignored filetypes
-  ignore_filetypes = { 'NvimTree', 'TelescopePrompt' }
+  ignore = { 'NvimTree', 'TelescopePrompt' }
 })
 
 -- PLUGSETTING: stevearc/aerial.nvim

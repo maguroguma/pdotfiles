@@ -278,6 +278,8 @@ call jetpack#add('kevinhwang91/nvim-bqf')
 call jetpack#add('jiaoshijie/undotree')
 call jetpack#add('windwp/nvim-ts-autotag')
 call jetpack#add('ellisonleao/gruvbox.nvim')
+call jetpack#add('kana/vim-operator-user')
+call jetpack#add('kana/vim-operator-replace')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -1201,6 +1203,12 @@ command! -nargs=0 DarkHybrid call s:colorschemeDarkHybrid()
 " augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: kana/vim-operator-user
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+map _ <Plug>(operator-replace)
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -1495,7 +1503,7 @@ command! -range YankRangePath :<line1>,<line2>call YankVisualRangeWithPath()
 
 " ビジュアル選択範囲をファイルパス:行番号形式でヤンク
 " nvim/init.vim:1493-1500
-xnoremap <Space>yp :YankRangePath<CR>
+" xnoremap <Space>yp :YankRangePath<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
@@ -1507,7 +1515,7 @@ syntax enable
 set mouse=n
 
 " システムクリップボードとの連携
-set clipboard+=unnamedplus
+" set clipboard+=unnamedplus
 
 " fold
 set foldmethod=expr
