@@ -472,9 +472,11 @@ highlight PounceGap        cterm=underline,bold ctermfg=214 ctermbg=236 gui=unde
 highlight PounceAccept     cterm=underline,bold ctermfg=184 ctermbg=236 gui=underline,bold guifg=#FFAF60 guibg=#555555
 highlight PounceAcceptBest cterm=underline,bold ctermfg=196 ctermbg=236 gui=underline,bold guifg=#EE2513 guibg=#555555
 
-" normal, insertともに<CR>で終了するようにする
+" normal 時に <CR> で保存して終了するようにする
 nnoremap <CR> :wq<CR>
-inoremap <CR> <Esc>:wq<CR>
+" inoremap <CR> <Esc>:wq<CR>
+
+" autocmd VimEnter * startinsert
 
 colorscheme dayfox
 lua <<EOF

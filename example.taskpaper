@@ -1,0 +1,39 @@
+タグ説明:
+at done(YYYY-MM-DD) = 完了日付
+at urgent = 緊急度が高いタスク
+at important = 重要度が高いタスク
+at risky = 不確実性が高いタスク
+at inProgress = 着手中
+at due(YYYY-MM-DD) = 期限日付
+at createdAt(YYYY-MM-DD) = 作成日付
+
+キーマップ説明:
+<Space>tD = at done のタスクをアーカイブする
+<Space>ts = 特定のタグで検索・フィルタ
+<Space>tp = 全プロジェクトを折り畳む
+<Space>tj = 次のプロジェクトに移動する
+<Space>tk = 前のプロジェクトに移動する
+<Space>td = at done(YYYY-MM-DD) タグをトグルする（付与/削除）
+<Space>tu = at urgent タグをトグル（付与/削除）
+<Space>ti = at important タグをトグル（付与/削除）
+<Space>tr = at risky タグをトグル（付与/削除）
+<Space>tg = at inProgress タグをトグル（付与/削除）
+
+=== === ===
+
+開発プロジェクト:
+- モジュール A を作る @due(2025-07-26) @urgent @important
+ハイフンをつけなければ、それらはノートとして自由に記述できる
+
+- 期限切れタスク @due(2025-08-24)
+- 余裕ありタスク @due(2099-01-01) @important @urgent @risky @inProgress
+
+=== === ===
+
+運用プロジェクト:
+- バッチの実行状況を確認する
+
+=== === ===
+
+Archive:
+	- 完了済みタスク @due(2025-07-26) @important @done(2025-07-26) @project(開発プロジェクト)

@@ -280,6 +280,8 @@ call jetpack#add('windwp/nvim-ts-autotag')
 call jetpack#add('ellisonleao/gruvbox.nvim')
 call jetpack#add('kana/vim-operator-user')
 call jetpack#add('kana/vim-operator-replace')
+call jetpack#add('davidoc/taskpaper.vim')
+call jetpack#add('uga-rosa/ccc.nvim')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -1206,7 +1208,91 @@ command! -nargs=0 DarkHybrid call s:colorschemeDarkHybrid()
 " PLUGSETTING: kana/vim-operator-user
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" e.g.: visual 時に _ すると、無名レジスタを汚さず置換できる
 map _ <Plug>(operator-replace)
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: davidoc/taskpaper.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" TaskPaper.vim カスタムタグのスタイル設定
+let g:task_paper_styles={
+    \ 'urgent': 'ctermbg=214 guibg=#d75f5f ctermfg=black guifg=#ffffff',
+    \ 'important': 'ctermbg=69 guibg=#cccc00 ctermfg=white guifg=#000000',
+    \ 'risky': 'ctermbg=167 guibg=#d75f5f ctermfg=white guifg=#ffffff',
+    \ 'inProgress': 'ctermbg=108 guibg=#87af87 ctermfg=black guifg=#000000',
+    \ }
+
+" due タグのハイライト設定
+let g:taskpaper_due_highlight = get(g:, 'taskpaper_due_highlight', {})
+
+" デフォルト設定
+let g:taskpaper_due_highlight = extend({
+    \ 'critical_days': 7,
+    \ 'warning_days': 28,
+    \ 'critical_style': 'ctermbg=196 guibg=#d75f5f ctermfg=white guifg=#ffffff',
+    \ 'warning_style': 'ctermbg=214 guibg=#eaaf00 ctermfg=black guifg=#000000',
+    \ 'normal_style': 'ctermbg=40 guibg=#87af87 ctermfg=black guifg=#000000',
+    \ }, g:taskpaper_due_highlight)
+
+" ハイライトグループを動的に定義
+execute 'highlight DueCritical ' . g:taskpaper_due_highlight.critical_style
+execute 'highlight DueWarning ' . g:taskpaper_due_highlight.warning_style
+execute 'highlight DueNormal ' . g:taskpaper_due_highlight.normal_style
+
+function! s:calculate_date_diff(date_str)
+  let l:due_timestamp = strptime('%Y-%m-%d', a:date_str)
+  let l:today_timestamp = localtime()
+  let l:today_start = l:today_timestamp - (l:today_timestamp % 86400)
+  let l:due_start = l:due_timestamp - (l:due_timestamp % 86400)
+
+  return (l:due_start - l:today_start) / 86400
+endfunction
+
+function! s:update_due_highlights()
+  call clearmatches()
+
+  for l:line_num in range(1, line('$'))
+    let l:line = getline(l:line_num)
+    let l:match = matchstr(l:line, '@due(\d\{4\}-\d\{2\}-\d\{2\})')
+
+    if l:match != ''
+      let l:date_str = substitute(l:match, '@due(\(\d\{4\}-\d\{2\}-\d\{2\}\))', '\1', '')
+      let l:diff_days = s:calculate_date_diff(l:date_str)
+
+      if l:diff_days <= g:taskpaper_due_highlight.critical_days
+        call matchaddpos('DueCritical', [[l:line_num, match(l:line, l:match) + 1, len(l:match)]])
+      elseif l:diff_days <= g:taskpaper_due_highlight.warning_days
+        call matchaddpos('DueWarning', [[l:line_num, match(l:line, l:match) + 1, len(l:match)]])
+      else
+        call matchaddpos('DueNormal', [[l:line_num, match(l:line, l:match) + 1, len(l:match)]])
+      endif
+    endif
+  endfor
+endfunction
+
+function! s:taskpaper_setup()
+  " Your settings
+  nnoremap <buffer> <silent> <Leader>tu
+  \    :<C-u>call taskpaper#toggle_tag('urgent', '')<CR>
+  nnoremap <buffer> <silent> <Leader>ti
+  \    :<C-u>call taskpaper#toggle_tag('important', '')<CR>
+  nnoremap <buffer> <silent> <Leader>tr
+  \    :<C-u>call taskpaper#toggle_tag('risky', '')<CR>
+  nnoremap <buffer> <silent> <Leader>tg
+  \    :<C-u>call taskpaper#toggle_tag('inProgress', '')<CR>
+
+  " due タグのハイライトを初期化と更新
+  call s:update_due_highlights()
+
+  " ファイル保存時やテキスト変更時にハイライトを更新
+  autocmd BufWritePost,TextChanged,TextChangedI <buffer> call s:update_due_highlights()
+endfunction
+
+augroup vimrc-taskpaper
+  autocmd!
+  autocmd FileType taskpaper call s:taskpaper_setup()
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
@@ -1258,27 +1344,51 @@ function g:TerminalDay()
 endfunction
 tnoremap <C-a>day <C-\><C-n><cmd>call g:TerminalDay()<CR>
 
-" markdownのコードスニペット
-function! g:ReadTripleBackQuotes(lang_text)
-  let l:text = "```" . a:lang_text . "\n```"
-  let tmp = @a
+" markdownのコードブロック関数（統合版）
+function! InsertCodeBlock()
+  let l:lang = input("言語指定（省略可）: ")
+  let l:text = "```" . l:lang . "\n```"
+  let l:tmp = @a
   let @a = l:text
   execute 'normal "ap'
-  let @a = tmp
+  let @a = l:tmp
+  " カーソルを開始タグと終了タグの間に移動
+  execute 'normal k$'
 endfunction
-command! -nargs=1 TripleBackQuotes :call g:ReadTripleBackQuotes(<f-args>)
 
-" マークダウン用のコードブロック囲み関数
 function! SurroundWithCodeBlock() range
-  let l:ext = ""
-  " 言語指定をオプションで聞くバージョンにする場合はコメントを外す
-  " let l:ext = input("言語指定（省略可）: ")
-  execute "normal! `>o```" . l:ext
-  execute "normal! `<O```" . l:ext
+  let l:lang = input("言語指定（省略可）: ")
+
+  " 単一のundo操作として実行
+  let l:start_line = a:firstline
+  let l:end_line = a:lastline
+  let l:save_cursor = getpos('.')
+
+  " 終了行の後に```を追加
+  call append(l:end_line, '```')
+  " 開始行の前に```langを追加
+  call append(l:start_line - 1, '```' . l:lang)
+
+  call setpos('.', l:save_cursor)
 endfunction
 
+function! QuoteSelectedLines() range
+  let l:start_line = a:firstline
+  let l:end_line = a:lastline
+
+  for l:line_num in range(l:start_line, l:end_line)
+    let l:current_line = getline(l:line_num)
+    if l:current_line =~ '^\s*$'
+      call setline(l:line_num, '>')
+    else
+      call setline(l:line_num, '> ' . l:current_line)
+    endif
+  endfor
+endfunction
+
+autocmd FileType markdown nnoremap <buffer> <Space>` :call InsertCodeBlock()<CR>
 autocmd FileType markdown vnoremap <buffer> <Space>` :call SurroundWithCodeBlock()<CR>
-autocmd FileType markdown nnoremap <buffer> <Space>` <cmd>call g:ReadTripleBackQuotes("")<CR>
+autocmd FileType markdown vnoremap <buffer> <Space>q :call QuoteSelectedLines()<CR>
 
 " ファイル・バッファのエンコーディング
 command! OpenAsSjis :edit ++encoding=sjis<CR>

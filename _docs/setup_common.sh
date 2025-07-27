@@ -100,6 +100,7 @@ npm install mdpdf -g
 npm install -g yarn
 npm install -g aws-cdk
 npm install -g @marp-team/marp-cli
+npm install -g editprompt
 
 #########
 # Python

@@ -839,6 +839,9 @@ vim.api.nvim_set_hl(0, "FzfLuaHeaderBind", { fg = "CadetBlue4" })
 vim.api.nvim_set_hl(0, "FzfLuaPathLineNr", { fg = "CadetBlue4" })
 vim.api.nvim_set_hl(0, "FzfLuaTabMarker", { fg = "CadetBlue4" })
 
+-- PLUGSETTING: uga-rosa/ccc.nvim
+require("ccc").setup()
+
 local function blink_active_window(duration, count)
   local win = vim.api.nvim_get_current_win()
   local original = vim.api.nvim_win_get_option(win, "winhighlight")

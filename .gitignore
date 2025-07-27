@@ -83,4 +83,7 @@ nvim/pack/
 !borders/bordersrc
 
 !claude/CLAUDE.md
+!claude/settings.json
 !CLAUDE.md
+
+!example.taskpaper
