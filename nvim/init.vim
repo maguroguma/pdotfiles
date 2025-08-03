@@ -1217,9 +1217,9 @@ map _ <Plug>(operator-replace)
 
 " TaskPaper.vim カスタムタグのスタイル設定
 let g:task_paper_styles={
-    \ 'urgent': 'ctermbg=214 guibg=#d75f5f ctermfg=black guifg=#ffffff',
+    \ 'urgent': 'ctermbg=214 guibg=#cccc00 ctermfg=black guifg=#000000',
     \ 'important': 'ctermbg=69 guibg=#cccc00 ctermfg=white guifg=#000000',
-    \ 'risky': 'ctermbg=167 guibg=#d75f5f ctermfg=white guifg=#ffffff',
+    \ 'risky': 'ctermbg=167 guibg=#cccc00 ctermfg=white guifg=#000000',
     \ 'inProgress': 'ctermbg=108 guibg=#87af87 ctermfg=black guifg=#000000',
     \ }
 

@@ -1,4 +1,5 @@
 gh pr checkout #{PR_num}
+gh pr checkout --detach #{PR_num}
 gh pr create
 gh pr create --web
 gh pr view #{branch_name}?
@@ -33,6 +34,8 @@ git diff --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-
 git diff --staged --ignore-all-space --ignore-blank-lines --ignore-space-at-eol --ignore-space-change --color-moved-ws=allow-indentation-change
 
 git grep #{pattern_string}
+git grep -W #{function_name_pattern_string} ### ヒットした関数全体を出力する
+git grep -p -C 10 #{function_name_pattern_string} ### ヒットした関数の head を出力する
 
 git ls-files -io --exclude-standard ### git ignore されている未追跡のファイルをリストする
 
@@ -68,5 +71,10 @@ git log --patch -S #{pattern_string} ### パターンが変更されたコミッ
 git log --patch -G #{regex_string} ### パターンが変更されたコミットとその差分を表示する
 git log -S #{pattern_string} ### パターンが変更されたコミットを表示する
 git log -G #{regex_string} ### パターンが変更されたコミットを表示する
+
+git log --pretty=fuller ### author と committer を確認する
+git log --pretty=format:"%h %an %ad %cn %cd %s" --date=short
+
+git log -L:'関数名':#{file_path} ### その関数の履歴を調べる
 
 gemini -p "Web Search: "

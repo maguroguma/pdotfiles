@@ -26,6 +26,7 @@
 !nvim/minimal.init.vim
 !nvim/lua/myconfig.lua
 !nvim/fzf-any-dictionary
+!nvim/after/ftplugin/help.vim
 
 # plugins for copilot
 nvim/pack/
