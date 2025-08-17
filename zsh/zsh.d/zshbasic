@@ -497,42 +497,49 @@ git-grep-history() {
 }
 
 # marp function
-marp-pdf() {
-  if [ "$#" -ne 1 ]; then
-    echo "使用法: marp-pdf <markdown_file>"
-    echo "例: marp-pdf presentation.md"
-    return 1
-  fi
+if command -v marp &>/dev/null; then
+    marp-pdf() {
+      if [ "$#" -ne 1 ]; then
+        echo "使用法: marp-pdf <markdown_file>"
+        echo "例: marp-pdf presentation.md"
+        return 1
+      fi
 
-  local md_file="$1"
+      local md_file="$1"
 
-  # ファイルが存在するかチェック
-  if [ ! -f "$md_file" ]; then
-    echo "エラー: ${md_file} が見つかりません"
-    return 1
-  fi
+      # ファイルが存在するかチェック
+      if [ ! -f "$md_file" ]; then
+        echo "エラー: ${md_file} が見つかりません"
+        return 1
+      fi
 
-  # 拡張子が.mdかチェック
-  if [[ "$md_file" != *.md ]]; then
-    echo "エラー: ${md_file} はマークダウンファイルではありません（.md拡張子が必要）"
-    return 1
-  fi
+      # 拡張子が.mdかチェック
+      if [[ "$md_file" != *.md ]]; then
+        echo "エラー: ${md_file} はマークダウンファイルではありません（.md拡張子が必要）"
+        return 1
+      fi
 
-  # 拡張子を除いたベース名を取得
-  local basename="${md_file%.md}"
-  local pdf_file="${basename}.pdf"
+      # 拡張子を除いたベース名を取得
+      local basename="${md_file%.md}"
+      local pdf_file="${basename}.pdf"
 
-  echo "PDF を生成します: ${md_file} -> ${pdf_file}"
-  marp "$md_file" -o "$pdf_file"
+      echo "PDF を生成します: ${md_file} -> ${pdf_file}"
+      marp "$md_file" -o "$pdf_file"
 
-  if [ $? -eq 0 ]; then
-    echo "PDF生成完了: ${pdf_file}"
-  else
-    echo "エラー: PDF生成に失敗しました"
-    return 1
-  fi
-}
+      if [ $? -eq 0 ]; then
+        echo "PDF生成完了: ${pdf_file}"
+      else
+        echo "エラー: PDF生成に失敗しました"
+        return 1
+      fi
+    }
 
-alias marp-watch='marp -w'
+    alias marp-watch='marp -w'
+fi
+
+# claude code shortcut
+if command -v claude &>/dev/null; then
+    alias clp='claude -p'
+fi
 
 echo "\e[33m[$(basename $0)]\e[0m\t\e[32mloaded\e[0m"

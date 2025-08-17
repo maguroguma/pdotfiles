@@ -1287,11 +1287,24 @@ function! s:taskpaper_setup()
 
   " ファイル保存時やテキスト変更時にハイライトを更新
   autocmd BufWritePost,TextChanged,TextChangedI <buffer> call s:update_due_highlights()
+  " バッファを離れる時にハイライトをクリア
+  autocmd BufLeave <buffer> call clearmatches()
+endfunction
+
+function! s:handle_taskpaper_highlights()
+  " taskpaper以外のファイルでハイライトをクリア、taskpaperの場合は更新
+  if &filetype == 'taskpaper'
+    call s:update_due_highlights()
+  else
+    call clearmatches()
+  endif
 endfunction
 
 augroup vimrc-taskpaper
   autocmd!
   autocmd FileType taskpaper call s:taskpaper_setup()
+  " バッファに入った時の処理（taskpaperならハイライト更新、他ならクリア）
+  autocmd BufEnter * call s:handle_taskpaper_highlights()
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1954,6 +1967,74 @@ endif
 " PageUp      <PageUp><PageDown>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" マッピング方針
+"
+" nmap
+" - s, S は潰す
+" - x だけはブラックホールレジスタを使うようにする
+" - t はタブ関係で潰す
+" - , と ; も潰す
+" - H, L, M は迷いなく潰す
+" - J, K は潰す、K は戻したい気持ちもある
+" - m は潰す
+" - n, N は検索プラグインに委譲する
+" - q はなるべく残すが Q は積極的に潰す
+" - Z は git commit 時のみの特殊用途に潰している
+" - C-b,f,d,u,e,y は積極的に潰したいが、d,u のみはデフォルトを維持している
+" - C-g はこのままなるべくデフォルトを維持したい
+" - C-h,j,k,l は l のみは手動で潰さないようにする
+" - C-n は遠慮なく潰してよい、C-p は fuzzy finder で固定する
+" - C-i,o は元のジャンプ機能を維持しつつカスタマイズする
+" - C-m は <CR> を潰してよいなら好きに潰せる
+" - C-q,s は terminal 関係で潰すが、使用する端末によってはマップが有効化されない可能性がある
+" - C-t はタグを使わないなら潰しても良いが、tmux との併用がしづらいのでこのままにする
+" - C-w は謎だが触れない方が良い
+" - C-z は触らない
+"
+" imap
+" - C-a は自由に潰す
+" - C-c は潰してもよいが、そのままにしておく
+" - C-d,t はインデントに便利なので、デフォルトを維持する
+" - C-e,y は自由に潰してよいが、LSP 系で潰されているのかもしれない
+" - C-g はちょっと謎なのでデフォルトを維持したい
+" - C-h は…
+" - C-i は Tab もマップされてしまうため、デフォルト維持を厳守する
+" - C-j は必ず skk に提供する
+" - C-m は <CR> と等価であるため、デフォルト維持を厳守する
+" - C-k は digraph 入力用に残しておきたい
+" - C-l,z は潰しても良い
+" - C-n,p,x はデフォルトでは補完機能なので残しておきたいが、実際はそうは出来ていない
+" - C-o はデフォルトを維持する
+" - C-q,v は文字コードを指定して文字を入力するものなので、なるべくデフォルトを維持する
+" - C-r はもともとの機能を拡張する範囲でしかいじらないこと
+" - C-s は端末によっては使えないので、触らない
+" - C-u はデフォルトを維持する
+" - C-w はデフォルトを維持する
+" - C-[ は ESC なので、絶対にデフォルトを維持する
+" - C-] は潰しても良さそう
+"
+" cmap
+" - C-a は自由に潰す
+" - C-b,e は潰しても良いが、デフォルトを維持する
+" - C-c は潰してもよいが、そのままにしておく
+" - C-d は補完関連であるため、デフォルトを維持する
+" - C-f はコマンドラインウィンドウを開けて便利であるため、デフォルトを維持する
+" - C-g,t は潰しても良さそう
+" - C-h,l は…
+" - C-j は必ず skk に提供する
+" - C-i,m はそれぞれ TAB, CR であるため、必ずデフォルトを維持する
+" - C-k はデフォルトを維持する
+" - C-n,p はデフォルトを維持する
+" - C-q,v はデフォルトを維持する
+" - C-r はもともとの機能を拡張する範囲でしかいじらないこと
+" - C-s はデフォルトを維持する
+" - C-u はデフォルトを維持する
+" - C-w はデフォルトを維持する
+"
+" ref: https://files.kaoriya.net/docs/SpartanVim/SpartanVim-5.1-online.pdf
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " esc
 inoremap <silent> jj <ESC> " better-escapeプラグインに委譲
 
@@ -1983,14 +2064,6 @@ nnoremap H ^
 vnoremap H ^
 nnoremap L $
 vnoremap L $
-nnoremap <C-h> 20h
-vnoremap <C-h> 20h
-nnoremap <C-l> 20l
-vnoremap <C-l> 20l
-
-" concat
-nnoremap <C-j> J
-vnoremap <C-j> J
 
 " search
 " nzz, Nzz は、現在 lua プラグインに寄せている
@@ -2044,18 +2117,21 @@ nnoremap Y ggVG"+y
 
 " blackhole register
 nnoremap x "_x
-nnoremap D "_d
-nnoremap C "_c
-xnoremap D "_d
-xnoremap C "_c
 
-" register
+" register(insert a register's content)
 inoremap <C-r><C-r> <C-r>"
 inoremap <C-r>r <C-r>"
 cnoremap <C-r><C-r> <C-r>"
 cnoremap <C-r>r <C-r>"
 inoremap <C-r><Space> <C-r>+
 cnoremap <C-r><Space> <C-r>+
+
+" blackhole and clipboadrd register
+" ref: https://blog.atusy.net/2025/08/08/map-minus-to-blackhole-register/
+nnoremap - "_
+xnoremap - "_
+nnoremap + "+
+xnoremap + "+
 
 " for browsing the input history
 cnoremap <c-n> <down>

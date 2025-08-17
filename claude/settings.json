@@ -1,4 +1,7 @@
 {
+  "permissions": {
+    "deny": ["Bash(curl:*)"]
+  },
   "hooks": {
     "Stop": [
       {
@@ -17,7 +20,38 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cat | jq -r '\"display notification \\\"\" + .message + \"\\\" with title \\\"\" + .title + \"\\\" sound name \\\"Glass\\\"\"' | xargs -I {} osascript -e '{}'"
+            "command": "osascript -e 'display notification \"入力を求めています。\" with title \"Claude Code\" sound name \"Glass\"'"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '\"\\(.tool_input.command) - \\(.tool_input.description // \"No description\")\"' >> ~/.claude/any-command-history.log"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r 'if .tool_input.command | test(\"rm -rf|dd if=|:(){ :|:& };:\") then {\"decision\": \"block\", \"reason\": \"危険なコマンドは実行できません。別の方法を検討してください。\"} else empty end'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[$(date)] $USER: $(jq -r '.tool_input.command')\" >> ~/.claude/bash-command-history.log"
           }
         ]
       }

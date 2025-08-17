@@ -83,8 +83,11 @@ nvim/pack/
 
 !borders/bordersrc
 
+!CLAUDE.md
 !claude/CLAUDE.md
 !claude/settings.json
-!CLAUDE.md
+!claude/settings-sample.json
+!claude/commands/japanese-hello.md
+!claude/commands/nippou/nippou-add.md
 
 !example.taskpaper
