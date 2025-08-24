@@ -1250,8 +1250,6 @@ function! s:calculate_date_diff(date_str)
 endfunction
 
 function! s:update_due_highlights()
-  call clearmatches()
-
   for l:line_num in range(1, line('$'))
     let l:line = getline(l:line_num)
     let l:match = matchstr(l:line, '@due(\d\{4\}-\d\{2\}-\d\{2\})')
@@ -1260,12 +1258,13 @@ function! s:update_due_highlights()
       let l:date_str = substitute(l:match, '@due(\(\d\{4\}-\d\{2\}-\d\{2\}\))', '\1', '')
       let l:diff_days = s:calculate_date_diff(l:date_str)
 
+      let l:pattern = '\%' . l:line_num . 'l@due(\d\{4\}-\d\{2\}-\d\{2\})'
       if l:diff_days <= g:taskpaper_due_highlight.critical_days
-        call matchaddpos('DueCritical', [[l:line_num, match(l:line, l:match) + 1, len(l:match)]])
+        call matchadd('DueCritical', l:pattern)
       elseif l:diff_days <= g:taskpaper_due_highlight.warning_days
-        call matchaddpos('DueWarning', [[l:line_num, match(l:line, l:match) + 1, len(l:match)]])
+        call matchadd('DueWarning', l:pattern)
       else
-        call matchaddpos('DueNormal', [[l:line_num, match(l:line, l:match) + 1, len(l:match)]])
+        call matchadd('DueNormal', l:pattern)
       endif
     endif
   endfor
@@ -1287,16 +1286,12 @@ function! s:taskpaper_setup()
 
   " ファイル保存時やテキスト変更時にハイライトを更新
   autocmd BufWritePost,TextChanged,TextChangedI <buffer> call s:update_due_highlights()
-  " バッファを離れる時にハイライトをクリア
-  autocmd BufLeave <buffer> call clearmatches()
 endfunction
 
 function! s:handle_taskpaper_highlights()
-  " taskpaper以外のファイルでハイライトをクリア、taskpaperの場合は更新
+  " taskpaperファイルの場合のみハイライトを更新
   if &filetype == 'taskpaper'
     call s:update_due_highlights()
-  else
-    call clearmatches()
   endif
 endfunction
 
@@ -1399,9 +1394,56 @@ function! QuoteSelectedLines() range
   endfor
 endfunction
 
+function! s:markdown_bold_visual() range
+  " 現在の選択を記録
+  let l:save_reg = @@
+  let l:save_regtype = getregtype('"')
+
+  " 選択されたテキストを取得
+  normal! gv"xy
+  let l:selected_text = @x
+
+  " 選択位置情報を取得
+  let l:start_line = line("'<")
+  let l:start_col = col("'<")
+  let l:end_col = col("'>")
+
+  let l:line = getline(l:start_line)
+
+  " 前後の文字を確認（バイト単位で）
+  let l:is_line_start = (l:start_col == 1)
+  let l:is_line_end = (l:end_col == col('$') - 1)
+
+  let l:before_char = l:is_line_start ? '' : l:line[l:start_col - 2]
+  let l:after_char = l:is_line_end ? '' : l:line[l:end_col]
+
+  " 先頭に追加するテキストを決定
+  let l:prefix = '**'
+  if !l:is_line_start && l:before_char != ' '
+    let l:prefix = ' **'
+  endif
+
+  " 末尾に追加するテキストを決定
+  let l:suffix = '**'
+  if !l:is_line_end && l:after_char != ' '
+    let l:suffix = '** '
+  endif
+
+  " 置換テキストを作成
+  let l:replacement = l:prefix . l:selected_text . l:suffix
+
+  " 選択範囲を置換
+  normal! gvd
+  execute "normal! i" . l:replacement
+
+  " レジスタを復元
+  call setreg('"', l:save_reg, l:save_regtype)
+endfunction
+
 autocmd FileType markdown nnoremap <buffer> <Space>` :call InsertCodeBlock()<CR>
 autocmd FileType markdown vnoremap <buffer> <Space>` :call SurroundWithCodeBlock()<CR>
 autocmd FileType markdown vnoremap <buffer> <Space>q :call QuoteSelectedLines()<CR>
+autocmd FileType markdown vnoremap <silent> <Space>mb :<C-u>call <SID>markdown_bold_visual()<CR>
 
 " ファイル・バッファのエンコーディング
 command! OpenAsSjis :edit ++encoding=sjis<CR>
