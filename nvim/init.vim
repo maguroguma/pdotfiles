@@ -746,8 +746,8 @@ let g:highlightedyank_highlight_duration = 500
 
 let g:better_whitespace_filetypes_blacklist = ['diff', 'git', 'gitcommit', 'unite', 'qf', 'help', 'fugitive', 'defx']
 let g:better_whitespace_ctermcolor = '12'
-" highlight ExtraWhitespace ctermbg=159
-" highlight ExtraWhitespace guibg=#caedfc
+highlight ExtraWhitespace ctermbg=159
+highlight ExtraWhitespace guibg=#ff9999
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: mattn/emmet-vim
