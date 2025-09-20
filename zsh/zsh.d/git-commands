@@ -41,6 +41,7 @@ git ls-files -io --exclude-standard ### git ignore されている未追跡の�
 
 git merge #{branch_name}
 git merge --squash #{branch_name}
+git merge --no-ff #{branch_name}
 
 git push #{branch_name}?
 git push --force-with-lease --force-if-includes #{branch_name}?
