@@ -51,42 +51,91 @@ scripts/tmpspace.sh
 # 日時変換
 scripts/date-to-ts.sh
 scripts/ts-to-date.sh
+
+# その他のユーティリティ
+scripts/github_go.sh          # GitHubリポジトリへの直接移動
+scripts/github_search_PR.sh   # GitHub PR検索
+scripts/google.sh             # Google検索
+scripts/my-ascii.sh           # ASCII アート生成
+scripts/cherry-pick-to.sh     # Git cherry-pick支援
 ```
 
 ### tmux操作（prefix: C-t）
 - `|`: 縦分割
-- `-`: 横分割  
+- `-`: 横分割
 - `hjkl`: vim風ペイン移動
-- `Ctrl+f`: yaziファイルマネージャー起動
+- `=`: ペインを均等分割
+
+### zsh操作
+- `Ctrl+f`: yaziファイルマネージャー起動（ディレクトリ移動機能付き）
 
 ### Git操作
 ```bash
-# カスタムエイリアス（git/config）
-git lg      # グラフログ表示
-git push-f  # force-with-lease
-git gone    # 削除済みブランチ整理
-git df      # delta差分表示
+# 主要なカスタムエイリアス（git/config）
+git lg          # グラフログ表示
+git push-f      # force-with-lease --force-if-includes
+git gone        # リモートで削除済みブランチの整理
+git today       # 過去12時間のコミット表示
+git cancel      # 直前コミットを取り消し（soft reset）
+git prev        # HEADを1つ前に戻す
+git amend       # 最新コミットを修正
+git append      # 最新コミットに変更を追加（メッセージ変更なし）
+git save-tag    # ローカル作業用タグ作成
+git wip-commit  # WIP用コミット作成
+git sec-scan-history # git-secretsでhistory全体をスキャン
+
+# delta統合（差分表示の改善）
+git diff        # deltaによる美しい差分表示
+git log         # ナビゲーション機能付き（n/N で移動）
 ```
 
 ## 特別な設定
 
+### セキュリティ機能
+- **git-secrets**: AWS認証情報の自動検出・防止
+- **envchain**: API キーの安全な管理（ChatGPT等）
+- **typos-cli**: コード中のタイポ検出
+
 ### Neovim
-- jetpackプラグイン管理
-- GitHub Copilot + CopilotChat統合
-- TypeScript、Go、Shell用スニペット
-- プロファイリング機能（カスタムProfile）
+- **設定ファイル**: init.vim（メイン）、lua/myconfig.lua（モダン機能）
+- **プラグイン管理**: jetpack
+- **AI統合**: GitHub Copilot + CopilotChat
+- **スニペット**: UltiSnips（TypeScript、Go、Shell）
+- **テーマ**: gruvbox_light
+- **プロファイリング**: vim-startuptime連携
 
 ### 日本語環境
 - AquaSKK（macOS日本語入力）
 - PlemolJPフォント（プログラミング用日本語フォント）
 - 日本語での操作を前提とした設定
 
-## ディレクトリ構造の意味
+### パッケージ管理・開発ワークフロー
+- **Node.js**: asdf管理（`asdf install nodejs latest`）
+- **Go**: GOPATH (`~/go/src`) + ghq によるリポジトリ管理
+- **Rust**: rustup + cargo
+- **リポジトリ管理**: ghq (`ghq get <repo>`) でGitHub等から取得
+- **依存関係**: Homebrew（macOS）+ 各言語のツールチェーン
 
+## ディレクトリ構造とXDG準拠
+
+### 特殊ディレクトリ
 - `_docs/`: セットアップドキュメント・スクリプト
-- `_ai_works/`: AI関連の作業ファイル
+- `_ai_works/`: AI関連の作業ファイル（Claude設定等）
 - `scripts/`: 開発支援ユーティリティスクリプト
-- 各設定ディレクトリ: 対応するツールの設定ファイル
+- `tmp/`: 一時作業用ディレクトリ
+
+### 設定ディレクトリ（XDG準拠のシンボリックリンク）
+- `zsh/` → `~/.config/zsh/`
+- `tmux/` → `~/.config/tmux/`
+- `nvim/` → `~/.config/nvim/`
+- `git/` → `~/.config/git/`
+- `yazi/` → `~/.config/yazi/`
+- `lazygit/` → `~/.config/lazygit/`
+
+### ホームディレクトリ直下へのリンク
+- `.zshenv` → `~/.zshenv`
+- `.editorconfig` → `~/.editorconfig`
+- `.wezterm.lua` → `~/.wezterm.lua`
 
 ## 開発時の注意事項
 
