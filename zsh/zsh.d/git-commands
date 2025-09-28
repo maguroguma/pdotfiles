@@ -10,7 +10,7 @@ gh pr status
 gh pr list
 gh pr list --web
 gh pr list --web --state all --search #{pattern}
-gh repo create 
+gh repo create #{}
 
 git branch --all
 git branch --delete
@@ -23,6 +23,8 @@ git commit -m #{message_string}
 git commit --amend
 git commit --amend --no-edit
 git commit --fixup #{commit_hash}
+
+git checkout --detach ${branch_name}
 
 git rebase --interactive #{commit_hash}
 git rebase --interactive --autosquash #{commit_hash}
@@ -60,7 +62,7 @@ git tag -a '' -m '' ### -a #{tag_name} -m #{message}
 git tag -d #{tag_name}
 
 git submodule status
-git submodule add 
+git submodule add #{submodule}
 git submodule update
 git submodule update --recursive
 
@@ -77,5 +79,3 @@ git log --pretty=fuller ### author と committer を確認する
 git log --pretty=format:"%h %an %ad %cn %cd %s" --date=short
 
 git log -L:'関数名':#{file_path} ### その関数の履歴を調べる
-
-gemini -p "Web Search: "

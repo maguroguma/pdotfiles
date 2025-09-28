@@ -626,6 +626,29 @@ cmp.setup.cmdline(':', {
   },
 })
 
+cmp.setup({
+  sources = {
+    { name = 'claude_slash', priority = 900 },
+    { name = 'claude_at', priority = 900 },
+    { name = 'path' },
+    { name = 'buffer' },
+  },
+
+  -- enabled = function()
+  --   -- cocが有効な場合はnvim-cmpを無効化
+  --   if vim.g.coc_enabled then
+  --     return false
+  --   end
+  --   return true
+  -- end
+
+  view = {
+    entries = {
+      name = 'native',  -- ネイティブビューを使用
+    }
+  }
+})
+
 -- PLUGSETTING: pounce
 require'pounce'.setup{
   accept_keys = "HJKLYUIOPNMQWERTASDFGZXCVB",
@@ -705,17 +728,25 @@ require('treesj').setup({
 })
 
 -- PLUGSETTING: folke/noice.nvim
-require('noice').setup({
-  cmdline = {
-    view = "cmdline_popup",
-    opts = {
-      position = { row = '40%', col = '50%' },
-    },
-  },
-  messages = {
-    enabled = false,
-  },
-})
+-- require('noice').setup({
+--   cmdline = {
+--     -- view = "cmdline_popup",
+--     view = "cmdline",
+--     opts = {
+--       position = { row = '40%', col = '50%' },
+--     },
+--   },
+--   messages = {
+--     enabled = false,
+--   },
+--   lsp = {
+--     override = {
+--       ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+--       ["vim.lsp.util.stylize_markdown"] = true,
+--       ["cmp.entry.get_documentation"] = true,
+--     },
+--   },
+-- })
 
 -- PLUGSETTING: delphinus/skkeleton_indicator.nvim
 require("skkeleton_indicator").setup {}

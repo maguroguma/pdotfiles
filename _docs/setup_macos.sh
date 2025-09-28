@@ -46,6 +46,9 @@ brew install t-rec
 # window operation tool
 brew install --cask swift-shift
 
+# mac <-> android
+brew install openmtp --cask
+
 #########
 # others
 #########

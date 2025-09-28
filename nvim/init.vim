@@ -162,6 +162,7 @@ call jetpack#add('hrsh7th/cmp-buffer')
 call jetpack#add('hrsh7th/cmp-path')
 call jetpack#add('hrsh7th/cmp-cmdline')
 call jetpack#add('hrsh7th/nvim-cmp')
+call jetpack#add('biosugar0/cmp-claudecode')
 
 call jetpack#add('nvim-tree/nvim-web-devicons')
 
@@ -266,7 +267,7 @@ call jetpack#add('kazhala/close-buffers.nvim')
 call jetpack#add('Wansmer/treesj')
 call jetpack#add('thinca/vim-qfreplace')
 call jetpack#add('rhysd/clever-f.vim')
-call jetpack#add('folke/noice.nvim')
+" call jetpack#add('folke/noice.nvim')
 call jetpack#add('vim-skk/skkeleton')
 call jetpack#add('delphinus/skkeleton_indicator.nvim')
 call jetpack#add('will133/vim-dirdiff')
@@ -1220,7 +1221,7 @@ let g:task_paper_styles={
     \ 'urgent': 'ctermbg=214 guibg=#cccc00 ctermfg=black guifg=#000000',
     \ 'important': 'ctermbg=69 guibg=#cccc00 ctermfg=white guifg=#000000',
     \ 'risky': 'ctermbg=167 guibg=#cccc00 ctermfg=white guifg=#000000',
-    \ 'inProgress': 'ctermbg=108 guibg=#87af87 ctermfg=black guifg=#000000',
+    \ 'inProgress': 'ctermbg=108 guibg=#d75f5f ctermfg=black guifg=#ffffff',
     \ }
 
 " due タグのハイライト設定
