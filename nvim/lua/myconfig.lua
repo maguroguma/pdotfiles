@@ -630,8 +630,6 @@ cmp.setup({
   sources = {
     { name = 'claude_slash', priority = 900 },
     { name = 'claude_at', priority = 900 },
-    { name = 'path' },
-    { name = 'buffer' },
   },
 
   -- enabled = function()
