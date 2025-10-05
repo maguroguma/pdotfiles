@@ -589,6 +589,7 @@ map g# <Plug>(asterisk-gz#)
 nmap M <Plug>(quickhl-manual-this-whole-word)
 xmap M <Plug>(quickhl-manual-this)
 nmap ma <Plug>(quickhl-manual-this)
+nmap mq <Plug>(quickhl-manual-reset)
 
 let g:quickhl_manual_keywords = [
       \ 'FACT:',
