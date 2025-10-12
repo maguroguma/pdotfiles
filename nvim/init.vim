@@ -207,7 +207,6 @@ call jetpack#add('ntpeters/vim-better-whitespace')
 call jetpack#add('machakann/vim-highlightedyank')
 " read vim command result to buffer
 call jetpack#add('tyru/capture.vim')
-" call jetpack#add('moll/vim-bbye')
 call jetpack#add('mattn/vim-maketable', {
       \ 'on_ft': ['md', 'markdown']
       \ })
@@ -632,13 +631,6 @@ nnoremap <Space>M :QuickhlManualAdd! <C-r>/<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 nnoremap <Space>s <cmd>Spectre<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: moll/vim-bbye
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-nnoremap <Space>d <cmd>BDelete this<CR>
-nnoremap <Space>D <cmd>BDelete hidden<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: t9md/vim-choosewin

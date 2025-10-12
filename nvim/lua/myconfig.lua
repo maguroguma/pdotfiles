@@ -720,6 +720,9 @@ require('close_buffers').setup({
   next_buffer_cmd = nil,  -- Custom function to retrieve the next buffer when preserving window layout
 })
 
+vim.keymap.set('n', '<Space>d', "<cmd>BDelete hidden<cr>", { noremap = true, silent = false })
+vim.keymap.set('n', '<Space>D', "<cmd>BWipeout all<cr>", { noremap = true, silent = false })
+
 -- PLUGSETTING: Wansmer/treesj
 require('treesj').setup({
   use_default_keymaps = false,
