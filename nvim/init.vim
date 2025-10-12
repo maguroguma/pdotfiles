@@ -1681,7 +1681,7 @@ set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
-nnoremap sf <cmd>set foldmethod=expr<CR>
+nnoremap sf <cmd>set foldmethod=expr<CR><cmd>set foldexpr=nvim_treesitter#foldexpr()<CR>
 
 " 挿入モードでのバックスペースで改行が削除できない場合に設定する項目
 set backspace=indent,eol,start
@@ -2186,6 +2186,14 @@ function! ToggleColorColumn()
         set colorcolumn=
     endif
 endfunction
+
+set number
+" フォーカス中のwindowでのみ行番号を表示する
+augroup vimrc-auto-number
+  autocmd!
+  autocmd WinEnter * setlocal number
+  autocmd WinLeave * setlocal nonumber
+augroup END
 
 augroup MyXML
   autocmd!
