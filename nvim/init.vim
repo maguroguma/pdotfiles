@@ -217,7 +217,7 @@ call jetpack#add('jodosha/vim-godebug', {
 " call jetpack#add('Raimondi/delimitMate')
 " easy grep tool
 call jetpack#add('windwp/nvim-spectre')
-call jetpack#add('simeji/winresizer')
+" call jetpack#add('simeji/winresizer')
 " for commenting on vue SFC
 call jetpack#add('tomtom/tcomment_vim')
 call jetpack#add('vim-test/vim-test')
@@ -265,7 +265,7 @@ call jetpack#add('shellRaining/hlchunk.nvim')
 call jetpack#add('kazhala/close-buffers.nvim')
 call jetpack#add('Wansmer/treesj')
 call jetpack#add('thinca/vim-qfreplace')
-call jetpack#add('rhysd/clever-f.vim')
+" call jetpack#add('rhysd/clever-f.vim')
 " call jetpack#add('folke/noice.nvim')
 call jetpack#add('vim-skk/skkeleton')
 call jetpack#add('delphinus/skkeleton_indicator.nvim')
@@ -282,6 +282,7 @@ call jetpack#add('kana/vim-operator-user')
 call jetpack#add('kana/vim-operator-replace')
 call jetpack#add('davidoc/taskpaper.vim')
 call jetpack#add('uga-rosa/ccc.nvim')
+call jetpack#add('lambdalisue/vim-initial')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -697,7 +698,7 @@ augroup END
 " PLUGSETTING: simeji/winresizer
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nmap <C-e> <cmd>WinResizerStartResize<CR>
+" nmap <C-e> <cmd>WinResizerStartResize<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: previm/previm
@@ -727,6 +728,12 @@ highlight FuzzyMotionSubChar gui=bold guifg=#2bb2e3
 " highlight FuzzyMotionShade ctermfg=0 ctermbg=0
 let g:fuzzy_motion_matchers = ['fzf', 'kensaku']
 cnoremap <C-a><CR> <Plug>(kensaku-search-replace)<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nnoremap ' <Cmd>Initial<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: machakann/vim-highlightedyank
@@ -1112,7 +1119,7 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " nmap ' <cmd>Pounce<CR>
-nmap ' <cmd>FuzzyMotion<CR>
+nmap f <cmd>FuzzyMotion<CR>
 vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
 
@@ -1138,10 +1145,10 @@ nnoremap <Space>t <cmd>TSJToggle<CR>
 " PLUGSETTING: rhysd/clever-f.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:clever_f_smart_case = 1
-let g:clever_f_use_migemo = 1
-" let g:clever_f_mark_char_color = 'FuzzyMotionChar'
-let g:clever_f_chars_match_any_signs = ';'
+" let g:clever_f_smart_case = 1
+" let g:clever_f_use_migemo = 1
+" " let g:clever_f_mark_char_color = 'FuzzyMotionChar'
+" let g:clever_f_chars_match_any_signs = ';'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: vim-skk/skkeleton

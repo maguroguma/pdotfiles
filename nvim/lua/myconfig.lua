@@ -691,9 +691,23 @@ require("aerial").setup({
     vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
     vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
   end,
+
+  layout = {
+    -- 最大幅を大きく設定（例：80列または画面幅の50%）
+    max_width = { 80, 0.8 },
+    min_width = 20,
+    -- コンテンツに応じてリサイズを有効化
+    resize_to_content = true,
+  },
+
+  -- Options for opening aerial in a floating win
+  float = {
+    relative = "win",
+    max_height = 0.9,
+  },
 })
 -- You probably also want to set a keymap to toggle aerial
-vim.keymap.set("n", "<leader>ae", "<cmd>AerialToggle!<CR>")
+vim.keymap.set("n", "F", "<cmd>AerialToggle! float<CR>")
 
 -- PLUGSETTING: shellRaining/hlchunk.nvim
 require("hlchunk").setup({

@@ -65,6 +65,7 @@ git submodule status
 git submodule add #{submodule}
 git submodule update
 git submodule update --recursive
+git submodule update --init --recursive
 
 git worktree add #{path} #{branch_name}
 git worktree list
