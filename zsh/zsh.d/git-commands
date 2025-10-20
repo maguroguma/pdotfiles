@@ -18,6 +18,7 @@ git branch --delete --force
 git branch --verbose --verbose
 git branch --set-upstream-to #{<remote>/<branch>}
 git branch --unset-upstream
+git branch --move #{new_branch_name}
 
 git commit -m #{message_string}
 git commit --amend
