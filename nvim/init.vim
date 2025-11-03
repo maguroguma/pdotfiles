@@ -217,7 +217,7 @@ call jetpack#add('jodosha/vim-godebug', {
 " call jetpack#add('Raimondi/delimitMate')
 " easy grep tool
 call jetpack#add('windwp/nvim-spectre')
-" call jetpack#add('simeji/winresizer')
+call jetpack#add('simeji/winresizer')
 " for commenting on vue SFC
 call jetpack#add('tomtom/tcomment_vim')
 call jetpack#add('vim-test/vim-test')
@@ -698,7 +698,7 @@ augroup END
 " PLUGSETTING: simeji/winresizer
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" nmap <C-e> <cmd>WinResizerStartResize<CR>
+nmap <C-e> <cmd>WinResizerStartResize<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: previm/previm
