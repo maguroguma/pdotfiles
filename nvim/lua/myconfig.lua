@@ -707,7 +707,8 @@ require("aerial").setup({
   },
 })
 -- You probably also want to set a keymap to toggle aerial
-vim.keymap.set("n", "F", "<cmd>AerialToggle! float<CR>")
+-- vim.keymap.set("n", "F", "<cmd>AerialToggle! float<CR>")
+vim.keymap.set("n", "F", "<cmd>AerialToggle!<CR>")
 
 -- PLUGSETTING: shellRaining/hlchunk.nvim
 require("hlchunk").setup({

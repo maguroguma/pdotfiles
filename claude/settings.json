@@ -1,6 +1,8 @@
 {
   "permissions": {
-    "deny": ["Bash(curl:*)"]
+    "deny": [
+      "Bash(curl:*)"
+    ]
   },
   "hooks": {
     "Stop": [
@@ -60,5 +62,6 @@
   "statusLine": {
     "type": "command",
     "command": "npx ccusage@latest statusline"
-  }
+  },
+  "alwaysThinkingEnabled": true
 }

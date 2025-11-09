@@ -89,5 +89,6 @@ nvim/pack/
 !claude/settings-sample.json
 !claude/commands/japanese-hello.md
 !claude/commands/nippou/nippou-add.md
+!claude/commands/code-reading/how-to-read.md
 
 !example.taskpaper

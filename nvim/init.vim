@@ -283,6 +283,7 @@ call jetpack#add('kana/vim-operator-replace')
 call jetpack#add('davidoc/taskpaper.vim')
 call jetpack#add('uga-rosa/ccc.nvim')
 call jetpack#add('lambdalisue/vim-initial')
+" call jetpack#add('maguroguma/vim-initial', { 'branch': 'feat/arrange-index-letters' })
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -730,10 +731,15 @@ let g:fuzzy_motion_matchers = ['fzf', 'kensaku']
 cnoremap <C-a><CR> <Plug>(kensaku-search-replace)<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: 
+" PLUGSETTING: lambdalisue/vim-initial
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nnoremap ' <Cmd>Initial<CR>
+nnoremap f <Cmd>Initial<CR>
+" let g:vim_initial_labels = [
+"       \ 'h', 'j', 'k', 'l', 'y',
+"       \ 'u', 'i', 'o', 'p', 'n',
+"       \ 'm',
+"       \]
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: machakann/vim-highlightedyank
@@ -1119,7 +1125,7 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " nmap ' <cmd>Pounce<CR>
-nmap f <cmd>FuzzyMotion<CR>
+nmap ' <cmd>FuzzyMotion<CR>
 vmap ' <cmd>Pounce<CR>
 omap g' <cmd>Pounce<CR>
 
@@ -1668,8 +1674,8 @@ endfunction
 command! -range YankRangePath :<line1>,<line2>call YankVisualRangeWithPath()
 
 " ビジュアル選択範囲をファイルパス:行番号形式でヤンク
-" nvim/init.vim:1493-1500
-" xnoremap <Space>yp :YankRangePath<CR>
+" e.g.: nvim/init.vim:1493-1500
+xnoremap <Space>yr :YankRangePath<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
@@ -1688,6 +1694,7 @@ set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
+" TODO: これをバッファを開くたびに実行するようにする
 nnoremap sf <cmd>set foldmethod=expr<CR><cmd>set foldexpr=nvim_treesitter#foldexpr()<CR>
 
 " 挿入モードでのバックスペースで改行が削除できない場合に設定する項目
