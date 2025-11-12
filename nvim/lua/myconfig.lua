@@ -910,3 +910,6 @@ vim.api.nvim_create_user_command("BlinkWindow", function()
 end, {})
 
 vim.api.nvim_set_keymap("n", "ss", "<cmd>BlinkWindow<cr>", { noremap = true, silent = true })
+
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'

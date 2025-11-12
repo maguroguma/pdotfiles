@@ -1675,7 +1675,7 @@ command! -range YankRangePath :<line1>,<line2>call YankVisualRangeWithPath()
 
 " ビジュアル選択範囲をファイルパス:行番号形式でヤンク
 " e.g.: nvim/init.vim:1493-1500
-xnoremap <Space>yr :YankRangePath<CR>
+xnoremap <Space>rp :YankRangePath<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options
@@ -1690,12 +1690,11 @@ set mouse=n
 " set clipboard+=unnamedplus
 
 " fold
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+" set foldmethod=expr
+" set foldexpr=nvim_treesitter#foldexpr()
+" nnoremap sf <cmd>set foldmethod=expr<CR><cmd>set foldexpr=nvim_treesitter#foldexpr()<CR>
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
-" TODO: これをバッファを開くたびに実行するようにする
-nnoremap sf <cmd>set foldmethod=expr<CR><cmd>set foldexpr=nvim_treesitter#foldexpr()<CR>
 
 " 挿入モードでのバックスペースで改行が削除できない場合に設定する項目
 set backspace=indent,eol,start
