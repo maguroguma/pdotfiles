@@ -808,7 +808,11 @@ let g:go_metalinter_autosave = 0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " https://zenn.dev/uochan/articles/2021-12-08-vim-conventional-commits
-nnoremap ZZ <cmd>call g:SelectType()<CR>
+augroup GitCommitKeymap
+  autocmd!
+  autocmd FileType gitcommit,gina-commit nnoremap <buffer> ZZ <cmd>call g:SelectType()<CR>
+augroup END
+
 function! g:SelectType() abort
   if &filetype ==? "gitcommit" || &filetype ==? "gina-commit"
     let line = substitute(getline('.'), '^#\s*', '', 'g') " 最初の '# ' を除く
@@ -1695,6 +1699,7 @@ set mouse=n
 " nnoremap sf <cmd>set foldmethod=expr<CR><cmd>set foldexpr=nvim_treesitter#foldexpr()<CR>
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
+nnoremap Z za
 
 " 挿入モードでのバックスペースで改行が削除できない場合に設定する項目
 set backspace=indent,eol,start
