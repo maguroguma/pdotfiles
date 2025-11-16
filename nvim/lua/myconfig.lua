@@ -698,6 +698,8 @@ require("aerial").setup({
     min_width = 20,
     -- コンテンツに応じてリサイズを有効化
     resize_to_content = true,
+
+    default_direction = "left"
   },
 
   -- Options for opening aerial in a floating win

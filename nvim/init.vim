@@ -2205,13 +2205,13 @@ function! ToggleColorColumn()
     endif
 endfunction
 
-set number
+set nonumber
 " フォーカス中のwindowでのみ行番号を表示する
-augroup vimrc-auto-number
-  autocmd!
-  autocmd WinEnter * setlocal number
-  autocmd WinLeave * setlocal nonumber
-augroup END
+" augroup vimrc-auto-number
+"   autocmd!
+"   autocmd WinEnter * setlocal number
+"   autocmd WinLeave * setlocal nonumber
+" augroup END
 
 augroup MyXML
   autocmd!
