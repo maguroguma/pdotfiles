@@ -135,7 +135,7 @@ call jetpack#add('w0ng/vim-hybrid') " colorscheme
 call jetpack#add('navarasu/onedark.nvim') " colorscheme
 
 " DO NOT lazy load
-call jetpack#add('lambdalisue/readablefold.vim')
+" call jetpack#add('lambdalisue/readablefold.vim')
 " call jetpack#add('Yggdroot/indentLine') " NOTE: archived on Jul 29, 2023
 call jetpack#add('machakann/vim-sandwich')
 " call jetpack#add('luochen1990/rainbow')
@@ -284,6 +284,8 @@ call jetpack#add('davidoc/taskpaper.vim')
 call jetpack#add('uga-rosa/ccc.nvim')
 call jetpack#add('lambdalisue/vim-initial')
 " call jetpack#add('maguroguma/vim-initial', { 'branch': 'feat/arrange-index-letters' })
+call jetpack#add('kevinhwang91/promise-async')
+call jetpack#add('kevinhwang91/nvim-ufo')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -1456,6 +1458,26 @@ autocmd FileType markdown vnoremap <buffer> <Space>` :call SurroundWithCodeBlock
 autocmd FileType markdown vnoremap <buffer> <Space>q :call QuoteSelectedLines()<CR>
 autocmd FileType markdown vnoremap <silent> <Space>mb :<C-u>call <SID>markdown_bold_visual()<CR>
 
+" TODOリスト（markdownファイル専用）
+" Thanks to https://qiita.com/naoty_k/items/56eddc9b76fe630f9be7
+augroup markdown_todo
+  autocmd!
+  autocmd FileType markdown inoremap <buffer> <C-a>tl <C-r>='- [ ]'<CR>
+  autocmd FileType markdown nnoremap <buffer> <Space>x <cmd>call ToggleCheckbox()<CR>
+augroup END
+
+" 選択行のチェックボックスを切り替える
+function! ToggleCheckbox()
+  let l:line = getline('.')
+  if l:line =~ '\-\s\[\s\]'
+    let l:result = substitute(l:line, '-\s\[\s\]', '- [x]', '')
+    call setline('.', l:result)
+  elseif l:line =~ '\-\s\[x\]'
+    let l:result = substitute(l:line, '-\s\[x\]', '- [ ]', '')
+    call setline('.', l:result)
+  end
+endfunction
+
 " ファイル・バッファのエンコーディング
 command! OpenAsSjis :edit ++encoding=sjis<CR>
 command! OpenAsUtf8 :e ++enc=utf-8<CR>
@@ -1590,25 +1612,6 @@ function! ReverseLines() range
 endfunction
 
 command! -range -nargs=0 Reverse :<line1>,<line2>call ReverseLines()
-
-" TODOリスト
-" 参考: https://qiita.com/naoty_k/items/56eddc9b76fe630f9be7
-inoremap <C-a>tl <C-r>='- [ ]'<CR>
-
-" todoリストのon/offを切り替える
-nnoremap <buffer> <Space>x <cmd>call ToggleCheckbox()<CR>
-
-" 選択行のチェックボックスを切り替える
-function! ToggleCheckbox()
-  let l:line = getline('.')
-  if l:line =~ '\-\s\[\s\]'
-    let l:result = substitute(l:line, '-\s\[\s\]', '- [x]', '')
-    call setline('.', l:result)
-  elseif l:line =~ '\-\s\[x\]'
-    let l:result = substitute(l:line, '-\s\[x\]', '- [ ]', '')
-    call setline('.', l:result)
-  end
-endfunction
 
 command! -range=% SplitPeriods <line1>,<line2>s/。/。\r/g
 

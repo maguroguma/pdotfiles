@@ -915,3 +915,6 @@ vim.api.nvim_set_keymap("n", "ss", "<cmd>BlinkWindow<cr>", { noremap = true, sil
 
 vim.wo.foldmethod = 'expr'
 vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+
+-- use Neovim nightly branch
+require('ufo').setup()
