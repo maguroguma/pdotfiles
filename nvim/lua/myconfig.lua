@@ -891,6 +891,57 @@ vim.api.nvim_set_hl(0, "FzfLuaTabMarker", { fg = "CadetBlue4" })
 -- PLUGSETTING: uga-rosa/ccc.nvim
 require("ccc").setup()
 
+-- PLUGSETTING: kevinhwang91/nvim-ufo
+require('ufo').setup()
+
+-- PLUGSETTING: A7Lavinraj/fyler.nvim
+local fyler = require("fyler")
+fyler.setup({
+  views = {
+    finder = {
+      mappings = {
+        ["q"] = "CloseView",
+        ["<CR>"] = "Select",
+        zM = "CollapseAll",
+        zc = "CollapseNode",
+
+        --[[yank path variants]]
+        yp = function(finder)
+          local path = finder:cursor_node_entry().path
+          vim.fn.setreg(vim.v.register, path)
+          vim.notify("絶対パスをヤンクしました: " .. path, vim.log.levels.INFO)
+        end,
+        yr = function(finder)
+          local path = vim.fn.fnamemodify(finder:cursor_node_entry().path, ":.")
+          vim.fn.setreg(vim.v.register, path)
+          vim.notify("相対パスをヤンクしました: " .. path, vim.log.levels.INFO)
+        end,
+
+        -- [[Toggle node]]
+        Z = function(finder)
+          local entry = finder:cursor_node_entry()
+          if vim.fn.isdirectory(entry.path) == 1 then
+            finder:exec_action "n_select"
+          else
+            finder:exec_action "n_collapse_node"
+          end
+        end,
+
+        --[[disabled defaults]]
+        ["<C-t>"] = false,
+        ["|"] = false,
+        ["-"] = false,
+        ["^"] = false,
+        ["="] = false,
+        ["."] = false,
+        ["#"] = false,
+        ["<BS>"] = false,
+      }
+    }
+  }
+})
+vim.keymap.set("n", "<leader>f", fyler.open, { desc = "Open fyler View" })
+
 -- ORIGINAL:
 local function blink_active_window(duration, count)
   local win = vim.api.nvim_get_current_win()
@@ -915,6 +966,3 @@ vim.api.nvim_set_keymap("n", "ss", "<cmd>BlinkWindow<cr>", { noremap = true, sil
 
 vim.wo.foldmethod = 'expr'
 vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-
--- use Neovim nightly branch
-require('ufo').setup()

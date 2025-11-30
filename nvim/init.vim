@@ -286,6 +286,8 @@ call jetpack#add('lambdalisue/vim-initial')
 " call jetpack#add('maguroguma/vim-initial', { 'branch': 'feat/arrange-index-letters' })
 call jetpack#add('kevinhwang91/promise-async')
 call jetpack#add('kevinhwang91/nvim-ufo')
+call jetpack#add('A7Lavinraj/fyler.nvim')
+call jetpack#add('nvim-mini/mini.icons') " for fyler.nvim
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -928,7 +930,7 @@ nmap <Space>rn <Plug>(coc-rename)
 
 " Formatting selected code.
 xmap <Space>f  <Plug>(coc-format-selected)
-nmap <Space>f  <Plug>(coc-format-selected)
+" nmap <Space>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -1462,7 +1464,7 @@ autocmd FileType markdown vnoremap <silent> <Space>mb :<C-u>call <SID>markdown_b
 " Thanks to https://qiita.com/naoty_k/items/56eddc9b76fe630f9be7
 augroup markdown_todo
   autocmd!
-  autocmd FileType markdown inoremap <buffer> <C-a>tl <C-r>='- [ ]'<CR>
+  autocmd FileType markdown inoremap <buffer> <C-a>tl <C-r>='- [ ] '<CR>
   autocmd FileType markdown nnoremap <buffer> <Space>x <cmd>call ToggleCheckbox()<CR>
 augroup END
 
