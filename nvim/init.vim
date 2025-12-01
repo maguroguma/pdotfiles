@@ -2266,3 +2266,7 @@ endfunction
 autocmd VimEnter * if argc() == 0 | enew | setlocal buftype=nofile bufhidden=wipe noswapfile | endif
 command! Scratch 10split |  enew | setlocal buftype=nofile bufhidden=wipe noswapfile
 nnoremap S :Scratch<CR>
+
+" editprompt 専用の map
+autocmd BufRead,BufNewFile .editprompt-* set filetype=editprompt
+autocmd FileType editprompt nnoremap <buffer> <CR> <cmd>wq<CR>
