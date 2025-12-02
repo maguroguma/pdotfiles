@@ -288,6 +288,8 @@ call jetpack#add('kevinhwang91/promise-async')
 call jetpack#add('kevinhwang91/nvim-ufo')
 call jetpack#add('A7Lavinraj/fyler.nvim')
 call jetpack#add('nvim-mini/mini.icons') " for fyler.nvim
+call jetpack#add('backdround/global-note.nvim')
+call jetpack#add('TaDaa/vimade')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')

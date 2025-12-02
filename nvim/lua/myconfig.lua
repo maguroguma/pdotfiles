@@ -942,6 +942,20 @@ fyler.setup({
 })
 vim.keymap.set("n", "<leader>f", fyler.open, { desc = "Open fyler View" })
 
+-- PLUGSETTING: backdround/global-note.nvim
+local global_note = require("global-note")
+global_note.setup()
+vim.keymap.set("n", "<leader>gn", global_note.toggle_note, {
+  desc = "Toggle global note",
+})
+
+-- PLUGSETTING: TaDaa/vimade
+require('vimade').setup({
+  recipe = {'default', {animate = true}},
+  fadelevel = 0.68,
+  ncmode = 'windows'
+})
+
 -- ORIGINAL:
 local function blink_active_window(duration, count)
   local win = vim.api.nvim_get_current_win()
