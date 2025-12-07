@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#
+
+# Thanks to: https://zenn.dev/layerx/articles/8c29b0367238b8#tmux-session-%E3%81%AF-ghq-%E3%81%A7%E7%AE%A1%E7%90%86%E3%81%99%E3%82%8B%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E3%81%AB%E5%AF%BE%E5%BF%9C%E3%81%95%E3%81%9B%E3%82%8B
+
+set -euo pipefail
+
+changeSession() {
+  local change
+  [[ -n "${TMUX:-""}" ]] && change="switch-client" || change="attach-session"
+  tmux $change -t "$1"
+}
+
+createSessionIfNeeded() {
+  local name=$1
+  [[ -n "$2" ]] && dir=$2 || dir=$(pwd)
+  tmux list-sessions -F "#{session_name}" |
+    grep -q -E "^${name}$" ||
+    tmux new-session -d -c "${dir}" -s "${name}"
+}
+
+selectRepo() {
+  echo "$(ghq root)/$(ghq list | fzf)"
+}
+
+main() {
+  if [ $# -eq 1 ]; then
+    createSessionIfNeeded $1
+    changeSession $1
+    exit
+  fi
+
+  local repo="$(selectRepo)"
+  local session="$(echo "$repo" | awk -F/ '{ print $NF }')"
+
+  createSessionIfNeeded $session $repo
+  changeSession $session
+}
+
+main

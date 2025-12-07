@@ -746,25 +746,25 @@ require('treesj').setup({
 })
 
 -- PLUGSETTING: folke/noice.nvim
--- require('noice').setup({
---   cmdline = {
---     -- view = "cmdline_popup",
---     view = "cmdline",
---     opts = {
---       position = { row = '40%', col = '50%' },
---     },
---   },
---   messages = {
---     enabled = false,
---   },
---   lsp = {
---     override = {
---       ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
---       ["vim.lsp.util.stylize_markdown"] = true,
---       ["cmp.entry.get_documentation"] = true,
---     },
---   },
--- })
+require('noice').setup({
+  cmdline = {
+    view = "cmdline_popup",
+    -- view = "cmdline",
+    opts = {
+      position = { row = '40%', col = '50%' },
+    },
+  },
+  messages = {
+    enabled = false,
+  },
+  lsp = {
+    override = {
+      ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+      ["vim.lsp.util.stylize_markdown"] = true,
+      ["cmp.entry.get_documentation"] = true,
+    },
+  },
+})
 
 -- PLUGSETTING: delphinus/skkeleton_indicator.nvim
 require("skkeleton_indicator").setup {}
@@ -891,8 +891,30 @@ vim.api.nvim_set_hl(0, "FzfLuaTabMarker", { fg = "CadetBlue4" })
 -- PLUGSETTING: uga-rosa/ccc.nvim
 require("ccc").setup()
 
--- PLUGSETTING: kevinhwang91/nvim-ufo
-require('ufo').setup()
+-- PLUGSETTING: chrisgrieser/nvim-origami
+require("origami").setup {
+	useLspFoldsWithTreesitterFallback = true,
+	pauseFoldsOnSearch = true,
+	foldtext = {
+		enabled = true,
+		padding = 3,
+		lineCount = {
+			template = "%d lines", -- `%d` is replaced with the number of folded lines
+			hlgroup = "Comment",
+		},
+		diagnosticsCount = true, -- uses hlgroups and icons from `vim.diagnostic.config().signs`
+		gitsignsCount = true, -- requires `gitsigns.nvim`
+		disableOnFt = { "snacks_picker_input" }, ---@type string[]
+	},
+	autoFold = {
+		enabled = true,
+		kinds = { "comment", "imports" }, ---@type lsp.FoldingRangeKind[]
+	},
+	foldKeymaps = {
+		setup = true, -- modifies `h`, `l`, and `$`
+		hOnlyOpensOnFirstColumn = false,
+	},
+}
 
 -- PLUGSETTING: A7Lavinraj/fyler.nvim
 local fyler = require("fyler")

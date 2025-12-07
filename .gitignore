@@ -46,6 +46,7 @@ nvim/pack/
 !scripts/s-quote.sh
 !scripts/tmpspace.sh
 !scripts/ts-to-date.sh
+!scripts/tmnew-repo-session
 
 !tmux/tmux-session-fzf
 !tmux/tmux.conf
