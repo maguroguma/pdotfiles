@@ -1460,7 +1460,7 @@ endfunction
 
 autocmd FileType markdown nnoremap <buffer> <Space>` :call InsertCodeBlock()<CR>
 autocmd FileType markdown vnoremap <buffer> <Space>` :call SurroundWithCodeBlock()<CR>
-autocmd FileType markdown vnoremap <buffer> <Space>q :call QuoteSelectedLines()<CR>
+autocmd FileType markdown vnoremap <buffer> <Space>mq :call QuoteSelectedLines()<CR>
 autocmd FileType markdown vnoremap <silent> <Space>mb :<C-u>call <SID>markdown_bold_visual()<CR>
 
 " TODOリスト（markdownファイル専用）

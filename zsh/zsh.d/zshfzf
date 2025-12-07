@@ -65,6 +65,15 @@ function ghq-fzf() {
 zle -N ghq-fzf
 bindkey '^]' ghq-fzf
 
+# tmnew-repo-session をキーバインドで実行
+# ghq で管理しているリポジトリから選択して tmux セッションを作成・切り替え
+function tmnew-repo-session-widget() {
+  tmnew-repo-session
+  zle reset-prompt
+}
+zle -N tmnew-repo-session-widget
+bindkey '^atm' tmnew-repo-session-widget
+
 # tmuxで複数ペイン同時に起動したいので、fzf-tmuxは使わない
 function cdr-fzf() {
     local selected_dir=$(cdr -l | awk '{ print $2 }' | fzf)
