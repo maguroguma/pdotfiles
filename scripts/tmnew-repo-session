@@ -20,7 +20,9 @@ createSessionIfNeeded() {
 }
 
 selectRepo() {
-  echo "$(ghq root)/$(ghq list | fzf)"
+  local selected
+  selected=$(ghq list | fzf) || exit 0
+  echo "$(ghq root)/${selected}"
 }
 
 main() {
@@ -31,10 +33,10 @@ main() {
   fi
 
   local repo="$(selectRepo)"
-  local session="$(echo "$repo" | awk -F/ '{ print $NF }')"
+  local session="$(echo "$repo" | awk -F/ '{ print $(NF-1)"/"$NF }')"
 
   createSessionIfNeeded $session $repo
   changeSession $session
 }
 
-main
+main "$@"

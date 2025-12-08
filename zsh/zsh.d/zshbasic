@@ -18,6 +18,7 @@ bindkey '^N' history-beginning-search-forward
 bindkey -v '^?' backward-delete-char
 # Shift-Tabで候補を逆順に補完する
 bindkey '^[[Z' reverse-menu-complete
+bindkey '^L' clear-screen
 
 # vifm
 # tmux にまかせる

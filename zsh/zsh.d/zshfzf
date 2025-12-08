@@ -37,10 +37,8 @@ tmuxkillf () {
     local i
     for i in "${(f@)sessions}"
     do
-        [[ $i =~ '([^:]*):.*' ]] && {
-            echo "Killing $match[1]"
-            tmux kill-session -t "$match[1]"
-        }
+        echo "Killing $i"
+        tmux kill-session -t "$i"
     done
 }
 zle -N tmuxkillf

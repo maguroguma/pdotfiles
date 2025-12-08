@@ -453,6 +453,7 @@ nnoremap <silent> Q <cmd>FzfLua command_history<CR>
 nnoremap <silent> <Space>q <cmd>FzfLua command_history<CR>
 nnoremap <silent> ? <cmd>FzfLua search_history<CR>
 nnoremap <silent> <Space>/ <cmd>FzfLua search_history<CR>
+nnoremap <silent> <Space>j <cmd>FzfLua jumps<CR>
 
 nnoremap <silent> <Space>bd <cmd>BD<CR>
 
