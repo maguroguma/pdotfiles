@@ -2252,18 +2252,22 @@ endfunction
 " 文字コードによる入力
 inoremap <C-v>u <C-r>=nr2char(0x)<Left>
 
-" マッチ行をすべて a レジスタにヤンクする
-command! -nargs=? YankMatches call YankMatchesToA(<f-args>)
-function! YankMatchesToA(...) abort
-  let @a = ''
+" マッチ行をすべてデフォルトレジスタとクリップボードにヤンクする
+command! -nargs=? YankMatches call YankMatches(<f-args>)
+function! YankMatches(...) abort
+  let @" = ''
+  let @+ = ''
+  let l:count = 0
 
   if a:0 >= 1 && !empty(a:1)
     " パターンが明示された場合
-    execute 'g/' . escape(a:1, '/\') . '/let @a .= getline(".") . "\n"'
+    execute 'g/' . escape(a:1, '/\') . '/let @" .= getline(".") . "\n" | let @+ .= getline(".") . "\n" | let l:count += 1'
   else
     " 現在の検索パターンを使用（@/）
-    execute 'g//let @a .= getline(".") . "\n"'
+    execute 'g//let @" .= getline(".") . "\n" | let @+ .= getline(".") . "\n" | let l:count += 1'
   endif
+
+  echo 'Yanked' l:count 'lines to default register and clipboard'
 endfunction
 
 " 使い捨てのバッファを作るコマンド、nvim 単体で呼び出したときも使い捨てのバッファから始める

@@ -21,7 +21,7 @@ createSessionIfNeeded() {
 
 selectRepo() {
   local selected
-  selected=$(ghq list | fzf) || exit 0
+  selected=$(ghq list | fzf --prompt='make session> ') || exit 0
   echo "$(ghq root)/${selected}"
 }
 
