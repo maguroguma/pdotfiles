@@ -966,7 +966,22 @@ vim.keymap.set("n", "<leader>f", fyler.open, { desc = "Open fyler View" })
 
 -- PLUGSETTING: backdround/global-note.nvim
 local global_note = require("global-note")
-global_note.setup()
+global_note.setup({
+  window_config = function()
+    local window_height = vim.api.nvim_list_uis()[1].height
+    local window_width = vim.api.nvim_list_uis()[1].width
+    return {
+      relative = "editor",
+      border = "single",
+      title = "Note",
+      title_pos = "center",
+      width = math.floor(0.5 * window_width),
+      height = math.floor(0.95 * window_height),
+      col = math.floor(0.25 * window_width),
+      row = math.floor(0.025 * window_height),
+    }
+  end,
+})
 vim.keymap.set("n", "<leader>gn", global_note.toggle_note, {
   desc = "Toggle global note",
 })
