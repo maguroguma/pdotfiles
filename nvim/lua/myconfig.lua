@@ -892,8 +892,12 @@ vim.api.nvim_set_hl(0, "FzfLuaTabMarker", { fg = "CadetBlue4" })
 require("ccc").setup()
 
 -- PLUGSETTING: chrisgrieser/nvim-origami
+-- default settings
 require("origami").setup {
-	useLspFoldsWithTreesitterFallback = true,
+	useLspFoldsWithTreesitterFallback = {
+		enabled = true,
+		foldmethodIfNeitherIsAvailable = "indent", ---@type string|fun(bufnr: number): string
+	},
 	pauseFoldsOnSearch = true,
 	foldtext = {
 		enabled = true,
@@ -911,8 +915,9 @@ require("origami").setup {
 		kinds = { "comment", "imports" }, ---@type lsp.FoldingRangeKind[]
 	},
 	foldKeymaps = {
-		setup = true, -- modifies `h`, `l`, and `$`
-		hOnlyOpensOnFirstColumn = false,
+		setup = true, -- modifies `h`, `l`, `^`, and `$`
+		closeOnlyOnFirstColumn = false, -- `h` and `^` only close in the 1st column
+		scrollLeftOnCaret = false, -- `^` should scroll left (basically mapped to `0^`)
 	},
 }
 
@@ -992,6 +997,16 @@ require('vimade').setup({
   fadelevel = 0.68,
   ncmode = 'windows'
 })
+
+-- PLUGSETTING: pwntester/octo.nvim
+require"octo".setup {
+  picker = "fzf-lua", -- or "fzf-lua" or "snacks" or "default"
+}
+vim.keymap.set("n", "<Space>op", "<CMD>Octo pr list<CR>", { desc = "Open PR list" })
+vim.keymap.set("n", "<Space>or", "<CMD>Octo review<CR>",
+  { desc = "start or resume review of current branch's PR (comment: <Space>ca, suggest: <Space>sa)" }
+)
+vim.keymap.set("n", "<Space>os", "<CMD>Octo review submit<CR>", { desc = "submit review" })
 
 -- ORIGINAL:
 local function blink_active_window(duration, count)

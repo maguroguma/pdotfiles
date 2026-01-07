@@ -291,6 +291,7 @@ call jetpack#add('nvim-mini/mini.icons') " for fyler.nvim
 call jetpack#add('backdround/global-note.nvim')
 call jetpack#add('TaDaa/vimade')
 call jetpack#add('chrisgrieser/nvim-origami')
+call jetpack#add('pwntester/octo.nvim')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -311,6 +312,7 @@ endfor
 " this settings need to be loaded first.
 filetype plugin indent on
 let mapleader = "\<Space>"
+let maplocalleader = "\<Space>"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: main settings
