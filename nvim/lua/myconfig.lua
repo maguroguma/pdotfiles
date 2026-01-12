@@ -991,12 +991,12 @@ vim.keymap.set("n", "<leader>gn", global_note.toggle_note, {
   desc = "Toggle global note",
 })
 
--- PLUGSETTING: TaDaa/vimade
-require('vimade').setup({
-  recipe = {'default', {animate = true}},
-  fadelevel = 0.68,
-  ncmode = 'windows'
-})
+-- -- PLUGSETTING: TaDaa/vimade
+-- require('vimade').setup({
+--   recipe = {'default', {animate = true}},
+--   fadelevel = 0.68,
+--   ncmode = 'windows'
+-- })
 
 -- PLUGSETTING: pwntester/octo.nvim
 require"octo".setup {
@@ -1007,6 +1007,48 @@ vim.keymap.set("n", "<Space>or", "<CMD>Octo review<CR>",
   { desc = "start or resume review of current branch's PR (comment: <Space>ca, suggest: <Space>sa)" }
 )
 vim.keymap.set("n", "<Space>os", "<CMD>Octo review submit<CR>", { desc = "submit review" })
+
+-- PLUGSETTING: pwntester/octo.nvim
+-- Thanks to: https://zenn.dev/vim_jp/articles/00e297fcccf949
+-- 初期化 色などはsetup引数で調整可能
+local undo_glow = require('undo-glow')
+undo_glow.setup({
+  animation = {
+    enabled = true,
+    duration = 300,
+    animation_type = "zoom",
+    window_scoped = true,
+  },
+  highlights = {
+    undo = {
+      hl_color = { bg = "#693232" }, -- Dark muted red
+    },
+    redo = {
+      hl_color = { bg = "#2F4640" }, -- Dark muted green
+    },
+    yank = {
+      hl_color = { bg = "#7A683A" }, -- Dark muted yellow
+    },
+    paste = {
+      hl_color = { bg = "#325B5B" }, -- Dark muted cyan
+    },
+    search = {
+      hl_color = { bg = "#5C475C" }, -- Dark muted purple
+    },
+    comment = {
+      hl_color = { bg = "#7A5A3D" }, -- Dark muted orange
+    },
+    cursor = {
+      hl_color = { bg = "#793D54" }, -- Dark muted pink
+    },
+  },
+  priority = 2048 * 3,
+})
+-- u/Uでundo/redo
+vim.keymap.set('n', 'u', undo_glow.undo, { desc = 'Undo with highlight' })
+vim.keymap.set('n', '<C-r>', undo_glow.redo, { desc = 'Redo with highlight' })
+vim.keymap.set('n', 'p', undo_glow.paste_below, { desc = 'Paste below with highlight' })
+vim.keymap.set('n', 'P', undo_glow.paste_above, { desc = 'Paste above with highlight' })
 
 -- ORIGINAL:
 local function blink_active_window(duration, count)

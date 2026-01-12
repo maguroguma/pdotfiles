@@ -204,7 +204,7 @@ call jetpack#add('mattn/emmet-vim', {
       \ })
 call jetpack#add('t9md/vim-choosewin')
 call jetpack#add('ntpeters/vim-better-whitespace')
-call jetpack#add('machakann/vim-highlightedyank')
+call jetpack#add('machakann/vim-highlightedyank') " 2026-01-12: undo-glow.nvim に任せてもよいかも
 " read vim command result to buffer
 call jetpack#add('tyru/capture.vim')
 call jetpack#add('mattn/vim-maketable', {
@@ -289,9 +289,10 @@ call jetpack#add('lambdalisue/vim-initial')
 call jetpack#add('A7Lavinraj/fyler.nvim')
 call jetpack#add('nvim-mini/mini.icons') " for fyler.nvim
 call jetpack#add('backdround/global-note.nvim')
-call jetpack#add('TaDaa/vimade')
+" call jetpack#add('TaDaa/vimade')
 call jetpack#add('chrisgrieser/nvim-origami')
 call jetpack#add('pwntester/octo.nvim')
+call jetpack#add('y3owk1n/undo-glow.nvim')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
