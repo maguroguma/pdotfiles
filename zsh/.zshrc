@@ -35,4 +35,9 @@ loadlib $ZSH_SUB_FILES_DIR/meditation
 
 echo "\e[33m[zsh configuration ended]\e[0m"
 
+# シェル起動時に瞑想アートを表示（無効フラグがない場合のみ）
+if [[ ! -f "${XDG_CONFIG_HOME:-$HOME/.config}/meditation/disabled" ]]; then
+    meditation-art.sh
+fi
+
 . "$HOME/.local/share/../bin/env"
