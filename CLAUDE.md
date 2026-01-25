@@ -150,6 +150,7 @@ git log         # ナビゲーション機能付き（n/N で移動）
 ## Active Technologies
 - Zsh (POSIX準拠シェルスクリプト) + なし（zsh組み込み機能のみ） (001-meditation-ascii)
 - `~/.config/meditation/config` (フラグファイル) (001-meditation-ascii)
+- Bash (POSIX準拠シェルスクリプト) + なし（シェル組み込み機能のみ） (002-update-meditation-text)
 
 ## Recent Changes
 - 001-meditation-ascii: Added Zsh (POSIX準拠シェルスクリプト) + なし（zsh組み込み機能のみ）
