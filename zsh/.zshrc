@@ -31,5 +31,8 @@ fi
 
 loadlib $ZSH_SUB_FILES_DIR/zshhooks
 loadlib $ZSH_SUB_FILES_DIR/_zshexternal
+loadlib $ZSH_SUB_FILES_DIR/meditation
 
 echo "\e[33m[zsh configuration ended]\e[0m"
+
+. "$HOME/.local/share/../bin/env"

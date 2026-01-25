@@ -29,6 +29,7 @@ git checkout --detach ${branch_name}
 
 git rebase --interactive #{commit_hash}
 git rebase --interactive --autosquash #{commit_hash}
+git rebase --ignore-date #{commit_hash}
 
 git config --list
 
@@ -52,6 +53,8 @@ git push origin HEAD
 git push -u origin HEAD
 
 git reset HEAD #{file_name} ### ファイルを unstage する
+
+git show -s --format="commit hash: %h%nauthor name: %an%nauthor date: %ad%ncommit name: %cn%ncommit date: %cd%ncommit message: %s" #{commit_hash}
 
 git status --short --untracked-files=all
 git status --untracked-files=all

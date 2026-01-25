@@ -48,6 +48,7 @@ nvim/pack/
 !scripts/ts-to-date.sh
 !scripts/tmnew-repo-session
 !scripts/tmuxkillf.sh
+!scripts/meditation-art.sh
 
 !tmux/tmux-session-fzf
 !tmux/tmux.conf
@@ -67,6 +68,7 @@ nvim/pack/
 !zsh/zsh.d/zshzplug
 !zsh/zsh.d/git-commands
 !zsh/.zshrc
+!zsh/zsh.d/meditation
 
 !.editorconfig
 !.gitignore
@@ -92,5 +94,8 @@ nvim/pack/
 !claude/commands/japanese-hello.md
 !claude/commands/nippou/nippou-add.md
 !claude/commands/code-reading/how-to-read.md
+
+!.specify/**/*
+!specs/**/*.md
 
 !example.taskpaper

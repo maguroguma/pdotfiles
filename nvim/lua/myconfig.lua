@@ -1050,6 +1050,9 @@ vim.keymap.set('n', '<C-r>', undo_glow.redo, { desc = 'Redo with highlight' })
 vim.keymap.set('n', 'p', undo_glow.paste_below, { desc = 'Paste below with highlight' })
 vim.keymap.set('n', 'P', undo_glow.paste_above, { desc = 'Paste above with highlight' })
 
+-- PLUGSETTING: skanehira/github-actions.nvim
+require('github-actions').setup({})
+
 -- ORIGINAL:
 local function blink_active_window(duration, count)
   local win = vim.api.nvim_get_current_win()

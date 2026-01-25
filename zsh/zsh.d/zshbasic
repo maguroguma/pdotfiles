@@ -370,7 +370,7 @@ alias rm='rm -i'
 alias ..='cd ..'
 alias mv='mv -i'
 alias cp='cp -i'
-alias c='clear'
+# alias c='clear' # 瞑想機能により meditation-clear に置き換え（zsh.d/meditation）
 alias lined_path="echo $PATH | tr ':' '\n'"
 if [ -e "$HISTFILE" ]; then
     alias shell-history='cat $HISTFILE | cut -b 16- | head -n 5000'

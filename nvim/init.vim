@@ -293,6 +293,7 @@ call jetpack#add('backdround/global-note.nvim')
 call jetpack#add('chrisgrieser/nvim-origami')
 call jetpack#add('pwntester/octo.nvim')
 call jetpack#add('y3owk1n/undo-glow.nvim')
+call jetpack#add('skanehira/github-actions.nvim')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')

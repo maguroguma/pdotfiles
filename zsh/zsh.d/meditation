@@ -1,0 +1,60 @@
+# meditation - 瞑想リマインダー機能
+#
+# clearコマンド実行後に瞑想を促すアスキーアートを表示する
+#
+# 使用方法:
+#   clear または c  - 画面クリア後にアスキーアートを表示
+#   meditation-on   - 機能を有効化
+#   meditation-off  - 機能を無効化
+#
+# 設定ファイル:
+#   $XDG_CONFIG_HOME/meditation/disabled - 存在すれば機能無効
+
+#############################
+# 設定ディレクトリ
+#############################
+MEDITATION_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/meditation"
+MEDITATION_DISABLED_FLAG="$MEDITATION_CONFIG_DIR/disabled"
+
+#############################
+# 関数定義
+#############################
+
+# meditation-clear - 画面をクリアし、有効な場合はアスキーアートを表示する
+#
+# 動作:
+#   1. command clear を実行して画面をクリア
+#   2. disabled フラグが存在しなければ meditation-art.sh を実行
+meditation-clear() {
+    command clear
+    if [[ ! -f "$MEDITATION_DISABLED_FLAG" ]]; then
+        meditation-art.sh
+    fi
+}
+
+# meditation-on - 瞑想リマインダー機能を有効にする
+#
+# 動作:
+#   disabled フラグファイルを削除し、確認メッセージを表示する
+meditation-on() {
+    rm -f "$MEDITATION_DISABLED_FLAG"
+    echo "瞑想リマインダーを有効にしました"
+}
+
+# meditation-off - 瞑想リマインダー機能を無効にする
+#
+# 動作:
+#   disabled フラグファイルを作成し、確認メッセージを表示する
+meditation-off() {
+    mkdir -p "$MEDITATION_CONFIG_DIR"
+    touch "$MEDITATION_DISABLED_FLAG"
+    echo "瞑想リマインダーを無効にしました"
+}
+
+#############################
+# エイリアス定義
+#############################
+alias c='meditation-clear'
+alias clear='meditation-clear'
+
+echo "\e[33m[$(basename $0)]\e[0m\t\e[32mloaded\e[0m"

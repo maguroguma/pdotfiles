@@ -57,6 +57,10 @@ curl -fLo XDG_DATA_HOME/nvim/site/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vi
 # envchain
 envchain --set --noecho openai CHATGPT_API_KEY
 
+# uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+
 #########
 # go install
 #########
@@ -82,6 +86,7 @@ go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
 go install github.com/ddddddO/gtree/cmd/gtree@latest
 go install github.com/k0kubun/sqldef/cmd/mysqldef@latest
 go install oss.terrastruct.com/d2@latest
+go install github.com/rhysd/actionlint/cmd/actionlint@latest
 
 #########
 # Rust(cargo)

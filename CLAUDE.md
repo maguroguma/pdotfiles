@@ -68,6 +68,9 @@ scripts/cherry-pick-to.sh     # Git cherry-pick支援
 
 ### zsh操作
 - `Ctrl+f`: yaziファイルマネージャー起動（ディレクトリ移動機能付き）
+- `clear` または `c`: 画面クリア後に瞑想を促すアスキーアートを表示
+- `meditation-off`: 瞑想リマインダーを一時的に無効化（プレゼン時など）
+- `meditation-on`: 瞑想リマインダーを再度有効化
 
 ### Git操作
 ```bash
@@ -143,3 +146,10 @@ git log         # ナビゲーション機能付き（n/N で移動）
 - 日本語でのやりとりを優先
 - 既存の設定パターンに従い、破壊的変更は避ける
 - シンボリックリンク構造を維持する
+
+## Active Technologies
+- Zsh (POSIX準拠シェルスクリプト) + なし（zsh組み込み機能のみ） (001-meditation-ascii)
+- `~/.config/meditation/config` (フラグファイル) (001-meditation-ascii)
+
+## Recent Changes
+- 001-meditation-ascii: Added Zsh (POSIX準拠シェルスクリプト) + なし（zsh組み込み機能のみ）
