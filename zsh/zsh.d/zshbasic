@@ -398,7 +398,7 @@ alias gds='git diff --staged'
 alias gf='git fetch'
 alias gfp='git fetch --prune'
 # log
-alias glo='git log --oneline -n 30 --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --color=always --date=format:"%Y/%m/%d %H:%M:%S"'
+alias glo='git log --oneline -n 30 --format="%C(green)%C(bold)%ad %C(auto)%h%d %s (%an)" --color=always --date=format:"%Y/%m/%d %H:%M:%S"'
 # merge
 alias gm='git merge'
 # push

@@ -12,7 +12,7 @@
 
 [merge]
   tool = vimdiff
-  conflictstyle = diff3
+  conflictstyle = zdiff3
 
 [user]
   name = myokoyama
@@ -60,6 +60,7 @@
 [delta]
   navigate = true  # use n and N to move between diff sections
   line-numbers = true
+  dark = false
 
 [init]
   defaultBranch = main
