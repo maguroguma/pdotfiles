@@ -1053,6 +1053,42 @@ vim.keymap.set('n', 'P', undo_glow.paste_above, { desc = 'Paste above with highl
 -- PLUGSETTING: skanehira/github-actions.nvim
 require('github-actions').setup({})
 
+-- PLUGSETTING: sirasagi62/toggle-cheatsheet.nvim
+-- プラグインのロード
+local tcs = require('toggle-cheatsheet').setup(true)
+
+-- チートシートを定義する
+local cs1 = tcs.createCheatSheetFromSubmodeKeymap(
+  tcs.conf{
+    {"h","←"},
+    {"j","↓"},
+    {"k","↑"},
+    {"l","→"},
+    {"gg","Go to the top"},
+    {"G","Go to the bottom"},
+    {"%","Go to matching bracket"}
+  }
+)
+
+-- 別のチートシートを定義する。ただのテキストでも問題ない。
+-- 日本語が含まれていても問題ない
+local cs2 = [[
+\zs, \ze -> マッチ境界
+/vim/e   -> 検索のマッチの末尾にカーソルを移動する
+'<,'>g/{pattern}/d -> 範囲内のマッチ行を削除する
+'<,'>v/{pattern}/d -> 範囲内のマッチ行以外を削除する
+]]
+
+-- 適当なキーにマッピング
+-- 例ではkeymapを使っていますがコマンドでも問題なく動作するはずです
+
+-- vim.keymap.set("n","<Leader>q",function()
+--     tcs.toggle(cs1)
+-- end)
+vim.keymap.set("n","<Leader>?",function()
+    tcs.toggle(cs2)
+end)
+
 -- ORIGINAL:
 local function blink_active_window(duration, count)
   local win = vim.api.nvim_get_current_win()

@@ -265,7 +265,7 @@ call jetpack#add('shellRaining/hlchunk.nvim')
 call jetpack#add('kazhala/close-buffers.nvim')
 call jetpack#add('Wansmer/treesj')
 call jetpack#add('thinca/vim-qfreplace')
-" call jetpack#add('rhysd/clever-f.vim')
+call jetpack#add('rhysd/clever-f.vim')
 call jetpack#add('folke/noice.nvim')
 call jetpack#add('vim-skk/skkeleton')
 call jetpack#add('delphinus/skkeleton_indicator.nvim')
@@ -282,7 +282,7 @@ call jetpack#add('kana/vim-operator-user')
 call jetpack#add('kana/vim-operator-replace')
 call jetpack#add('davidoc/taskpaper.vim')
 call jetpack#add('uga-rosa/ccc.nvim')
-call jetpack#add('lambdalisue/vim-initial')
+" call jetpack#add('lambdalisue/vim-initial')
 " call jetpack#add('maguroguma/vim-initial', { 'branch': 'feat/arrange-index-letters' })
 " call jetpack#add('kevinhwang91/promise-async')
 " call jetpack#add('kevinhwang91/nvim-ufo')
@@ -294,6 +294,7 @@ call jetpack#add('chrisgrieser/nvim-origami')
 call jetpack#add('pwntester/octo.nvim')
 call jetpack#add('y3owk1n/undo-glow.nvim')
 call jetpack#add('skanehira/github-actions.nvim')
+call jetpack#add('sirasagi62/toggle-cheatsheet.nvim')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -746,7 +747,7 @@ cnoremap <C-a><CR> <Plug>(kensaku-search-replace)<CR>
 " PLUGSETTING: lambdalisue/vim-initial
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nnoremap f <Cmd>Initial<CR>
+" nnoremap f <Cmd>Initial<CR>
 " let g:vim_initial_labels = [
 "       \ 'h', 'j', 'k', 'l', 'y',
 "       \ 'u', 'i', 'o', 'p', 'n',
@@ -1167,10 +1168,10 @@ nnoremap <Space>t <cmd>TSJToggle<CR>
 " PLUGSETTING: rhysd/clever-f.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" let g:clever_f_smart_case = 1
-" let g:clever_f_use_migemo = 1
-" " let g:clever_f_mark_char_color = 'FuzzyMotionChar'
-" let g:clever_f_chars_match_any_signs = ';'
+let g:clever_f_smart_case = 1
+let g:clever_f_use_migemo = 1
+" let g:clever_f_mark_char_color = 'FuzzyMotionSubChar'
+let g:clever_f_chars_match_any_signs = ';'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: vim-skk/skkeleton
