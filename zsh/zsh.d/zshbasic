@@ -1,5 +1,6 @@
 if command -v nvim &>/dev/null; then
-    export EDITOR="nvim -u $XDG_CONFIG_HOME/nvim/minimal.init.vim"
+    # export EDITOR="nvim -u $XDG_CONFIG_HOME/nvim/minimal.init.vim"
+    export EDITOR="nvim"
 else
     export EDITOR="vim"
 fi

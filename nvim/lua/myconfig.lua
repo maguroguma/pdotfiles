@@ -1085,9 +1085,17 @@ local cs2 = [[
 -- vim.keymap.set("n","<Leader>q",function()
 --     tcs.toggle(cs1)
 -- end)
-vim.keymap.set("n","<Leader>?",function()
+vim.keymap.set("n", "<Leader>?", function()
     tcs.toggle(cs2)
 end)
+
+-- PLUGSETTING: gbprod/yanky.nvim
+require("yanky").setup({
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+})
+-- vim.keymap.set("n", "<Space>pp", "<cmd>YankyRingHistory<CR>", { desc = "" })
 
 -- ORIGINAL:
 local function blink_active_window(duration, count)

@@ -295,6 +295,7 @@ call jetpack#add('pwntester/octo.nvim')
 call jetpack#add('y3owk1n/undo-glow.nvim')
 call jetpack#add('skanehira/github-actions.nvim')
 call jetpack#add('sirasagi62/toggle-cheatsheet.nvim')
+call jetpack#add('gbprod/yanky.nvim')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -1190,7 +1191,11 @@ call skkeleton#config(
       \ ],
       \ 'eggLikeNewline': v:true,
       \ 'immediatelyCancel': v:false,
+      \ 'showCandidatesCount': 1,
       \})
+
+call skkeleton#register_keymap('henkan', "\<BS>", 'henkanBackward')
+
 imap <C-j> <Plug>(skkeleton-enable)
 cmap <C-j> <Plug>(skkeleton-enable)
 tmap <C-j> <Plug>(skkeleton-enable)
@@ -2283,3 +2288,30 @@ nnoremap S :Scratch<CR>
 " editprompt 専用の map
 autocmd BufRead,BufNewFile .editprompt-* set filetype=editprompt
 autocmd FileType editprompt nnoremap <buffer> <CR> <cmd>wq<CR>
+
+" edit-command-line (zsh C-o) 専用の map
+autocmd BufRead,BufNewFile /tmp/zshecl*,/private/tmp/zshecl*,/private/tmp/zsh*.zsh set filetype=zsh-cmdline
+autocmd FileType zsh-cmdline nnoremap <buffer> <CR> <cmd>wq<CR>
+
+" Vim/Neovimをquitするときに特殊ウィンドウを一気に閉じる
+" Thanks to: https://zenn.dev/vim_jp/articles/ff6cd224fab0c7
+function! s:close_special_windows() abort
+  " 現在のウィンドウ番号を取得
+  let current_win = winnr()
+  " すべてのウィンドウをループして調べる
+  for winnr in range(1, winnr('$'))
+    " カレント以外を調査
+    if winnr != current_win
+      let buftype = getbufvar(winbufnr(winnr), '&buftype')
+      " buftypeが空文字（通常のバッファ）があればループ終了
+      if buftype ==# ''
+        return
+      endif
+    endif
+  endfor
+  " ここまで来たらカレント以外がすべて特殊ウィンドウということなので
+  " カレント以外をすべて閉じる
+  only!
+  " この後、ウィンドウ1つの状態でquitが実行されるので、Vimが終了する
+endfunction
+autocmd QuitPre * call s:close_special_windows()
