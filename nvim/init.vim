@@ -1699,6 +1699,7 @@ command! -range YankRangePath :<line1>,<line2>call YankVisualRangeWithPath()
 " ビジュアル選択範囲をファイルパス:行番号形式でヤンク
 " e.g.: nvim/init.vim:1493-1500
 xnoremap <Space>rp :YankRangePath<CR>
+nnoremap <Space>rp <cmd>YankBufferPath<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: set options

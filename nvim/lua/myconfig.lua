@@ -980,9 +980,9 @@ global_note.setup({
       border = "single",
       title = "Note",
       title_pos = "center",
-      width = math.floor(0.5 * window_width),
-      height = math.floor(0.95 * window_height),
-      col = math.floor(0.25 * window_width),
+      width = math.floor(0.6 * window_width),
+      height = math.floor(0.93 * window_height),
+      col = math.floor(0.2 * window_width),
       row = math.floor(0.025 * window_height),
     }
   end,
