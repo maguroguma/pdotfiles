@@ -84,3 +84,12 @@ git log --pretty=fuller ### author と committer を確認する
 git log --pretty=format:"%h %an %ad %cn %cd %s" --date=short
 
 git log -L:'関数名':#{file_path} ### その関数の履歴を調べる
+
+brew list
+brew leaves ### 自分で入れたものだけ確認する
+brew deps --tree #{package} ### 指定したパッケージの依存ツリーを確認する
+brew uses --installed #{package} ### 指定したパッケージに依存しているものを確認する
+brew tap ### homebrew-core 以外のものを確認する
+brew info #{package}
+brew outdated
+brew doctor

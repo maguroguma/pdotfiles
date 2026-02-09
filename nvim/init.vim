@@ -1191,7 +1191,7 @@ call skkeleton#config(
       \ ],
       \ 'eggLikeNewline': v:true,
       \ 'immediatelyCancel': v:false,
-      \ 'showCandidatesCount': 1,
+      \ 'showCandidatesCount': 2,
       \})
 
 call skkeleton#register_keymap('henkan', "\<BS>", 'henkanBackward')
@@ -2293,26 +2293,3 @@ autocmd FileType editprompt nnoremap <buffer> <CR> <cmd>wq<CR>
 " edit-command-line (zsh C-o) 専用の map
 autocmd BufRead,BufNewFile /tmp/zshecl*,/private/tmp/zshecl*,/private/tmp/zsh*.zsh set filetype=zsh-cmdline
 autocmd FileType zsh-cmdline nnoremap <buffer> <CR> <cmd>wq<CR>
-
-" Vim/Neovimをquitするときに特殊ウィンドウを一気に閉じる
-" Thanks to: https://zenn.dev/vim_jp/articles/ff6cd224fab0c7
-function! s:close_special_windows() abort
-  " 現在のウィンドウ番号を取得
-  let current_win = winnr()
-  " すべてのウィンドウをループして調べる
-  for winnr in range(1, winnr('$'))
-    " カレント以外を調査
-    if winnr != current_win
-      let buftype = getbufvar(winbufnr(winnr), '&buftype')
-      " buftypeが空文字（通常のバッファ）があればループ終了
-      if buftype ==# ''
-        return
-      endif
-    endif
-  endfor
-  " ここまで来たらカレント以外がすべて特殊ウィンドウということなので
-  " カレント以外をすべて閉じる
-  only!
-  " この後、ウィンドウ1つの状態でquitが実行されるので、Vimが終了する
-endfunction
-autocmd QuitPre * call s:close_special_windows()

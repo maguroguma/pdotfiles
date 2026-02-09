@@ -710,7 +710,7 @@ require("aerial").setup({
 })
 -- You probably also want to set a keymap to toggle aerial
 -- vim.keymap.set("n", "F", "<cmd>AerialToggle! float<CR>")
-vim.keymap.set("n", "F", "<cmd>AerialToggle!<CR>")
+vim.keymap.set("n", "<Space>ae", "<cmd>AerialToggle!<CR>")
 
 -- PLUGSETTING: shellRaining/hlchunk.nvim
 require("hlchunk").setup({
@@ -1075,8 +1075,11 @@ local cs1 = tcs.createCheatSheetFromSubmodeKeymap(
 local cs2 = [[
 \zs, \ze -> マッチ境界
 /vim/e   -> 検索のマッチの末尾にカーソルを移動する
+
 '<,'>g/{pattern}/d -> 範囲内のマッチ行を削除する
 '<,'>v/{pattern}/d -> 範囲内のマッチ行以外を削除する
+
+visual 時に _ -> 無名レジスタを汚さず置換できる
 ]]
 
 -- 適当なキーにマッピング
