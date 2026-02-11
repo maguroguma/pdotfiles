@@ -85,6 +85,8 @@ git log --pretty=format:"%h %an %ad %cn %cd %s" --date=short
 
 git log -L:'関数名':#{file_path} ### その関数の履歴を調べる
 
+gitleaks git ### git リポジトリをスキャンする
+
 brew list
 brew leaves ### 自分で入れたものだけ確認する
 brew deps --tree #{package} ### 指定したパッケージの依存ツリーを確認する

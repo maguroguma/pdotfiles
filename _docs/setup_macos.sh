@@ -26,17 +26,18 @@ brew install sqlparse
 brew install envchain
 brew install coreutils findutils gnu-sed grep
 brew install curl
+brew install shellcheck
 
-brew tap homebrew/cask-fonts
-brew install font-plemol-jp
-brew install font-plemol-jp-nf
-brew install font-plemol-jp-nfj
-brew install font-plemol-jp-hs
+# brew tap homebrew/cask-fonts
+# brew install font-plemol-jp
+# brew install font-plemol-jp-nf
+# brew install font-plemol-jp-nfj
+# brew install font-plemol-jp-hs
 
 brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide imagemagick font-symbols-only-nerd-font
 brew install typos-cli
 
-# JankyBorders (emphasize active window)
+# TAP: JankyBorders (emphasize active window)
 brew tap FelixKratz/formulae
 brew install borders
 
@@ -48,6 +49,9 @@ brew install --cask swift-shift
 
 # mac <-> android
 brew install openmtp --cask
+
+# prevent from committing credentials
+brew install gitleaks
 
 #########
 # others

@@ -1080,6 +1080,10 @@ local cs2 = [[
 '<,'>v/{pattern}/d -> 範囲内のマッチ行以外を削除する
 
 visual 時に _ -> 無名レジスタを汚さず置換できる
+
+<Space>d  -> hidden buffer をすべて閉じる
+<Space>D  -> すべての buffer を閉じる
+<Space>bd -> fzf で選択した buffer を閉じる
 ]]
 
 -- 適当なキーにマッピング
@@ -1099,6 +1103,26 @@ require("yanky").setup({
     -- refer to the configuration section below
 })
 -- vim.keymap.set("n", "<Space>pp", "<cmd>YankyRingHistory<CR>", { desc = "" })
+
+require('spectre').setup({
+  open_cmd = function()
+    local height = math.floor(vim.o.lines * 0.7) -- 70% の高さを計算
+    -- vim.cmd('topleft ' .. height .. 'new') -- 横幅全体を使って split する
+    vim.cmd(height .. 'new') -- 現在のウィンドウ幅を維持して水平分割
+  end,
+  mapping = {
+    ['enter_file_and_close'] = {
+      map = '<cr>',
+      cmd = "<cmd>lua require('spectre.actions').select_entry(); require('spectre').close()<CR>",
+      desc = 'open file and close spectre',
+    },
+    ['enter_file'] = {
+      map = "o",
+      cmd = "<cmd>lua require('spectre.actions').select_entry()<CR>",
+      desc = "open file"
+    },
+  },
+})
 
 -- ORIGINAL:
 local function blink_active_window(duration, count)
