@@ -14,6 +14,7 @@
 !git/config
 !git/ignore
 !git/message
+!git/hooks/pre-commit
 
 !nvim/sonic-template/go/base-table_driven_test.go
 !nvim/UltiSnips/go.snippets

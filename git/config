@@ -3,6 +3,7 @@
   excludesfile = ~/.config/git/ignore
   pager = delta
   quotepath = false
+  hooksPath = ~/.config/git/hooks
 
 [diff]
   tool      = vimdiff

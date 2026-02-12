@@ -36,4 +36,7 @@ $XDG_CACHE_HOME/*
 ### vim bookmarks
 .vim-bookmarks
 
+### AI agent
+__human-specs/**/*
+
 **/.claude/settings.local.json

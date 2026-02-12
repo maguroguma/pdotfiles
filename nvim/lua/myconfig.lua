@@ -1084,6 +1084,8 @@ visual 時に _ -> 無名レジスタを汚さず置換できる
 <Space>d  -> hidden buffer をすべて閉じる
 <Space>D  -> すべての buffer を閉じる
 <Space>bd -> fzf で選択した buffer を閉じる
+
+<Space>[gG][dD] -> G なら全体、D なら staged で git diff
 ]]
 
 -- 適当なキーにマッピング
@@ -1104,6 +1106,7 @@ require("yanky").setup({
 })
 -- vim.keymap.set("n", "<Space>pp", "<cmd>YankyRingHistory<CR>", { desc = "" })
 
+-- PLUGSETTING: windwp/nvim-spectre
 require('spectre').setup({
   open_cmd = function()
     local height = math.floor(vim.o.lines * 0.7) -- 70% の高さを計算

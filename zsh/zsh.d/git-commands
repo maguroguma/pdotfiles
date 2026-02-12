@@ -86,6 +86,8 @@ git log --pretty=format:"%h %an %ad %cn %cd %s" --date=short
 git log -L:'関数名':#{file_path} ### その関数の履歴を調べる
 
 gitleaks git ### git リポジトリをスキャンする
+gitleaks git --staged ### staging された内容で判定する
+gitleaks git --pre-commit ### git diff で判定する
 
 brew list
 brew leaves ### 自分で入れたものだけ確認する
