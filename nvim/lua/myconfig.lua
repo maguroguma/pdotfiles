@@ -970,26 +970,26 @@ fyler.setup({
 vim.keymap.set("n", "<leader>f", fyler.open, { desc = "Open fyler View" })
 
 -- PLUGSETTING: backdround/global-note.nvim
-local global_note = require("global-note")
-global_note.setup({
-  window_config = function()
-    local window_height = vim.api.nvim_list_uis()[1].height
-    local window_width = vim.api.nvim_list_uis()[1].width
-    return {
-      relative = "editor",
-      border = "single",
-      title = "Note",
-      title_pos = "center",
-      width = math.floor(0.6 * window_width),
-      height = math.floor(0.93 * window_height),
-      col = math.floor(0.2 * window_width),
-      row = math.floor(0.025 * window_height),
-    }
-  end,
-})
-vim.keymap.set("n", "<leader>gn", global_note.toggle_note, {
-  desc = "Toggle global note",
-})
+-- local global_note = require("global-note")
+-- global_note.setup({
+--   window_config = function()
+--     local window_height = vim.api.nvim_list_uis()[1].height
+--     local window_width = vim.api.nvim_list_uis()[1].width
+--     return {
+--       relative = "editor",
+--       border = "single",
+--       title = "Note",
+--       title_pos = "center",
+--       width = math.floor(0.6 * window_width),
+--       height = math.floor(0.93 * window_height),
+--       col = math.floor(0.2 * window_width),
+--       row = math.floor(0.025 * window_height),
+--     }
+--   end,
+-- })
+-- vim.keymap.set("n", "<leader>gn", global_note.toggle_note, {
+--   desc = "Toggle global note",
+-- })
 
 -- -- PLUGSETTING: TaDaa/vimade
 -- require('vimade').setup({
@@ -1086,6 +1086,11 @@ visual 時に _ -> 無名レジスタを汚さず置換できる
 <Space>bd -> fzf で選択した buffer を閉じる
 
 <Space>[gG][dD] -> G なら全体、D なら staged で git diff
+
+<Space>tj -> normal mode 時に json format をトグルする
+<Space>tw -> カーソル上の英単語の意味を表示する
+<Space>tp -> visual 範囲の英和翻訳を float 表示する
+<Space>ty -> visual 範囲の英和翻訳をヤンクする
 ]]
 
 -- 適当なキーにマッピング
@@ -1108,11 +1113,11 @@ require("yanky").setup({
 
 -- PLUGSETTING: windwp/nvim-spectre
 require('spectre').setup({
-  open_cmd = function()
-    local height = math.floor(vim.o.lines * 0.7) -- 70% の高さを計算
-    -- vim.cmd('topleft ' .. height .. 'new') -- 横幅全体を使って split する
-    vim.cmd(height .. 'new') -- 現在のウィンドウ幅を維持して水平分割
-  end,
+  -- open_cmd = function()
+  --   local height = math.floor(vim.o.lines * 0.7) -- 70% の高さを計算
+  --   -- vim.cmd('topleft ' .. height .. 'new') -- 横幅全体を使って split する
+  --   vim.cmd(height .. 'new') -- 現在のウィンドウ幅を維持して水平分割
+  -- end,
   mapping = {
     ['enter_file_and_close'] = {
       map = '<cr>',
@@ -1126,6 +1131,13 @@ require('spectre').setup({
     },
   },
 })
+
+-- PLUGSETTING: uga-rosa/translate.nvim
+-- vim.keymap.set("x", "<Space>tp", ":<C-u>Translate ja<CR>")
+-- vim.keymap.set("x", "<Space>ty", ":<C-u>Translate ja -output=register<CR>")
+vim.keymap.set("x", "<Space>tp", "<Cmd>Translate JA<CR>")
+vim.keymap.set("x", "<Space>ty", "<Cmd>Translate JA -output=register<CR>")
+vim.keymap.set("n", "<Space>tw", "viw:Translate JA<CR>")
 
 -- ORIGINAL:
 local function blink_active_window(duration, count)

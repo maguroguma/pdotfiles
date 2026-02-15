@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "🔍 Running global pre-commit hook..."
+gitleaks git --staged

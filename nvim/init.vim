@@ -288,7 +288,7 @@ call jetpack#add('uga-rosa/ccc.nvim')
 " call jetpack#add('kevinhwang91/nvim-ufo')
 call jetpack#add('A7Lavinraj/fyler.nvim')
 call jetpack#add('nvim-mini/mini.icons') " for fyler.nvim
-call jetpack#add('backdround/global-note.nvim')
+" call jetpack#add('backdround/global-note.nvim')
 " call jetpack#add('TaDaa/vimade')
 call jetpack#add('chrisgrieser/nvim-origami')
 call jetpack#add('pwntester/octo.nvim')
@@ -296,6 +296,7 @@ call jetpack#add('y3owk1n/undo-glow.nvim')
 call jetpack#add('skanehira/github-actions.nvim')
 call jetpack#add('sirasagi62/toggle-cheatsheet.nvim')
 call jetpack#add('gbprod/yanky.nvim')
+call jetpack#add('uga-rosa/translate.nvim')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -916,7 +917,7 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gh <Plug>(coc-type-definition)
+nmap <silent> gH <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
@@ -1161,7 +1162,7 @@ omap g' <cmd>Pounce<CR>
 " PLUGSETTING: Wansmer/treesj
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nnoremap <Space>t <cmd>TSJToggle<CR>
+nnoremap <Space>tj <cmd>TSJToggle<CR>
 " nnoremap <Space>s <cmd>TSJSplit<CR>
 " nnoremap <Space>j <cmd>TSJJoin<CR>
 
