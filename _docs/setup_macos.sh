@@ -53,6 +53,9 @@ brew install openmtp --cask
 # prevent from committing credentials
 brew install gitleaks
 
+# fix screen shots tool
+brew install --cask fuwari
+
 #########
 # others
 #########

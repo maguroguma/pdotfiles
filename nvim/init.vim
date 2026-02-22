@@ -302,7 +302,7 @@ call jetpack#add('uga-rosa/translate.nvim')
 call jetpack#add('stevearc/dressing.nvim')
 call jetpack#add('MeanderingProgrammer/render-markdown.nvim')
 call jetpack#add('ibhagwan/fzf-lua')
-call jetpack#add('yetone/avante.nvim', { 'branch': 'main', 'do': 'make' })
+" call jetpack#add('yetone/avante.nvim', { 'branch': 'main', 'do': 'make' })
 call jetpack#end()
 " plugins END }}}
 
