@@ -88,6 +88,9 @@ git log -L:'関数名':#{file_path} ### その関数の履歴を調べる
 gitleaks git ### git リポジトリをスキャンする
 gitleaks git --staged ### staging された内容で判定する
 gitleaks git --pre-commit ### git diff で判定する
+gitleaks git --log-opts="-5" ### 最近の 5 コミットをチェックする
+gitleaks git --log-opts="<base-branch>..HEAD" ### 特定ブランチとの差分をチェックする
+gitleaks git --log-opts="<commit-hash>^..<commit-hash>" ### 特定のコミットハッシュ 1 つだけをチェックする
 
 brew list
 brew leaves ### 自分で入れたものだけ確認する
