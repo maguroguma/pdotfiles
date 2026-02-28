@@ -222,8 +222,13 @@ require('gitsigns').setup {
   end
 }
 
-vim.keymap.set("n", "gn", "<cmd>Gitsigns next_hunk<CR>")
-vim.keymap.set("n", "gN", "<cmd>Gitsigns prev_hunk<CR>")
+vim.keymap.set('n', 'gn', function()
+  require('gitsigns').nav_hunk('next', { target = 'all' })
+end)
+vim.keymap.set('n', 'gN', function()
+  require('gitsigns').nav_hunk('prev', { target = 'all' })
+end)
+
 vim.keymap.set("n", "<Space>gb", "<cmd>Gitsigns blame<CR>")
 vim.keymap.set("n", "gp", "<cmd>Gitsigns preview_hunk_inline<CR>")
 
@@ -626,27 +631,6 @@ cmp.setup.cmdline(':', {
   },
 })
 
-cmp.setup({
-  sources = {
-    { name = 'claude_slash', priority = 900 },
-    { name = 'claude_at', priority = 900 },
-  },
-
-  -- enabled = function()
-  --   -- cocが有効な場合はnvim-cmpを無効化
-  --   if vim.g.coc_enabled then
-  --     return false
-  --   end
-  --   return true
-  -- end
-
-  view = {
-    entries = {
-      name = 'native',  -- ネイティブビューを使用
-    }
-  }
-})
-
 -- PLUGSETTING: pounce
 require'pounce'.setup{
   accept_keys = "HJKLYUIOPNMQWERTASDFGZXCVB",
@@ -887,6 +871,29 @@ require('fzf-lua').setup({
 vim.api.nvim_set_hl(0, "FzfLuaHeaderBind", { fg = "CadetBlue4" })
 vim.api.nvim_set_hl(0, "FzfLuaPathLineNr", { fg = "CadetBlue4" })
 vim.api.nvim_set_hl(0, "FzfLuaTabMarker", { fg = "CadetBlue4" })
+
+-- 共通オプション
+local opts_with_no_ignore = {
+  no_ignore = true,                     -- git ignore を無視
+  file_ignore_patterns = { "^node_modules" }, -- node_modules のみ除外
+  hidden = true,                         -- 隠しファイルも含める
+}
+-- 1. nmap: ファイルをバッファで開く
+vim.keymap.set("n", "<C-]>", function()
+  require("fzf-lua").files(opts_with_no_ignore)
+end, { silent = true, desc = "FzfLua files (no ignore, exclude node_modules)" })
+-- 2. imap: 相対パスを挿入
+vim.keymap.set("i", "<C-a>f", function()
+  require("fzf-lua").complete_file(vim.tbl_extend("force", opts_with_no_ignore, {
+    cmd = "rg --color=never --files --no-ignore -g '!.git' --hidden", -- ← 明示指定
+    actions = {
+      ["default"] = require("fzf-lua").actions.complete,
+    },
+    winopts = {
+      preview = { hidden = false },
+    },
+  }))
+end, { silent = true, desc = "Insert file path (no ignore, exclude node_modules)" })
 
 -- PLUGSETTING: uga-rosa/ccc.nvim
 require("ccc").setup()

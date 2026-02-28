@@ -162,7 +162,6 @@ call jetpack#add('hrsh7th/cmp-buffer')
 call jetpack#add('hrsh7th/cmp-path')
 call jetpack#add('hrsh7th/cmp-cmdline')
 call jetpack#add('hrsh7th/nvim-cmp')
-call jetpack#add('biosugar0/cmp-claudecode')
 
 call jetpack#add('nvim-tree/nvim-web-devicons')
 
@@ -377,21 +376,32 @@ command! BD call fzf#run(fzf#wrap({
 """
 " custom git show with gina.vim
 """
-" source
+" source: コミットのリスト
 function! s:list_commits() abort
   let l:res = system('git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --color=always')
   return split(l:res, "\n")
 endfunction
-" sink
-function! s:select_commits(commit_hash) abort
+" sink: コミットハッシュを取得し、そのコミットの現在のバッファの内容を開く
+function! s:gina_show_of_this_buffer(commit_hash) abort
   let l:list = split(a:commit_hash, ' ')
   let l:execute_command = 'Gina show ' . l:list[1] . ':%'
   execute l:execute_command
 endfunction
+command! GinaShowOfThisBuffer call fzf#run(fzf#wrap({
+  \ 'source': s:list_commits(),
+  \ 'sink': funcref('s:gina_show_of_this_buffer'),
+  \ 'options': '--ansi --prompt "git show of the buffer> "',
+\ }))
+" sink: コミットハッシュを取得し、そのコミットを show する（diffをバッファに開く）
+function! s:gina_show_diff(commit_hash) abort
+  let l:list = split(a:commit_hash, ' ')
+  let l:execute_command = 'Gina show ' . l:list[1]
+  execute l:execute_command
+endfunction
 command! GinaShow call fzf#run(fzf#wrap({
   \ 'source': s:list_commits(),
-  \ 'sink': funcref('s:select_commits'),
-  \ 'options': '--ansi --prompt "git show of the buffer> "',
+  \ 'sink': funcref('s:gina_show_diff'),
+  \ 'options': '--ansi --prompt "git show> "',
 \ }))
 
 """
@@ -492,7 +502,7 @@ command! FzfPasteFilePaths call fzf#run(fzf#wrap({
 \ }))
 
 " Path completion with custom source command
-inoremap <expr> <C-a>f fzf#vim#complete#path('rg --files')
+" inoremap <expr> <C-a>f fzf#vim#complete#path('rg --files')
 " Shell history completion
 inoremap <C-a>r <cmd>HCommand<CR>
 inoremap <C-a>R <cmd>HCommand<CR>

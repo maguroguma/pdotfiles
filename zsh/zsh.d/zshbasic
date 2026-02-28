@@ -223,16 +223,38 @@ zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
 zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
 
-# ({upstream branchにのみ存在するコミット数}-{現在のbranchにのみ存在するコミット数})
+# git の状態に応じて以下を表示する:
+#   - git 管理外: "no git"
+#   - remote 未登録: "no remote"
+#   - upstream 未設定: "no upstream"
+#   - upstream 設定済み: ({upstream にのみ存在するコミット数}-{現在の branch にのみ存在するコミット数})
+#   - その他エラー: "ERROR"
 function git_upstream_diff_num() {
-    local branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-    if [ -n "$branch" ]; then
-        local commits=$(git rev-list --count --left-right @{upstream}...HEAD 2> /dev/null)
-        if [ -n "$commits" ]; then
-            echo "(${commits//$'\t'/-})"
-        else
-            echo "(diff error)"
-        fi
+    # git 管理されているか確認
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then
+        echo ""
+        return
+    fi
+
+    # remote リポジトリが登録されているか確認
+    if [ -z "$(git remote 2>/dev/null)" ]; then
+        echo "🔒"
+        return
+    fi
+
+    # upstream branch が登録されているか確認
+    if ! git rev-parse --abbrev-ref @{upstream} > /dev/null 2>&1; then
+        echo "🚧 NO UPSTREAM 🚧"
+        return
+    fi
+
+    # upstream との差分コミット数を表示
+    local commits
+    commits=$(git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null)
+    if [ -n "$commits" ]; then
+        echo "(${commits//$'\t'/-})"
+    else
+        echo "🔴 ERROR 🔴"
     fi
 }
 
@@ -286,7 +308,7 @@ precmd () {
   # バージョン管理されてた場合、ブランチ名
   vcs_info
   local diffnum='$(git_upstream_diff_num)'
-  local right="%B%K{252}%{\e[38;5;32m%}  ${vcs_info_msg_0_} \
+  local right="%B%K{252}%{\e[38;5;32m%} ${vcs_info_msg_0_} \
 %{\e[38;5;18m%}${diffnum} \
 %{\e[m%}\
 %k%K{178}%F{252}%f%k%b%B%K{178}%{\e[38;5;18m%}  %*(%D{%y%m%d}) %{\e[m%}%k%F{178}%f%b"
