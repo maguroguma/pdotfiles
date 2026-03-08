@@ -16,7 +16,11 @@ createSessionIfNeeded() {
   [[ -n "$2" ]] && dir=$2 || dir=$(pwd)
   tmux list-sessions -F "#{session_name}" |
     grep -q -E "^${name}$" ||
-    tmux new-session -d -c "${dir}" -s "${name}"
+    tmux new-session -c "${dir}" -s "${name}" \; \
+      split-window -c "${dir}" -h \; \
+      select-layout main-vertical \; \
+      select-pane -L \; \
+      detach-client
 }
 
 selectRepo() {

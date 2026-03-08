@@ -22,6 +22,7 @@ mkdir $HOME/.vifm && \
 ln -fnsv $DOTFILES_DIR/.wezterm.lua $HOME/.wezterm.lua
 ln -fnsv $DOTFILES_DIR/yazi $XDG_CONFIG_HOME/yazi
 ln -fnsv $HOME/dotfiles/claude/CLAUDE.md $XDG_CONFIG_HOME/claude
+ln -fnsv $HOME/dotfiles $GOPATH/src/github.com/maguroguma/dotfiles
 
 #########
 # Must tools

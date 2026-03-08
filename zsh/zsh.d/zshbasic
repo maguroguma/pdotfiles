@@ -252,7 +252,21 @@ function git_upstream_diff_num() {
     local commits
     commits=$(git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null)
     if [ -n "$commits" ]; then
-        echo "(${commits//$'\t'/-})"
+        local upstream_count="${commits%%$'\t'*}"
+        local local_count="${commits##*$'\t'}"
+        if [ "$upstream_count" = "0" ] && [ "$local_count" = "0" ]; then
+            # 同期済み → 緑色
+            printf "\e[32m(0-0)\e[39m"
+        elif [ "$upstream_count" = "0" ]; then
+            # local が前進 → オレンジ色
+            printf "\e[38;5;136m(0-${local_count})\e[39m"
+        elif [ "$local_count" = "0" ]; then
+            # remote が前進 → オレンジ色
+            printf "\e[38;5;136m(${upstream_count}-0) PULL!\e[39m"
+        else
+            # remote と local がそれぞれ別方向に前進 (diverged) → 赤色
+            printf "\e[31m(${upstream_count}-${local_count}) \uf071 FIX!\uf071\e[39m"
+        fi
     else
         echo "🔴 ERROR 🔴"
     fi
@@ -459,6 +473,7 @@ alias gd='git diff'
 alias gds='git diff --staged'
 # fetch
 alias gf='git fetch'
+alias f='git fetch'
 alias gfp='git fetch --prune'
 # log
 alias glo='git log --oneline -n 30 --format="%C(green)%C(bold)%ad %C(auto)%h%d %s (%an)" --color=always --date=format:"%Y/%m/%d %H:%M:%S"'
@@ -472,6 +487,7 @@ alias gpuoh='git push -u origin HEAD'
 alias gu='git reset HEAD'
 # status
 alias gs='git status --short --untracked-files=all'
+alias s='git status --short --untracked-files=all'
 alias gS='git status --untracked-files=all'
 # worktree
 alias gwa='git worktree add'

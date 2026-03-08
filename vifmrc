@@ -24,3 +24,9 @@ nnoremap Q :set quickview!<CR>
 " show git status
 command! Gst git -c color.status=always status -s %q
 nnoremap s :Gst<CR>
+
+" 例: 'g' キーで ghq + fzf を起動してディレクトリ移動
+command! GhqJump : set noautosort |
+                 \ let $DST = term('ghq list -p | fzf') |
+                 \ if $DST != '' | execute 'cd' $DST | endif
+nnoremap <C-]> :GhqJump<cr>

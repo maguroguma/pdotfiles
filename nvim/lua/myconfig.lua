@@ -895,6 +895,41 @@ vim.keymap.set("i", "<C-a>f", function()
   }))
 end, { silent = true, desc = "Insert file path (no ignore, exclude node_modules)" })
 
+-- insert mode で <C-a>b に git branch completion を設定
+vim.keymap.set("i", "<C-a>b", function()
+  require("fzf-lua").git_branches({
+    complete = function(selected, opts, line, col)
+      -- ブランチ名を行の先頭から抽出（'*' と余白を除去）
+      local branch = selected[1]:match("^%s*%*?%s*([^%s]+)")
+      -- カーソル位置にブランチ名を挿入
+      local newline = line:sub(1, col) .. branch .. line:sub(col + 1)
+      return newline, col + #branch
+    end
+  })
+end, { silent = true, desc = "Complete git branch at cursor" })
+
+-- insert mode で <C-a>c に git commit completion を設定
+vim.keymap.set("i", "<C-a>c", function()
+  require("fzf-lua").git_commits({
+    -- 複数選択を有効化（デフォルトの --no-multi を上書き）
+    fzf_opts = { ["--multi"] = true },
+    complete = function(selected, opts, line, col)
+      local hashes = {}
+      for _, item in ipairs(selected) do
+        -- コミットハッシュを抽出（先頭の単語）
+        local hash = item:match("^%s*([^%s]+)")
+        if hash then
+          table.insert(hashes, hash)
+        end
+      end
+      -- スペース区切りで結合
+      local commit_str = table.concat(hashes, " ")
+      local newline = line:sub(1, col) .. commit_str .. line:sub(col + 1)
+      return newline, col + #commit_str
+    end
+  })
+end, { silent = true, desc = "Complete git commit hashes at cursor" })
+
 -- PLUGSETTING: uga-rosa/ccc.nvim
 require("ccc").setup()
 
