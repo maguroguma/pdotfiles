@@ -73,7 +73,8 @@ git submodule update --init --recursive
 
 git worktree add #{path} #{branch_name}
 git worktree list
-git worktree prune
+git worktree prune ### 実体のない worktree を削除する
+git worktree remove #{path}
 
 git log --patch -S #{pattern_string} ### パターンが変更されたコミットとその差分を表示する
 git log --patch -G #{regex_string} ### パターンが変更されたコミットとその差分を表示する
