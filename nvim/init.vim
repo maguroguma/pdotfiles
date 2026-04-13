@@ -296,6 +296,7 @@ call jetpack#add('skanehira/github-actions.nvim')
 call jetpack#add('sirasagi62/toggle-cheatsheet.nvim')
 call jetpack#add('gbprod/yanky.nvim')
 call jetpack#add('uga-rosa/translate.nvim')
+call jetpack#add('arto-app/arto.vim')
 
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
@@ -1341,6 +1342,13 @@ augroup vimrc-taskpaper
   " バッファに入った時の処理（taskpaperならハイライト更新、他ならクリア）
   autocmd BufEnter * call s:handle_taskpaper_highlights()
 augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGSETTING: arto-app/arto.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" macOS (default: '/Applications/Arto.app')
+let g:arto_path = '/Applications/Arto.app'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original
