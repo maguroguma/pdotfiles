@@ -1,11 +1,16 @@
 taskpaper 形式の todo リスト
 
 開発プロジェクト:
-- モジュール A を作る @due(2025-07-26) @urgent @important
+- モジュール A を作る @due(2025-07-26) @urgent @wait
 ハイフンをつけなければ、それらはノートとして自由に記述できる
 
 - 期限切れタスク @due(2025-08-24)
-- 余裕ありタスク @due(2099-01-01) @important @urgent @risky @inProgress
+- 期限やや危ういタスク @due(2026-04-31)
+- 期限余裕ありタスク @due(2099-01-01)
+- 着手中タスク @inProgress
+- 待機中タスク @wait
+- 緊急タスク @urgent
+- 不確実タスク @risky
 
 === === ===
 
@@ -17,9 +22,9 @@ taskpaper 形式の todo リスト
 タグ説明:
 at done(YYYY-MM-DD) = 完了日付
 at urgent = 緊急度が高いタスク
-at important = 重要度が高いタスク
 at risky = 不確実性が高いタスク
 at inProgress = 着手中
+at wait = 待機中・ブロック中
 at due(YYYY-MM-DD) = 期限日付
 at createdAt(YYYY-MM-DD) = 作成日付
 
@@ -31,9 +36,9 @@ at createdAt(YYYY-MM-DD) = 作成日付
 <Space>tk = 前のプロジェクトに移動する
 <Space>td = at done(YYYY-MM-DD) タグをトグルする（付与/削除）
 <Space>tu = at urgent タグをトグル（付与/削除）
-<Space>ti = at important タグをトグル（付与/削除）
 <Space>tr = at risky タグをトグル（付与/削除）
 <Space>tg = at inProgress タグをトグル（付与/削除）
+<Space>tw = at wait タグをトグル（付与/削除）
 
 === === ===
 

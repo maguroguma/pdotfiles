@@ -1259,9 +1259,9 @@ map _ <Plug>(operator-replace)
 " TaskPaper.vim カスタムタグのスタイル設定
 let g:task_paper_styles={
     \ 'urgent': 'ctermbg=214 guibg=#cccc00 ctermfg=black guifg=#000000',
-    \ 'important': 'ctermbg=69 guibg=#cccc00 ctermfg=white guifg=#000000',
     \ 'risky': 'ctermbg=167 guibg=#cccc00 ctermfg=white guifg=#000000',
-    \ 'inProgress': 'ctermbg=108 guibg=#d75f5f ctermfg=black guifg=#ffffff',
+    \ 'inProgress': 'ctermbg=108 guibg=#87af87 ctermfg=black guifg=#000000',
+    \ 'wait': 'ctermbg=196 guibg=#809fff ctermfg=white guifg=#000000',
     \ }
 
 " due タグのハイライト設定
@@ -1269,9 +1269,9 @@ let g:taskpaper_due_highlight = get(g:, 'taskpaper_due_highlight', {})
 
 " デフォルト設定
 let g:taskpaper_due_highlight = extend({
-    \ 'critical_days': 7,
-    \ 'warning_days': 28,
-    \ 'critical_style': 'ctermbg=196 guibg=#d75f5f ctermfg=white guifg=#ffffff',
+    \ 'critical_days': 3,
+    \ 'warning_days': 7,
+    \ 'critical_style': 'ctermbg=196 guibg=#ff9999 ctermfg=white guifg=#000000',
     \ 'warning_style': 'ctermbg=214 guibg=#eaaf00 ctermfg=black guifg=#000000',
     \ 'normal_style': 'ctermbg=40 guibg=#87af87 ctermfg=black guifg=#000000',
     \ }, g:taskpaper_due_highlight)
@@ -1315,12 +1315,12 @@ function! s:taskpaper_setup()
   " Your settings
   nnoremap <buffer> <silent> <Leader>tu
   \    :<C-u>call taskpaper#toggle_tag('urgent', '')<CR>
-  nnoremap <buffer> <silent> <Leader>ti
-  \    :<C-u>call taskpaper#toggle_tag('important', '')<CR>
   nnoremap <buffer> <silent> <Leader>tr
   \    :<C-u>call taskpaper#toggle_tag('risky', '')<CR>
   nnoremap <buffer> <silent> <Leader>tg
   \    :<C-u>call taskpaper#toggle_tag('inProgress', '')<CR>
+  nnoremap <buffer> <silent> <Leader>tw
+  \    :<C-u>call taskpaper#toggle_tag('wait', '')<CR>
 
   " due タグのハイライトを初期化と更新
   call s:update_due_highlights()

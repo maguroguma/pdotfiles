@@ -40,6 +40,8 @@ brew install typos-cli
 # TAP: JankyBorders (emphasize active window)
 brew tap FelixKratz/formulae
 brew install borders
+brew install --cask arto-app/tap/arto
+xattr -dr com.apple.quarantine /Applications/Arto.app
 
 # window capture
 brew install t-rec
