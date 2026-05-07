@@ -101,3 +101,5 @@ brew tap ### homebrew-core 以外のものを確認する
 brew info #{package}
 brew outdated
 brew doctor
+
+tmux send-keys -t #{pane_id} #{keys} Enter
