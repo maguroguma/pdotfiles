@@ -298,6 +298,12 @@ call jetpack#add('gbprod/yanky.nvim')
 call jetpack#add('uga-rosa/translate.nvim')
 call jetpack#add('arto-app/arto.vim')
 
+call jetpack#add("antoinemadec/FixCursorHold.nvim")
+call jetpack#add("nvim-neotest/nvim-nio")
+call jetpack#add("nvim-neotest/neotest")
+call jetpack#add("fredrikaverpil/neotest-golang")
+call jetpack#add("andythigpen/nvim-coverage")
+
 " for avante
 call jetpack#add('stevearc/dressing.nvim')
 call jetpack#add('MeanderingProgrammer/render-markdown.nvim')

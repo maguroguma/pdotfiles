@@ -1181,6 +1181,80 @@ vim.keymap.set("x", "<Space>tp", "<Cmd>Translate JA<CR>")
 vim.keymap.set("x", "<Space>ty", "<Cmd>Translate JA -output=register<CR>")
 vim.keymap.set("n", "<Space>tw", "viw:Translate JA<CR>")
 
+-- PLUGSETTING: nvim-neotest/neotest
+
+-- -------------------------------------------------------
+-- nvim-treesitter
+-- -------------------------------------------------------
+-- require("nvim-treesitter.configs").setup({
+--   ensure_installed = { "go" },
+--   highlight = { enable = true },
+-- })
+
+-- -------------------------------------------------------
+-- neotest-golang アダプターの設定
+-- -------------------------------------------------------
+local neotest_golang = require("neotest-golang")
+
+-- -------------------------------------------------------
+-- neotest 本体の設定
+-- -------------------------------------------------------
+require("neotest").setup({
+  adapters = {
+    neotest_golang({
+      go_test_args = {
+        "-v",
+        "-count=1",
+        "-coverprofile=" .. vim.fn.getcwd() .. "/coverage.out",
+      },
+    }),
+  },
+})
+
+-- -------------------------------------------------------
+-- nvim-coverage の設定
+-- -------------------------------------------------------
+require("coverage").setup({
+  auto_reload = true,
+  highlights = {
+    covered   = { fg = "#4db300" },
+    uncovered = { fg = "#ea6633" },
+  },
+  signs = {
+    covered   = { hl = "CoverageCovered",   text = "┃" },
+    uncovered = { hl = "CoverageUncovered", text = "╎" },
+  },
+  summary = {
+    min_coverage = 80.0,
+  },
+})
+
+-- -------------------------------------------------------
+-- キーマップ
+-- -------------------------------------------------------
+local neotest = require("neotest")
+local coverage = require("coverage")
+
+-- テスト実行系
+vim.keymap.set("n", "<leader>tn", function() neotest.run.run() end,
+  { desc = "Run nearest test" })
+vim.keymap.set("n", "<leader>tf", function() neotest.run.run(vim.fn.expand("%")) end,
+  { desc = "Run tests in file" })
+vim.keymap.set("n", "<leader>ta", function() neotest.run.run(vim.fn.getcwd()) end,
+  { desc = "Run all tests" })
+vim.keymap.set("n", "<leader>ts", function() neotest.summary.toggle() end,
+  { desc = "Toggle test summary" })
+vim.keymap.set("n", "<leader>to", function() neotest.output.open({ enter = true }) end,
+  { desc = "Open test output" })
+
+-- カバレッジ表示系
+vim.keymap.set("n", "<leader>cl", function() coverage.load(true) end,
+  { desc = "Load and show coverage" })
+vim.keymap.set("n", "<leader>cs", function() coverage.summary() end,
+  { desc = "Coverage summary" })
+vim.keymap.set("n", "<leader>ch", function() coverage.hide() end,
+  { desc = "Hide coverage" })
+
 -- ORIGINAL:
 local function blink_active_window(duration, count)
   local win = vim.api.nvim_get_current_win()
