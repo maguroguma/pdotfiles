@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+tmpfile=$(mktemp /tmp/gitdiff.XXXXXX.diff)
+git --no-pager diff > "$tmpfile"
+if [[ -s "$tmpfile" ]]; then
+  nvim -R "$tmpfile" -c 'set ft=diff'
+else
+  echo "変更なし"
+fi
+rm -f "$tmpfile"

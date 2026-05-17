@@ -1,8 +1,16 @@
 #!/bin/bash
 
 if [ -n "$TMUX" ]; then
-  SELECTED="$(tmux list-sessions | fzf-tmux -w 95% -h 95% | cut -d : -f 1)"
+  _PREVIEW_SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/tmux-session-preview"
+  SELECTED="$(tmux ls -F '#{session_name}' | fzf \
+    --height=100% \
+    --prompt='switch session> ' \
+    --preview "$_PREVIEW_SCRIPT {}" \
+    --preview-window=right:70%:border-bold \
+    --color='preview-border:#b728c7' \
+    --preview-label=' Preview '
+  )"
   if [ -n "$SELECTED" ]; then
-    tmux switch -t $SELECTED
+    tmux switch -t "$SELECTED"
   fi
 fi

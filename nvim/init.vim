@@ -732,6 +732,7 @@ nmap <C-e> <cmd>WinResizerStartResize<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:previm_open_cmd = 'open -a Google\ Chrome'
+let g:previm_custom_css_path = expand('~/.config/nvim/previm-custom.css')
 nnoremap <silent> <Space>mp <cmd>PrevimOpen<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

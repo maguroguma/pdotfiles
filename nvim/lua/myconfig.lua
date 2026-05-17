@@ -13,7 +13,7 @@ lualine.setup {
   options = {
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
-    theme = 'gruvbox_light',
+    theme = 'everforest',
 
     disabled_filetypes = {
       statusline = { "Avante", "AvanteInput", "AvanteSelectedFiles" },

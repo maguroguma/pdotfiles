@@ -1,0 +1,52 @@
+/* previm カスタムCSS: 文字サイズ・行間を読みやすく調整 */
+
+body {
+  font-size: 17px;
+  /* line-height: 1.85; */
+  line-height: 1.5;
+  max-width: 960px;
+}
+
+h1 {
+  font-size: 32px;
+}
+h2 {
+  font-size: 26px;
+}
+h3 {
+  font-size: 22px;
+}
+h4 {
+  font-size: 19px;
+}
+h5 {
+  font-size: 17px;
+}
+h6 {
+  font-size: 17px;
+}
+
+pre,
+code {
+  font-size: 14px;
+}
+
+.highlight pre,
+pre {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+table {
+  font-size: 16px;
+}
+
+dl dt {
+  font-size: 16px;
+}
+
+@media screen and (min-width: 914px) {
+  body {
+    width: 900px;
+  }
+}

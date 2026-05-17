@@ -28,6 +28,7 @@
 !nvim/lua/myconfig.lua
 !nvim/fzf-any-dictionary
 !nvim/after/ftplugin/help.vim
+!nvim/previm-custom.css
 
 # plugins for copilot
 nvim/pack/
@@ -51,8 +52,13 @@ nvim/pack/
 !scripts/tmuxkillf.sh
 !scripts/meditation-art.sh
 
-!tmux/tmux-session-fzf
 !tmux/tmux.conf
+!tmux/tmux-session-fzf
+!tmux/tmnew-repo-session
+!tmux/tmuxkillf
+!tmux/tmux-session-preview
+!tmux/git-diff-view-nvim
+!tmux/git-diff-stashed-view-nvim
 
 !vscode/snippets/go.json
 !vscode/extensions

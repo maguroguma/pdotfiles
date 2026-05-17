@@ -1,0 +1,23 @@
+#!/bin/bash -e
+
+# tmuxのセッションをfzfで選択して削除するスクリプト
+
+_PREVIEW_SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/tmux-session-preview"
+
+sessions="$(tmux ls -F '#{session_name}' | fzf \
+  --height=100% \
+  --exit-0 \
+  --multi \
+  --prompt='kill tmux sessions> ' \
+  --preview "$_PREVIEW_SCRIPT {}" \
+  --preview-window=right:70%:border-bold \
+  --color='preview-border:#b728c7' \
+  --preview-label=' Preview '
+)" || exit $?
+
+if [[ -n "$sessions" ]]; then
+    echo "$sessions" | while IFS= read -r session; do
+        echo "Killing $session"
+        tmux kill-session -t "$session"
+    done
+fi

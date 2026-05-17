@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# fzf の --preview オプションから呼び出されるスクリプト。
+# 引数にセッション名を受け取り、セッション内の全ペイン情報とコンテンツを出力する。
+
+session="$1"
+
+printf "\033[48;2;230;150;255m\033[97m 📋 Processes ─────────────────────────────────────────────────────────────────\033[0m\n"
+tmux list-panes -s -t "$session" -F "  P#{pane_index}: #{pane_current_command} (#{pane_id})"
+
+tmux list-panes -s -t "$session" -F "#{pane_id}" | while read -r pane_id; do
+  echo ""
+  pane_header=$(tmux display-message -p -t "$pane_id" "P#{pane_index}: #{pane_current_command} (#{pane_id})")
+  n=$((75 - ${#pane_header}))
+  [ "$n" -gt 0 ] && dashes=$(printf "%.0s─" $(seq 1 "$n")) || dashes=""
+  printf "\033[48;2;100;225;225m\033[97m 🖥  %s%s\033[0m\n" "$pane_header" "$dashes"
+  tmux capture-pane -ep -t "$pane_id" | head -20
+done
