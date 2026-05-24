@@ -90,32 +90,6 @@ vim.api.nvim_create_autocmd("RecordingLeave", {
     end,
 })
 
--- PLUGSETTING: SmoothCursor.nvim
-require('smoothcursor').setup()
-local autocmd = vim.api.nvim_create_autocmd
-
-autocmd({ 'ModeChanged' }, {
-  callback = function()
-    local current_mode = vim.fn.mode()
-    if current_mode == 'n' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = 'CadetBlue4' })
-      vim.fn.sign_define('smoothcursor', { text = '●' })
-    elseif current_mode == 'v' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = 'CadetBlue4' })
-      vim.fn.sign_define('smoothcursor', { text = '' })
-    elseif current_mode == 'V' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = 'CadetBlue4' })
-      vim.fn.sign_define('smoothcursor', { text = '' })
-    elseif current_mode == '�' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = 'CadetBlue4' })
-      vim.fn.sign_define('smoothcursor', { text = '' })
-    elseif current_mode == 'i' then
-      vim.api.nvim_set_hl(0, 'SmoothCursor', { fg = 'CadetBlue4' })
-      vim.fn.sign_define('smoothcursor', { text = '' })
-    end
-  end,
-})
-
 -- PLUGSETTING: lewis6991/gitsigns.nvim
 require('gitsigns').setup {
   signs = {
@@ -753,17 +727,6 @@ require('noice').setup({
 -- PLUGSETTING: delphinus/skkeleton_indicator.nvim
 require("skkeleton_indicator").setup {}
 
--- PLUGSETTING: nacro90/numb.nvim
-require('numb').setup()
-
--- PLUGSETTING: atusy/treemonkey.nvim
-vim.keymap.set({"x", "o"}, "m", function()
-  require("treemonkey").select({
-    ignore_injections = false,
-    highlight = { backdrop = "Comment" }
-  })
-end)
-
 -- PLUGSETTING: stevearc/quicker.nvim
 require("quicker").setup()
 
@@ -943,7 +906,7 @@ require("origami").setup {
 	pauseFoldsOnSearch = true,
 	foldtext = {
 		enabled = true,
-		padding = 3,
+		padding = { width = 3 },
 		lineCount = {
 			template = "%d lines", -- `%d` is replaced with the number of folded lines
 			hlgroup = "Comment",
@@ -1011,46 +974,7 @@ fyler.setup({
 })
 vim.keymap.set("n", "<leader>f", fyler.open, { desc = "Open fyler View" })
 
--- PLUGSETTING: backdround/global-note.nvim
--- local global_note = require("global-note")
--- global_note.setup({
---   window_config = function()
---     local window_height = vim.api.nvim_list_uis()[1].height
---     local window_width = vim.api.nvim_list_uis()[1].width
---     return {
---       relative = "editor",
---       border = "single",
---       title = "Note",
---       title_pos = "center",
---       width = math.floor(0.6 * window_width),
---       height = math.floor(0.93 * window_height),
---       col = math.floor(0.2 * window_width),
---       row = math.floor(0.025 * window_height),
---     }
---   end,
--- })
--- vim.keymap.set("n", "<leader>gn", global_note.toggle_note, {
---   desc = "Toggle global note",
--- })
-
--- -- PLUGSETTING: TaDaa/vimade
--- require('vimade').setup({
---   recipe = {'default', {animate = true}},
---   fadelevel = 0.68,
---   ncmode = 'windows'
--- })
-
--- PLUGSETTING: pwntester/octo.nvim
-require"octo".setup {
-  picker = "fzf-lua", -- or "fzf-lua" or "snacks" or "default"
-}
-vim.keymap.set("n", "<Space>op", "<CMD>Octo pr list<CR>", { desc = "Open PR list" })
-vim.keymap.set("n", "<Space>or", "<CMD>Octo review<CR>",
-  { desc = "start or resume review of current branch's PR (comment: <Space>ca, suggest: <Space>sa)" }
-)
-vim.keymap.set("n", "<Space>os", "<CMD>Octo review submit<CR>", { desc = "submit review" })
-
--- PLUGSETTING: pwntester/octo.nvim
+-- PLUGSETTING: y3owk1n/undo-glow.nvim
 -- Thanks to: https://zenn.dev/vim_jp/articles/00e297fcccf949
 -- 初期化 色などはsetup引数で調整可能
 local undo_glow = require('undo-glow')
@@ -1092,9 +1016,6 @@ vim.keymap.set('n', '<C-r>', undo_glow.redo, { desc = 'Redo with highlight' })
 vim.keymap.set('n', 'p', undo_glow.paste_below, { desc = 'Paste below with highlight' })
 vim.keymap.set('n', 'P', undo_glow.paste_above, { desc = 'Paste above with highlight' })
 
--- PLUGSETTING: skanehira/github-actions.nvim
-require('github-actions').setup({})
-
 -- PLUGSETTING: sirasagi62/toggle-cheatsheet.nvim
 -- プラグインのロード
 local tcs = require('toggle-cheatsheet').setup(true)
@@ -1121,7 +1042,7 @@ local cs2 = [[
 '<,'>g/{pattern}/d -> 範囲内のマッチ行を削除する
 '<,'>v/{pattern}/d -> 範囲内のマッチ行以外を削除する
 
-visual 時に _ -> 無名レジスタを汚さず置換できる
+visual 時に _ -> 無名レジスタを汚さず置換できる（プラグイン依存）
 
 <Space>d  -> hidden buffer をすべて閉じる
 <Space>D  -> すべての buffer を閉じる
@@ -1133,6 +1054,8 @@ visual 時に _ -> 無名レジスタを汚さず置換できる
 <Space>tw -> カーソル上の英単語の意味を表示する
 <Space>tp -> visual 範囲の英和翻訳を float 表示する
 <Space>ty -> visual 範囲の英和翻訳をヤンクする
+
+:%s/検索パターン/[&]/g -> 検索パターンを [] で囲む
 ]]
 
 -- 適当なキーにマッピング
@@ -1173,13 +1096,6 @@ require('spectre').setup({
     },
   },
 })
-
--- PLUGSETTING: uga-rosa/translate.nvim
--- vim.keymap.set("x", "<Space>tp", ":<C-u>Translate ja<CR>")
--- vim.keymap.set("x", "<Space>ty", ":<C-u>Translate ja -output=register<CR>")
-vim.keymap.set("x", "<Space>tp", "<Cmd>Translate JA<CR>")
-vim.keymap.set("x", "<Space>ty", "<Cmd>Translate JA -output=register<CR>")
-vim.keymap.set("n", "<Space>tw", "viw:Translate JA<CR>")
 
 -- PLUGSETTING: nvim-neotest/neotest
 

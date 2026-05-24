@@ -113,202 +113,133 @@ if !filereadable(s:jetpackfile)
 endif
 
 " main version
+" $HOME/.local/share/nvim/site/pack/jetpack/main/
 let s:main_jetpack_dir = stdpath('data') .. '/site/pack/jetpack/main/'
 
 " manage plugins by jetpack
 " plugins {{{
 packadd vim-jetpack
 call jetpack#begin(s:main_jetpack_dir)
-call jetpack#add('tani/vim-jetpack', { 'opt': 1 })
+call jetpack#add('tani/vim-jetpack', { 'opt': 1, 'commit': '56558f4' }) " [2025/02/20 12:14:18 56558f4]
 
 " common library
-call jetpack#add('vim-denops/denops.vim')
-call jetpack#add('nvim-lua/plenary.nvim')
-call jetpack#add('MunifTanjim/nui.nvim')
-call jetpack#add('Shougo/vimproc.vim', { 'build' : 'make' })
-call jetpack#add('vim-jp/vital.vim')
+call jetpack#add('vim-denops/denops.vim', { 'commit': '1df7a02' }) " [2026/03/22 19:53:02 1df7a02]
+call jetpack#add('nvim-lua/plenary.nvim', { 'commit': '74b06c6' }) " [2026/04/10 07:52:46 74b06c6]
+call jetpack#add('MunifTanjim/nui.nvim', { 'commit': 'de74099' }) " [2025/06/08 16:26:28 de74099]
+call jetpack#add('Shougo/vimproc.vim', { 'build' : 'make', 'commit': '63a4ce0' }) " [2024/09/04 09:35:29 63a4ce0]
+call jetpack#add('vim-jp/vital.vim', { 'commit': '19ef725' }) " [2026/04/06 06:04:19 19ef725]
 
-call jetpack#add('vim-jp/vimdoc-ja')
-call jetpack#add('ryanoasis/vim-devicons')
-call jetpack#add('editorconfig/editorconfig-vim')
-call jetpack#add('w0ng/vim-hybrid') " colorscheme
-call jetpack#add('navarasu/onedark.nvim') " colorscheme
+call jetpack#add('vim-jp/vimdoc-ja', { 'commit': '29cc30d' }) " [2026/05/22 22:30:16 29cc30d]
+call jetpack#add('ryanoasis/vim-devicons', { 'commit': '71f239a' }) " [2022/10/02 03:28:33 71f239a]
+call jetpack#add('editorconfig/editorconfig-vim', { 'commit': 'c022788' }) " [2023/01/25 09:53:34 c022788]
 
-" DO NOT lazy load
-" call jetpack#add('lambdalisue/readablefold.vim')
-" call jetpack#add('Yggdroot/indentLine') " NOTE: archived on Jul 29, 2023
-call jetpack#add('machakann/vim-sandwich')
-" call jetpack#add('luochen1990/rainbow')
-call jetpack#add('segeljakt/vim-silicon') " code snapshot tool helper
-call jetpack#add('previm/previm')
-call jetpack#add('shinespark/vim-list2tree') " NOTE: (m) make directory tree format txt from markdown lists
-call jetpack#add('AndrewRadev/linediff.vim')
-call jetpack#add('lambdalisue/vim-manpager')
+call jetpack#add('machakann/vim-sandwich', { 'commit': '74cf93d' }) " [2024/03/20 21:36:01 74cf93d]
+call jetpack#add('previm/previm', { 'commit': '2bccb5e' }) " [2026/04/10 02:32:12 2bccb5e]
+call jetpack#add('AndrewRadev/linediff.vim', { 'commit': 'c378060' }) " [2026/04/17 10:55:23 c378060]
+call jetpack#add('lambdalisue/vim-manpager', { 'commit': 'ba60d59' }) " [2022/07/24 00:20:46 ba60d59]
 
 " depends on denops
-call jetpack#add('lambdalisue/kensaku.vim') " search Japanese by megemo
-call jetpack#add('lambdalisue/kensaku-search.vim')
-call jetpack#add('lambdalisue/kensaku-command.vim')
-call jetpack#add('yuki-yano/fuzzy-motion.vim') " pounce like motion plugin
+call jetpack#add('lambdalisue/kensaku.vim', { 'commit': '67727c8' }) " [2024/11/26 22:21:31 67727c8] search Japanese by megemo
+call jetpack#add('lambdalisue/kensaku-search.vim', { 'commit': '9568c2b' }) " [2024/02/15 18:31:45 9568c2b]
+call jetpack#add('lambdalisue/kensaku-command.vim', { 'commit': 'd14e13d' }) " [2023/01/18 04:51:02 d14e13d]
+call jetpack#add('yuki-yano/fuzzy-motion.vim', { 'commit': 'd6ab71e' }) " [2025/04/15 00:35:51 d6ab71e]
 
 " lua plugin
-call jetpack#add('nvim-lualine/lualine.nvim')
-call jetpack#add('gen740/SmoothCursor.nvim')
-call jetpack#add('lewis6991/gitsigns.nvim')
+call jetpack#add('nvim-lualine/lualine.nvim', { 'commit': '131a558' }) " [2026/04/28 08:33:27 131a558]
+call jetpack#add('lewis6991/gitsigns.nvim', { 'commit': 'dd3f588' }) " [2026/04/21 11:28:18 dd3f588]
 
-" lazy
-call jetpack#add('glidenote/memolist.vim')
-call jetpack#add('hrsh7th/cmp-buffer')
-call jetpack#add('hrsh7th/cmp-path')
-call jetpack#add('hrsh7th/cmp-cmdline')
-call jetpack#add('hrsh7th/nvim-cmp')
+call jetpack#add('glidenote/memolist.vim', { 'commit': '8090f7a' }) " [2022/11/11 17:12:28 8090f7a]
 
-call jetpack#add('nvim-tree/nvim-web-devicons')
+call jetpack#add('hrsh7th/cmp-buffer', { 'commit': 'b74fab3' }) " [2025/04/01 17:46:25 b74fab3]
+call jetpack#add('hrsh7th/cmp-path', { 'commit': 'c642487' }) " [2025/07/30 12:07:41 c642487]
+call jetpack#add('hrsh7th/cmp-cmdline', { 'commit': 'd126061' }) " [2025/05/18 10:04:26 d126061]
+call jetpack#add('hrsh7th/nvim-cmp', { 'commit': 'a1d5048' }) " [2026/03/25 15:28:59 a1d5048]
 
-" call jetpack#add('mbbill/undotree')
-call jetpack#add('voldikss/vim-floaterm')
-call jetpack#add('fatih/vim-go', {
-      \ 'on_ft': 'go',
-      \ })
+call jetpack#add('nvim-tree/nvim-web-devicons', { 'commit': '0d7d35f' }) " [2026/05/21 23:36:10 0d7d35f]
 
-call jetpack#add('lambdalisue/fern.vim')
-call jetpack#add('lambdalisue/fern-git-status.vim')
-call jetpack#add('lambdalisue/nerdfont.vim')
-call jetpack#add('lambdalisue/fern-renderer-nerdfont.vim')
-call jetpack#add('lambdalisue/glyph-palette.vim')
-call jetpack#add('lambdalisue/fern-hijack.vim')
+call jetpack#add('voldikss/vim-floaterm', { 'commit': 'bb4ba79' }) " [2026/05/07 11:55:24 bb4ba79]
+call jetpack#add('fatih/vim-go', { 'on_ft': 'go', 'commit': 'f4b4ba1' }) " [2026/03/27 19:13:05 f4b4ba1]
 
-call jetpack#add('junegunn/fzf')
-call jetpack#add('junegunn/fzf.vim')
-call jetpack#add('rlane/pounce.nvim')
-call jetpack#add('folke/todo-comments.nvim')
+call jetpack#add('junegunn/fzf', { 'commit': '677e854' }) " [2026/05/23 10:32:19 677e854]
+call jetpack#add('junegunn/fzf.vim', { 'commit': 'b9b98ac' }) " [2026/05/21 20:35:04 b9b98ac]
+call jetpack#add('rlane/pounce.nvim', { 'commit': '2e36399' }) " [2024/09/11 20:36:49 2e36399]
+call jetpack#add('folke/todo-comments.nvim', { 'commit': '31e3c38' }) " [2025/11/10 09:55:22 31e3c38]
 
-call jetpack#add('nvim-treesitter/nvim-treesitter', {
-      \ 'do': ':TSUpdate'
-      \ })
-call jetpack#add('rhysd/committia.vim', {
-      \ 'on_ft': ['gitcommit', 'git', 'gina-commit'],
-      \ })
+call jetpack#add('nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'commit': 'cf12346' }) " [2026/03/23 19:42:18 cf12346]
+call jetpack#add('rhysd/committia.vim', { 'on_ft': ['gitcommit', 'git', 'gina-commit'], 'commit': 'c8c0f25' }) " [2024/11/03 23:52:35 c8c0f25]
 
-call jetpack#add('neoclide/coc.nvim', {
-      \ 'branch': 'release',
-      \ })
-call jetpack#add('cohama/lexima.vim')
+call jetpack#add('neoclide/coc.nvim', { 'commit': 'a23e8e5' }) " [2026/05/22 16:45:38 a23e8e5]
+call jetpack#add('cohama/lexima.vim', { 'commit': 'ab621e4' }) " [2025/05/16 00:21:58 ab621e4]
 
-" better asterisk behavior
-call jetpack#add('haya14busa/vim-asterisk')
-call jetpack#add('kevinhwang91/nvim-hlslens')
-call jetpack#add('mattn/emmet-vim', {
-      \ 'on_ft': ['html', 'vue', 'html.twig'],
-      \ })
-call jetpack#add('t9md/vim-choosewin')
-call jetpack#add('ntpeters/vim-better-whitespace')
-call jetpack#add('machakann/vim-highlightedyank') " 2026-01-12: undo-glow.nvim に任せてもよいかも
-" read vim command result to buffer
-call jetpack#add('tyru/capture.vim')
-call jetpack#add('mattn/vim-maketable', {
-      \ 'on_ft': ['md', 'markdown']
-      \ })
-call jetpack#add('jodosha/vim-godebug', {
-      \ 'on_ft': 'go'
-      \ })
-" automatic closing of quotes, parenthesis, brackets, etc.
-" call jetpack#add('Raimondi/delimitMate')
-" easy grep tool
-call jetpack#add('windwp/nvim-spectre')
-call jetpack#add('simeji/winresizer')
-" for commenting on vue SFC
-call jetpack#add('tomtom/tcomment_vim')
-call jetpack#add('vim-test/vim-test')
-" mark colors to words and sentences
-call jetpack#add('t9md/vim-quickhl')
-" realize live substitute
-call jetpack#add('markonm/traces.vim')
-call jetpack#add('tyru/open-browser.vim')
-call jetpack#add('mtdl9/vim-log-highlighting', {
-      \ 'on_ft': ['log']
-      \ })
-" NOTE: (m) show git diff on git rebase
-call jetpack#add('hotwatermorning/auto-git-diff', {
-      \ 'on_ft': ['gitcommit', 'git']
-      \ })
-call jetpack#add('mzlogin/vim-markdown-toc', {
-      \ 'on_ft': ['md', 'markdown']
-      \ })
-" call jetpack#add('alvan/vim-closetag', {
-"       \ 'on_ft': ['html', 'vue', 'html.twig']
-"       \ })
-" call jetpack#add('ap/vim-css-color', {
-"       \ 'on_ft': ['html', 'vue', 'html.twig', 'vim', 'lua', 'css', 'scss', 'astro', 'jsx', 'tsx']
-"       \ })
-call jetpack#add('ap/vim-css-color')
-call jetpack#add('posva/vim-vue', {
-      \ 'on_ft': ['vue']
-      \ })
-call jetpack#add('mattn/vim-sqlfmt', {
-      \ 'on_ft': ['sql']
-      \ })
-call jetpack#add('lambdalisue/gina.vim')
-call jetpack#add('nvim-neo-tree/neo-tree.nvim', {
-      \ 'branch': 'v3.x',
-      \ })
-call jetpack#add('chrisbra/csv.vim', {
-      \ 'on_ft': ['csv']
-      \ })
+call jetpack#add('haya14busa/vim-asterisk', { 'commit': '77e9706' }) " [2020/02/04 02:44:39 77e9706] better asterisk behavior
+call jetpack#add('kevinhwang91/nvim-hlslens', { 'commit': 'be2d7b2' }) " [2026/01/11 07:17:56 be2d7b2]
+call jetpack#add('mattn/emmet-vim', { 'on_ft': ['html', 'vue', 'html.twig'], 'commit': '92ef2f7' }) " [2026/03/24 17:18:49 92ef2f7]
+call jetpack#add('ntpeters/vim-better-whitespace', { 'commit': 'de99b55' }) " [2025/05/12 20:41:43 de99b55]
+
+call jetpack#add('tyru/capture.vim', { 'commit': '857ee11' }) " [2018/06/26 11:18:56 857ee11] read vim command result to buffer
+call jetpack#add('mattn/vim-maketable', { 'on_ft': ['md', 'markdown'], 'commit': 'd72e73f' }) " [2022/11/08 09:01:49 d72e73f]
+
+call jetpack#add('windwp/nvim-spectre', { 'commit': '72f56f7' }) " [2025/05/13 07:51:44 72f56f7] easy grep tool
+call jetpack#add('simeji/winresizer', { 'commit': '299076f' }) " [2026/03/29 00:38:10 299076f]
+
+call jetpack#add('tomtom/tcomment_vim', { 'commit': '48ab639' }) " [2024/03/25 11:36:44 48ab639] for commenting on vue SFC
+call jetpack#add('vim-test/vim-test', { 'commit': '7062b50' }) " [2026/05/07 13:11:15 7062b50]
+
+call jetpack#add('t9md/vim-quickhl', { 'commit': 'be1f441' }) " [2021/09/01 17:59:12 be1f441] mark colors to words and sentences
+
+call jetpack#add('markonm/traces.vim', { 'commit': '261602a' }) " [2025/01/25 18:11:16 261602a] realize live substitute
+call jetpack#add('tyru/open-browser.vim', { 'commit': '7d4c1d8' }) " [2022/10/09 02:01:10 7d4c1d8]
+call jetpack#add('mtdl9/vim-log-highlighting', { 'on_ft': ['log'], 'commit': '1037e26' }) " [2020/08/30 09:10:11 1037e26]
+
+call jetpack#add('hotwatermorning/auto-git-diff', { 'on_ft': ['gitcommit', 'git'], 'commit': '8d5ba42' }) " [2022/10/30 01:24:09 8d5ba42] show git diff on git rebase
+call jetpack#add('ap/vim-css-color', { 'commit': '14fd934' }) " [2024/10/18 10:01:12 14fd934]
+call jetpack#add('posva/vim-vue', { 'on_ft': ['vue'], 'commit': '6ae8fa7' }) " [2024/03/30 07:53:18 6ae8fa7]
+call jetpack#add('mattn/vim-sqlfmt', { 'on_ft': ['sql'], 'commit': 'db63651' }) " [2017/11/29 13:29:43 db63651]
+call jetpack#add('lambdalisue/gina.vim', { 'commit': 'ff6c2dd' }) " [2022/03/30 13:28:47 ff6c2dd]
+call jetpack#add('nvim-neo-tree/neo-tree.nvim', { 'commit': 'ebd6676' }) " [2026/05/15 04:31:36 ebd6676] tag:v3.x を追従していた
+call jetpack#add('chrisbra/csv.vim', { 'on_ft': ['csv'], 'commit': '8977f68' }) " [2026/05/16 08:33:04 8977f68]
 
 " 2024
-call jetpack#add('mvllow/modes.nvim')
-call jetpack#add('stevearc/aerial.nvim')
-call jetpack#add('MattesGroeger/vim-bookmarks')
-call jetpack#add('shellRaining/hlchunk.nvim')
-call jetpack#add('kazhala/close-buffers.nvim')
-call jetpack#add('Wansmer/treesj')
-call jetpack#add('thinca/vim-qfreplace')
-call jetpack#add('rhysd/clever-f.vim')
-call jetpack#add('folke/noice.nvim')
-call jetpack#add('vim-skk/skkeleton')
-call jetpack#add('delphinus/skkeleton_indicator.nvim')
-call jetpack#add('will133/vim-dirdiff')
-call jetpack#add('nacro90/numb.nvim')
-call jetpack#add('atusy/treemonkey.nvim')
-call jetpack#add('nvim-treesitter/nvim-treesitter-context')
-call jetpack#add('stevearc/quicker.nvim')
-call jetpack#add('kevinhwang91/nvim-bqf')
-call jetpack#add('jiaoshijie/undotree')
-call jetpack#add('windwp/nvim-ts-autotag')
-call jetpack#add('ellisonleao/gruvbox.nvim')
-call jetpack#add('kana/vim-operator-user')
-call jetpack#add('kana/vim-operator-replace')
-call jetpack#add('davidoc/taskpaper.vim')
-call jetpack#add('uga-rosa/ccc.nvim')
-" call jetpack#add('lambdalisue/vim-initial')
-" call jetpack#add('maguroguma/vim-initial', { 'branch': 'feat/arrange-index-letters' })
-" call jetpack#add('kevinhwang91/promise-async')
-" call jetpack#add('kevinhwang91/nvim-ufo')
-call jetpack#add('A7Lavinraj/fyler.nvim')
-call jetpack#add('nvim-mini/mini.icons') " for fyler.nvim
-" call jetpack#add('backdround/global-note.nvim')
-" call jetpack#add('TaDaa/vimade')
-call jetpack#add('chrisgrieser/nvim-origami')
-call jetpack#add('pwntester/octo.nvim')
-call jetpack#add('y3owk1n/undo-glow.nvim')
-call jetpack#add('skanehira/github-actions.nvim')
-call jetpack#add('sirasagi62/toggle-cheatsheet.nvim')
-call jetpack#add('gbprod/yanky.nvim')
-call jetpack#add('uga-rosa/translate.nvim')
-call jetpack#add('arto-app/arto.vim')
+call jetpack#add('mvllow/modes.nvim', { 'commit': '2badf87' }) " [2026/03/16 03:45:17 2badf87]
+call jetpack#add('stevearc/aerial.nvim', { 'commit': '43dd88a' }) " [2026/05/14 23:47:00 43dd88a]
+call jetpack#add('MattesGroeger/vim-bookmarks', { 'commit': '9cc5fa7' }) " [2021/08/23 04:45:52 9cc5fa7]
+call jetpack#add('shellRaining/hlchunk.nvim', { 'commit': '06f5192' }) " [2026/05/07 19:05:09 06f5192]
+call jetpack#add('kazhala/close-buffers.nvim', { 'commit': '3acbcad' }) " [2021/11/15 10:11:00 3acbcad]
+call jetpack#add('Wansmer/treesj', { 'commit': '5fa4e7b' }) " [2026/04/16 09:35:12 5fa4e7b]
+call jetpack#add('rhysd/clever-f.vim', { 'commit': '6a3ac5e' }) " [2022/10/15 23:24:20 6a3ac5e]
+call jetpack#add('folke/noice.nvim', { 'commit': '7bfd942' }) " [2025/11/03 17:33:44 7bfd942]
+call jetpack#add('vim-skk/skkeleton', { 'commit': '770b265' }) " [2026/05/05 15:20:32 770b265]
+call jetpack#add('delphinus/skkeleton_indicator.nvim', { 'commit': 'b3e5379' }) " [2026/04/07 00:18:52 b3e5379]
+call jetpack#add('nvim-treesitter/nvim-treesitter-context', { 'commit': 'b311b30' }) " [2026/05/06 16:41:42 b311b30]
+call jetpack#add('stevearc/quicker.nvim', { 'commit': '1c9322b' }) " [2026/05/15 06:06:31 1c9322b]
+call jetpack#add('kevinhwang91/nvim-bqf', { 'commit': 'c282a62' }) " [2026/04/02 17:24:58 c282a62]
+call jetpack#add('jiaoshijie/undotree', { 'commit': '02b69ae' }) " [2026/05/16 10:02:24 02b69ae]
+call jetpack#add('windwp/nvim-ts-autotag', { 'commit': '88c1453' }) " [2026/04/15 17:02:58 88c1453]
+call jetpack#add('ellisonleao/gruvbox.nvim', { 'commit': '154eb5f' }) " [2026/04/15 12:42:42 154eb5f]
+call jetpack#add('kana/vim-operator-user', { 'commit': 'c3dfd41' }) " [2015/02/17 21:42:12 c3dfd41]
+call jetpack#add('kana/vim-operator-replace', { 'commit': '1345a55' }) " [2015/02/25 00:56:19 1345a55]
+call jetpack#add('davidoc/taskpaper.vim', { 'commit': '2df291f' }) " [2012/10/15 04:58:01 2df291f]
+call jetpack#add('uga-rosa/ccc.nvim', { 'commit': '9d1a256' }) " [2025/05/06 22:20:59 9d1a256]
 
-call jetpack#add("antoinemadec/FixCursorHold.nvim")
-call jetpack#add("nvim-neotest/nvim-nio")
-call jetpack#add("nvim-neotest/neotest")
-call jetpack#add("fredrikaverpil/neotest-golang")
-call jetpack#add("andythigpen/nvim-coverage")
+call jetpack#add('A7Lavinraj/fyler.nvim', { 'commit': 'e87911e' }) " [2026/04/05 15:05:20 e87911e]
+call jetpack#add('nvim-mini/mini.icons', { 'commit': '520995f' }) " [2026/05/13 20:06:36 520995f] for fyler.nvim
 
-" for avante
-call jetpack#add('stevearc/dressing.nvim')
-call jetpack#add('MeanderingProgrammer/render-markdown.nvim')
-call jetpack#add('ibhagwan/fzf-lua')
-" call jetpack#add('yetone/avante.nvim', { 'branch': 'main', 'do': 'make' })
+call jetpack#add('chrisgrieser/nvim-origami', { 'commit': '67c15fd' }) " [2026/04/06 15:54:55 67c15fd]
+
+call jetpack#add('y3owk1n/undo-glow.nvim', { 'commit': '25314a9' }) " [2025/12/14 13:49:31 25314a9]
+
+call jetpack#add('sirasagi62/toggle-cheatsheet.nvim', { 'commit': '0a4d454' }) " [2025/05/26 21:06:42 0a4d454]
+call jetpack#add('gbprod/yanky.nvim', { 'commit': 'b13d318' }) " [2026/05/20 08:52:20 b13d318]
+
+call jetpack#add("antoinemadec/FixCursorHold.nvim", { 'commit': '1900f89' }) " [2023/02/13 12:23:07 1900f89]
+call jetpack#add("nvim-neotest/nvim-nio", { 'commit': '21f5324' }) " [2025/01/20 20:31:13 21f5324]
+call jetpack#add("nvim-neotest/neotest", { 'commit': 'ad99182' }) " [2026/05/01 10:17:50 ad99182]
+call jetpack#add("fredrikaverpil/neotest-golang", { 'commit': '5b15cab' }) " [2026/05/19 08:01:21 5b15cab]
+call jetpack#add("andythigpen/nvim-coverage", { 'commit': 'a939e42' }) " [2024/12/18 10:42:57 a939e42]
+
+call jetpack#add('MeanderingProgrammer/render-markdown.nvim', { 'commit': '629eb95' }) " [2026/05/07 02:14:55 629eb95]
+
+call jetpack#add('ibhagwan/fzf-lua', { 'commit': '71b45a0' }) " [2026/05/21 10:55:26 71b45a0]
 call jetpack#end()
 " plugins END }}}
 
@@ -667,17 +598,6 @@ nnoremap <Space>M :QuickhlManualAdd! <C-r>/<CR>
 nnoremap <Space>s <cmd>Spectre<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: t9md/vim-choosewin
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-nmap so <cmd>ChooseWin<CR>
-" オーバーレイ機能を有効にしたい場合
-let g:choosewin_overlay_enable          = 1
-" オーバーレイ・フォントをマルチバイト文字を含むバッファでも綺麗に表示する。
-let g:choosewin_overlay_clear_multibyte = 1
-let g:choosewin_label = 'HJKLYUIONM'
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: glidenote/memolist.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -693,25 +613,12 @@ let g:memolist_prompt_categories = 1
 let g:memolist_fzf = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: w0ng/vim-hybrid
+" PLUGSETTING: ellisonleao/gruvbox.nvim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set termguicolors
 set background=light
 colorscheme gruvbox
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: mbbill/undotree
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-noremap <Space>u <cmd>UndotreeToggle<CR>
-let g:undotree_WindowLayout = 2         " undotreeは左側/diffは下にウィンドウ幅で表示
-let g:undotree_ShortIndicators = 1      " 時間単位は短く表示
-let g:undotree_SplitWidth = 40          " undotreeのウィンドウ幅
-let g:undotree_SetFocusWhenToggle = 1   " undotreeを開いたらフォーカスする
-"let g:undotree_DiffAutoOpen = 0         " diffウィンドウは起動時無効
-let g:undotree_DiffpanelHeight = 8      " diffウィンドウの行数
-"let g:undotree_HighlightChangedText = 0 " 変更箇所のハイライト無効
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: voldikss/vim-floaterm
@@ -762,23 +669,6 @@ highlight FuzzyMotionSubChar gui=bold guifg=#2bb2e3
 " highlight FuzzyMotionShade ctermfg=0 ctermbg=0
 let g:fuzzy_motion_matchers = ['fzf', 'kensaku']
 cnoremap <C-a><CR> <Plug>(kensaku-search-replace)<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: lambdalisue/vim-initial
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" nnoremap f <Cmd>Initial<CR>
-" let g:vim_initial_labels = [
-"       \ 'h', 'j', 'k', 'l', 'y',
-"       \ 'u', 'i', 'o', 'p', 'n',
-"       \ 'm',
-"       \]
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: machakann/vim-highlightedyank
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:highlightedyank_highlight_duration = 500
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: ntpeters/vim-better-whitespace
@@ -860,30 +750,6 @@ function! g:SelectType() abort
     return
   endif
 endfunction
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: lambdalisue/fern.vim
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" nmap <C-f> :<C-u>Fern . -reveal=%<CR>
-let g:fern#renderer = "nerdfont"
-let g:fern#renderer#nerdfont#indent_markers = 1
-
-function! s:init_fern() abort
-  " Use 'select' instead of 'edit' for default 'open' action
-  " nmap <buffer> <Plug>(fern-action-open) <Plug>(fern-action-open:select)
-endfunction
-
-augroup fern-custom
-  autocmd! *
-  autocmd FileType fern call s:init_fern()
-augroup END
-
-augroup my-glyph-palette
-  autocmd! *
-  autocmd FileType fern call glyph_palette#apply()
-  autocmd FileType nerdtree,startify call glyph_palette#apply()
-augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: neoclide/coc.nvim
@@ -1231,28 +1097,6 @@ call skkeleton#register_kanatable('rom', {
       \})
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: colorscheme
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-function! s:colorschemeLightOnedark()
-  set background=light
-  colorscheme onedark
-endfunction
-command! -nargs=0 LightOnedark call s:colorschemeLightOnedark()
-
-function! s:colorschemeDarkHybrid()
-  set background=dark
-  colorscheme hybrid
-endfunction
-command! -nargs=0 DarkHybrid call s:colorschemeDarkHybrid()
-
-" augroup ChangeColorschemeOnMacro
-"   autocmd!
-"   autocmd RecordingEnter * LightOnedark
-"   autocmd RecordingLeave * DarkHybrid
-" augroup END
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: kana/vim-operator-user
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -1349,13 +1193,6 @@ augroup vimrc-taskpaper
   " バッファに入った時の処理（taskpaperならハイライト更新、他ならクリア）
   autocmd BufEnter * call s:handle_taskpaper_highlights()
 augroup END
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGSETTING: arto-app/arto.vim
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" macOS (default: '/Applications/Arto.app')
-let g:arto_path = '/Applications/Arto.app'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SECTION: original

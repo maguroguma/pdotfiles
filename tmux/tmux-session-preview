@@ -5,8 +5,8 @@
 
 session="$1"
 
-printf "\033[48;2;230;150;255m\033[97m 📋 Processes ─────────────────────────────────────────────────────────────────\033[0m\n"
-tmux list-panes -s -t "$session" -F "  P#{pane_index}: #{pane_current_command} (#{pane_id})"
+# printf "\033[48;2;230;150;255m\033[97m 📋 Processes ─────────────────────────────────────────────────────────────────\033[0m\n"
+# tmux list-panes -s -t "$session" -F "  P#{pane_index}: #{pane_current_command} (#{pane_id})"
 
 tmux list-panes -s -t "$session" -F "#{pane_id}" | while read -r pane_id; do
   echo ""
