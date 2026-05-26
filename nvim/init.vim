@@ -154,6 +154,13 @@ call jetpack#add('hrsh7th/cmp-buffer', { 'commit': 'b74fab3' }) " [2025/04/01 17
 call jetpack#add('hrsh7th/cmp-path', { 'commit': 'c642487' }) " [2025/07/30 12:07:41 c642487]
 call jetpack#add('hrsh7th/cmp-cmdline', { 'commit': 'd126061' }) " [2025/05/18 10:04:26 d126061]
 call jetpack#add('hrsh7th/nvim-cmp', { 'commit': 'a1d5048' }) " [2026/03/25 15:28:59 a1d5048]
+call jetpack#add('hrsh7th/cmp-nvim-lsp', { 'commit': 'cbc7b02' }) " [2025/11/13 12:57:45 cbc7b02] LSP補完ソース
+
+call jetpack#add('neovim/nvim-lspconfig', { 'commit': 'a4ed4e7' }) " [2026/05/22 08:52:53 a4ed4e7] LSP設定
+call jetpack#add('williamboman/mason.nvim', { 'commit': 'bb639d4' }) " [2026/05/22 20:19:38 bb639d4] LSPサーバーのバイナリ管理
+call jetpack#add('williamboman/mason-lspconfig.nvim', { 'commit': '7b01e29' }) " [2026/05/15 12:52:21 7b01e29] mason と lspconfig の橋渡し
+call jetpack#add('stevearc/conform.nvim', { 'commit': '619363c' }) " [2026/05/24 19:49:05 619363c]
+call jetpack#add('mfussenegger/nvim-lint', { 'commit': 'd48f3a7' }) " [2026/05/19 19:32:31 d48f3a7]
 
 call jetpack#add('nvim-tree/nvim-web-devicons', { 'commit': '0d7d35f' }) " [2026/05/21 23:36:10 0d7d35f]
 
@@ -168,7 +175,7 @@ call jetpack#add('folke/todo-comments.nvim', { 'commit': '31e3c38' }) " [2025/11
 call jetpack#add('nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'commit': 'cf12346' }) " [2026/03/23 19:42:18 cf12346]
 call jetpack#add('rhysd/committia.vim', { 'on_ft': ['gitcommit', 'git', 'gina-commit'], 'commit': 'c8c0f25' }) " [2024/11/03 23:52:35 c8c0f25]
 
-call jetpack#add('neoclide/coc.nvim', { 'commit': 'a23e8e5' }) " [2026/05/22 16:45:38 a23e8e5]
+" call jetpack#add('neoclide/coc.nvim', { 'commit': 'a23e8e5' }) " [2026/05/22 16:45:38 a23e8e5] nvim-lspconfig に移行
 call jetpack#add('cohama/lexima.vim', { 'commit': 'ab621e4' }) " [2025/05/16 00:21:58 ab621e4]
 
 call jetpack#add('haya14busa/vim-asterisk', { 'commit': '77e9706' }) " [2020/02/04 02:44:39 77e9706] better asterisk behavior
@@ -696,9 +703,11 @@ let g:go_highlight_types = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_fmt_command = "goimports"
-" LSPに任せる機能をOFFにする
+let g:go_fmt_autosave = 0 " conform.nvim に一本化するため vim-go の autosave を無効化
+" LSPに任せる機能をOFFにする（nvim-lspconfig の gopls が担当するため）
 let g:go_def_mapping_enabled = 0
 let g:go_doc_keywordprg_enabled = 0
+let g:go_gopls_enabled = 0
 
 " autocmd FileType go nmap <Space>b  <Plug>(go-build)
 autocmd FileType go nmap <Space>r  <Plug>(go-run)
@@ -750,6 +759,7 @@ function! g:SelectType() abort
     return
   endif
 endfunction
+if 0 " ===== coc.nvim 設定 (nvim-lspconfig に移行済み) =====
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: neoclide/coc.nvim
@@ -943,6 +953,7 @@ let g:coc_global_extensions = [
 """
 " let g:coc_node_path = '/path/to/node'
 
+endif " ===== coc.nvim 設定ここまで =====
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: cohama/lexima.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -982,13 +993,10 @@ endfunction
 
 call SetupLexima()
 
-" cocの補完をEnterで決定する（leximaの設定を上書きする）
-inoremap <silent><expr> <C-k><C-j> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-" helpより
-inoremap <silent><expr> <CR> coc#pum#visible() ? "\<CR>" :
-      \ "\<C-g>u\<C-r>=lexima#expand('<LT>CR>', 'i')\<CR><C-r>=coc#on_enter()\<CR>"
+" nvim-cmp + lexima の Enter キー統合
+" cmp が表示中の場合は myconfig.lua の Lua キーマップが先に処理する
+" cmp が表示されていない場合はこの inoremap が呼ばれ、lexima に委ねる
+inoremap <silent><expr> <CR> "\<C-g>u\<C-r>=lexima#expand('<LT>CR>', 'i')\<CR>"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGSETTING: MattesGroeger/vim-bookmarks
@@ -1085,11 +1093,12 @@ imap <C-j> <Plug>(skkeleton-enable)
 cmap <C-j> <Plug>(skkeleton-enable)
 tmap <C-j> <Plug>(skkeleton-enable)
 
-augroup skkeleton-coc
-  autocmd!
-  autocmd User skkeleton-enable-pre let b:coc_suggest_disable = v:true
-  autocmd User skkeleton-disable-pre let b:coc_suggest_disable = v:false
-augroup END
+" skkeleton と nvim-cmp の統合は myconfig.lua の cmp.setup の enabled 関数で制御する
+" augroup skkeleton-coc
+"   autocmd!
+"   autocmd User skkeleton-enable-pre let b:coc_suggest_disable = v:true
+"   autocmd User skkeleton-disable-pre let b:coc_suggest_disable = v:false
+" augroup END
 
 call skkeleton#register_kanatable('rom', {
       \ '(' : ['（', ''],

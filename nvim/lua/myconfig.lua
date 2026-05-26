@@ -555,17 +555,45 @@ local kind_icons = {
 }
 
 cmp.setup {
+  -- skkeleton（日本語入力）が有効な間は補完を無効化する
+  enabled = function()
+    if vim.fn['skkeleton#is_enabled']() then
+      return false
+    end
+    return true
+  end,
+
+  mapping = cmp.mapping.preset.insert({
+    ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+    ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    -- cmp が表示中にアクティブな候補があれば確定し、なければ fallback（lexima の <CR>）を呼ぶ
+    ['<CR>'] = cmp.mapping(function(fallback)
+      if cmp.visible() and cmp.get_active_entry() then
+        cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+      else
+        fallback()
+      end
+    end, { 'i' }),
+  }),
+
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+  }, {
+    { name = 'buffer' },
+    { name = 'path' },
+  }),
+
   formatting = {
     format = function(entry, vim_item)
-      -- Kind icons
-      vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
-      -- Source
+      vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
       vim_item.menu = ({
         buffer = "[Buffer]",
         nvim_lsp = "[LSP]",
-        luasnip = "[LuaSnip]",
         nvim_lua = "[Lua]",
-        latex_symbols = "[LaTeX]",
+        path = "[Path]",
       })[entry.source.name]
       return vim_item
     end
@@ -1195,3 +1223,258 @@ vim.api.nvim_set_keymap("n", "ss", "<cmd>BlinkWindow<cr>", { noremap = true, sil
 
 vim.wo.foldmethod = 'expr'
 vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+
+-- PLUGSETTING: mason.nvim + nvim-lspconfig
+-- -------------------------------------------------------
+-- キーマップ（LSP バッファアタッチ時に設定）
+-- -------------------------------------------------------
+local function on_attach(_, bufnr)
+  local opts = { noremap = true, silent = true, buffer = bufnr }
+
+  -- 診断ナビ（coc の [g / ]g に相当）
+  vim.keymap.set('n', '[g', vim.diagnostic.goto_prev, opts)
+  vim.keymap.set('n', ']g', vim.diagnostic.goto_next, opts)
+
+  -- コードナビゲーション（coc の gd / gH / gi / gr に相当）
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+  vim.keymap.set('n', 'gH', vim.lsp.buf.type_definition, opts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+
+  -- ホバー（coc の gh に相当）
+  vim.keymap.set('n', 'gh', vim.lsp.buf.hover, opts)
+
+  -- シンボルリネーム（coc の <Space>rn に相当）
+  vim.keymap.set('n', '<Space>rn', vim.lsp.buf.rename, opts)
+
+  -- コードアクション（coc の <Space>a / <Space>ac に相当）
+  vim.keymap.set({ 'n', 'x' }, '<Space>a', vim.lsp.buf.code_action, opts)
+  vim.keymap.set('n', '<Space>ac', vim.lsp.buf.code_action, opts)
+
+  -- フォーマット（coc の <Space>f に相当）
+  -- conform.nvim が担当し、設定のない filetype は LSP format にフォールバックする
+  vim.keymap.set({ 'n', 'x' }, '<Space>f', function()
+    require('conform').format({ async = true, lsp_format = 'fallback' })
+  end, opts)
+
+  -- コードレンズ（coc の <Space>cl に相当）
+  vim.keymap.set('n', '<Space>cl', vim.lsp.codelens.run, opts)
+
+  -- カーソル下のシンボルをハイライト（coc の CursorHold highlight に相当）
+  local augroup_id = vim.api.nvim_create_augroup('lsp_document_highlight_' .. bufnr, { clear = true })
+  vim.api.nvim_create_autocmd('CursorHold', {
+    group = augroup_id,
+    buffer = bufnr,
+    callback = vim.lsp.buf.document_highlight,
+  })
+  vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+    group = augroup_id,
+    buffer = bufnr,
+    callback = vim.lsp.buf.clear_references,
+  })
+end
+
+-- -------------------------------------------------------
+-- mason.nvim の初期化
+-- -------------------------------------------------------
+require('mason').setup()
+
+-- LSP サーバー以外（リンター・フォーマッター等）の自動インストール
+-- mason-lspconfig は LSP サーバー専用のため、それ以外は Mason の Lua API で管理する
+local function mason_ensure_installed(packages)
+  local registry = require('mason-registry')
+  registry.refresh(function()
+    for _, name in ipairs(packages) do
+      local ok, pkg = pcall(registry.get_package, name)
+      if ok and not pkg:is_installed() then
+        pkg:install()
+      end
+    end
+  end)
+end
+
+mason_ensure_installed({
+  'golangci-lint',
+})
+
+-- -------------------------------------------------------
+-- mason-lspconfig: 必要な LSP サーバーを自動インストール
+-- -------------------------------------------------------
+require('mason-lspconfig').setup({
+  ensure_installed = {
+    'gopls',    -- Go
+    'ts_ls',    -- TypeScript / JavaScript
+    'bashls',   -- bash / zsh
+    'vimls',    -- Vim script
+    'lua_ls',   -- Lua
+  },
+  automatic_installation = true,
+})
+
+-- -------------------------------------------------------
+-- nvim-lspconfig: 各言語サーバーの設定 (Neovim 0.11+ / lspconfig v3.x API)
+-- nvim-lspconfig がサーバーのデフォルト設定を vim.lsp.config に登録するため、
+-- require('lspconfig').xxx.setup() は不要。vim.lsp.config で上書きするだけでよい。
+-- -------------------------------------------------------
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+-- Go
+vim.lsp.config('gopls', {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+        shadow = true,
+      },
+      staticcheck = true,
+    },
+  },
+})
+
+-- TypeScript / JavaScript
+vim.lsp.config('ts_ls', {
+  capabilities = capabilities,
+  on_attach = on_attach,
+})
+
+-- bash / zsh
+vim.lsp.config('bashls', {
+  capabilities = capabilities,
+  on_attach = on_attach,
+})
+
+-- Vim script
+vim.lsp.config('vimls', {
+  capabilities = capabilities,
+  on_attach = on_attach,
+})
+
+-- Lua
+-- workspace.library で Neovim 組み込みの API（vim.lsp.* 等）を認識させる
+vim.lsp.config('lua_ls', {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file('', true),
+        checkThirdParty = false,
+      },
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+})
+
+-- サーバーを有効化
+vim.lsp.enable({ 'gopls', 'ts_ls', 'bashls', 'vimls', 'lua_ls' })
+
+-- -------------------------------------------------------
+-- 診断表示の設定
+-- -------------------------------------------------------
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})
+
+-- -------------------------------------------------------
+-- PLUGSETTING: conform.nvim
+-- -------------------------------------------------------
+require('conform').setup({
+  -- 保存時に自動フォーマット
+  format_on_save = {
+    timeout_ms = 2000,
+    -- conform に設定のない filetype は LSP format にフォールバックする
+    lsp_format = 'fallback',
+  },
+
+  formatters_by_ft = {
+    go                  = { 'goimports' },
+    javascript          = { 'prettier' },
+    javascriptreact     = { 'prettier' },
+    typescript          = { 'prettier' },
+    typescriptreact     = { 'prettier' },
+    css                 = { 'prettier' },
+    vue                 = { 'prettier' },
+    json                = { 'prettier' },
+    html                = { 'prettier' },
+  },
+
+  formatters = {
+    prettier = {
+      -- プロジェクトにローカルの prettier バイナリまたは設定ファイルがある場合のみ実行する
+      condition = function(_, ctx)
+        return vim.fs.find({
+          '.prettierrc',
+          '.prettierrc.json',
+          '.prettierrc.js',
+          '.prettierrc.cjs',
+          '.prettierrc.yaml',
+          '.prettierrc.yml',
+          'prettier.config.js',
+          'prettier.config.cjs',
+          'prettier.config.mjs',
+          'node_modules/.bin/prettier',
+        }, { path = ctx.filename, upward = true })[1] ~= nil
+      end,
+    },
+  },
+})
+
+-- -------------------------------------------------------
+-- PLUGSETTING: nvim-lint
+-- -------------------------------------------------------
+local lint = require('lint')
+
+-- ESLint: プロジェクトローカルのバイナリを優先して使う
+lint.linters.eslint.cmd = function()
+  local found = vim.fs.find('node_modules/.bin/eslint', {
+    upward = true,
+    path = vim.fn.expand('%:p:h'),
+  })
+  return #found > 0 and found[1] or 'eslint'
+end
+
+lint.linters_by_ft = {
+  javascript      = { 'eslint' },
+  javascriptreact = { 'eslint' },
+  typescript      = { 'eslint' },
+  typescriptreact = { 'eslint' },
+  vue             = { 'eslint' },
+  go              = { 'golangcilint' },
+}
+
+-- リント実行のトリガー
+vim.api.nvim_create_autocmd({ 'BufWritePost', 'InsertLeave' }, {
+  callback = function()
+    local ft = vim.bo.filetype
+
+    -- JS/TS/Vue: プロジェクトに eslint 設定またはローカルバイナリがある場合のみ実行
+    if vim.tbl_contains({ 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'vue' }, ft) then
+      local eslint_found = vim.fs.find({
+        '.eslintrc', '.eslintrc.js', '.eslintrc.cjs', '.eslintrc.json',
+        '.eslintrc.yaml', '.eslintrc.yml',
+        'eslint.config.js', 'eslint.config.mjs', 'eslint.config.cjs',
+        'node_modules/.bin/eslint',
+      }, { upward = true, path = vim.fn.expand('%:p:h') })
+      if #eslint_found > 0 then
+        lint.try_lint()
+      end
+      return
+    end
+
+    -- Go: 無条件で実行（golangci-lint は常に PATH にある前提）
+    if ft == 'go' then
+      lint.try_lint()
+    end
+  end,
+})
