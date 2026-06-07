@@ -1,18 +1,19 @@
 -- PLUGSETTING: lualine
 -- ref: https://www.reddit.com/r/neovim/comments/xy0tu1/cmdheight0_recording_macros_message/
 function _G.show_macro_recording()
-    local recording_register = vim.fn.reg_recording()
-    if recording_register == "" then
-        return ""
-    else
-        return "🎬RECORDING MACRO @" .. recording_register .. "🎬"
-    end
+  local recording_register = vim.fn.reg_recording()
+  if recording_register == "" then
+    return ""
+  else
+    return "🎬RECORDING MACRO @" .. recording_register .. "🎬"
+  end
 end
+
 local lualine = require('lualine')
 lualine.setup {
   options = {
-    component_separators = { left = '', right = ''},
-    section_separators = { left = '', right = ''},
+    component_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
     theme = 'everforest',
 
     disabled_filetypes = {
@@ -28,7 +29,7 @@ lualine.setup {
       },
       'mode',
     },
-    lualine_b = {'location'},
+    lualine_b = { 'location' },
     lualine_c = {
       {
         'filename',
@@ -37,14 +38,14 @@ lualine.setup {
         newfile_status = true,   -- Display new file status (new file means no write after created)
         symbols = {
           modified = '[+]',      -- Text to show when the file is modified.
-          readonly = '[-RO]',      -- Text to show when the file is non-modifiable or readonly.
+          readonly = '[-RO]',    -- Text to show when the file is non-modifiable or readonly.
           unnamed = '[No Name]', -- Text to show for unnamed buffers.
           newfile = '[New]',     -- Text to show for new created file before first writting
         },
       },
     },
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
-    lualine_y = {'branch'},
+    lualine_x = { 'encoding', 'fileformat', 'filetype' },
+    lualine_y = { 'branch' },
     lualine_z = {}
   },
   inactive_sections = {
@@ -57,60 +58,61 @@ lualine.setup {
         shorting_target = 40,
       },
     },
-    lualine_x = {'location'},
+    lualine_x = { 'location' },
     lualine_y = {},
     lualine_z = {}
   },
 }
 vim.api.nvim_create_autocmd("RecordingEnter", {
-    callback = function()
-        lualine.refresh({
-            place = { "statusline" },
-        })
-    end,
+  callback = function()
+    lualine.refresh({
+      place = { "statusline" },
+    })
+  end,
 })
 vim.api.nvim_create_autocmd("RecordingLeave", {
-    callback = function()
-        -- This is going to seem really weird!
-        -- Instead of just calling refresh we need to wait a moment because of the nature of
-        -- `vim.fn.reg_recording`. If we tell lualine to refresh right now it actually will
-        -- still show a recording occuring because `vim.fn.reg_recording` hasn't emptied yet.
-        -- So what we need to do is wait a tiny amount of time (in this instance 50 ms) to
-        -- ensure `vim.fn.reg_recording` is purged before asking lualine to refresh.
-        local timer = vim.loop.new_timer()
-        timer:start(
-            50,
-            0,
-            vim.schedule_wrap(function()
-                lualine.refresh({
-                    place = { "statusline" },
-                })
-            end)
-        )
-    end,
+  callback = function()
+    -- This is going to seem really weird!
+    -- Instead of just calling refresh we need to wait a moment because of the nature of
+    -- `vim.fn.reg_recording`. If we tell lualine to refresh right now it actually will
+    -- still show a recording occuring because `vim.fn.reg_recording` hasn't emptied yet.
+    -- So what we need to do is wait a tiny amount of time (in this instance 50 ms) to
+    -- ensure `vim.fn.reg_recording` is purged before asking lualine to refresh.
+    local timer = vim.loop.new_timer()
+    timer:start(
+      50,
+      0,
+      vim.schedule_wrap(function()
+        lualine.refresh({
+          place = { "statusline" },
+        })
+      end)
+    )
+  end,
 })
 
 -- PLUGSETTING: lewis6991/gitsigns.nvim
 require('gitsigns').setup {
-  signs = {
-    add          = { text = '┃' },
-    change       = { text = '┃' },
-    delete       = { text = '_' },
+  -- 極太: █
+  signs                        = {
+    add          = { text = '▌' },
+    change       = { text = '▌' },
+    delete       = { text = '-' },
     topdelete    = { text = '‾' },
     changedelete = { text = '~' },
     untracked    = { text = '┆' },
   },
-  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
-  numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
-  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
-  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
-  watch_gitdir = {
+  signcolumn                   = true,  -- Toggle with `:Gitsigns toggle_signs`
+  numhl                        = true,  -- Toggle with `:Gitsigns toggle_numhl`
+  linehl                       = false, -- Toggle with `:Gitsigns toggle_linehl`
+  word_diff                    = false, -- Toggle with `:Gitsigns toggle_word_diff`
+  watch_gitdir                 = {
     follow_files = true
   },
-  auto_attach = true,
-  attach_to_untracked = false,
-  current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
-  current_line_blame_opts = {
+  auto_attach                  = true,
+  attach_to_untracked          = false,
+  current_line_blame           = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+  current_line_blame_opts      = {
     virt_text = true,
     virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
     delay = 1000,
@@ -118,11 +120,11 @@ require('gitsigns').setup {
     virt_text_priority = 100,
   },
   current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
-  sign_priority = 6,
-  update_debounce = 100,
-  status_formatter = nil, -- Use default
-  max_file_length = 40000, -- Disable if file is longer than this (in lines)
-  preview_config = {
+  sign_priority                = 6,
+  update_debounce              = 100,
+  status_formatter             = nil,   -- Use default
+  max_file_length              = 40000, -- Disable if file is longer than this (in lines)
+  preview_config               = {
     -- Options passed to nvim_open_win
     border = 'single',
     style = 'minimal',
@@ -131,7 +133,7 @@ require('gitsigns').setup {
     col = 1
   },
 
-  on_attach = function(bufnr)
+  on_attach                    = function(bufnr)
     local gitsigns = require('gitsigns')
 
     local function map(mode, l, r, opts)
@@ -214,7 +216,7 @@ vim.keymap.set("n", "gp", "<cmd>Gitsigns preview_hunk_inline<CR>")
 -- HACK:
 -- WARNING:
 require("todo-comments").setup {
-  signs = true, -- show icons in the signs column
+  signs = true,      -- show icons in the signs column
   sign_priority = 8, -- sign priority
   -- keywords recognized as todo comments
   keywords = {
@@ -236,13 +238,13 @@ require("todo-comments").setup {
   -- * keyword: highlights of the keyword
   -- * after: highlights after the keyword (todo text)
   highlight = {
-    before = "", -- "fg" or "bg" or empty
-    keyword = "wide", -- "fg", "bg", "wide" or empty. (wide is the same as bg, but will also highlight surrounding characters)
-    after = "fg", -- "fg" or "bg" or empty
+    before = "",                     -- "fg" or "bg" or empty
+    keyword = "wide",                -- "fg", "bg", "wide" or empty. (wide is the same as bg, but will also highlight surrounding characters)
+    after = "fg",                    -- "fg" or "bg" or empty
     pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlightng (vim regex)
-    comments_only = true, -- uses treesitter to match keywords in comments only
-    max_line_len = 400, -- ignore lines longer than this
-    exclude = {}, -- list of file types to exclude highlighting
+    comments_only = true,            -- uses treesitter to match keywords in comments only
+    max_line_len = 400,              -- ignore lines longer than this
+    exclude = {},                    -- list of file types to exclude highlighting
   },
   -- list of named colors where we try to extract the guifg from the
   -- list of hilight groups or use the hex color if hl not found as a fallback
@@ -271,17 +273,17 @@ require("todo-comments").setup {
 
 -- PLUGSETTING: nvim-hlslens
 require('hlslens').setup({
-    nearest_only = true
+  nearest_only = true
 })
 
-local kopts = {noremap = true, silent = true}
+local kopts = { noremap = true, silent = true }
 
 vim.api.nvim_set_keymap('n', 'n',
-    [[<Cmd>execute('keepjumps normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>zz]],
-    kopts)
+  [[<Cmd>execute('keepjumps normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>zz]],
+  kopts)
 vim.api.nvim_set_keymap('n', 'N',
-    [[<Cmd>execute('keepjumps normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>zz]],
-    kopts)
+  [[<Cmd>execute('keepjumps normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>zz]],
+  kopts)
 
 -- vim-asterisk integration
 vim.api.nvim_set_keymap('n', '*', [[<Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>]], {})
@@ -294,7 +296,7 @@ vim.api.nvim_set_keymap('x', 'g*', [[<Plug>(asterisk-gz*)<Cmd>lua require('hlsle
 vim.api.nvim_set_keymap('x', 'g#', [[<Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>]], {})
 
 -- PLUGSETTING: nvim-treesitter/nvim-treesitter
-require'nvim-treesitter.configs'.setup {
+require 'nvim-treesitter.configs'.setup {
   parser_install_dir = vim.fn.expand("$XDG_DATA_HOME/nvim/site/pack/jetpack/nvim-treesitter"),
 }
 
@@ -304,13 +306,13 @@ vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 
 -- If you want icons for diagnostic errors, you'll need to define them somewhere:
 vim.fn.sign_define("DiagnosticSignError",
-  {text = " ", texthl = "DiagnosticSignError"})
+  { text = " ", texthl = "DiagnosticSignError" })
 vim.fn.sign_define("DiagnosticSignWarn",
-  {text = " ", texthl = "DiagnosticSignWarn"})
+  { text = " ", texthl = "DiagnosticSignWarn" })
 vim.fn.sign_define("DiagnosticSignInfo",
-  {text = " ", texthl = "DiagnosticSignInfo"})
+  { text = " ", texthl = "DiagnosticSignInfo" })
 vim.fn.sign_define("DiagnosticSignHint",
-  {text = "", texthl = "DiagnosticSignHint"})
+  { text = "", texthl = "DiagnosticSignHint" })
 -- NOTE: this is changed from v1.x, which used the old style of highlight groups
 -- in the form "LspDiagnosticsSignWarning"
 
@@ -320,7 +322,7 @@ require("neo-tree").setup({
   enable_git_status = true,
   enable_diagnostics = true,
   sort_case_insensitive = false, -- used when sorting files and directories in the tree
-  sort_function = nil , -- use a custom function for sorting files and directories in the tree 
+  sort_function = nil,           -- use a custom function for sorting files and directories in the tree
   -- sort_function = function (a,b)
   --       if a.type == b.type then
   --           return a.path > b.path
@@ -369,8 +371,8 @@ require("neo-tree").setup({
         -- Change type
         added     = "", -- or "✚", but this is redundant info if you use git_status_colors on the name
         modified  = "", -- or "", but this is redundant info if you use git_status_colors on the name
-        deleted   = "✖",-- this can only be used in the git_status source
-        renamed   = "",-- this can only be used in the git_status source
+        deleted   = "✖", -- this can only be used in the git_status source
+        renamed   = "", -- this can only be used in the git_status source
         -- Status type
         untracked = "",
         ignored   = "",
@@ -388,9 +390,9 @@ require("neo-tree").setup({
       nowait = true,
     },
     mappings = {
-      ["<space>"] = { 
-          "toggle_node", 
-          nowait = true, -- disable `nowait` if you have existing combos starting with this char that you want to use 
+      ["<space>"] = {
+        "toggle_node",
+        nowait = true, -- disable `nowait` if you have existing combos starting with this char that you want to use
       },
       ["<2-LeftMouse>"] = "open",
       ["l"] = "open",
@@ -410,7 +412,7 @@ require("neo-tree").setup({
       ["h"] = "close_node",
       ["z"] = "noop",
       --["Z"] = "expand_all_nodes",
-      ["a"] = { 
+      ["a"] = {
         "add",
         -- this command supports BASH style brace expansion ("x{a,b,c}" -> xa,xb,xc). see `:h neo-tree-file-actions` for details
         -- some commands may take optional config options, see `:h neo-tree-mappings` for details
@@ -465,18 +467,18 @@ require("neo-tree").setup({
       },
     },
     follow_current_file = {
-      enabled = false, -- This will find and focus the file in the active buffer every time
+      enabled = false,                      -- This will find and focus the file in the active buffer every time
       --               -- the current file is changed while the tree is open.
-      leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+      leave_dirs_open = false,              -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
     },
-    group_empty_dirs = false, -- when true, empty folders will be grouped together
+    group_empty_dirs = false,               -- when true, empty folders will be grouped together
     hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
-                                            -- in whatever position is specified in window.position
-                          -- "open_current",  -- netrw disabled, opening a directory opens within the
-                                            -- window like netrw would, regardless of window.position
-                          -- "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
+    -- in whatever position is specified in window.position
+    -- "open_current",  -- netrw disabled, opening a directory opens within the
+    -- window like netrw would, regardless of window.position
+    -- "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
     use_libuv_file_watcher = false, -- This will use the OS level file watchers to detect changes
-                                    -- instead of relying on nvim autocmd events.
+    -- instead of relying on nvim autocmd events.
     window = {
       mappings = {
         ["<bs>"] = "navigate_up",
@@ -493,11 +495,11 @@ require("neo-tree").setup({
   },
   buffers = {
     follow_current_file = {
-      enabled = true, -- This will find and focus the file in the active buffer every time
+      enabled = true,          -- This will find and focus the file in the active buffer every time
       --              -- the current file is changed while the tree is open.
       leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
     },
-    group_empty_dirs = true, -- when true, empty folders will be grouped together
+    group_empty_dirs = true,   -- when true, empty folders will be grouped together
     show_unloaded = true,
     window = {
       mappings = {
@@ -524,7 +526,7 @@ require("neo-tree").setup({
 })
 
 -- PLUGSETTING: nvim-cmp
-local cmp = require'cmp'
+local cmp = require 'cmp'
 
 local kind_icons = {
   Text = "",
@@ -629,12 +631,12 @@ cmp.setup.cmdline(':', {
     { name = 'cmdline' }
   }),
   view = {
-    entries = {name = 'custom', selection_order = 'near_cursor' }
+    entries = { name = 'custom', selection_order = 'near_cursor' }
   },
 })
 
 -- PLUGSETTING: pounce
-require'pounce'.setup{
+require 'pounce'.setup {
   accept_keys = "HJKLYUIOPNMQWERTASDFGZXCVB",
   accept_best_key = "<enter>",
   multi_window = true,
@@ -716,11 +718,11 @@ require("hlchunk").setup({
 
 -- PLUGSETTING: kazhala/close-buffers.nvim
 require('close_buffers').setup({
-  filetype_ignore = {},  -- Filetype to ignore when running deletions
-  file_glob_ignore = {},  -- File name glob pattern to ignore when running deletions (e.g. '*.md')
-  file_regex_ignore = {}, -- File name regex pattern to ignore when running deletions (e.g. '.*[.]md')
-  preserve_window_layout = { 'this', 'nameless' },  -- Types of deletion that should preserve the window layout
-  next_buffer_cmd = nil,  -- Custom function to retrieve the next buffer when preserving window layout
+  filetype_ignore = {},                            -- Filetype to ignore when running deletions
+  file_glob_ignore = {},                           -- File name glob pattern to ignore when running deletions (e.g. '*.md')
+  file_regex_ignore = {},                          -- File name regex pattern to ignore when running deletions (e.g. '.*[.]md')
+  preserve_window_layout = { 'this', 'nameless' }, -- Types of deletion that should preserve the window layout
+  next_buffer_cmd = nil,                           -- Custom function to retrieve the next buffer when preserving window layout
 })
 
 vim.keymap.set('n', '<Space>d', "<cmd>BDelete hidden<cr>", { noremap = true, silent = false })
@@ -772,8 +774,8 @@ vim.keymap.set('n', '<leader>u', require('undotree').toggle, { noremap = true, s
 require('nvim-ts-autotag').setup({
   opts = {
     -- Defaults
-    enable_close = true, -- Auto close tags
-    enable_rename = true, -- Auto rename pairs of tags
+    enable_close = true,          -- Auto close tags
+    enable_rename = true,         -- Auto rename pairs of tags
     enable_close_on_slash = false -- Auto close on trailing </
   },
   -- Also override individual filetype configs, these take priority.
@@ -804,12 +806,12 @@ require('render-markdown').setup({
     --     'RenderMarkdownH1Bg',
     -- },
     foregrounds = {
-        'RenderMarkdownH1',
-        'RenderMarkdownH1',
-        'RenderMarkdownH1',
-        'RenderMarkdownH1',
-        'RenderMarkdownH1',
-        'RenderMarkdownH1',
+      'RenderMarkdownH1',
+      'RenderMarkdownH1',
+      'RenderMarkdownH1',
+      'RenderMarkdownH1',
+      'RenderMarkdownH1',
+      'RenderMarkdownH1',
     },
   },
 
@@ -831,31 +833,31 @@ vim.api.nvim_set_hl(0, 'RenderMarkdownH6Bg', { bg = '#ffffff' }) -- 白
 local actions = require("fzf-lua").actions
 require('fzf-lua').setup({
   winopts = {
-    height           = 0.6,            -- window height
-    width            = 0.8,            -- window width
-    row              = 0.5,            -- window row position (0=top, 1=bottom)
-    col              = 0.5,            -- window col position (0=left, 1=right)
+    height  = 0.6, -- window height
+    width   = 0.8, -- window width
+    row     = 0.5, -- window row position (0=top, 1=bottom)
+    col     = 0.5, -- window col position (0=left, 1=right)
 
     preview = {
-      default = false,
-      vertical       = "down:50%",      -- up|down:size
-      layout         = "vertical",          -- horizontal|vertical|flex
+      default  = false,
+      vertical = "down:50%", -- up|down:size
+      layout   = "vertical", -- horizontal|vertical|flex
     },
   },
   git = {
     status = {
-      prompt        = 'GitStatus❯ ',
+      prompt  = 'GitStatus❯ ',
       actions = {
         ["right"]  = false,
         ["left"]   = false,
-        ["ctrl-l"]  = { fn = actions.git_unstage, reload = true },
-        ["ctrl-h"]   = { fn = actions.git_stage, reload = true },
+        ["ctrl-l"] = { fn = actions.git_unstage, reload = true },
+        ["ctrl-h"] = { fn = actions.git_stage, reload = true },
         ["ctrl-x"] = { fn = actions.git_reset, reload = true },
       },
     },
   },
   buffers = {
-    prompt            = 'Buffers❯ ',
+    prompt = 'Buffers❯ ',
   },
 })
 -- light theme だとまぶしかったので暗くした MediumSpringGreen -> CadetBlue4
@@ -865,9 +867,9 @@ vim.api.nvim_set_hl(0, "FzfLuaTabMarker", { fg = "CadetBlue4" })
 
 -- 共通オプション
 local opts_with_no_ignore = {
-  no_ignore = true,                     -- git ignore を無視
+  no_ignore = true,                           -- git ignore を無視
   file_ignore_patterns = { "^node_modules" }, -- node_modules のみ除外
-  hidden = true,                         -- 隠しファイルも含める
+  hidden = true,                              -- 隠しファイルも含める
 }
 -- 1. nmap: ファイルをバッファで開く
 vim.keymap.set("n", "<C-]>", function()
@@ -927,31 +929,31 @@ require("ccc").setup()
 -- PLUGSETTING: chrisgrieser/nvim-origami
 -- default settings
 require("origami").setup {
-	useLspFoldsWithTreesitterFallback = {
-		enabled = true,
-		foldmethodIfNeitherIsAvailable = "indent", ---@type string|fun(bufnr: number): string
-	},
-	pauseFoldsOnSearch = true,
-	foldtext = {
-		enabled = true,
-		padding = { width = 3 },
-		lineCount = {
-			template = "%d lines", -- `%d` is replaced with the number of folded lines
-			hlgroup = "Comment",
-		},
-		diagnosticsCount = true, -- uses hlgroups and icons from `vim.diagnostic.config().signs`
-		gitsignsCount = true, -- requires `gitsigns.nvim`
-		disableOnFt = { "snacks_picker_input" }, ---@type string[]
-	},
-	autoFold = {
-		enabled = true,
-		kinds = { "comment", "imports" }, ---@type lsp.FoldingRangeKind[]
-	},
-	foldKeymaps = {
-		setup = true, -- modifies `h`, `l`, `^`, and `$`
-		closeOnlyOnFirstColumn = false, -- `h` and `^` only close in the 1st column
-		scrollLeftOnCaret = false, -- `^` should scroll left (basically mapped to `0^`)
-	},
+  useLspFoldsWithTreesitterFallback = {
+    enabled = true,
+    foldmethodIfNeitherIsAvailable = "indent", ---@type string|fun(bufnr: number): string
+  },
+  pauseFoldsOnSearch = true,
+  foldtext = {
+    enabled = true,
+    padding = { width = 3 },
+    lineCount = {
+      template = "%d lines", -- `%d` is replaced with the number of folded lines
+      hlgroup = "Comment",
+    },
+    diagnosticsCount = true, -- uses hlgroups and icons from `vim.diagnostic.config().signs`
+    gitsignsCount = true,    -- requires `gitsigns.nvim`
+    disableOnFt = { "snacks_picker_input" }, ---@type string[]
+  },
+  autoFold = {
+    enabled = true,
+    kinds = { "comment", "imports" }, ---@type lsp.FoldingRangeKind[]
+  },
+  foldKeymaps = {
+    setup = true,                   -- modifies `h`, `l`, `^`, and `$`
+    closeOnlyOnFirstColumn = false, -- `h` and `^` only close in the 1st column
+    scrollLeftOnCaret = false,      -- `^` should scroll left (basically mapped to `0^`)
+  },
 }
 
 -- PLUGSETTING: A7Lavinraj/fyler.nvim
@@ -1050,14 +1052,14 @@ local tcs = require('toggle-cheatsheet').setup(true)
 
 -- チートシートを定義する
 local cs1 = tcs.createCheatSheetFromSubmodeKeymap(
-  tcs.conf{
-    {"h","←"},
-    {"j","↓"},
-    {"k","↑"},
-    {"l","→"},
-    {"gg","Go to the top"},
-    {"G","Go to the bottom"},
-    {"%","Go to matching bracket"}
+  tcs.conf {
+    { "h", "←" },
+    { "j", "↓" },
+    { "k", "↑" },
+    { "l", "→" },
+    { "gg", "Go to the top" },
+    { "G", "Go to the bottom" },
+    { "%", "Go to matching bracket" }
   }
 )
 
@@ -1093,14 +1095,14 @@ visual 時に _ -> 無名レジスタを汚さず置換できる（プラグイ�
 --     tcs.toggle(cs1)
 -- end)
 vim.keymap.set("n", "<Leader>?", function()
-    tcs.toggle(cs2)
+  tcs.toggle(cs2)
 end)
 
 -- PLUGSETTING: gbprod/yanky.nvim
 require("yanky").setup({
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
+  -- your configuration comes here
+  -- or leave it empty to use the default settings
+  -- refer to the configuration section below
 })
 -- vim.keymap.set("n", "<Space>pp", "<cmd>YankyRingHistory<CR>", { desc = "" })
 
@@ -1165,7 +1167,7 @@ require("coverage").setup({
     uncovered = { fg = "#ea6633" },
   },
   signs = {
-    covered   = { hl = "CoverageCovered",   text = "┃" },
+    covered   = { hl = "CoverageCovered", text = "┃" },
     uncovered = { hl = "CoverageUncovered", text = "╎" },
   },
   summary = {
@@ -1302,11 +1304,11 @@ mason_ensure_installed({
 -- -------------------------------------------------------
 require('mason-lspconfig').setup({
   ensure_installed = {
-    'gopls',    -- Go
-    'ts_ls',    -- TypeScript / JavaScript
-    'bashls',   -- bash / zsh
-    'vimls',    -- Vim script
-    'lua_ls',   -- Lua
+    'gopls',  -- Go
+    'ts_ls',  -- TypeScript / JavaScript
+    'bashls', -- bash / zsh
+    'vimls',  -- Vim script
+    'lua_ls', -- Lua
   },
   automatic_installation = true,
 })
@@ -1398,15 +1400,15 @@ require('conform').setup({
   },
 
   formatters_by_ft = {
-    go                  = { 'goimports' },
-    javascript          = { 'prettier' },
-    javascriptreact     = { 'prettier' },
-    typescript          = { 'prettier' },
-    typescriptreact     = { 'prettier' },
-    css                 = { 'prettier' },
-    vue                 = { 'prettier' },
-    json                = { 'prettier' },
-    html                = { 'prettier' },
+    go              = { 'goimports' },
+    javascript      = { 'prettier' },
+    javascriptreact = { 'prettier' },
+    typescript      = { 'prettier' },
+    typescriptreact = { 'prettier' },
+    css             = { 'prettier' },
+    vue             = { 'prettier' },
+    json            = { 'prettier' },
+    html            = { 'prettier' },
   },
 
   formatters = {
