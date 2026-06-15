@@ -103,3 +103,5 @@ brew outdated
 brew doctor
 
 tmux send-keys -t #{pane_id} #{keys} Enter
+
+ls -l | grep '^l' ### カレントディレクトリのシンボリックリンクのみを表示する

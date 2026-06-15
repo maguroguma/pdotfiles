@@ -97,7 +97,15 @@ require('gitsigns').setup {
   signs                        = {
     add          = { text = '▌' },
     change       = { text = '▌' },
-    delete       = { text = '-' },
+    delete       = { text = '━' },
+    topdelete    = { text = '‾' },
+    changedelete = { text = '~' },
+    untracked    = { text = '┆' },
+  },
+  signs_staged                 = {
+    add          = { text = '▌' },
+    change       = { text = '▌' },
+    delete       = { text = '━' },
     topdelete    = { text = '‾' },
     changedelete = { text = '~' },
     untracked    = { text = '┆' },
@@ -821,6 +829,13 @@ require('render-markdown').setup({
   },
 
   render_modes = true,
+
+  win_options = {
+    conceallevel = {
+      default = 0,  -- 通常時の非表示レベルを0（すべて表示）にする
+      rendered = 0, -- レンダリング時も0にする
+    }
+  }
 })
 vim.api.nvim_set_hl(0, 'RenderMarkdownH1Bg', { bg = '#b5b37b' }) -- 濃い緑
 vim.api.nvim_set_hl(0, 'RenderMarkdownH2Bg', { bg = '#c5c39b' }) -- 少し薄い緑
@@ -1480,3 +1495,19 @@ vim.api.nvim_create_autocmd({ 'BufWritePost', 'InsertLeave' }, {
     end
   end,
 })
+
+-- -------------------------------------------------------
+-- PLUGSETTING: obsidian-nvim/obsidian.nvim
+-- -------------------------------------------------------
+require("obsidian").setup {
+  legacy_commands = false,
+  workspaces = {
+    {
+      name = "personal",
+      path = "~/go/src/github.com/maguroguma/diary", -- 自分の vault のパスに変更
+    },
+  },
+  picker = {
+    name = "fzf-lua", -- picker を使わない場合はこの行は不要
+  },
+}

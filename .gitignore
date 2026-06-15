@@ -101,6 +101,8 @@ nvim/pack/
 !claude/commands/japanese-hello.md
 !claude/commands/nippou/nippou-add.md
 !claude/commands/code-reading/how-to-read.md
+!claude/skills/grill-me/SKILL.md
+!claude/skills/skill-creator/**/*
 
 !.specify/**/*
 !specs/**/*.md

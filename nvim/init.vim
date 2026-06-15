@@ -247,6 +247,7 @@ call jetpack#add("andythigpen/nvim-coverage", { 'commit': 'a939e42' }) " [2024/1
 call jetpack#add('MeanderingProgrammer/render-markdown.nvim', { 'commit': '629eb95' }) " [2026/05/07 02:14:55 629eb95]
 
 call jetpack#add('ibhagwan/fzf-lua', { 'commit': '71b45a0' }) " [2026/05/21 10:55:26 71b45a0]
+call jetpack#add('obsidian-nvim/obsidian.nvim', { 'commit': '266c55b' }) " [2026/06/12 18:46:34 266c55b]
 call jetpack#end()
 " plugins END }}}
 
@@ -993,6 +994,9 @@ endfunction
 
 call SetupLexima()
 
+" markdown では一旦 lexima を無効化中
+" autocmd FileType markdown let b:lexima_disabled = 1
+
 " nvim-cmp + lexima の Enter キー統合
 " cmp が表示中の場合は myconfig.lua の Lua キーマップが先に処理する
 " cmp が表示されていない場合はこの inoremap が呼ばれ、lexima に委ねる
@@ -1246,7 +1250,7 @@ inoremap <C-a>sr <strong><span style="color:red;"></span></strong>
 " fzfで日付を入力したい
 function g:TerminalDay()
   let l:temp = @z
-  let @z = strftime("%Y-%m-%d")
+  let @z = strftime("%Y%m%d")
   put! z
   let @z = l:temp
   norm a
