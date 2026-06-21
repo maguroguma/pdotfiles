@@ -74,6 +74,7 @@ nvim/pack/
 !zsh/zsh.d/zshhooks
 !zsh/zsh.d/zshzplug
 !zsh/zsh.d/git-commands
+!zsh/zsh.d/any-commands
 !zsh/.zshrc
 !zsh/zsh.d/meditation
 

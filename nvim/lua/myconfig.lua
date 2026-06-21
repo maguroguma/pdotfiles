@@ -903,8 +903,8 @@ vim.keymap.set("i", "<C-a>f", function()
   }))
 end, { silent = true, desc = "Insert file path (no ignore, exclude node_modules)" })
 
--- insert mode で <C-a>b に git branch completion を設定
-vim.keymap.set("i", "<C-a>b", function()
+-- insert mode で <C-a>gb に git branch completion を設定
+vim.keymap.set("i", "<C-a>gb", function()
   require("fzf-lua").git_branches({
     complete = function(selected, opts, line, col)
       -- ブランチ名を行の先頭から抽出（'*' と余白を除去）
@@ -916,8 +916,8 @@ vim.keymap.set("i", "<C-a>b", function()
   })
 end, { silent = true, desc = "Complete git branch at cursor" })
 
--- insert mode で <C-a>c に git commit completion を設定
-vim.keymap.set("i", "<C-a>c", function()
+-- insert mode で <C-a>gc に git commit completion を設定
+vim.keymap.set("i", "<C-a>gc", function()
   require("fzf-lua").git_commits({
     -- 複数選択を有効化（デフォルトの --no-multi を上書き）
     fzf_opts = { ["--multi"] = true },

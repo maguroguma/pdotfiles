@@ -183,8 +183,7 @@ _gr() {
         cut -d' ' -f1
 }
 
-# エスケープバージョン
-# 2個目のキーはctrlなしでも発動するようにする
+# エスケープバージョン（複数の値を選択したい場合）
 bind-git-helper() {
   local c
   for c in $@; do
@@ -201,11 +200,18 @@ unset -f bind-git-helper
 _gg() {
     is_in_git_repo || return
     cat $DOTFILES_DIR/zsh/zsh.d/git-commands | \
-        fzf-down --prompt="commands> " | \
+        fzf-down --prompt="git commands> " | \
         cut -d'#' -f1
 }
 
-# エスケープしないバージョン
+# original: any well used commands
+_ga() {
+    cat $DOTFILES_DIR/zsh/zsh.d/any-commands | \
+        fzf-down --prompt="any commands> " | \
+        cut -d'#' -f1
+}
+
+# エスケープしないバージョン（単一行をそのまま選択したい場合）
 bind-git-helper-unescaped() {
   local c
   for c in $@; do
@@ -215,7 +221,7 @@ bind-git-helper-unescaped() {
     eval "bindkey '^g$c' fzf-g$c-widget"
   done
 }
-bind-git-helper-unescaped g
+bind-git-helper-unescaped g a
 unset -f bind-git-helper-unescaped
 
 # jqのライブクエリ: jqz sample.json

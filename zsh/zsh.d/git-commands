@@ -92,16 +92,3 @@ gitleaks git --pre-commit ### git diff で判定する
 gitleaks git --log-opts="-5" ### 最近の 5 コミットをチェックする
 gitleaks git --log-opts="<base-branch>..HEAD" ### 特定ブランチとの差分をチェックする
 gitleaks git --log-opts="<commit-hash>^..<commit-hash>" ### 特定のコミットハッシュ 1 つだけをチェックする
-
-brew list
-brew leaves ### 自分で入れたものだけ確認する
-brew deps --tree #{package} ### 指定したパッケージの依存ツリーを確認する
-brew uses --installed #{package} ### 指定したパッケージに依存しているものを確認する
-brew tap ### homebrew-core 以外のものを確認する
-brew info #{package}
-brew outdated
-brew doctor
-
-tmux send-keys -t #{pane_id} #{keys} Enter
-
-ls -l | grep '^l' ### カレントディレクトリのシンボリックリンクのみを表示する
