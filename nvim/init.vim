@@ -355,7 +355,7 @@ command! GinaShow call fzf#run(fzf#wrap({
 """
 " source
 function! s:list_command_history() abort
-  let l:res = system("cat $HISTFILE | cut -b 16- | head -n 5000")
+  let l:res = system("tail -n 5000 \"$HISTFILE\" | sed 's/^: [0-9]*:[0-9]*;//'")
   return reverse(split(l:res, "\n"))
 endfunction
 " sink
