@@ -1511,3 +1511,28 @@ require("obsidian").setup {
     name = "fzf-lua", -- picker を使わない場合はこの行は不要
   },
 }
+
+-- -------------------------------------------------------
+-- PLUGSETTING: olimorris/codecompanion.nvim
+-- -------------------------------------------------------
+require("codecompanion").setup({
+  interactions = {
+    chat = {
+      adapter = "claude_code", -- Claude Code CLIをACP経由で使う場合
+      keymaps = {
+        send = {
+          modes = { n = "<CR>", i = "<C-CR>" }, -- <C-s>を外して定義し直す
+        },
+      },
+    },
+  },
+  display = {
+    chat = {
+      window = {
+        layout = "vertical", -- float|vertical|horizontal|tab|buffer
+        position = "right",  -- left|right|top|bottom
+      },
+    },
+  },
+})
+vim.keymap.set("n", "<leader>cc", "<cmd>CodeCompanionChat<CR>", { desc = "Coverage summary" })

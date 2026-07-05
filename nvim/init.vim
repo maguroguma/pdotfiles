@@ -248,6 +248,8 @@ call jetpack#add('MeanderingProgrammer/render-markdown.nvim', { 'commit': '629eb
 
 call jetpack#add('ibhagwan/fzf-lua', { 'commit': '71b45a0' }) " [2026/05/21 10:55:26 71b45a0]
 call jetpack#add('obsidian-nvim/obsidian.nvim', { 'commit': '266c55b' }) " [2026/06/12 18:46:34 266c55b]
+
+call jetpack#add('olimorris/codecompanion.nvim', { 'commit': 'c8bd2d0' }) " [2026/07/01 18:38:16 c8bd2d0]
 call jetpack#end()
 " plugins END }}}
 

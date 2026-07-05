@@ -60,5 +60,6 @@
     ]
   },
   "alwaysThinkingEnabled": true,
-  "theme": "light"
+  "theme": "light",
+  "outputStyle": "My Original"
 }

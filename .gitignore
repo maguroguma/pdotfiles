@@ -104,6 +104,7 @@ nvim/pack/
 !claude/commands/code-reading/how-to-read.md
 !claude/skills/grill-me/SKILL.md
 !claude/skills/skill-creator/**/*
+!claude/output-styles/**/*
 
 !.specify/**/*
 !specs/**/*.md
