@@ -104,7 +104,9 @@ nvim/pack/
 !claude/commands/code-reading/how-to-read.md
 !claude/skills/grill-me/SKILL.md
 !claude/skills/skill-creator/**/*
-!claude/output-styles/**/*
+!claude/output-styles/my-original.md
+
+!raycast/script-commands/copy-chrome-tab-markdown-link.sh
 
 !.specify/**/*
 !specs/**/*.md
