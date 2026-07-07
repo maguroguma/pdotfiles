@@ -1535,4 +1535,10 @@ require("codecompanion").setup({
     },
   },
 })
-vim.keymap.set("n", "<leader>cc", "<cmd>CodeCompanionChat<CR>", { desc = "Coverage summary" })
+vim.keymap.set("n", "<leader>cc", "<cmd>CodeCompanionChat<CR>", { desc = "open CodeCompanion" })
+
+-- -------------------------------------------------------
+-- PLUGSETTING: lambdalisue/nvim-aibo
+-- -------------------------------------------------------
+require('aibo').setup()
+vim.keymap.set("n", "<leader>ai", "<cmd>Aibo claude<CR>", { desc = "open nvim-aibo by claude code" })
