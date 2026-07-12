@@ -916,6 +916,14 @@ vim.keymap.set("i", "<C-a>gb", function()
   })
 end, { silent = true, desc = "Complete git branch at cursor" })
 
+-- insert mode で <C-a>gr に ghq リポジトリのフルパス挿入を設定
+vim.keymap.set("i", "<C-a>gr", function()
+  require("fzf-lua").fzf_exec("ghq list --full-path", {
+    prompt = "ghq list> ",
+    complete = true,
+  })
+end, { silent = true, desc = "Insert ghq repository full path at cursor" })
+
 -- insert mode で <C-a>gc に git commit completion を設定
 vim.keymap.set("i", "<C-a>gc", function()
   require("fzf-lua").git_commits({
