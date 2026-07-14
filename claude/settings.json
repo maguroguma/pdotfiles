@@ -60,7 +60,8 @@
       }
     ]
   },
+  "outputStyle": "My Original",
   "alwaysThinkingEnabled": true,
   "theme": "light",
-  "outputStyle": "My Original"
+  "tui": "fullscreen"
 }

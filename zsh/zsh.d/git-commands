@@ -71,10 +71,12 @@ git submodule update
 git submodule update --recursive
 git submodule update --init --recursive
 
-git worktree add #{path} #{branch_name}
+git worktree add #{file_path} #{branch_name}
+git worktree add -b #{new_branch_name} #{file_path} #{base_branch_name}
+git worktree add --detach #{file_path} #{base_branch_name}
 git worktree list
 git worktree prune ### 実体のない worktree を削除する
-git worktree remove #{path}
+git worktree remove #{file_path}
 
 git log --patch -S #{pattern_string} ### パターンが変更されたコミットとその差分を表示する
 git log --patch -G #{regex_string} ### パターンが変更されたコミットとその差分を表示する
