@@ -1,0 +1,76 @@
+# herdr configuration
+# 配置: このファイルは dotfiles リポジトリの herdr/config.toml を
+# ~/.config/herdr/config.toml にシンボリックリンクしたもの。
+#
+# tmux/tmux.conf からの移行を段階的に進めている。
+# ここには「無改造でそのまま移行できる」設定のみを入れている。
+# 詳細: https://herdr.dev/docs/config-reference/
+
+[keys]
+# tmux の `set -g prefix C-t` に合わせる
+prefix = "ctrl+t"
+
+# prefix なしで使えるダイレクトショートカット。
+# tmux の `bind -n M-h/M-j/M-k/M-l/M-z`（prefixなしのペイン移動・ズーム）に相当。
+# ctrl+alt 系はターミナル/OSの既存ショートカットと衝突しにくいため
+# herdr 公式ドキュメントが直接バインドの規定値として推奨している。
+focus_pane_left = ["prefix+h", "ctrl+alt+h"]
+focus_pane_down = ["prefix+j", "ctrl+alt+j"]
+focus_pane_up = ["prefix+k", "ctrl+alt+k"]
+focus_pane_right = ["prefix+l", "ctrl+alt+l"]
+split_vertical = ["prefix+v", "ctrl+alt+d"]
+split_horizontal = ["prefix+minus", "ctrl+alt+shift+d"]
+zoom = ["prefix+z", "ctrl+alt+z"]
+
+# tmux popup で起動していたスクリプト群をそのまま herdr popup に移植。
+# vifm / lazygit / git-diff-view-nvim / git-diff-stashed-view-nvim は
+# tmux コマンドに依存しないため無改造で動く。
+
+# tmux: bind f popup ... vifm
+[[keys.command]]
+key = "prefix+f"
+type = "popup"
+command = "vifm"
+description = "vifm"
+width = "100%"
+height = "93%"
+
+# tmux: bind-key -T git-table l popup ... lazygit
+[[keys.command]]
+key = "prefix+alt+g"
+type = "popup"
+command = "lazygit"
+description = "lazygit"
+width = "100%"
+height = "93%"
+
+# tmux: bind-key -T git-table d popup ... git-diff-view-nvim
+[[keys.command]]
+key = "prefix+alt+d"
+type = "popup"
+command = "git-diff-view-nvim"
+description = "git diff (working tree)"
+width = "100%"
+height = "93%"
+
+# tmux: bind-key -T git-table D/s popup ... git-diff-stashed-view-nvim
+[[keys.command]]
+key = "prefix+alt+s"
+type = "popup"
+command = "git-diff-stashed-view-nvim"
+description = "git diff (staged)"
+width = "100%"
+height = "93%"
+
+# tmux: bind m popup -x 0 -y 0 -w100% -h80% ... nvim global-memo.md
+[[keys.command]]
+key = "prefix+alt+m"
+type = "popup"
+command = "nvim $HOME/.memo/global-memo.md"
+description = "global memo"
+width = "100%"
+height = "80%"
+
+[ui]
+# tmux.conf の @prefix_border_color (#b728c7) をアクセントカラーとして流用
+accent = "#b728c7"

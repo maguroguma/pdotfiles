@@ -27,6 +27,7 @@ brew install envchain
 brew install coreutils findutils gnu-sed grep
 brew install curl
 brew install shellcheck
+brew install herdr
 
 # brew tap homebrew/cask-fonts
 # brew install font-plemol-jp

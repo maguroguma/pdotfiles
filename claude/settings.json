@@ -60,8 +60,19 @@
       }
     ]
   },
+  "extraKnownMarketplaces": {
+    "hiroppy": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/yokoyamamasahiro/.config/tmux/plugins/tmux-agent-sidebar"
+      }
+    }
+  },
   "outputStyle": "My Original",
   "alwaysThinkingEnabled": true,
+  "tui": "fullscreen",
   "theme": "light",
-  "tui": "fullscreen"
+  "enabledPlugins": {
+    "tmux-agent-sidebar@hiroppy": true
+  }
 }

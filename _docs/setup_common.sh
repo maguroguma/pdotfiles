@@ -15,6 +15,8 @@ ln -fnsv $DOTFILES_DIR/tmux $XDG_CONFIG_HOME/tmux
 ln -fnsv $DOTFILES_DIR/nvim $XDG_CONFIG_HOME/nvim
 ln -fnsv $DOTFILES_DIR/git $XDG_CONFIG_HOME/git
 ln -fnsv $DOTFILES_DIR/lazygit/config.yml $XDG_CONFIG_HOME/lazygit/config.yml
+mkdir -p $XDG_CONFIG_HOME/herdr && \
+  ln -fnsv $DOTFILES_DIR/herdr/config.toml $XDG_CONFIG_HOME/herdr/config.toml
 
 ln -fnsv $DOTFILES_DIR/.editorconfig $HOME/.editorconfig
 mkdir $HOME/.vifm && \
@@ -97,6 +99,7 @@ cargo install --locked bat
 cargo install silicon
 cargo install git-delta
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+cargo install --locked tree-sitter-cli
 
 #########
 # Node.js

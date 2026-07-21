@@ -172,7 +172,7 @@ call jetpack#add('junegunn/fzf.vim', { 'commit': 'b9b98ac' }) " [2026/05/21 20:3
 call jetpack#add('rlane/pounce.nvim', { 'commit': '2e36399' }) " [2024/09/11 20:36:49 2e36399]
 call jetpack#add('folke/todo-comments.nvim', { 'commit': '31e3c38' }) " [2025/11/10 09:55:22 31e3c38]
 
-call jetpack#add('nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'commit': 'cf12346' }) " [2026/03/23 19:42:18 cf12346]
+call jetpack#add('nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'commit': '4916d65' }) " [2026/04/03 15:05:06 4916d65]
 call jetpack#add('rhysd/committia.vim', { 'on_ft': ['gitcommit', 'git', 'gina-commit'], 'commit': 'c8c0f25' }) " [2024/11/03 23:52:35 c8c0f25]
 
 " call jetpack#add('neoclide/coc.nvim', { 'commit': 'a23e8e5' }) " [2026/05/22 16:45:38 a23e8e5] nvim-lspconfig に移行
@@ -1593,9 +1593,6 @@ set mouse=n
 " set clipboard+=unnamedplus
 
 " fold
-" set foldmethod=expr
-" set foldexpr=nvim_treesitter#foldexpr()
-" nnoremap sf <cmd>set foldmethod=expr<CR><cmd>set foldexpr=nvim_treesitter#foldexpr()<CR>
 set nofoldenable " Disable folding at startup.
 set foldlevelstart=100
 nnoremap Z za

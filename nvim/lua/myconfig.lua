@@ -304,9 +304,15 @@ vim.api.nvim_set_keymap('x', 'g*', [[<Plug>(asterisk-gz*)<Cmd>lua require('hlsle
 vim.api.nvim_set_keymap('x', 'g#', [[<Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>]], {})
 
 -- PLUGSETTING: nvim-treesitter/nvim-treesitter
-require 'nvim-treesitter.configs'.setup {
-  parser_install_dir = vim.fn.expand("$XDG_DATA_HOME/nvim/site/pack/jetpack/nvim-treesitter"),
+require('nvim-treesitter').setup {
+  install_dir = vim.fn.expand("$XDG_DATA_HOME/nvim/site/pack/jetpack/nvim-treesitter"),
 }
+
+vim.api.nvim_create_autocmd('FileType', {
+  callback = function()
+    pcall(vim.treesitter.start)
+  end,
+})
 
 -- PLUGSETTING: nvim-neo-tree/neo-tree.nvim
 -- Unless you are still migrating, remove the deprecated commands from v1.x
@@ -1549,4 +1555,5 @@ vim.keymap.set("n", "<leader>cc", "<cmd>CodeCompanionChat<CR>", { desc = "open C
 -- PLUGSETTING: lambdalisue/nvim-aibo
 -- -------------------------------------------------------
 require('aibo').setup()
-vim.keymap.set("n", "<leader>ai", "<cmd>Aibo claude<CR>", { desc = "open nvim-aibo by claude code" })
+vim.keymap.set("n", "<leader>ai", '<cmd>Aibo claude --settings {"tui":"default"}<CR>',
+  { desc = "open nvim-aibo by claude code" })

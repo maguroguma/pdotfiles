@@ -59,6 +59,10 @@ nvim/pack/
 !tmux/tmux-session-preview
 !tmux/git-diff-view-nvim
 !tmux/git-diff-stashed-view-nvim
+# tmux plugin
+tmux/plugins/**/*
+
+!herdr/config.toml
 
 !vscode/snippets/go.json
 !vscode/extensions
