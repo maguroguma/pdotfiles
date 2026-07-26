@@ -109,6 +109,7 @@ tmux/plugins/**/*
 !claude/skills/grill-me/SKILL.md
 !claude/skills/skill-creator/**/*
 !claude/output-styles/my-original.md
+!claude/statusline-command.sh
 
 !raycast/script-commands/copy-chrome-tab-markdown-link.sh
 

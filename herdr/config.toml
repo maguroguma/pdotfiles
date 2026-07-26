@@ -18,7 +18,7 @@ focus_pane_left = ["prefix+h", "ctrl+alt+h"]
 focus_pane_down = ["prefix+j", "ctrl+alt+j"]
 focus_pane_up = ["prefix+k", "ctrl+alt+k"]
 focus_pane_right = ["prefix+l", "ctrl+alt+l"]
-split_vertical = ["prefix+v", "ctrl+alt+d"]
+split_vertical = ["prefix+|", "ctrl+alt+d"]
 split_horizontal = ["prefix+minus", "ctrl+alt+shift+d"]
 zoom = ["prefix+z", "ctrl+alt+z"]
 
@@ -64,7 +64,7 @@ height = "93%"
 
 # tmux: bind m popup -x 0 -y 0 -w100% -h80% ... nvim global-memo.md
 [[keys.command]]
-key = "prefix+alt+m"
+key = "prefix+m"
 type = "popup"
 command = "nvim $HOME/.memo/global-memo.md"
 description = "global memo"

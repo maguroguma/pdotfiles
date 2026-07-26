@@ -4,6 +4,8 @@ gh pr create
 gh pr create --web
 gh pr view #{branch_name}?
 gh pr view --web #{branch_name}?
+gh pr view --web ### 引数なしだと現在のブランチの PR を自動判別して開く
+gh pr view --web #{pr_number}? ### 番号を指定すればそれが開ける
 gh pr diff #{branch_name}?
 gh pr diff --web #{branch_name}?
 gh pr status
@@ -26,6 +28,8 @@ git commit --amend --no-edit
 git commit --fixup #{commit_hash}
 
 git checkout --detach ${branch_name}
+
+git history fixup ${commit_hash}
 
 git rebase --interactive #{commit_hash}
 git rebase --interactive --autosquash #{commit_hash}
