@@ -5,8 +5,53 @@
 
 input=$(cat)
 
+# 短縮パス生成関数 (zsh/zsh.d/zshbasic の shrink_path と同じロジック)
+# 末尾から2つのディレクトリはフルネーム、それ以外は頭文字1文字で表示
+# 例: ~/dotfiles/zsh/zsh.d → ~/d/zsh/zsh.d
+shrink_path() {
+  local full_path="$1"
+  case "$full_path" in
+    "$HOME") printf '%s' "~"; return ;;
+    "$HOME"/*) full_path="~${full_path#"$HOME"}" ;;
+  esac
+
+  if [ "$full_path" = "/" ]; then
+    printf '%s' "/"
+    return
+  fi
+
+  local is_absolute=0
+  case "$full_path" in
+    /*) is_absolute=1 ;;
+  esac
+
+  local IFS='/'
+  local -a parts
+  read -ra parts <<< "$full_path"
+  local n=${#parts[@]}
+
+  local result="" i part
+  for ((i = 0; i < n; i++)); do
+    part="${parts[$i]}"
+    [ -z "$part" ] && continue
+    if [ "$part" = "~" ]; then
+      result="~"
+    elif [ "$i" -ge $((n - 2)) ]; then
+      result="${result}/${part}"
+    else
+      result="${result}/${part:0:1}"
+    fi
+  done
+
+  result="${result#/}"
+  [ "$is_absolute" -eq 1 ] && result="/${result}"
+  printf '%s' "$result"
+}
+
 cwd=$(echo "$input" | jq -r '.workspace.current_dir // .cwd // empty')
-dir_display=$(basename "${cwd:-.}")
+dir_display=$(shrink_path "${cwd:-$PWD}")
+
+session_name=$(echo "$input" | jq -r '.session_name // empty')
 
 project_dir=$(echo "$input" | jq -r '.workspace.project_dir // empty')
 project_dir_display=""
@@ -90,52 +135,64 @@ render_bar() {
   printf '%b%s%b' "$color" "$bar" "$RESET"
 }
 
-output="${CYAN}📁 ${dir_display}${RESET}"
+# Line 0: session name/title (custom or AI-generated), omitted when unset
+line0=""
+if [ -n "$session_name" ]; then
+  line0="${WHITE}💬 ${session_name}${RESET}"
+fi
+
+# Line 1: current directory, project/added dirs, git branch/worktree
+line1="${CYAN}📁 ${dir_display}${RESET}"
 
 if [ -n "$project_dir_display" ]; then
-  output="${output}${SEP}${CYAN}🚀 ${project_dir_display}${RESET}"
+  line1="${line1}${SEP}${CYAN}🚀 ${project_dir_display}${RESET}"
 fi
 
 if [ -n "$added_dirs_display" ]; then
-  output="${output}${SEP}${CYAN}🗂️ ${added_dirs_display}${RESET}"
+  line1="${line1}${SEP}${CYAN}🗂️ ${added_dirs_display}${RESET}"
 fi
 
 if [ -n "$branch" ]; then
-  output="${output}${SEP}${GREEN}${BRANCH_ICON} ${branch}${RESET}"
+  line1="${line1}${SEP}${GREEN}${BRANCH_ICON} ${branch}${RESET}"
   if [ -n "$git_worktree" ]; then
-    output="${output}${GREEN} 🌳${git_worktree}${RESET}"
+    line1="${line1}${GREEN} 🌳${git_worktree}${RESET}"
   fi
 fi
 
-output="${output}${SEP}${MAGENTA}👨‍🎓 ${model}${RESET}"
-output="${output}${SEP}${YELLOW}🧠 Ctx:${context_display}${RESET}"
+# Line 2: model, context window usage, cost, duration
+line2="${MAGENTA}👨‍🎓 ${model}${RESET}"
+line2="${line2}${SEP}${YELLOW}🧠 Ctx:${context_display}${RESET}"
 
 if [ -n "$cost_display" ]; then
-  output="${output}${SEP}${BLUE}💸 ${cost_display}${RESET}"
+  line2="${line2}${SEP}${BLUE}💸 ${cost_display}${RESET}"
 fi
 
 if [ -n "$duration_display" ]; then
-  output="${output}${SEP}${BLUE}⏱️ ${duration_display}${RESET}"
+  line2="${line2}${SEP}${BLUE}⏱️ ${duration_display}${RESET}"
 fi
 
-# Second line: rate limit percentages with progress bars
-line2=""
+# Line 3: rate limit percentages with progress bars
+line3=""
 if [ -n "$five" ]; then
   five_pct=$(printf '%.0f' "$five")
-  line2="${WHITE}⏳ 5h:${five_pct}%${RESET} $(render_bar "$five_pct")"
+  line3="${WHITE}⏳ 5h:${five_pct}%${RESET} $(render_bar "$five_pct")"
 fi
 if [ -n "$week" ]; then
   week_pct=$(printf '%.0f' "$week")
   week_segment="${WHITE}🗓️ 7d:${week_pct}%${RESET} $(render_bar "$week_pct")"
-  if [ -n "$line2" ]; then
-    line2="${line2}, ${week_segment}"
+  if [ -n "$line3" ]; then
+    line3="${line3}, ${week_segment}"
   else
-    line2="$week_segment"
+    line3="$week_segment"
   fi
 fi
 
-printf "%b" "$output"
-if [ -n "$line2" ]; then
-  printf "\n%b" "$line2"
+if [ -n "$line0" ]; then
+  printf "%b\n" "$line0"
+fi
+printf "%b\n" "$line1"
+printf "%b" "$line2"
+if [ -n "$line3" ]; then
+  printf "\n%b" "$line3"
 fi
 printf "\n"

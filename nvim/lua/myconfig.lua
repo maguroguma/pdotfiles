@@ -1555,5 +1555,5 @@ vim.keymap.set("n", "<leader>cc", "<cmd>CodeCompanionChat<CR>", { desc = "open C
 -- PLUGSETTING: lambdalisue/nvim-aibo
 -- -------------------------------------------------------
 require('aibo').setup()
-vim.keymap.set("n", "<leader>ai", '<cmd>Aibo claude --settings {"tui":"default"}<CR>',
+vim.keymap.set("n", "<leader>ai", '<cmd>Aibo -opener=rightbelow\\ vsplit claude --settings {"tui":"default"}<CR>',
   { desc = "open nvim-aibo by claude code" })
