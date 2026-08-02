@@ -28,6 +28,7 @@ brew install coreutils findutils gnu-sed grep
 brew install curl
 brew install shellcheck
 brew install herdr
+brew install agavra/tap/tuicr
 
 # brew tap homebrew/cask-fonts
 # brew install font-plemol-jp

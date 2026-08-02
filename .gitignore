@@ -112,6 +112,7 @@ tmux/plugins/**/*
 !claude/statusline-command.sh
 
 !raycast/script-commands/copy-chrome-tab-markdown-link.sh
+!raycast/script-commands/copy-chrome-tab-plain-link.sh
 
 !.specify/**/*
 !specs/**/*.md

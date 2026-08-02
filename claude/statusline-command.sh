@@ -93,6 +93,8 @@ fi
 # Rate limit usage (Claude.ai subscription limits, may be absent)
 five=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
 week=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+five_resets_at=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
+week_resets_at=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
 
 # Git branch (or short commit hash when in detached HEAD state).
 # --no-optional-locks avoids contending with other git processes.
@@ -135,6 +137,41 @@ render_bar() {
   printf '%b%s%b' "$color" "$bar" "$RESET"
 }
 
+# Formats the time remaining until a rate limit resets, given the reset time
+# as a Unix epoch (seconds). Uses `date +%s` for "now". Output shrinks to the
+# coarsest useful unit: "3d5h" (>=24h), "2h13m" (>=1h), or "47m" otherwise;
+# a reset time already in the past prints "0m". Prints nothing (and exits
+# cleanly) when the input is empty or not a number.
+format_remaining() {
+  # jq renders the epoch as a JSON number, so drop any fractional part before
+  # the integer-only arithmetic below.
+  local resets_at="${1%%.*}"
+  case "$resets_at" in
+    ''|*[!0-9]*) return ;;
+  esac
+  local now remaining
+  now=$(date +%s)
+  remaining=$((resets_at - now))
+  if [ "$remaining" -le 0 ]; then
+    printf '0m'
+    return
+  fi
+
+  local days hours mins
+  if [ "$remaining" -ge 86400 ]; then
+    days=$((remaining / 86400))
+    hours=$(((remaining % 86400) / 3600))
+    printf '%dd%dh' "$days" "$hours"
+  elif [ "$remaining" -ge 3600 ]; then
+    hours=$((remaining / 3600))
+    mins=$(((remaining % 3600) / 60))
+    printf '%dh%dm' "$hours" "$mins"
+  else
+    mins=$((remaining / 60))
+    printf '%dm' "$mins"
+  fi
+}
+
 # Line 0: session name/title (custom or AI-generated), omitted when unset
 line0=""
 if [ -n "$session_name" ]; then
@@ -175,11 +212,19 @@ fi
 line3=""
 if [ -n "$five" ]; then
   five_pct=$(printf '%.0f' "$five")
+  five_remaining=$(format_remaining "$five_resets_at")
   line3="${WHITE}⏳ 5h:${five_pct}%${RESET} $(render_bar "$five_pct")"
+  if [ -n "$five_remaining" ]; then
+    line3="${line3} ${WHITE}(${five_remaining})${RESET}"
+  fi
 fi
 if [ -n "$week" ]; then
   week_pct=$(printf '%.0f' "$week")
+  week_remaining=$(format_remaining "$week_resets_at")
   week_segment="${WHITE}🗓️ 7d:${week_pct}%${RESET} $(render_bar "$week_pct")"
+  if [ -n "$week_remaining" ]; then
+    week_segment="${week_segment} ${WHITE}(${week_remaining})${RESET}"
+  fi
   if [ -n "$line3" ]; then
     line3="${line3}, ${week_segment}"
   else

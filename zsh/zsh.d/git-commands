@@ -98,3 +98,5 @@ gitleaks git --pre-commit ### git diff で判定する
 gitleaks git --log-opts="-5" ### 最近の 5 コミットをチェックする
 gitleaks git --log-opts="<base-branch>..HEAD" ### 特定ブランチとの差分をチェックする
 gitleaks git --log-opts="<commit-hash>^..<commit-hash>" ### 特定のコミットハッシュ 1 つだけをチェックする
+
+tuicr pr #{PR_number}

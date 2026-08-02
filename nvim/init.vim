@@ -172,7 +172,7 @@ call jetpack#add('junegunn/fzf.vim', { 'commit': 'b9b98ac' }) " [2026/05/21 20:3
 call jetpack#add('rlane/pounce.nvim', { 'commit': '2e36399' }) " [2024/09/11 20:36:49 2e36399]
 call jetpack#add('folke/todo-comments.nvim', { 'commit': '31e3c38' }) " [2025/11/10 09:55:22 31e3c38]
 
-call jetpack#add('nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'commit': '4916d65' }) " [2026/04/03 15:05:06 4916d65]
+call jetpack#add('nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate', 'branch': 'main', 'commit': '7b6cc89' }) " [2026/08/01 08:38:47 7b6cc89]
 call jetpack#add('rhysd/committia.vim', { 'on_ft': ['gitcommit', 'git', 'gina-commit'], 'commit': 'c8c0f25' }) " [2024/11/03 23:52:35 c8c0f25]
 
 " call jetpack#add('neoclide/coc.nvim', { 'commit': 'a23e8e5' }) " [2026/05/22 16:45:38 a23e8e5] nvim-lspconfig に移行
@@ -249,8 +249,9 @@ call jetpack#add('MeanderingProgrammer/render-markdown.nvim', { 'commit': '629eb
 call jetpack#add('ibhagwan/fzf-lua', { 'commit': '71b45a0' }) " [2026/05/21 10:55:26 71b45a0]
 call jetpack#add('obsidian-nvim/obsidian.nvim', { 'commit': '266c55b' }) " [2026/06/12 18:46:34 266c55b]
 
-call jetpack#add('olimorris/codecompanion.nvim', { 'commit': 'c8bd2d0' }) " [2026/07/01 18:38:16 c8bd2d0]
 call jetpack#add('lambdalisue/nvim-aibo', { 'commit': '0505c2e' }) " [2026/07/07 18:15:00 0505c2e]
+
+call jetpack#add('pwntester/octo.nvim')
 call jetpack#end()
 " plugins END }}}
 

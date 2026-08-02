@@ -769,7 +769,15 @@ require('noice').setup({
 })
 
 -- PLUGSETTING: delphinus/skkeleton_indicator.nvim
-require("skkeleton_indicator").setup {}
+-- require("skkeleton_indicator").setup {
+--   -- octo バッファではインジケータを出さない。
+--   -- octo.nvim は PR バッファ生成時に undo 履歴を消すため、undolevels=-1 の状態で
+--   -- `:normal a <BS>` を実行する（octo/utils.lua の clear_history）。
+--   -- このとき InsertEnter が発火し、skkeleton_indicator がフロートウィンドウを
+--   -- 新規作成すると octo バッファの undo チェーンが壊れて E439 が発生する。
+--   -- その後そのバッファを削除すると Neovim 本体が SIGSEGV で落ちるため除外する。
+--   ignoreFt = { "octo" },
+-- }
 
 -- PLUGSETTING: stevearc/quicker.nvim
 require("quicker").setup()
@@ -1115,6 +1123,17 @@ visual 時に _ -> 無名レジスタを汚さず置換できる（プラグイ�
 <Space>ty -> visual 範囲の英和翻訳をヤンクする
 
 :%s/検索パターン/[&]/g -> 検索パターンを [] で囲む
+
+:Octo pr list
+    <leader>cr -> リプライを書く
+:Octo review {PR 番号}
+    <leader><space> -> review 済みかどうかのトグル
+    <leader>ca      -> コメントを追加する
+:Octo review thread
+    q -> 元のモードに戻る
+:Octo review commit
+:Octo pr commits
+:Octo review submit
 ]]
 
 -- 適当なキーにマッピング
@@ -1527,33 +1546,18 @@ require("obsidian").setup {
 }
 
 -- -------------------------------------------------------
--- PLUGSETTING: olimorris/codecompanion.nvim
--- -------------------------------------------------------
-require("codecompanion").setup({
-  interactions = {
-    chat = {
-      adapter = "claude_code", -- Claude Code CLIをACP経由で使う場合
-      keymaps = {
-        send = {
-          modes = { n = "<CR>", i = "<C-CR>" }, -- <C-s>を外して定義し直す
-        },
-      },
-    },
-  },
-  display = {
-    chat = {
-      window = {
-        layout = "vertical", -- float|vertical|horizontal|tab|buffer
-        position = "right",  -- left|right|top|bottom
-      },
-    },
-  },
-})
-vim.keymap.set("n", "<leader>cc", "<cmd>CodeCompanionChat<CR>", { desc = "open CodeCompanion" })
-
--- -------------------------------------------------------
 -- PLUGSETTING: lambdalisue/nvim-aibo
 -- -------------------------------------------------------
 require('aibo').setup()
 vim.keymap.set("n", "<leader>ai", '<cmd>Aibo -opener=rightbelow\\ vsplit claude --settings {"tui":"default"}<CR>',
   { desc = "open nvim-aibo by claude code" })
+
+-- -------------------------------------------------------
+-- PLUGSETTING: pwntester/octo.nvim
+-- -------------------------------------------------------
+require('octo').setup({
+  picker = 'fzf-lua',
+  reviews = {
+    auto_show_threads = false,
+  },
+})
