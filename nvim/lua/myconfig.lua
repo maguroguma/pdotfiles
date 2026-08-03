@@ -20,6 +20,8 @@ lualine.setup {
       statusline = { "Avante", "AvanteInput", "AvanteSelectedFiles" },
       winbar = { "Avante", "AvanteInput", "AvanteSelectedFiles" },
     },
+
+    always_show_tabline = false, -- タブが1つだけのときはタブラインを隠す
   },
   sections = {
     lualine_a = {
@@ -59,6 +61,29 @@ lualine.setup {
       },
     },
     lualine_x = { 'location' },
+    lualine_y = {},
+    lualine_z = {}
+  },
+  -- buffer line は表示せず、タブページのみをタブラインに表示する
+  tabline = {
+    lualine_a = {
+      {
+        'tabs',
+        mode = 2, -- 0: タブ番号のみ / 1: タブ名のみ / 2: 番号+名前
+        path = 0, -- 0: ファイル名のみ / 1: 相対パス / 2: 絶対パス
+        -- タブラインの最大幅（リサイズに追従させるため関数で指定する）
+        max_length = function()
+          return vim.o.columns
+        end,
+        use_mode_colors = false,
+        symbols = {
+          modified = ' [+]', -- Text to show when the tab contains a modified buffer.
+        },
+      },
+    },
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
     lualine_y = {},
     lualine_z = {}
   },

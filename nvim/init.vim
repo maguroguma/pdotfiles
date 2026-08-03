@@ -2041,6 +2041,10 @@ nnoremap sQ <cmd>confirm qall<CR>
 
 " tab
 nnoremap tq <cmd>tabclose<CR>
+nnoremap tn <cmd>tabnew<CR>
+nnoremap tl <cmd>tabnext<CR>
+nnoremap th <cmd>tabprevious<CR>
+" nnoremap to <cmd>tabonly<CR>
 
 " buffer
 nnoremap <C-o> <C-o>zz
