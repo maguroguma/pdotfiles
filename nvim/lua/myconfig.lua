@@ -1151,6 +1151,7 @@ visual 時に _ -> 無名レジスタを汚さず置換できる（プラグイ�
 
 :Octo pr list
     <leader>cr -> リプライを書く
+    <C-b>      -> ブラウザで PR を開く
 :Octo review {PR 番号}
     <leader><space> -> review 済みかどうかのトグル
     <leader>ca      -> コメントを追加する
@@ -1585,4 +1586,23 @@ require('octo').setup({
   reviews = {
     auto_show_threads = false,
   },
+  mappings = {
+    pull_request = {
+      review_start = { lhs = "<localleader>rs", desc = "start a review for the current PR" }, -- error になるなら <localleader>vs で resume する
+    },
+    review_diff = {
+      close_review_tab = { lhs = "" },
+      review_commits = { lhs = "<localleader>rc", desc = "review PR commits" },
+    },
+    file_panel = {
+      close_review_tab = { lhs = "" },
+      review_commits = { lhs = "<localleader>rc", desc = "review PR commits" },
+    },
+    submit_win = {
+      close_review_tab = { lhs = "" }, -- 注意: レビュー送信ウィンドウを閉じる操作も無効になります
+    },
+  },
 })
+vim.keymap.set("n", "<Space>op",
+  '<cmd>Octo pr list<CR>',
+  { desc = "Open PR list by octo.nvim" })

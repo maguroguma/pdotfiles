@@ -473,6 +473,8 @@ nnoremap <silent> <C-f> <cmd>Neotree reveal<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set diffopt+=vertical
+" diff モードに入っても 'wrap' を維持する（Octo のレビュー画面などで折り返しを効かせるため）
+set diffopt+=followwrap
 " 現在のバッファ
 " 現在のバッファのファイルをcheckoutする
 function! s:gitCheckoutThis()
@@ -2042,8 +2044,8 @@ nnoremap sQ <cmd>confirm qall<CR>
 " tab
 nnoremap tq <cmd>tabclose<CR>
 nnoremap tn <cmd>tabnew<CR>
-nnoremap tl <cmd>tabnext<CR>
-nnoremap th <cmd>tabprevious<CR>
+nnoremap tj <cmd>tabnext<CR>
+nnoremap tk <cmd>tabprevious<CR>
 " nnoremap to <cmd>tabonly<CR>
 
 " buffer
