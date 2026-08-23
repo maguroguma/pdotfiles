@@ -1168,6 +1168,7 @@ cit         -> 状態を変更(space で外す)
 <Space>oid  -> 締切を付与
 <Space>ois  -> 着手予定日を付与
 <Space>o,   -> 優先度を付与
+<Space>oz   -> アーカイブ（archive/ 配下に追い出す）
 <C-c>       -> 確定
 <Space>ok   -> キャンセル
 
@@ -1640,7 +1641,7 @@ local org_dir = vim.fn.expand("$GOPATH/src/github.com/maguroguma/diary/org")
 ---@return any # 選ばれた項目の action() の戻り値。何も選ばれなければ nil
 local function org_menu_popup(data)
   local lines = {}
-  local separators = {} -- 行番号 -> セパレータに使う文字（幅が決まってから埋める）
+  local separators = {}   -- 行番号 -> セパレータに使う文字（幅が決まってから埋める）
   local valid_keys = {}
   local option_lines = {} -- 行番号 -> メニュー項目（ハイライト用）
 
@@ -1869,9 +1870,32 @@ require("orgmode").setup {
         { type = "agenda", org_agenda_span = "week", org_agenda_overriding_header = "今週" },
       },
     },
+    -- 掃除用: 完了・棄却したものだけを集めて、その場で <Space>oz を連打して追い出す。
+    -- tags_todo は未完了しか拾わないため、DONE を含められる tags を使う。
+    -- :ARCHIVE: タグ付きと archive/ 配下は検索対象から外れるので、処理済みは並ばない。
+    z = {
+      description = "アーカイブ候補（DONE / CANCELED）",
+      types = {
+        {
+          type = "tags",
+          match = "/DONE|CANCELED",
+          org_agenda_overriding_header = "アーカイブ候補（<Space>oz で追い出す）",
+        },
+      },
+    },
   },
 
-  mappings = { prefix = "<Leader>o" },
+  -- アーカイブ（org_archive_subtree）は既定が <prefix>$ で Shift を要求するため、
+  -- Shift and Space 環境では leader の <Space> と衝突して打ちにくい。
+  -- 完了タスクをファイルから追い出す操作は多用するので、vim の fold（畳む）を
+  -- 連想させる z に寄せて、非 Shift の単打で叩けるようにする。
+  -- 一方 org_toggle_archive_tag（<prefix>A）はファイルに残す操作で出番が少ないため、
+  -- 既定のまま据え置く。
+  mappings = {
+    prefix = "<Leader>o",
+    org = { org_archive_subtree = "<prefix>z" },
+    agenda = { org_agenda_archive = "<prefix>z" },
+  },
 
   -- 選択メニューだけを中央のフロートに差し替える。
   -- ハンドラを設定すると cit（TODO fast access）もこちらを通る。
