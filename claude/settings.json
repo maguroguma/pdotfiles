@@ -5,6 +5,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -57,5 +58,5 @@
   "alwaysThinkingEnabled": true,
   "tui": "fullscreen",
   "theme": "light",
-  "model": "opus"
+  "agentPushNotifEnabled": false
 }

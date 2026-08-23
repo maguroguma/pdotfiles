@@ -118,3 +118,4 @@ tmux/plugins/**/*
 !specs/**/*.md
 
 !example.taskpaper
+!example.org

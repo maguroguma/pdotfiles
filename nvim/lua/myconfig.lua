@@ -1160,6 +1160,19 @@ visual 時に _ -> 無名レジスタを汚さず置換できる（プラグイ�
 :Octo review commit
 :Octo pr commits
 :Octo review submit
+
+capture or .org
+cit         -> 状態を変更(space で外す)
+<Space>or   -> refile
+<Space>ot   -> project などのタグ付与
+<Space>oid  -> 締切を付与
+<Space>ois  -> 着手予定日を付与
+<Space>o,   -> 優先度を付与
+<C-c>       -> 確定
+<Space>ok   -> キャンセル
+
+agenda
+t           -> 状態を変更(space で外す)
 ]]
 
 -- 適当なキーにマッピング
@@ -1606,3 +1619,283 @@ require('octo').setup({
 vim.keymap.set("n", "<Space>op",
   '<cmd>Octo pr list<CR>',
   { desc = "Open PR list by octo.nvim" })
+
+-- PLUGSETTING: nvim-orgmode/orgmode
+-- taskpaper.vim からの移行先。taskpaper 側の設定は init.vim に残してあり、
+-- 移行が完了したら削除する。
+-- 注意: runtimepath への追加は init.vim 側で行っている（$VIMRUNTIME の
+-- ftplugin/org.vim より前に置かないとキーマップが一切効かないため）。
+local org_dir = vim.fn.expand("$GOPATH/src/github.com/maguroguma/diary/org")
+
+-- 選択メニュー（agenda / capture / export / cit の fast access）を画面中央に出す。
+-- 既定の実装は :echon + getchar() でコマンドライン領域に描くため、画面下部に出る。
+-- ui.menu.handler は描画だけを差し替える口で、win_split_mode による
+-- agenda / capture 本体のウィンドウ配置には影響しない。
+--
+-- 公式ドキュメントは vim.ui.select を使う例を載せているが、ここでは採用しない。
+-- handler の戻り値はそのまま呼び出し元へ返る同期前提の設計で、cit（TODO fast
+-- access）は選ばれたキーワードを返してもらう必要がある。非同期の vim.ui.select
+-- だと常に nil が返り、cit が動かなくなる。
+---@param data table nvim-orgmode から渡るメニュー定義（title / items / prompt / kind）
+---@return any # 選ばれた項目の action() の戻り値。何も選ばれなければ nil
+local function org_menu_popup(data)
+  local lines = {}
+  local separators = {} -- 行番号 -> セパレータに使う文字（幅が決まってから埋める）
+  local valid_keys = {}
+  local option_lines = {} -- 行番号 -> メニュー項目（ハイライト用）
+
+  table.insert(lines, data.title)
+  separators[#lines + 1] = "-"
+  table.insert(lines, "")
+
+  for _, item in ipairs(data.items) do
+    if item.icon then
+      -- セパレータは既定で length = 80 と長いので、幅はこちらで決め直す
+      separators[#lines + 1] = item.icon
+      table.insert(lines, "")
+    else
+      valid_keys[item.key] = item
+      option_lines[#lines + 1] = item
+      table.insert(lines, string.format("%s  %s", item.key, item.label))
+    end
+  end
+
+  -- data.prompt（"Template key" など）はウィンドウ内の title と内容が重複するため使わない
+  local width = 20
+  for _, line in ipairs(lines) do
+    width = math.max(width, vim.fn.strdisplaywidth(line) + 2)
+  end
+  width = math.min(width, vim.o.columns - 4)
+
+  for lnum, icon in pairs(separators) do
+    lines[lnum] = string.rep(icon, width)
+  end
+
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+  local ns = vim.api.nvim_create_namespace("myconfig_org_menu")
+  vim.api.nvim_buf_set_extmark(buf, ns, 0, 0, { end_col = #lines[1], hl_group = "Title" })
+  for lnum, item in pairs(option_lines) do
+    -- 押すキーだけを目立たせ、ラベルは TODO キーワードの色（hl）があればそれに従う
+    vim.api.nvim_buf_set_extmark(buf, ns, lnum - 1, 0, { end_col = #item.key, hl_group = "Question" })
+    if item.hl then
+      vim.api.nvim_buf_set_extmark(buf, ns, lnum - 1, #item.key + 2, {
+        end_col = #lines[lnum],
+        hl_group = item.hl,
+      })
+    end
+  end
+  vim.bo[buf].modifiable = false
+
+  local height = math.min(#lines, vim.o.lines - 4)
+  local win = vim.api.nvim_open_win(buf, false, {
+    relative = "editor",
+    width = width,
+    height = height,
+    row = math.max(0, math.floor((vim.o.lines - height) / 2) - 1),
+    col = math.max(0, math.floor((vim.o.columns - width) / 2)),
+    style = "minimal",
+    border = "rounded",
+    noautocmd = true,
+  })
+
+  vim.cmd("redraw")
+  -- <C-c> で getcharstr() が例外を投げるため、pcall で受けてウィンドウを必ず閉じる
+  local ok, char = pcall(vim.fn.getcharstr)
+  vim.api.nvim_win_close(win, true)
+  vim.cmd("redraw")
+
+  if not ok then
+    return
+  end
+  local entry = valid_keys[char]
+  if not entry or not entry.action then
+    return
+  end
+  return entry.action()
+end
+
+require("orgmode").setup {
+  -- diary リポジトリの中の org/ だけを org-mode の領域として隔離する。
+  -- 直下の *.org のみを対象にするため、archive/ 配下は走査されず、
+  -- アジェンダには現役のタスクだけが並ぶ。
+  org_agenda_files = { org_dir .. "/*.org" },
+  -- capture の投入先は todo.org に統一し、その「直下（トップレベル）」を受信箱として使う。
+  -- 親にぶら下げたくなったら <Space>or で同じファイルの中を移動させればよく、
+  -- 受信箱専用のファイルを別に持つ必要がない。
+  -- この設定自体は、target を書いていない capture テンプレートの既定の宛先。
+  -- 下の org_capture_templates は全て target を明示しているので、実際には
+  -- :checkhealth orgmode の警告を消すための保険として効いている。
+  org_default_notes_file = org_dir .. "/todo.org",
+
+  -- タスクの「状態」でワークフローを表現する。運用ルールは以下のとおり。
+  --   SOMEDAY … やるかどうかまだ決めていない。週次レビューで棚卸しする
+  --   TODO    … やると決めたが、着手できる粒度に分解できていない（＝分解待ち）
+  --   NEXT    … 分解済みで、いま着手できる「次の一手」
+  --   DOING   … 着手中（taskpaper の @inProgress）
+  --   WAIT    … 他者・外部要因の待ちでブロックされている（taskpaper の @wait）
+  --   DONE    … 完了
+  --   CANCELED… 棄却。「終わった」扱いにして DONE と区別する
+  -- 「手をつけられる粒度になったら即 NEXT にする」を守ることで、TODO のまま残って
+  -- いるものが「分解待ちの大きなタスク」として自動的に炙り出される。
+  org_todo_keywords = {
+    "SOMEDAY(s)",
+    "TODO(t)",
+    "NEXT(n)",
+    "DOING(g)",
+    "WAIT(w)",
+    "|",
+    "DONE(d)",
+    "CANCELED(c)",
+  },
+  org_todo_keyword_faces = {
+    SOMEDAY = ":foreground #928374 :slant italic",
+    NEXT = ":foreground #b57614 :weight bold",  -- 次の一手が一番目立つようにする
+    DOING = ":foreground #79740e :weight bold", -- 旧 @inProgress の色
+    WAIT = ":foreground #076678 :weight bold",  -- 旧 @wait の色
+    CANCELED = ":foreground #928374 :slant italic",
+  },
+
+  -- @done(YYYY-MM-DD) 相当。DONE / CANCELED にした日時を CLOSED: として自動で残す
+  org_log_done = "time",
+  org_log_into_drawer = "LOGBOOK",
+
+  -- 自作していた due ハイライト（critical_days / warning_days）の代替。
+  -- この日数以内の DEADLINE がアジェンダ上で警告扱いになる。
+  org_deadline_warning_days = 7,
+
+  -- taskpaper の Archive: セクション相当。
+  -- todo.org -> org/archive/todo.org_archive に退避する（相対パス指定）
+  org_archive_location = "archive/%s_archive::",
+
+  -- 分解した親見出しには状態を付けず、:project: タグだけを付ける運用にする。
+  -- 継承から除外することで、配下のタスクが +project にヒットしなくなり、
+  -- 「プロジェクトそのもの」だけを週次レビューで一覧できる。
+  --
+  -- 状態を付けない狙いは、built-in の t（全 TODO エントリ）に載せないことにある。
+  -- プロジェクトは「望む結果」であって、そのままでは手を動かせないため、
+  -- 次の一手を選ぶための一覧に並べても判断コストが増えるだけになる。
+  -- 代わりに、下の w（週次レビュー）の +project ブロックが唯一の窓口になる。
+  --
+  -- プロジェクトの投入口は capture の p。途中で「これは分解が必要な塊だ」と
+  -- 気づいた場合は、cit で fast access を開いて Space（Clear keyword）を押すと
+  -- 状態を外せるので、そこから <Leader>ot で :project: タグを付けて昇格させる。
+  --
+  -- 状態を持たない以上、プロジェクトを DONE で閉じることはできない。
+  -- 配下が全て DONE になった時点でアーカイブする操作が、実質的な締めになる。
+  org_tags_exclude_from_inheritance = { "project" },
+
+  -- アジェンダと capture のウィンドウを、画面の上半分ちょうどに開く。
+  -- 既定の "horizontal" は行数を直接指定するため（アジェンダ 34 行、capture 16 行）、
+  -- 画面の高さによって広すぎたり狭すぎたりする。:split は現在のウィンドウを
+  -- 半分に割る挙動なので、topleft と組み合わせて「上半分」を得る。
+  win_split_mode = "topleft split",
+
+  org_startup_folded = "content",
+  -- 効かないのでコメントアウトしている。*bold* などの記号を隠すには
+  -- conceallevel を 1 以上にする必要があるが、この環境は 0（render-markdown 側でも
+  -- 明示的に 0 にしている）ため、true にしても何も起きない。
+  -- 記号を隠したくなったら、この行を戻した上で org ファイルの conceallevel を上げる。
+  -- org_hide_emphasis_markers = true,
+  org_tags_column = 0, -- taskpaper のようにタグを本文の直後に置く
+  -- 深いツリーを読みやすくするための仮想インデント。見出しの先頭の * も隠れる。
+  -- 見た目が好みでなければこの 1 行を消せば元に戻る。
+  -- org_startup_indented = true,
+
+  org_capture_templates = {
+    t = {
+      description = "Todo（分解待ちも含めて、まずはここに放り込む）",
+      template = "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:",
+      target = org_dir .. "/todo.org",
+    },
+    d = {
+      description = "Todo（期限付き。カレンダーで日付を選ぶ）",
+      -- %^{...}t はカレンダーを開いて日付を選ばせる
+      template = "* TODO %?\nDEADLINE: %^{期限}t\n:PROPERTIES:\n:CREATED: %U\n:END:",
+      target = org_dir .. "/todo.org",
+    },
+    s = {
+      description = "Someday（やるかどうか未定のアイデア）",
+      template = "* SOMEDAY %?\n:PROPERTIES:\n:CREATED: %U\n:END:",
+      target = org_dir .. "/todo.org",
+    },
+    n = {
+      -- 既存タスクのサブタスクを作るとき用。capture ウィンドウで <Space>or を押すと
+      -- 「todo.org/親タスク名」を補完で選べて、そのまま子見出しとしてぶら下がる。
+      description = "Next（サブタスク。<Space>or で親へぶら下げる）",
+      template = "* NEXT %?\n:PROPERTIES:\n:CREATED: %U\n:END:",
+      target = org_dir .. "/todo.org",
+    },
+    p = {
+      -- 分解待ちの「塊」を入れる口。ここだけ TODO キーワードを付けずに投入する。
+      -- notes.org ではなく todo.org に入れるのは、notes.org を「タスクではないもの」の
+      -- 置き場として保ち、週次レビューで読む対象を todo.org だけに閉じておくため。
+      -- 期限はプロジェクト自体には持たせない。agenda ビューは TODO キーワードではなく
+      -- 日付で拾うため、ここに DEADLINE を書くと d / w の日付ブロックに出続けてしまう。
+      -- 期限は分解後の NEXT 側に付ける。
+      description = "Project（分解待ちの塊。状態は持たせない）",
+      template = "* %? :project:\n:PROPERTIES:\n:CREATED: %U\n:END:",
+      target = org_dir .. "/todo.org",
+    },
+    m = {
+      description = "Memo（notes.org へ。タスクではないもの）",
+      template = "* %?\n%U",
+      target = org_dir .. "/notes.org",
+    },
+  },
+
+  org_agenda_custom_commands = {
+    -- 日次: いま手を動かせるものだけに絞る。TODO / SOMEDAY はあえて出さない。
+    d = {
+      description = "日次ダッシュボード",
+      types = {
+        { type = "agenda", org_agenda_span = "day", org_agenda_overriding_header = "今日（期限・予定）" },
+        { type = "tags_todo", match = "/DOING", org_agenda_overriding_header = "着手中" },
+        { type = "tags_todo", match = "/NEXT", org_agenda_overriding_header = "次の一手" },
+        { type = "tags_todo", match = "/WAIT", org_agenda_overriding_header = "待機中（ブロック中）" },
+      },
+    },
+    -- 週次レビュー: 溜まっているものを棚卸しする。ここが分解と棄却の場。
+    w = {
+      description = "週次レビュー",
+      types = {
+        { type = "tags", match = "+project", org_agenda_overriding_header = "プロジェクト一覧（NEXT が 1 つあるか確認する）" },
+        { type = "tags_todo", match = "/TODO", org_agenda_overriding_header = "分解待ち（NEXT を切るか、CANCELED にする）" },
+        { type = "tags_todo", match = "/SOMEDAY", org_agenda_overriding_header = "いつかやる（やらないと決めたら CANCELED）" },
+        { type = "tags_todo", match = "/WAIT", org_agenda_overriding_header = "待機中（待ち続けていないか確認する）" },
+        { type = "tags_todo", match = '+PRIORITY="A"', org_agenda_overriding_header = "緊急（旧 @urgent）" },
+        { type = "tags_todo", match = "+risky", org_agenda_overriding_header = "不確実（旧 @risky）" },
+        { type = "agenda", org_agenda_span = "week", org_agenda_overriding_header = "今週" },
+      },
+    },
+  },
+
+  mappings = { prefix = "<Leader>o" },
+
+  -- 選択メニューだけを中央のフロートに差し替える。
+  -- ハンドラを設定すると cit（TODO fast access）もこちらを通る。
+  ui = {
+    menu = { handler = org_menu_popup },
+  },
+}
+
+-- CANCELED にしたときだけ、棄却の理由をその場でメモさせる。
+-- org_log_done = "note" にすると DONE のたびに聞かれて煩わしいため、
+-- TodoChanged イベントを拾って CANCELED に限定している。
+-- 理由は org_log_into_drawer の設定により LOGBOOK ドロワーに畳まれる。
+local org_events = require("orgmode.events")
+org_events.listen(org_events.event.TodoChanged, function(event)
+  -- アジェンダ上で t を押した場合、nvim-orgmode は 1x2 の非表示フロートに対象ファイルを
+  -- 開いて書き換える（utils.edit_file）。このときも filetype は "org" になるため、
+  -- filetype だけで判定すると、その極小ウィンドウの中でメモ入力を開こうとしてしまう。
+  -- nvim-orgmode 自身が立てる b:org_tmp_edit_window を見て、その状況を除外する。
+  -- 結果として、理由を聞くのは org ファイルを直接開いて操作したときだけになる。
+  if not event.headline or vim.bo.filetype ~= "org" or vim.b.org_tmp_edit_window then
+    return
+  end
+  local todo = event.headline:get_todo()
+  if todo == "CANCELED" and event.old_todo_state ~= "CANCELED" then
+    require("orgmode").org_mappings:add_note()
+  end
+end)

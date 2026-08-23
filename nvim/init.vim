@@ -251,9 +251,22 @@ call jetpack#add('obsidian-nvim/obsidian.nvim', { 'commit': '266c55b' }) " [2026
 
 call jetpack#add('lambdalisue/nvim-aibo', { 'commit': '0505c2e' }) " [2026/07/07 18:15:00 0505c2e]
 
-call jetpack#add('pwntester/octo.nvim')
+call jetpack#add('pwntester/octo.nvim', { 'commit': '205f024' }) " [2026/07/31 01:09:49 205f024]
+
+call jetpack#add('nvim-orgmode/orgmode', { 'commit': '005368b' }) " [2026/08/21 00:11:59 005368b]
 call jetpack#end()
 " plugins END }}}
+
+" nvim 0.11+ には $VIMRUNTIME/ftplugin/org.vim が同梱されており、b:did_ftplugin を立てる。
+" jetpack はプラグインを $VIMRUNTIME より後ろの runtimepath に追加するため、何もしないと
+" nvim-orgmode の ftplugin/org.lua が冒頭の `if vim.b.did_ftplugin then return end` で
+" 抜けてしまい、キーマップ・折り畳み・treesitter ハイライトが全て無効になる。
+" jetpack が登録したエントリを一度取り除いてから先頭に入れ直す。単に ^= で足すと
+" 同じディレクトリが runtimepath に二重登録され、nvim-orgmode が同一の
+" parser/org.so を別物と誤認して "Multiple org parsers found" と警告してしまう。
+let s:orgmode_rtp = s:main_jetpack_dir .. '/pack/jetpack/opt/orgmode/'
+execute 'set runtimepath-=' .. s:orgmode_rtp
+execute 'set runtimepath^=' .. s:orgmode_rtp
 
 " Automatic plugin installation on startup
 for name in jetpack#names()
@@ -1625,7 +1638,10 @@ set smartindent
 set visualbell
 set showmatch
 set laststatus=2
-set wildmode=list:longest
+" list:longest だけだと、共通の接頭辞が伸びない場面（nvim-orgmode の refile 宛先など）で
+" <Tab> が無反応に見える。,full を足すと 2 回目以降の <Tab> で候補を順に選べる。
+" 1 回目の挙動はこれまでと変わらない。
+set wildmode=list:longest,full
 
 set list listchars=tab:\^\-,trail:~,nbsp:%,eol:$
 set expandtab
@@ -2166,8 +2182,8 @@ endfunction
 
 " 使い捨てのバッファを作るコマンド、nvim 単体で呼び出したときも使い捨てのバッファから始める
 autocmd VimEnter * if argc() == 0 | enew | setlocal buftype=nofile bufhidden=wipe noswapfile | endif
-command! Scratch 10split |  enew | setlocal buftype=nofile bufhidden=wipe noswapfile
-nnoremap S :Scratch<CR>
+" command! Scratch 10split |  enew | setlocal buftype=nofile bufhidden=wipe noswapfile
+" nnoremap S :Scratch<CR>
 
 " editprompt 専用の map
 autocmd BufRead,BufNewFile .editprompt-* set filetype=editprompt
@@ -2176,3 +2192,8 @@ autocmd FileType editprompt nnoremap <buffer> <CR> <cmd>wq<CR>
 " edit-command-line (zsh C-o) 専用の map
 autocmd BufRead,BufNewFile /tmp/zshecl*,/private/tmp/zshecl*,/private/tmp/zsh*.zsh set filetype=zsh-cmdline
 autocmd FileType zsh-cmdline nnoremap <buffer> <CR> <cmd>wq<CR>
+
+" claude code (C-g) 専用の map
+" $TMPDIR/claude-<uid>/claude-prompt-<uuid>.md が開かれる
+" markdown のシンタックスを活かしたいので、filetype は変更せずにマップだけ足す
+autocmd BufRead,BufNewFile claude-prompt-*.md nnoremap <buffer> <CR> <cmd>wq<CR>
