@@ -1163,7 +1163,7 @@ visual 時に _ -> 無名レジスタを汚さず置換できる（プラグイ�
 
 capture or .org
 cit         -> 状態を変更(space で外す)
-<Space>or   -> refile
+<Space>or   -> refile（fzf-lua で宛先を fuzzy 検索）
 <Space>ot   -> project などのタグ付与
 <Space>oid  -> 締切を付与
 <Space>ois  -> 着手予定日を付与
@@ -1903,6 +1903,95 @@ require("orgmode").setup {
     menu = { handler = org_menu_popup },
   },
 }
+
+-- refile 先の選択を fzf-lua の fuzzy find に差し替える。
+-- 既定の実装（OrgCapture:get_destination）は cmdline に「ファイル/見出し」を
+-- 補完付きで入力させるため、見出しが増えるほど宛先を選びづらい。クラスの
+-- メソッドごと差し替えることで、refile を呼ぶ経路すべて（capture ウィンドウの
+-- <Space>or、org ファイルやアジェンダ上の <Space>or）が同じ picker を通る。
+--
+-- このメソッドは nvim-orgmode 独自の Promise を返し、
+-- { file = OrgFile, headline = OrgHeadline? } に解決する契約になっている。
+-- headline を省くとファイルのトップレベルが宛先になる。中断時は false を返す。
+local OrgCapture = require("orgmode.capture")
+local OrgPromise = require("orgmode.utils.promise")
+
+---@return OrgPromise # { file: OrgFile, headline?: OrgHeadline } または false に解決する
+function OrgCapture:get_destination()
+  -- private メソッドだが、既定の補完と同じ表示（共通の親を落としたファイル名）を
+  -- そのまま使いたいので利用する。キーは "todo.org/" 形式、値は OrgFile。
+  local files = self:_get_autocompletion_files()
+
+  local names = vim.tbl_keys(files)
+  table.sort(names)
+
+  ---@type { display: string, file: OrgFile, headline?: OrgHeadline }[]
+  local items = {}
+  for _, name in ipairs(names) do
+    local file = files[name]
+    -- ファイル自身のエントリ。選ぶとトップレベル（受信箱）に入る。
+    table.insert(items, { display = name, file = file })
+    -- DONE と :ARCHIVE: 付きは、既定の補完と同様に宛先から外れる。
+    for _, headline in ipairs(file:get_opened_unfinished_headlines()) do
+      local outline_path = headline:get_outline_path()
+      local prefix = outline_path ~= "" and (outline_path .. "/") or ""
+      table.insert(items, {
+        display = name .. prefix .. headline:get_title(),
+        file = file,
+        headline = headline,
+      })
+    end
+  end
+
+  -- 同名の見出しが複数あっても選択結果を一意に引き当てられるよう、行頭に添字を埋める。
+  -- 添字は --with-nth で表示と検索の対象から外す。
+  local entries = {}
+  for i, item in ipairs(items) do
+    entries[i] = string.format("%d\t%s", i, item.display)
+  end
+
+  return OrgPromise.new(function(resolve)
+    local done = false
+    ---@param value { file: OrgFile, headline?: OrgHeadline }|false
+    local function finish(value)
+      if done then
+        return
+      end
+      done = true
+      -- picker を閉じ切ってから refile 本体を走らせる。refile はカレントバッファを
+      -- 直接書き換えるため、ウィンドウが元に戻る前に実行されないようにしておく。
+      vim.schedule(function()
+        resolve(value)
+      end)
+    end
+
+    require("fzf-lua").fzf_exec(entries, {
+      prompt = "Refile❯ ",
+      fzf_opts = { ["--delimiter"] = "\t", ["--with-nth"] = "2.." },
+      winopts = {
+        title = " Refile destination ",
+        -- 選択でも中断でもここを通る。fzf-lua はウィンドウを閉じてから action を
+        -- 呼ぶので、vim.schedule で 1 tick 遅らせて action の結果を待ち合わせる。
+        on_close = function()
+          vim.schedule(function()
+            finish(false)
+          end)
+        end,
+      },
+      actions = {
+        ["default"] = function(selected)
+          local line = selected and selected[1]
+          local index = line and tonumber(line:match("^(%d+)\t"))
+          local item = index and items[index]
+          if not item then
+            return
+          end
+          finish({ file = item.file, headline = item.headline })
+        end,
+      },
+    })
+  end)
+end
 
 -- CANCELED にしたときだけ、棄却の理由をその場でメモさせる。
 -- org_log_done = "note" にすると DONE のたびに聞かれて煩わしいため、
