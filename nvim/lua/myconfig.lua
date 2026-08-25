@@ -1894,7 +1894,17 @@ require("orgmode").setup {
   mappings = {
     prefix = "<Leader>o",
     org = { org_archive_subtree = "<prefix>z" },
-    agenda = { org_agenda_archive = "<prefix>z" },
+    -- プレビュー（既定 K）は、LSP hover に割り当てている gh と操作感を揃える。
+    -- agenda バッファには LSP が attach せず、orgmode がバッファローカルに
+    -- keymap を張るため、グローバルの gh とも衝突しない。
+    agenda = {
+      org_agenda_archive = "<prefix>z",
+      org_agenda_preview = "gh",
+      -- 日付ジャンプ（既定 J）は無効化する。J はグローバルで 10gj に
+      -- 割り当てており、agenda 上でも同じ移動感を保ちたいため。
+      -- false を渡すとその keymap は張られない（map_entry.lua の attach 参照）。
+      org_agenda_goto_date = false,
+    },
   },
 
   -- 選択メニューだけを中央のフロートに差し替える。
