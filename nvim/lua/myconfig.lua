@@ -1583,6 +1583,13 @@ require("obsidian").setup {
   picker = {
     name = "fzf-lua", -- picker を使わない場合はこの行は不要
   },
+  -- obsidian.nvim の追加 UI（チェックボックスや参照リンクの装飾）は使わない。
+  -- これらは conceallevel が 1 以上でないと動かないが、この環境では
+  -- render-markdown 側で conceallevel を 0 に固定しているため機能しない。
+  -- false にしないと markdown を開くたびに警告が出る。
+  ui = {
+    enable = false,
+  },
 }
 
 -- -------------------------------------------------------
@@ -1627,6 +1634,11 @@ vim.keymap.set("n", "<Space>op",
 -- 注意: runtimepath への追加は init.vim 側で行っている（$VIMRUNTIME の
 -- ftplugin/org.vim より前に置かないとキーマップが一切効かないため）。
 local org_dir = vim.fn.expand("$GOPATH/src/github.com/maguroguma/diary/org")
+
+-- capture とアジェンダの宛先はここに集約する。ファイル名を変えるときはこの 3 行だけを直す。
+local org_inbox_file = org_dir .. "/inbox.org" -- capture の投入先。直下が受信箱になる
+local org_notes_file = org_dir .. "/notes.org" -- タスクではないメモの置き場
+local org_journal_dir = org_dir .. "/journal"  -- 日報。1 日 1 ファイルに分ける
 
 -- 選択メニュー（agenda / capture / export / cit の fast access）を画面中央に出す。
 -- 既定の実装は :echon + getchar() でコマンドライン領域に描くため、画面下部に出る。
@@ -1722,19 +1734,19 @@ require("orgmode").setup {
   -- 直下の *.org のみを対象にするため、archive/ 配下は走査されず、
   -- アジェンダには現役のタスクだけが並ぶ。
   org_agenda_files = { org_dir .. "/*.org" },
-  -- capture の投入先は todo.org に統一し、その「直下（トップレベル）」を受信箱として使う。
+  -- capture の投入先は inbox.org に統一し、その「直下（トップレベル）」を受信箱として使う。
   -- 親にぶら下げたくなったら <Space>or で同じファイルの中を移動させればよく、
   -- 受信箱専用のファイルを別に持つ必要がない。
   -- この設定自体は、target を書いていない capture テンプレートの既定の宛先。
   -- 下の org_capture_templates は全て target を明示しているので、実際には
   -- :checkhealth orgmode の警告を消すための保険として効いている。
-  org_default_notes_file = org_dir .. "/todo.org",
+  org_default_notes_file = org_inbox_file,
 
   -- タスクの「状態」でワークフローを表現する。運用ルールは以下のとおり。
   --   SOMEDAY … やるかどうかまだ決めていない。週次レビューで棚卸しする
   --   TODO    … やると決めたが、着手できる粒度に分解できていない（＝分解待ち）
   --   NEXT    … 分解済みで、いま着手できる「次の一手」
-  --   DOING   … 着手中（taskpaper の @inProgress）
+  --   GOING   … 着手中（taskpaper の @inProgress）
   --   WAIT    … 他者・外部要因の待ちでブロックされている（taskpaper の @wait）
   --   DONE    … 完了
   --   CANCELED… 棄却。「終わった」扱いにして DONE と区別する
@@ -1744,7 +1756,7 @@ require("orgmode").setup {
     "SOMEDAY(s)",
     "TODO(t)",
     "NEXT(n)",
-    "DOING(g)",
+    "GOING(g)",
     "WAIT(w)",
     "|",
     "DONE(d)",
@@ -1753,7 +1765,7 @@ require("orgmode").setup {
   org_todo_keyword_faces = {
     SOMEDAY = ":foreground #928374 :slant italic",
     NEXT = ":foreground #b57614 :weight bold",  -- 次の一手が一番目立つようにする
-    DOING = ":foreground #79740e :weight bold", -- 旧 @inProgress の色
+    GOING = ":foreground #79740e :weight bold", -- 旧 @inProgress の色
     WAIT = ":foreground #076678 :weight bold",  -- 旧 @wait の色
     CANCELED = ":foreground #928374 :slant italic",
   },
@@ -1767,7 +1779,7 @@ require("orgmode").setup {
   org_deadline_warning_days = 7,
 
   -- taskpaper の Archive: セクション相当。
-  -- todo.org -> org/archive/todo.org_archive に退避する（相対パス指定）
+  -- inbox.org -> org/archive/inbox.org_archive に退避する（相対パス指定）
   org_archive_location = "archive/%s_archive::",
 
   -- 分解した親見出しには状態を付けず、:project: タグだけを付ける運用にする。
@@ -1808,41 +1820,66 @@ require("orgmode").setup {
     t = {
       description = "Todo（分解待ちも含めて、まずはここに放り込む）",
       template = "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:",
-      target = org_dir .. "/todo.org",
+      target = org_inbox_file,
     },
     d = {
       description = "Todo（期限付き。カレンダーで日付を選ぶ）",
       -- %^{...}t はカレンダーを開いて日付を選ばせる
       template = "* TODO %?\nDEADLINE: %^{期限}t\n:PROPERTIES:\n:CREATED: %U\n:END:",
-      target = org_dir .. "/todo.org",
+      target = org_inbox_file,
     },
     s = {
       description = "Someday（やるかどうか未定のアイデア）",
       template = "* SOMEDAY %?\n:PROPERTIES:\n:CREATED: %U\n:END:",
-      target = org_dir .. "/todo.org",
+      target = org_inbox_file,
     },
     n = {
       -- 既存タスクのサブタスクを作るとき用。capture ウィンドウで <Space>or を押すと
-      -- 「todo.org/親タスク名」を補完で選べて、そのまま子見出しとしてぶら下がる。
+      -- 「inbox.org/親タスク名」を補完で選べて、そのまま子見出しとしてぶら下がる。
       description = "Next（サブタスク。<Space>or で親へぶら下げる）",
       template = "* NEXT %?\n:PROPERTIES:\n:CREATED: %U\n:END:",
-      target = org_dir .. "/todo.org",
+      target = org_inbox_file,
     },
     p = {
       -- 分解待ちの「塊」を入れる口。ここだけ TODO キーワードを付けずに投入する。
-      -- notes.org ではなく todo.org に入れるのは、notes.org を「タスクではないもの」の
-      -- 置き場として保ち、週次レビューで読む対象を todo.org だけに閉じておくため。
+      -- notes.org ではなく inbox.org に入れるのは、notes.org を「タスクではないもの」の
+      -- 置き場として保ち、週次レビューで読む対象を inbox.org だけに閉じておくため。
       -- 期限はプロジェクト自体には持たせない。agenda ビューは TODO キーワードではなく
       -- 日付で拾うため、ここに DEADLINE を書くと d / w の日付ブロックに出続けてしまう。
       -- 期限は分解後の NEXT 側に付ける。
       description = "Project（分解待ちの塊。状態は持たせない）",
       template = "* %? :project:\n:PROPERTIES:\n:CREATED: %U\n:END:",
-      target = org_dir .. "/todo.org",
+      target = org_inbox_file,
     },
     m = {
       description = "Memo（notes.org へ。タスクではないもの）",
       template = "* %?\n%U",
-      target = org_dir .. "/notes.org",
+      target = org_notes_file,
+    },
+    -- キーはアジェンダ側の j（日報ビュー）と揃えてある。投入と閲覧で同じ文字を
+    -- 叩けるようにして、日報まわりの操作を 1 文字で覚えられる状態に保つ。
+    j = {
+      -- 日報。1 日 1 ファイルに分け、journal/YYYY/MM/DD.org へ落とす。
+      -- target に書いた %<...> は本文と同じく os.date で展開されるため、日付が
+      -- 変わると宛先ファイルが自動的に切り替わる。存在しないファイルについては、
+      -- capture が確認ダイアログを 1 回出した上で、親ディレクトリごと作ってくれる。
+      --
+      -- 置き場を journal/ 配下に分けているのは、org_agenda_files が org 直下の
+      -- *.org しか見ていないため。日報は「済んだことのログ」であってタスクではなく、
+      -- アジェンダや週次レビューに並べても次の一手を選ぶ役には立たない。
+      -- 「レビューで読むのは inbox.org だけ」という状態を保つために、あえて拾わせない。
+      --
+      -- 見出しの下に %T（アクティブなタイムスタンプ）を置くのは、日報を下の j
+      -- アジェンダへ載せるため。アジェンダは日付か TODO 状態を手がかりに見出しを
+      -- 拾うので、パス側に日付があるだけでは並ばない。DEADLINE でも SCHEDULED でも
+      -- ない素のタイムスタンプで十分に拾われる。
+      --
+      -- 見出しそのものには時刻を入れない。%T が時刻まで含むため、入れると同じ時刻が
+      -- 1 エントリに 2 度出て冗長になる。アジェンダ側もタイムスタンプから時刻を読んで
+      -- 行頭に出してくれるので、見出しは本文だけに保つ。
+      description = "日報（journal/YYYY/MM/DD.org へ積む）",
+      template = "* %?\n%T",
+      target = org_journal_dir .. "/%<%Y/%m/%d>.org",
     },
   },
 
@@ -1852,9 +1889,28 @@ require("orgmode").setup {
       description = "日次ダッシュボード",
       types = {
         { type = "agenda", org_agenda_span = "day", org_agenda_overriding_header = "今日（期限・予定）" },
-        { type = "tags_todo", match = "/DOING", org_agenda_overriding_header = "着手中" },
+        { type = "tags_todo", match = "/GOING", org_agenda_overriding_header = "着手中" },
         { type = "tags_todo", match = "/NEXT", org_agenda_overriding_header = "次の一手" },
         { type = "tags_todo", match = "/WAIT", org_agenda_overriding_header = "待機中（ブロック中）" },
+      },
+    },
+    -- 日報: その日に capture したログだけを一覧する。<TAB> でその日のファイルへ飛べるので、
+    -- capture の UI を確定させたあとに続きを書き足したくなったときの入口になる。
+    --
+    -- org_agenda_files をこのブロックだけに指定しているのがこの定義の肝。
+    -- グローバルの org_agenda_files（org 直下の *.org）は据え置いたまま、この
+    -- ビューだけが journal/ 配下を見る。こうしないと日報が d や w にも流れ込み、
+    -- 「次の一手を選ぶ一覧」がログで埋まってしまう。
+    -- ** は vim.fn.glob に渡るため、YYYY/MM の 2 階層を跨いで再帰的に展開される。
+    j = {
+      description = "日報（今日書いたログ）",
+      types = {
+        {
+          type = "agenda",
+          org_agenda_span = "day",
+          org_agenda_files = { org_journal_dir .. "/**/*.org" },
+          org_agenda_overriding_header = "今日の日報",
+        },
       },
     },
     -- 週次レビュー: 溜まっているものを棚卸しする。ここが分解と棄却の場。
@@ -1929,7 +1985,7 @@ local OrgPromise = require("orgmode.utils.promise")
 ---@return OrgPromise # { file: OrgFile, headline?: OrgHeadline } または false に解決する
 function OrgCapture:get_destination()
   -- private メソッドだが、既定の補完と同じ表示（共通の親を落としたファイル名）を
-  -- そのまま使いたいので利用する。キーは "todo.org/" 形式、値は OrgFile。
+  -- そのまま使いたいので利用する。キーは "inbox.org/" 形式、値は OrgFile。
   local files = self:_get_autocompletion_files()
 
   local names = vim.tbl_keys(files)
