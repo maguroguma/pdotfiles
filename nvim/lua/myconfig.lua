@@ -1950,6 +1950,16 @@ require("orgmode").setup {
   mappings = {
     prefix = "<Leader>o",
     org = { org_archive_subtree = "<prefix>z" },
+    -- 確定の既定 <C-c> は、Emacs の org-capture の C-c C-c（確定）を縮めたもの。
+    -- ところが vim の <C-c> は「キャンセル」を連想させるため、意味が逆に読める。
+    -- 実際、挿入モードの <C-c> はモードを抜けるだけなので、中断のつもりで
+    -- 2 回叩くと保存されて閉じる、という逆向きの事故が起きる。
+    -- そこで kill（<prefix>k）や refile（<prefix>r）と系列を揃えて <prefix>c に寄せ、
+    -- <C-c> は残さず外す。capture ウィンドウの中ではグローバルの capture 起動
+    -- （同じ <prefix>c）を覆うが、capture を入れ子にはしないので実害はない。
+    capture = { org_capture_finalize = "<prefix>c" },
+    -- note バッファ（org_add_note など）の確定も既定が <C-c> なので揃える。
+    note = { org_note_finalize = "<prefix>c" },
     -- プレビュー（既定 K）は、LSP hover に割り当てている gh と操作感を揃える。
     -- agenda バッファには LSP が attach せず、orgmode がバッファローカルに
     -- keymap を張るため、グローバルの gh とも衝突しない。
