@@ -1661,12 +1661,25 @@ local function org_menu_popup(data)
   separators[#lines + 1] = "-"
   table.insert(lines, "")
 
-  for _, item in ipairs(data.items) do
+  -- 同じキーを持つ項目が複数あるとき、実際に発火するのは最後に登録されたもの。
+  -- valid_keys が後勝ちで上書きされるためで、これは nvim-orgmode 本体の
+  -- Menu:get_valid_keys() も同じ挙動になっている。
+  -- org_agenda_custom_commands は組み込みのコマンドより後に積まれるので、
+  -- 下の t のようにキーを奪うと、組み込み側の行が「押しても反応しない行」として
+  -- 残ってしまう。表示と挙動を一致させるため、後勝ちで間引いてから描画する。
+  local last_index_by_key = {}
+  for index, item in ipairs(data.items) do
+    if item.key then
+      last_index_by_key[item.key] = index
+    end
+  end
+
+  for index, item in ipairs(data.items) do
     if item.icon then
       -- セパレータは既定で length = 80 と長いので、幅はこちらで決め直す
       separators[#lines + 1] = item.icon
       table.insert(lines, "")
-    else
+    elseif last_index_by_key[item.key] == index then
       valid_keys[item.key] = item
       option_lines[#lines + 1] = item
       table.insert(lines, string.format("%s  %s", item.key, item.label))
@@ -1729,6 +1742,53 @@ local function org_menu_popup(data)
   return entry.action()
 end
 
+-- タスクの「状態」でワークフローを表現する。運用ルールは以下のとおり。
+--   SOMEDAY … やるかどうかまだ決めていない。週次レビューで棚卸しする
+--   TODO    … やると決めたが、着手できる粒度に分解できていない（＝分解待ち）
+--   NEXT    … 分解済みで、いま着手できる「次の一手」
+--   GOING   … 着手中（taskpaper の @inProgress）
+--   WAIT    … 他者・外部要因の待ちでブロックされている（taskpaper の @wait）
+--   DONE    … 完了
+--   CANCELED… 棄却。「終わった」扱いにして DONE と区別する
+-- 「手をつけられる粒度になったら即 NEXT にする」を守ることで、TODO のまま残って
+-- いるものが「分解待ちの大きなタスク」として自動的に炙り出される。
+--
+-- 並び順にも意味がある。アジェンダの todo-state-down はこの定義順を逆にたどるため、
+-- 下に置いたキーワードほど一覧の上に来る（下の T のカスタムコマンドを参照）。
+local org_todo_keywords = {
+  "SOMEDAY(s)",
+  "TODO(t)",
+  "NEXT(n)",
+  "GOING(g)",
+  "WAIT(w)",
+  "|",
+  "DONE(d)",
+  "CANCELED(c)",
+}
+
+--- 「状態が付いていない見出し」だけを拾うアジェンダの match クエリを組み立てる。
+---
+--- nvim-orgmode は検索時、キーワードを持たない見出しの状態を空文字として扱う。
+--- そのため全キーワードを `-` で否定すると、どれにも一致しない空文字だけが生き残る。
+--- 未完了キーワードだけを否定すると DONE / CANCELED が残ってしまうので、
+--- `|` を除く全てのキーワードを並べる必要がある。
+---
+---@param keywords string[] org_todo_keywords と同じ形式（`KEYWORD(x)` と `|` を含む）
+---@return string query tags 型のアジェンダに渡す match クエリ
+local function build_no_keyword_query(keywords)
+  local query = "/"
+  for _, keyword in ipairs(keywords) do
+    if keyword ~= "|" then
+      -- "SOMEDAY(s)" のような fast access 用の括弧を落として "SOMEDAY" にする
+      local value = keyword:gsub("%b()", "")
+      query = query .. "-" .. value
+    end
+  end
+  return query
+end
+
+local org_no_keyword_query = build_no_keyword_query(org_todo_keywords)
+
 require("orgmode").setup {
   -- diary リポジトリの中の org/ だけを org-mode の領域として隔離する。
   -- 直下の *.org のみを対象にするため、archive/ 配下は走査されず、
@@ -1742,26 +1802,9 @@ require("orgmode").setup {
   -- :checkhealth orgmode の警告を消すための保険として効いている。
   org_default_notes_file = org_inbox_file,
 
-  -- タスクの「状態」でワークフローを表現する。運用ルールは以下のとおり。
-  --   SOMEDAY … やるかどうかまだ決めていない。週次レビューで棚卸しする
-  --   TODO    … やると決めたが、着手できる粒度に分解できていない（＝分解待ち）
-  --   NEXT    … 分解済みで、いま着手できる「次の一手」
-  --   GOING   … 着手中（taskpaper の @inProgress）
-  --   WAIT    … 他者・外部要因の待ちでブロックされている（taskpaper の @wait）
-  --   DONE    … 完了
-  --   CANCELED… 棄却。「終わった」扱いにして DONE と区別する
-  -- 「手をつけられる粒度になったら即 NEXT にする」を守ることで、TODO のまま残って
-  -- いるものが「分解待ちの大きなタスク」として自動的に炙り出される。
-  org_todo_keywords = {
-    "SOMEDAY(s)",
-    "TODO(t)",
-    "NEXT(n)",
-    "GOING(g)",
-    "WAIT(w)",
-    "|",
-    "DONE(d)",
-    "CANCELED(c)",
-  },
+  -- キーワードの一覧と運用ルールは、setup の手前の org_todo_keywords を参照。
+  -- 「状態未設定の見出し」を集めるクエリを組み立てる都合で、外に出している。
+  org_todo_keywords = org_todo_keywords,
   org_todo_keyword_faces = {
     SOMEDAY = ":foreground #928374 :slant italic",
     NEXT = ":foreground #b57614 :weight bold",  -- 次の一手が一番目立つようにする
@@ -1859,10 +1902,15 @@ require("orgmode").setup {
     -- キーはアジェンダ側の j（日報ビュー）と揃えてある。投入と閲覧で同じ文字を
     -- 叩けるようにして、日報まわりの操作を 1 文字で覚えられる状態に保つ。
     j = {
-      -- 日報。1 日 1 ファイルに分け、journal/YYYY/MM/DD.org へ落とす。
+      -- 日報。1 日 1 ディレクトリに分け、journal/YYYY/MM/DD/index.org へ落とす。
       -- target に書いた %<...> は本文と同じく os.date で展開されるため、日付が
       -- 変わると宛先ファイルが自動的に切り替わる。存在しないファイルについては、
       -- capture が確認ダイアログを 1 回出した上で、親ディレクトリごと作ってくれる。
+      -- mkdir は 'p' 付きで呼ばれるので、YYYY/MM/DD の 3 階層が一度に掘られる。
+      --
+      -- 日付そのものをディレクトリにしているのは、その日のスクショや貼り付けた
+      -- コード片を本文の隣に置けるようにするため。本文を index.org に固定して
+      -- おけば、ディレクトリの中でどれが日報本体かを迷わずに済む。
       --
       -- 置き場を journal/ 配下に分けているのは、org_agenda_files が org 直下の
       -- *.org しか見ていないため。日報は「済んだことのログ」であってタスクではなく、
@@ -1877,9 +1925,9 @@ require("orgmode").setup {
       -- 見出しそのものには時刻を入れない。%T が時刻まで含むため、入れると同じ時刻が
       -- 1 エントリに 2 度出て冗長になる。アジェンダ側もタイムスタンプから時刻を読んで
       -- 行頭に出してくれるので、見出しは本文だけに保つ。
-      description = "日報（journal/YYYY/MM/DD.org へ積む）",
+      description = "日報（journal/YYYY/MM/DD/index.org へ積む）",
       template = "* %?\n%T",
-      target = org_journal_dir .. "/%<%Y/%m/%d>.org",
+      target = org_journal_dir .. "/%<%Y/%m/%d>/index.org",
     },
   },
 
@@ -1901,7 +1949,8 @@ require("orgmode").setup {
     -- グローバルの org_agenda_files（org 直下の *.org）は据え置いたまま、この
     -- ビューだけが journal/ 配下を見る。こうしないと日報が d や w にも流れ込み、
     -- 「次の一手を選ぶ一覧」がログで埋まってしまう。
-    -- ** は vim.fn.glob に渡るため、YYYY/MM の 2 階層を跨いで再帰的に展開される。
+    -- ** は vim.fn.glob に渡るため、YYYY/MM/DD の階層を跨いで再帰的に展開される。
+    -- 深さを問わず拾うので、旧レイアウト（YYYY/MM/DD.org）が残っていても一緒に並ぶ。
     j = {
       description = "日報（今日書いたログ）",
       types = {
@@ -1936,6 +1985,62 @@ require("orgmode").setup {
           type = "tags",
           match = "/DONE|CANCELED",
           org_agenda_overriding_header = "アーカイブ候補（<Space>oz で追い出す）",
+        },
+      },
+    },
+    -- 全 TODO（状態順）: 常用するため、組み込みの t からキーを奪って t に置く。
+    -- カスタムコマンドは組み込みのコマンドより後にメニューへ積まれ、キーは
+    -- 後勝ちで解決されるので、この定義がそのまま t の担当になる。
+    -- 押せなくなった組み込みの行は、org_menu_popup 側で間引いている。
+    -- 元の t（優先度順）は、下の T として同じ内容を組み直してある。
+    --
+    -- todo-state-down は org_todo_keywords の定義順を逆にたどるため、定義順が
+    -- SOMEDAY → TODO → NEXT → GOING → WAIT である以上、一覧は
+    -- WAIT → GOING → NEXT → TODO → SOMEDAY となり、手を動かせるものが上に来る。
+    -- 定義順そのものを組み替えても同じ並びは作れるが、それをすると
+    -- <prefix>iT で挿入される見出しのキーワードまで変わってしまう。
+    -- 副作用を避けるため、定義順は据え置いて逆順ソートで解決している。
+    -- 同じ状態の中では優先度の高い順、それも同じならファイル順・出現順に並ぶ。
+    t = {
+      description = "全 TODO（状態順）",
+      types = {
+        {
+          -- カスタムコマンドは組み込みの t と同じ type = "todo" を受け付けない。
+          -- ただし tags_todo は todo_only を立てるので、対象の見出しは t と一致する。
+          -- match が空文字のときは「条件なし」として扱われ、全件が残る。
+          type = "tags_todo",
+          match = "",
+          org_agenda_sorting_strategy = { "todo-state-down", "priority-down", "category-keep" },
+          org_agenda_overriding_header = "全 TODO（状態順 → 優先度順）",
+        },
+      },
+    },
+    -- 組み込みの t の代替。t を上の状態順に譲ったので、優先度順の一覧をここへ移す。
+    -- 組み込みの todo ビューの既定ソートが priority-down / category-keep なので、
+    -- 同じ戦略を明示すれば見え方は元の t と変わらない。
+    T = {
+      description = "全 TODO（優先度順・元の t）",
+      types = {
+        {
+          type = "tags_todo",
+          match = "",
+          org_agenda_sorting_strategy = { "priority-down", "category-keep" },
+          org_agenda_overriding_header = "全 TODO（優先度順）",
+        },
+      },
+    },
+    -- 状態未設定の見出し: capture したまま状態を付け忘れたものを拾う。
+    -- :project: を付けた見出しは元から状態を持たない運用なので、ここには必ず並ぶ。
+    -- プロジェクトを除いて見たいときは、アジェンダ上で / を押して -project で絞れる。
+    n = {
+      description = "状態未設定の見出し",
+      types = {
+        {
+          -- tags_todo ではなく tags を使う。tags は todo_only を立てないため、
+          -- キーワードを持たない見出しが検索の対象に入る。
+          type = "tags",
+          match = org_no_keyword_query,
+          org_agenda_overriding_header = "状態未設定の見出し（:project: を含む）",
         },
       },
     },
