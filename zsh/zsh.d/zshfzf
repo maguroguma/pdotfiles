@@ -63,6 +63,20 @@ function ghq-fzf() {
 zle -N ghq-fzf
 bindkey '^]' ghq-fzf
 
+# ghq 管理リポジトリのフルパスをカーソル位置に挿入する
+# ghq-fzf と違い、コマンドの確定（実行）はしない
+function ghq-path-insert-fzf() {
+  local selected
+  selected=$(ghq list --full-path | fzf-tmux -w 95% -h 95% --prompt="ghq path> ")
+  if [ -n "$selected" ]; then
+    LBUFFER+="$selected"
+  fi
+  zle reset-prompt
+  zle -R -c
+}
+zle -N ghq-path-insert-fzf
+bindkey '^gq' ghq-path-insert-fzf
+
 # tmnew-repo-session をキーバインドで実行
 # ghq で管理しているリポジトリから選択して tmux セッションを作成・切り替え
 function tmnew-repo-session-widget() {

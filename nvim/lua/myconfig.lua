@@ -781,8 +781,13 @@ require('noice').setup({
       position = { row = '40%', col = '50%' },
     },
   },
+  -- メッセージを noice のフロートに回すことで、hit-enter プロンプト
+  -- （Press ENTER or type command to continue）が出なくなる。
+  -- 端末幅が狭いと g<C-g> 程度の短いメッセージでもロックしていたため有効化した。
+  -- 幅が狭いとフロートの末尾が欠けることがあるが、:messages を実行すれば
+  -- noice 専用の split が開き、全文を折り返し表示でゆっくり読める（q で閉じる）。
   messages = {
-    enabled = false,
+    enabled = true,
   },
   lsp = {
     override = {
@@ -956,7 +961,7 @@ vim.keymap.set("i", "<C-a>gb", function()
 end, { silent = true, desc = "Complete git branch at cursor" })
 
 -- insert mode で <C-a>gr に ghq リポジトリのフルパス挿入を設定
-vim.keymap.set("i", "<C-a>gr", function()
+vim.keymap.set("i", "<C-a>gq", function()
   require("fzf-lua").fzf_exec("ghq list --full-path", {
     prompt = "ghq list> ",
     complete = true,
