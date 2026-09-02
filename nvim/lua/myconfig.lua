@@ -2090,6 +2090,22 @@ require("orgmode").setup {
   },
 }
 
+-- 見出しの priority（[#A] など）の色。
+-- nvim-orgmode は queries/org/highlights.scm で priority の区分ごとに
+-- @org.priority.{highest,high,default,low,lowest} を割り当てるが、色を持つのは
+-- highest（@comment.error へのリンク）だけで、残りは未定義のため色がつかない。
+-- そこでここで明示的に定義する。プラグイン側のリンクは default = true 付きなので、
+-- ここでの指定が優先され、上書きされることはない。
+-- org_priority_highest/default/lowest は既定の A/B/C なので、
+-- A = highest、B = default、C = lowest に対応する（high と low は該当なし）。
+--
+-- 色は taskpaper.vim 時代（init.vim の g:task_paper_styles と
+-- g:taskpaper_due_highlight）の見た目をそのまま引き継いでいる。
+-- 目の慣れを保つため、背景色で塗る方式も含めて踏襲する。
+vim.api.nvim_set_hl(0, "@org.priority.highest", { bg = "#ff9999", fg = "#000000" }) -- A: 旧 DueCritical（@due の期限切れ）
+vim.api.nvim_set_hl(0, "@org.priority.default", { bg = "#cccc00", fg = "#000000" }) -- B: 旧 @urgent / @risky
+vim.api.nvim_set_hl(0, "@org.priority.lowest", { bg = "#87af87", fg = "#000000" })  -- C: 旧 @inProgress
+
 -- refile 先の選択を fzf-lua の fuzzy find に差し替える。
 -- 既定の実装（OrgCapture:get_destination）は cmdline に「ファイル/見出し」を
 -- 補完付きで入力させるため、見出しが増えるほど宛先を選びづらい。クラスの
