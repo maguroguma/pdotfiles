@@ -1640,10 +1640,23 @@ vim.keymap.set("n", "<Space>op",
 -- ftplugin/org.vim より前に置かないとキーマップが一切効かないため）。
 local org_dir = vim.fn.expand("$GOPATH/src/github.com/maguroguma/diary/org")
 
--- capture とアジェンダの宛先はここに集約する。ファイル名を変えるときはこの 3 行だけを直す。
+-- capture とアジェンダの宛先はここに集約する。ファイル名を変えるときはこの 5 行だけを直す。
 local org_inbox_file = org_dir .. "/inbox.org" -- capture の投入先。直下が受信箱になる
 local org_notes_file = org_dir .. "/notes.org" -- タスクではないメモの置き場
 local org_journal_dir = org_dir .. "/journal"  -- 日報。1 日 1 ファイルに分ける
+
+-- 分からなかったことリスト。業務中に出会って調べきれなかった技術を放り込む。
+-- 日報と同じく org 直下ではなくサブディレクトリに置くのが肝で、org_agenda_files が
+-- 「org 直下の *.org」しか見ていないため、これだけでアジェンダ・週次レビュー・
+-- 全 TODO 一覧のどれにも載らなくなる。TODO キーワードを付けても既存の一覧を汚さない。
+-- 閲覧は下の org_agenda_custom_commands の u が、そのブロックだけ
+-- org_agenda_files を上書きして担当する。
+--
+-- capture は必ず unknowns/inbox.org へ落とし、あとから unknowns/go.org のような
+-- トピック別ファイルへ refile して振り分ける運用にする。そのための宛先候補は、
+-- ファイル末尾の OrgCapture:get_destination() の override で合流させている。
+local org_unknowns_dir = org_dir .. "/unknowns"
+local org_unknowns_file = org_unknowns_dir .. "/inbox.org"
 
 -- 選択メニュー（agenda / capture / export / cit の fast access）を画面中央に出す。
 -- 既定の実装は :echon + getchar() でコマンドライン領域に描くため、画面下部に出る。
@@ -1934,6 +1947,24 @@ require("orgmode").setup {
       template = "* %?\n%T",
       target = org_journal_dir .. "/%<%Y/%m/%d>/index.org",
     },
+    -- キーは日報の j と同じ考え方で、アジェンダ側の u（分からなかったこと）と揃えてある。
+    -- 投入と閲覧で同じ 1 文字を叩けるようにして、操作を覚える負担を減らす。
+    u = {
+      -- 分からなかったこと。業務の手を止めずに放り込めることを最優先する。
+      -- 投入先は unknowns/inbox.org に固定し、トピック別ファイルへの振り分けは
+      -- あとから refile でやる。capture の時点で宛先を選ばせると、その判断コストで
+      -- 「とりあえず放り込む」というこのテンプレートの目的が崩れてしまう。
+      --
+      -- TODO キーワードを付けるのは、調べて分かった時点で DONE にして締められる
+      -- ようにするため。unknowns/ は org_agenda_files の外にあるので、TODO を
+      -- 付けても d / w / t の一覧には流れ込まない。
+      --
+      -- CREATED を残すのは、「いつ出会ったか」が後から効く情報だから。
+      -- 半年放置されている項目は、実は困っていなかったと判断して捨てられる。
+      description = "分からなかったこと（unknowns/inbox.org へ積む）",
+      template = "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:",
+      target = org_unknowns_file,
+    },
   },
 
   org_agenda_custom_commands = {
@@ -1964,6 +1995,32 @@ require("orgmode").setup {
           org_agenda_span = "day",
           org_agenda_files = { org_journal_dir .. "/**/*.org" },
           org_agenda_overriding_header = "今日の日報",
+        },
+      },
+    },
+    -- 分からなかったこと: 未解決のものだけを一覧する。capture の u と対になる入口。
+    --
+    -- 日報の j と同じく、このブロックだけ org_agenda_files を unknowns/ に向けている。
+    -- グローバルの org_agenda_files（org 直下の *.org）は据え置かれるので、ここに
+    -- 並ぶ TODO が d（日次）や w（週次レビュー）へ漏れることはない。「業務で手を
+    -- 動かすためのタスク」と「あとで調べたい技術」は緊急度の性質が違うので、
+    -- 同じ一覧に混ぜると次の一手を選ぶ判断が鈍る。
+    --
+    -- tags_todo に match = "" を渡すのは「条件なしで未完了を全件」の意味で、
+    -- 下の t（全 TODO）と同じ書き方をしている。DONE にしたものは自動的に落ちるため、
+    -- 調べ終えた項目は何もしなくても一覧から消える。
+    --
+    -- glob を */*.org ではなく **/*.org にしてあるのは、トピックが増えて
+    -- unknowns/go/generics.org のように階層を切りたくなったときに、設定を
+    -- 直さずそのまま拾えるようにするため。
+    u = {
+      description = "分からなかったこと（未解決）",
+      types = {
+        {
+          type = "tags_todo",
+          match = "",
+          org_agenda_files = { org_unknowns_dir .. "/**/*.org" },
+          org_agenda_overriding_header = "分からなかったこと（調べたら DONE にする）",
         },
       },
     },
@@ -2123,6 +2180,49 @@ function OrgCapture:get_destination()
   -- private メソッドだが、既定の補完と同じ表示（共通の親を落としたファイル名）を
   -- そのまま使いたいので利用する。キーは "inbox.org/" 形式、値は OrgFile。
   local files = self:_get_autocompletion_files()
+
+  -- 分からなかったことリスト（unknowns/）を宛先候補に合流させる。
+  --
+  -- _get_autocompletion_files() は内部で self.files:all() を回すため、候補は
+  -- org_agenda_files にマッチしたファイルに限られる。unknowns/ は「アジェンダに
+  -- 載せない」ことを目的にそこから外してあるので、既定のままでは宛先に出てこない。
+  -- ファイル間はもちろん、同じファイル内で見出しをぶら下げることもできなくなる。
+  --
+  -- 一方、refile を実行する Capture:_refile_from_org_file() は宛先に対して
+  -- destination_file:update_sync() を呼ぶだけで、org_agenda_files への登録を
+  -- 見ていない。読み込み済みの OrgFile でありさえすれば動く。そこで専用の
+  -- OrgFiles インスタンスをここで作り、候補にだけ足している。
+  -- これでアジェンダの排他性は保ったまま、refile での振り分けだけが通る。
+  --
+  -- inbox.org からの refile でも unknowns/ が候補に並ぶが、これは意図した挙動。
+  -- 「これは調べ物だった」と気づいたタスクをリスト側へ移せる。
+  --
+  -- load_sync を明示的に呼ぶ必要がある。:all() が経由する ensure_loaded() は
+  -- 読み込みを開始せず、load_state が 'loaded' になるまで vim.wait で最大 5 秒
+  -- 待つだけの実装で、自前のインスタンスは誰も読み込んでくれない。省くと
+  -- <Space>or のたびに 5 秒固まった末に空リストが返る。
+  -- force = true にしているのは、毎回 glob を引き直してトピック別ファイルの
+  -- 追加を拾うため。
+  local OrgFiles = require("orgmode.files")
+  local unknowns = OrgFiles:new({ paths = { org_unknowns_dir .. "/**/*.org" }, cache = true })
+  unknowns:load_sync(true)
+  -- OrgFile.filename は vim.fn.resolve を通った実体のパスなので、接頭辞を落とす
+  -- ときも同じ形に揃えておく。将来 diary リポジトリをシンボリックリンクで置いた
+  -- 場合でも、接頭辞が一致しなくなって表示が壊れることがない。
+  local unknowns_root = vim.fn.resolve(org_unknowns_dir)
+  for _, file in ipairs(unknowns:all()) do
+    -- 既定の候補は trim_common_root で共通の親を落とした相対パスなので、
+    -- 同じ見え方になるよう unknowns/ 起点の相対パスを自分で組む。
+    -- 末尾の "/" は、ファイル自身を指すキーの形式（"inbox.org/"）に合わせている。
+    local relative = file.filename
+    if vim.startswith(relative, unknowns_root .. "/") then
+      relative = relative:sub(#unknowns_root + 2)
+    else
+      -- 想定外のパスでもフルパスを晒さないよう、ファイル名だけに落とす
+      relative = vim.fn.fnamemodify(relative, ":t")
+    end
+    files["unknowns/" .. relative .. "/"] = file
+  end
 
   local names = vim.tbl_keys(files)
   table.sort(names)
