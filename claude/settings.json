@@ -3,10 +3,23 @@
     "deny": [
       "Bash(curl:*)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "additionalDirectories": [
+      "/Users/yokoyamamasahiro/go/src/github.com/maguroguma/ai-notes"
+    ]
   },
   "model": "opus",
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/dotfiles/scripts/ai-notes-path.sh --hook"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "",

@@ -241,6 +241,28 @@ end)
 vim.keymap.set("n", "<Space>gb", "<cmd>Gitsigns blame<CR>")
 vim.keymap.set("n", "gp", "<cmd>Gitsigns preview_hunk_inline<CR>")
 
+-- PLUGSETTING: lewis6991/satellite.nvim
+-- ファイル内の相対位置と残りの長さを、右端のスクロールバーで把握するために使う。
+-- 注意: marks ハンドラは ma〜mZ にマッピングを足す。既存のマッピングは奪わないので、
+-- vim-bookmarks の mm / ml（init.vim 側で先に定義）はそのまま使える。
+local ok_satellite, satellite = pcall(require, 'satellite')
+if ok_satellite then
+  satellite.setup {
+    width = 2,
+    winblend = 50,
+    handlers = {
+      cursor = { enable = true },
+      search = { enable = true },
+      diagnostic = { enable = true },
+      gitsigns = { enable = true },
+      marks = { enable = true, show_builtins = false },
+      quickfix = { enable = true },
+    },
+  }
+else
+  vim.notify('satellite.nvim が読み込めません: ' .. tostring(satellite), vim.log.levels.WARN)
+end
+
 -- PLUGSETTING: folke/todo-comments.nvim
 -- FIXME:
 -- TODO:
@@ -990,6 +1012,108 @@ vim.keymap.set("i", "<C-a>gc", function()
   })
 end, { silent = true, desc = "Complete git commit hashes at cursor" })
 
+-- ai-notes（AI エージェントの記録を置くリポジトリ）を fzf-lua で開く
+-- <Space>k は knowledge の k。置き場所は scripts/ai-notes-path.sh と同じく AI_NOTES_DIR で差し替えられる。
+--   <Space>kk -> ai-notes 全体をファイル名で探す（新しい順）。<C-k> にも同じ動作を割り当てている
+--   <Space>kr -> 今いるリポジトリの raw/<名前空間>/ だけに絞って探す
+--   <Space>kg -> ai-notes の中身を live grep する
+--   <Space>kw -> wiki の索引を開く
+
+--- ai-notes のルートディレクトリを返す。
+--- AI_NOTES_DIR が設定されていればそれを、無ければ $GOPATH/src/github.com/maguroguma/ai-notes を使う。
+---@return string
+local function ai_notes_root()
+  if vim.env.AI_NOTES_DIR and vim.env.AI_NOTES_DIR ~= "" then
+    return vim.env.AI_NOTES_DIR
+  end
+  local gopath = (vim.env.GOPATH and vim.env.GOPATH ~= "") and vim.env.GOPATH or vim.fn.expand("~/go")
+  return gopath .. "/src/github.com/maguroguma/ai-notes"
+end
+
+--- ai-notes のルートが存在すれば返し、無ければ通知して nil を返す。
+---@return string|nil
+local function ensure_ai_notes_root()
+  local root = ai_notes_root()
+  if vim.fn.isdirectory(root) == 0 then
+    vim.notify("ai-notes が見つかりません: " .. root, vim.log.levels.WARN)
+    return nil
+  end
+  return root
+end
+
+--- 指定ディレクトリ配下のファイルを、新しい順（パスの降順）に fuzzy find する。
+--- raw/ は YYYY/MM/DD で掘っているため、パスの降順がそのまま新しい順になる。
+---@param cwd string 検索の起点ディレクトリ
+---@param prompt string fzf のプロンプト
+local function ai_notes_files(cwd, prompt)
+  require("fzf-lua").files({
+    cwd = cwd,
+    prompt = prompt,
+    cmd = "rg --files --color=never --hidden -g '!.git' --sortr path",
+    winopts = { preview = { hidden = false } },
+  })
+end
+
+--- 今いるリポジトリに対応する ai-notes の raw/<名前空間> ディレクトリを返す。
+--- 名前空間の決め方を二重に実装しないよう、scripts/ai-notes-path.sh に任せる。
+---@return string|nil dir 求められなかった場合は nil
+---@return string|nil err 失敗した理由
+local function ai_notes_repo_dir()
+  local script = vim.fn.expand("~/dotfiles/scripts/ai-notes-path.sh")
+  if vim.fn.filereadable(script) == 0 then
+    return nil, "スクリプトが見つかりません: " .. script
+  end
+
+  local ok, result = pcall(function()
+    return vim.system({ "bash", script }, { cwd = vim.fn.getcwd(), text = true }):wait()
+  end)
+  if not ok then
+    return nil, "スクリプトを実行できませんでした: " .. tostring(result)
+  end
+  if result.code ~= 0 then
+    return nil, "スクリプトが失敗しました: " .. vim.trim(result.stderr or "")
+  end
+
+  -- 出力は raw/<名前空間>/YYYY/MM/DD なので、日付の 3 階層を取り除く
+  return vim.fn.fnamemodify(vim.trim(result.stdout or ""), ":h:h:h"), nil
+end
+
+--- ai-notes 全体をファイル名で探す。<Space>kk と <C-k> の両方から呼ぶ。
+local function ai_notes_find_all()
+  local root = ensure_ai_notes_root()
+  if not root then return end
+  ai_notes_files(root, "ai-notes❯ ")
+end
+
+vim.keymap.set("n", "<Space>kk", ai_notes_find_all, { silent = true, desc = "ai-notes: 全体をファイル名で探す" })
+vim.keymap.set("n", "<C-k>", ai_notes_find_all, { silent = true, desc = "ai-notes: 全体をファイル名で探す" })
+
+vim.keymap.set("n", "<Space>kr", function()
+  if not ensure_ai_notes_root() then return end
+  local dir, err = ai_notes_repo_dir()
+  if not dir then
+    vim.notify("ai-notes: " .. err, vim.log.levels.ERROR)
+    return
+  end
+  if vim.fn.isdirectory(dir) == 0 then
+    vim.notify("ai-notes: このリポジトリの記録はまだありません: " .. dir, vim.log.levels.INFO)
+    return
+  end
+  ai_notes_files(dir, "ai-notes(repo)❯ ")
+end, { silent = true, desc = "ai-notes: 今いるリポジトリの記録を探す" })
+
+vim.keymap.set("n", "<Space>kg", function()
+  local root = ensure_ai_notes_root()
+  if not root then return end
+  require("fzf-lua").live_grep({ cwd = root, prompt = "ai-notes(grep)❯ " })
+end, { silent = true, desc = "ai-notes: 中身を live grep する" })
+
+vim.keymap.set("n", "<Space>kw", function()
+  local root = ensure_ai_notes_root()
+  if not root then return end
+  vim.cmd.edit(vim.fn.fnameescape(root .. "/wiki/index.md"))
+end, { silent = true, desc = "ai-notes: wiki の索引を開く" })
+
 -- PLUGSETTING: uga-rosa/ccc.nvim
 require("ccc").setup()
 
@@ -1640,14 +1764,20 @@ vim.keymap.set("n", "<Space>op",
 -- ftplugin/org.vim より前に置かないとキーマップが一切効かないため）。
 local org_dir = vim.fn.expand("$GOPATH/src/github.com/maguroguma/diary/org")
 
+-- org/ の直下は用途ごとのディレクトリだけを並べる。todo/ が現役のタスク、
+-- journal/ が日報、unknowns/ が分からなかったことリストを受け持つ。
+-- org_agenda_files が見るのは todo/ の直下だけなので、ここに置かない限り
+-- アジェンダには載らない。用途を増やすときは、新しいディレクトリを切る。
+local org_todo_dir = org_dir .. "/todo"
+
 -- capture とアジェンダの宛先はここに集約する。ファイル名を変えるときはこの 5 行だけを直す。
-local org_inbox_file = org_dir .. "/inbox.org" -- capture の投入先。直下が受信箱になる
-local org_notes_file = org_dir .. "/notes.org" -- タスクではないメモの置き場
-local org_journal_dir = org_dir .. "/journal"  -- 日報。1 日 1 ファイルに分ける
+local org_inbox_file = org_todo_dir .. "/inbox.org" -- capture の投入先。todo/ 直下が受信箱になる
+local org_notes_file = org_todo_dir .. "/notes.org" -- タスクではないメモの置き場
+local org_journal_dir = org_dir .. "/journal"       -- 日報。1 日 1 ファイルに分ける
 
 -- 分からなかったことリスト。業務中に出会って調べきれなかった技術を放り込む。
--- 日報と同じく org 直下ではなくサブディレクトリに置くのが肝で、org_agenda_files が
--- 「org 直下の *.org」しか見ていないため、これだけでアジェンダ・週次レビュー・
+-- 日報と同じく todo/ ではなく専用のディレクトリに置くのが肝で、org_agenda_files が
+-- 「todo/ 直下の *.org」しか見ていないため、これだけでアジェンダ・週次レビュー・
 -- 全 TODO 一覧のどれにも載らなくなる。TODO キーワードを付けても既存の一覧を汚さない。
 -- 閲覧は下の org_agenda_custom_commands の u が、そのブロックだけ
 -- org_agenda_files を上書きして担当する。
@@ -1808,10 +1938,11 @@ end
 local org_no_keyword_query = build_no_keyword_query(org_todo_keywords)
 
 require("orgmode").setup {
-  -- diary リポジトリの中の org/ だけを org-mode の領域として隔離する。
-  -- 直下の *.org のみを対象にするため、archive/ 配下は走査されず、
-  -- アジェンダには現役のタスクだけが並ぶ。
-  org_agenda_files = { org_dir .. "/*.org" },
+  -- diary リポジトリの中の org/todo/ だけを、アジェンダの対象として隔離する。
+  -- * は 1 階層しか展開しないので、todo/archive/ 配下は走査されず、
+  -- アジェンダには現役のタスクだけが並ぶ。journal/ と unknowns/ が
+  -- 載らないのも同じ理屈で、ここに書いたディレクトリの外にあるため。
+  org_agenda_files = { org_todo_dir .. "/*.org" },
   -- capture の投入先は inbox.org に統一し、その「直下（トップレベル）」を受信箱として使う。
   -- 親にぶら下げたくなったら <Space>or で同じファイルの中を移動させればよく、
   -- 受信箱専用のファイルを別に持つ必要がない。
@@ -1831,6 +1962,18 @@ require("orgmode").setup {
     CANCELED = ":foreground #928374 :slant italic",
   },
 
+  -- 優先度を既定の A〜C から A〜E の 5 段階に広げる。
+  -- highest（A）と default（B）は既定のまま据え置き、lowest だけを E にずらす。
+  -- nvim-orgmode は highest から lowest までを文字コード順にたどって範囲を作るので、
+  -- 増減（cir など）も直接入力もこの 1 行で A〜E を扱えるようになる。
+  -- default を B に残しているのは、優先度を持たない見出しのソート位置を変えないため。
+  -- 区分が変わる（C が lowest から low になる）ので、下の @org.priority.* の色も対になっている。
+  -- 3 つは必ず揃えて書く。lowest だけを指定すると
+  -- 「can only be set together」の警告が出て、A〜C の既定に戻されてしまう。
+  org_priority_highest = "A",
+  org_priority_default = "B",
+  org_priority_lowest = "E",
+
   -- @done(YYYY-MM-DD) 相当。DONE / CANCELED にした日時を CLOSED: として自動で残す
   org_log_done = "time",
   org_log_into_drawer = "LOGBOOK",
@@ -1840,7 +1983,11 @@ require("orgmode").setup {
   org_deadline_warning_days = 7,
 
   -- taskpaper の Archive: セクション相当。
-  -- inbox.org -> org/archive/inbox.org_archive に退避する（相対パス指定）
+  -- inbox.org -> org/todo/archive/inbox.org_archive に退避する（相対パス指定）。
+  -- 相対パスはアーカイブ元ファイルのあるディレクトリを基準に解決されるため、
+  -- todo/ の中身をどこへ移しても、移した先の archive/ が自動的に使われる。
+  -- 退避済みの見出しに残る :ARCHIVE_FILE: は記録専用で、読み取る実装はない。
+  -- 過去のパス（org/todo.org など）が残っていても実害は出ない。
   org_archive_location = "archive/%s_archive::",
 
   -- 分解した親見出しには状態を付けず、:project: タグだけを付ける運用にする。
@@ -1930,7 +2077,7 @@ require("orgmode").setup {
       -- コード片を本文の隣に置けるようにするため。本文を index.org に固定して
       -- おけば、ディレクトリの中でどれが日報本体かを迷わずに済む。
       --
-      -- 置き場を journal/ 配下に分けているのは、org_agenda_files が org 直下の
+      -- 置き場を journal/ 配下に分けているのは、org_agenda_files が todo/ 直下の
       -- *.org しか見ていないため。日報は「済んだことのログ」であってタスクではなく、
       -- アジェンダや週次レビューに並べても次の一手を選ぶ役には立たない。
       -- 「レビューで読むのは inbox.org だけ」という状態を保つために、あえて拾わせない。
@@ -1982,7 +2129,7 @@ require("orgmode").setup {
     -- capture の UI を確定させたあとに続きを書き足したくなったときの入口になる。
     --
     -- org_agenda_files をこのブロックだけに指定しているのがこの定義の肝。
-    -- グローバルの org_agenda_files（org 直下の *.org）は据え置いたまま、この
+    -- グローバルの org_agenda_files（todo/ 直下の *.org）は据え置いたまま、この
     -- ビューだけが journal/ 配下を見る。こうしないと日報が d や w にも流れ込み、
     -- 「次の一手を選ぶ一覧」がログで埋まってしまう。
     -- ** は vim.fn.glob に渡るため、YYYY/MM/DD の階層を跨いで再帰的に展開される。
@@ -2001,7 +2148,7 @@ require("orgmode").setup {
     -- 分からなかったこと: 未解決のものだけを一覧する。capture の u と対になる入口。
     --
     -- 日報の j と同じく、このブロックだけ org_agenda_files を unknowns/ に向けている。
-    -- グローバルの org_agenda_files（org 直下の *.org）は据え置かれるので、ここに
+    -- グローバルの org_agenda_files（todo/ 直下の *.org）は据え置かれるので、ここに
     -- 並ぶ TODO が d（日次）や w（週次レビュー）へ漏れることはない。「業務で手を
     -- 動かすためのタスク」と「あとで調べたい技術」は緊急度の性質が違うので、
     -- 同じ一覧に混ぜると次の一手を選ぶ判断が鈍る。
@@ -2153,15 +2300,178 @@ require("orgmode").setup {
 -- highest（@comment.error へのリンク）だけで、残りは未定義のため色がつかない。
 -- そこでここで明示的に定義する。プラグイン側のリンクは default = true 付きなので、
 -- ここでの指定が優先され、上書きされることはない。
--- org_priority_highest/default/lowest は既定の A/B/C なので、
--- A = highest、B = default、C = lowest に対応する（high と low は該当なし）。
+-- setup で org_priority_lowest = "E" にしているため、区分は
+-- A = highest、B = default、C・D = low、E = lowest に対応する（high は該当なし）。
+-- 区分ごとに 1 色しか持てないので、C と D は同じ色になる。
 --
--- 色は taskpaper.vim 時代（init.vim の g:task_paper_styles と
+-- A〜C の色は taskpaper.vim 時代（init.vim の g:task_paper_styles と
 -- g:taskpaper_due_highlight）の見た目をそのまま引き継いでいる。
 -- 目の慣れを保つため、背景色で塗る方式も含めて踏襲する。
+-- 元々 C に付けていた緑は、C を含む low 区分へ移した。
+-- 追加した E は「ほぼ手を付けない」位置づけなので、目立たない灰色にしている。
 vim.api.nvim_set_hl(0, "@org.priority.highest", { bg = "#ff9999", fg = "#000000" }) -- A: 旧 DueCritical（@due の期限切れ）
 vim.api.nvim_set_hl(0, "@org.priority.default", { bg = "#cccc00", fg = "#000000" }) -- B: 旧 @urgent / @risky
-vim.api.nvim_set_hl(0, "@org.priority.lowest", { bg = "#87af87", fg = "#000000" })  -- C: 旧 @inProgress
+vim.api.nvim_set_hl(0, "@org.priority.low", { bg = "#87af87", fg = "#000000" })     -- C・D: 旧 @inProgress
+vim.api.nvim_set_hl(0, "@org.priority.lowest", { bg = "#bdae93", fg = "#000000" })  -- E
+
+-- 日報に紐づく markdown メモ。capture の j（index.org）とは別に、会議メモのような
+-- まとまった記録を journal/YYYY/MM/DD/<タイトル>.md へ切り出すための仕組み。
+-- nvim-orgmode の capture は org 形式でしか書き出せないので、自前で用意している。
+--
+-- md を作ると同時に、その日の index.org へ「見出し + アクティブなタイムスタンプ +
+-- リンク」を 1 件積む。capture の j と同じ形にしておくことで、アジェンダの j
+-- ビューにも scripts/org-timeline.sh にも、md メモが他の日報と並んで時系列に載る。
+-- md 自体は org ではないのでどちらからも読まれず、index.org 側の 1 件が代理を務める。
+--
+-- リンクを file:./ の相対パスにしているのは、nvim の cwd に依存させないため。
+-- nvim-orgmode は org ファイル自身のディレクトリを基準に解決するので、どこで
+-- 開いた nvim からでも辿れる。
+
+--- 今日の日報ディレクトリ（journal/YYYY/MM/DD）の絶対パスを返す。
+--- 呼ばれた時点の日付で決まるため、日付を跨いだセッションでも宛先が追従する。
+---@return string
+local function journal_today_dir()
+  return org_journal_dir .. os.date("/%Y/%m/%d")
+end
+
+--- 入力されたメモのタイトルを検証し、ファイル名として使える形に整える。
+--- パス区切りや先頭のドットは、journal/ の外や隠しファイルへ書き出す事故を防ぐために拒否する。
+---@param input string|nil vim.ui.input から渡る生の入力（中断時は nil）
+---@return string|nil title 拡張子を除いたタイトル。不正・中断なら nil
+---@return string|nil err 不正だった理由。中断時は nil
+local function normalize_journal_memo_title(input)
+  if input == nil then
+    return nil, nil
+  end
+  local title = vim.trim(input):gsub("%.md$", "")
+  if title == "" then
+    return nil, "タイトルが空です"
+  end
+  if title:find("[/\\%z]") or title:find("^%.") or title:find("[%[%]\n]") then
+    -- [ ] は org のリンク記法 [[file:...][...]] を壊すので、ここで弾いておく
+    return nil, "タイトルに / \\ [ ] や先頭の . は使えません: " .. title
+  end
+  return title, nil
+end
+
+--- index.org の末尾に md メモへのリンク見出しを追記して保存する。
+--- 同じ nvim で index.org を開いていても W11（外部で変更された）警告が出ないよう、
+--- ファイルを直接書き換えずにバッファ経由で追記する。
+--- 未保存の変更があるときは、それを巻き込んで保存しないよう追記自体を見送る。
+---@param index_path string 追記先の index.org の絶対パス
+---@param title string 見出しとリンクの表示名に使うタイトル
+---@return boolean ok 追記して保存できたら true
+---@return string|nil err 失敗した理由
+local function append_journal_memo_link(index_path, title)
+  local existed = vim.fn.bufexists(index_path) == 1
+  local was_loaded = vim.fn.bufloaded(index_path) == 1
+  local bufnr = vim.fn.bufadd(index_path)
+  vim.fn.bufload(bufnr)
+  if vim.bo[bufnr].modified then
+    return false, "index.org に未保存の変更があるため、リンクの追記を見送りました"
+  end
+
+  --- 追記のためだけに読み込んだバッファを、バッファ一覧から消す。
+  --- 失敗時は追記を戻してから呼ぶが、万一変更が残っていても隠れた未保存バッファに
+  --- ならないよう force で消す（ディスク上の index.org には影響しない）。
+  local function cleanup()
+    if not existed then
+      pcall(vim.api.nvim_buf_delete, bufnr, { force = true })
+    end
+  end
+
+  -- bufload は読み込み済みのバッファをディスクから読み直さない。tmux の別ペインの
+  -- nvim で capture j を積んだ後だと、古い内容に追記して保存することになり、
+  -- 別ペインで積んだ日報を消してしまう。直前で未変更を確認済みなので、
+  -- edit! で読み直しても手元の編集は失われない。
+  if was_loaded and vim.fn.filereadable(index_path) == 1 then
+    local reloaded, reload_err = pcall(vim.api.nvim_buf_call, bufnr, function()
+      vim.cmd("silent edit!")
+    end)
+    if not reloaded then
+      return false, "index.org を読み直せなかったため、リンクの追記を見送りました: " .. tostring(reload_err)
+    end
+  end
+
+  local lines = {
+    "* " .. title,
+    require("orgmode.objects.date").now():to_wrapped_string(true),
+    string.format("  [[file:./%s.md][%s]]", title, title),
+  }
+  -- 空のファイルは 1 行の空行として読まれるので、その場合は先頭から置き換える
+  local last = vim.api.nvim_buf_line_count(bufnr)
+  local is_empty = last == 1 and vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1] == ""
+  local start = is_empty and 0 or last
+  vim.api.nvim_buf_set_lines(bufnr, start, -1, false, lines)
+
+  local ok, err = pcall(vim.api.nvim_buf_call, bufnr, function()
+    vim.cmd("silent write")
+  end)
+  if not ok then
+    -- 追記した行を戻して、読み込み直後（＝ディスクと同じ）状態に揃える。
+    -- 残すと未保存バッファになり、次回の追記が「未保存の変更あり」で弾かれ続ける。
+    vim.api.nvim_buf_set_lines(bufnr, start, -1, false, is_empty and { "" } or {})
+    vim.bo[bufnr].modified = false
+    cleanup()
+    return false, "index.org の保存に失敗しました: " .. tostring(err)
+  end
+  cleanup()
+  return true, nil
+end
+
+--- タイトルを尋ねて、今日の日報ディレクトリに markdown メモを作って開く。
+--- 既に同名のメモがあれば、index.org には何も足さずにそれを開くだけにする。
+local function create_journal_memo()
+  vim.ui.input({ prompt = "日報メモのタイトル: " }, function(input)
+    local title, err = normalize_journal_memo_title(input)
+    if not title then
+      if err then
+        vim.notify(err, vim.log.levels.WARN)
+      end
+      return
+    end
+
+    local dir = journal_today_dir()
+    local memo_path = dir .. "/" .. title .. ".md"
+    if vim.fn.filereadable(memo_path) == 1 then
+      vim.cmd.edit(vim.fn.fnameescape(memo_path))
+      return
+    end
+
+    if vim.fn.isdirectory(dir) == 0 and vim.fn.mkdir(dir, "p") == 0 then
+      vim.notify("ディレクトリを作成できませんでした: " .. dir, vim.log.levels.ERROR)
+      return
+    end
+    if vim.fn.writefile({ "# " .. title, "" }, memo_path) ~= 0 then
+      vim.notify("メモを作成できませんでした: " .. memo_path, vim.log.levels.ERROR)
+      return
+    end
+
+    -- リンクの追記に失敗してもメモ自体は作れているので、通知だけして開く
+    local linked, link_err = append_journal_memo_link(dir .. "/index.org", title)
+    if not linked then
+      vim.notify(link_err, vim.log.levels.WARN)
+    end
+
+    vim.cmd.edit(vim.fn.fnameescape(memo_path))
+    vim.cmd("normal! G")
+  end)
+end
+
+--- 今日の日報ディレクトリのファイルを fzf-lua で選んで開く。
+local function open_journal_today()
+  local dir = journal_today_dir()
+  if vim.fn.isdirectory(dir) == 0 then
+    vim.notify("今日の日報ディレクトリはまだありません: " .. dir, vim.log.levels.INFO)
+    return
+  end
+  require("fzf-lua").files({ cwd = dir, prompt = "journal(today)❯ " })
+end
+
+-- <Leader>o 配下のうち、org バッファのローカルマップ（oJ など）と被らない文字を選んでいる。
+-- m は memo、j は capture とアジェンダの j（日報）に揃えている。
+vim.keymap.set("n", "<Leader>om", create_journal_memo, { desc = "日報の markdown メモを作る" })
+vim.keymap.set("n", "<Leader>oj", open_journal_today, { desc = "今日の日報ディレクトリを開く" })
 
 -- refile 先の選択を fzf-lua の fuzzy find に差し替える。
 -- 既定の実装（OrgCapture:get_destination）は cmdline に「ファイル/見出し」を

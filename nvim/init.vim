@@ -254,6 +254,8 @@ call jetpack#add('lambdalisue/nvim-aibo', { 'commit': '0505c2e' }) " [2026/07/07
 call jetpack#add('pwntester/octo.nvim', { 'commit': '205f024' }) " [2026/07/31 01:09:49 205f024]
 
 call jetpack#add('nvim-orgmode/orgmode', { 'commit': '005368b' }) " [2026/08/21 00:11:59 005368b]
+
+call jetpack#add('lewis6991/satellite.nvim', { 'commit': '87843c9' }) " [2026/05/01 09:37:23 87843c9]
 call jetpack#end()
 " plugins END }}}
 

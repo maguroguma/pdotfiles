@@ -36,6 +36,7 @@ nvim/pack/
 # copilot.lua, CopilotChat.nvim
 !nvim/lua/copilot-setting.lua.base
 
+!scripts/ai-notes-path.sh
 !scripts/date-to-ts.sh
 !scripts/github_compare.sh
 !scripts/github_go.sh
@@ -43,6 +44,7 @@ nvim/pack/
 !scripts/google.sh
 !scripts/mru-branch-list.sh
 !scripts/my-ascii.sh
+!scripts/org-timeline.sh
 !scripts/print256colours.sh
 !scripts/refresh-mv.sh
 !scripts/s-quote.sh

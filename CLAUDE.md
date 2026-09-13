@@ -52,6 +52,13 @@ scripts/tmpspace.sh
 scripts/date-to-ts.sh
 scripts/ts-to-date.sh
 
+# 指定日の org の記録を時系列 1 本にまとめ、journal/YYYY/MM/DD/timeline.org へ書き出す
+scripts/org-timeline.sh [YYYY-MM-DD]
+
+# AI エージェントの記録先 (ai-notes/raw/<host>/<owner>/<repo>/YYYY/MM/DD) を出力する
+# --hook で Claude Code の SessionStart hook 向けの案内文を出力する (AI_NOTES_DIR で置き場所を変更可能)
+scripts/ai-notes-path.sh [--hook]
+
 # その他のユーティリティ
 scripts/github_go.sh          # GitHubリポジトリへの直接移動
 scripts/github_search_PR.sh   # GitHub PR検索
