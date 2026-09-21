@@ -1788,6 +1788,86 @@ local org_journal_dir = org_dir .. "/journal"       -- 日報。1 日 1 ファ�
 local org_unknowns_dir = org_dir .. "/unknowns"
 local org_unknowns_file = org_unknowns_dir .. "/inbox.org"
 
+-- GTD の実践のコツ。アジェンダの本文末尾に薄く並べ、TODO を眺めるあいだ自然と目に
+-- 入るようにする。extmark の仮想行なので実テキストは増えず、行数も <CR> の飛び先も
+-- ずれない。アジェンダの操作は何も壊れない。
+local org_gtd_tips = {
+  "次に何をすべきかを明確にする — 次のアクションが曖昧だと、やる気が起きにくい",
+  "行動にフォーカスする — いつ・どこで・どうやって実行するかまで考える",
+  "着手できない理由を深掘りする — 意気込んでも動けないのは、ひっかかりがあるため",
+  "とにかく収集して処理する — 認識できていないタスクが、じわじわ時間を奪う",
+  "移譲できるものは移譲する — 自分がやる必要があるかを、そのつど問い直す",
+}
+
+local org_gtd_ns = vim.api.nvim_create_namespace("myconfig_org_gtd_tips")
+
+-- 貼り直しの予約が二重に積まれるのを防ぐフラグ。バッファ番号をキーにする。
+local org_gtd_pending = {}
+
+--- アジェンダのバッファ末尾に、GTD のコツを薄い仮想行として貼り付ける。
+--- 先頭に空行を 1 つ挟むのは、アジェンダ本文と地続きに見えるのを避けるため。
+---@param bufnr integer 対象のバッファ番号
+local function org_gtd_render_tips(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) or vim.bo[bufnr].filetype ~= "orgagenda" then
+    return
+  end
+
+  local virt_lines = { { { "", "Comment" } } }
+  for _, tip in ipairs(org_gtd_tips) do
+    table.insert(virt_lines, { { "  👺 " .. tip, "Comment" } })
+  end
+
+  -- 置き直す前に消すのは、末尾の行番号が変わったときに古い extmark が残らないようにするため
+  vim.api.nvim_buf_clear_namespace(bufnr, org_gtd_ns, 0, -1)
+  local ok, err = pcall(vim.api.nvim_buf_set_extmark, bufnr, org_gtd_ns,
+    vim.api.nvim_buf_line_count(bufnr) - 1, 0, { virt_lines = virt_lines })
+  if not ok then
+    -- 表示だけの機能なので、失敗してもアジェンダの利用は続けられる。黙って諦めずに知らせる。
+    vim.notify("GTD のコツを表示できませんでした: " .. tostring(err), vim.log.levels.WARN)
+  end
+end
+
+--- アジェンダの再描画に追従できるよう、バッファの変更を監視して貼り直す。
+--- nvim-orgmode は r や状態の変更のたびにバッファの行を丸ごと置き換え、その範囲の
+--- extmark は消えるため、この貼り直しがないと一度きりの表示で終わってしまう。
+---@param bufnr integer 対象のバッファ番号
+local function org_gtd_watch_buffer(bufnr)
+  if org_gtd_pending[bufnr] ~= nil then
+    return -- 監視済み（nil でなければ attach 済みの印）
+  end
+  org_gtd_pending[bufnr] = false
+
+  vim.api.nvim_buf_attach(bufnr, false, {
+    -- on_lines の中では API を呼べない（textlock）ため、schedule で後回しにする。
+    -- 1 回の描画で何度も発火するので、予約済みなら積み増さずに捨てる。
+    on_lines = function()
+      if org_gtd_pending[bufnr] then
+        return
+      end
+      org_gtd_pending[bufnr] = true
+      vim.schedule(function()
+        org_gtd_pending[bufnr] = false
+        org_gtd_render_tips(bufnr)
+      end)
+    end,
+    on_detach = function()
+      org_gtd_pending[bufnr] = nil
+    end,
+  })
+end
+
+-- BufWinEnter も拾うのは、同じバッファを別のウィンドウで開き直したときに
+-- FileType が発火せず、コツが出ないままになるのを防ぐため。
+vim.api.nvim_create_autocmd({ "FileType", "BufWinEnter" }, {
+  callback = function(args)
+    if vim.bo[args.buf].filetype ~= "orgagenda" then
+      return
+    end
+    org_gtd_watch_buffer(args.buf)
+    org_gtd_render_tips(args.buf)
+  end,
+})
+
 -- 選択メニュー（agenda / capture / export / cit の fast access）を画面中央に出す。
 -- 既定の実装は :echon + getchar() でコマンドライン領域に描くため、画面下部に出る。
 -- ui.menu.handler は描画だけを差し替える口で、win_split_mode による
@@ -2468,10 +2548,47 @@ local function open_journal_today()
   require("fzf-lua").files({ cwd = dir, prompt = "journal(today)❯ " })
 end
 
+--- 日報ディレクトリ（journal/）配下のファイルを、日付をまたいで fzf-lua で選んで開く。
+--- 候補は YYYY/MM/DD/<ファイル名> の相対パスで並ぶので、日付でも絞り込める。
+--- 新しい日付が先頭に来るよう、ファイル一覧を逆順に並べてから fzf に渡す。
+local function open_journal_all()
+  if vim.fn.isdirectory(org_journal_dir) == 0 then
+    vim.notify("日報ディレクトリはまだありません: " .. org_journal_dir, vim.log.levels.INFO)
+    return
+  end
+
+  -- fd の出力順はディレクトリの走査順で、日付順にはならない。
+  -- パスが YYYY/MM/DD で始まるので、辞書順の逆にすれば新しい日付が先頭に来る。
+  -- Debian 系では fd が fdfind という名前で入るため、それも見る。
+  local list_cmd
+  if vim.fn.executable("fd") == 1 then
+    list_cmd = "fd --color=never --type f"
+  elseif vim.fn.executable("fdfind") == 1 then
+    list_cmd = "fdfind --color=never --type f"
+  elseif vim.fn.executable("rg") == 1 then
+    list_cmd = "rg --color=never --files"
+  else
+    vim.notify("fd も rg も見つからないため、日報を検索できません", vim.log.levels.ERROR)
+    return
+  end
+
+  require("fzf-lua").files({
+    cwd = org_journal_dir,
+    prompt = "journal❯ ",
+    cmd = list_cmd .. " | sort -r",
+    -- 絞り込み中もスコアが同じ候補は入力順（＝新しい順）を保つ。
+    -- 既定の tiebreak だと、短いパスが先に来て日付の順が崩れる。
+    fzf_opts = { ["--tiebreak"] = "index" },
+  })
+end
+
 -- <Leader>o 配下のうち、org バッファのローカルマップ（oJ など）と被らない文字を選んでいる。
 -- m は memo、j は capture とアジェンダの j（日報）に揃えている。
 vim.keymap.set("n", "<Leader>om", create_journal_memo, { desc = "日報の markdown メモを作る" })
 vim.keymap.set("n", "<Leader>oj", open_journal_today, { desc = "今日の日報ディレクトリを開く" })
+-- ノーマルモードの <C-j> は既定では j と同じ動きで、実質空いている。
+-- init.vim の <C-j>（skkeleton）は i/c/t モード向けなので衝突しない。
+vim.keymap.set("n", "<C-j>", open_journal_all, { desc = "日報ディレクトリ全体を検索して開く" })
 
 -- refile 先の選択を fzf-lua の fuzzy find に差し替える。
 -- 既定の実装（OrgCapture:get_destination）は cmdline に「ファイル/見出し」を
