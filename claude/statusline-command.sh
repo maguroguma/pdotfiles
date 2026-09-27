@@ -52,6 +52,7 @@ cwd=$(echo "$input" | jq -r '.workspace.current_dir // .cwd // empty')
 dir_display=$(shrink_path "${cwd:-$PWD}")
 
 session_name=$(echo "$input" | jq -r '.session_name // empty')
+session_id=$(echo "$input" | jq -r '.session_id // empty')
 
 project_dir=$(echo "$input" | jq -r '.workspace.project_dir // empty')
 project_dir_display=""
@@ -172,10 +173,103 @@ format_remaining() {
   fi
 }
 
-# Line 0: session name/title (custom or AI-generated), omitted when unset
+# Runs "$@" under a wall-clock limit (in seconds), printing whatever it wrote to
+# stdout and propagating its exit status; returns 142 when the limit expires.
+# macOS ships no coreutils `timeout`, so perl supplies one. The child becomes
+# its own process-group leader and the whole group is signalled on expiry:
+# signalling only the direct child would leave a grandchild holding the pipe
+# open, which would stall the status line for as long as the grandchild lives.
+run_limited() {
+  local secs="$1"
+  shift
+  perl -e '
+    my $secs = shift @ARGV;
+    my $pid = fork();
+    die "fork failed\n" unless defined $pid;
+    if ($pid == 0) { setpgrp(0, 0); exec @ARGV; exit 127; }
+    $SIG{ALRM} = sub {
+      kill("TERM", -$pid);
+      select(undef, undef, undef, 0.2);
+      kill("KILL", -$pid);
+      exit 142;
+    };
+    alarm $secs;
+    waitpid($pid, 0);
+    alarm 0;
+    exit($? >> 8);
+  ' "$secs" "$@"
+}
+
+# Queries `claude agents --json` for the live state of every Claude Code session
+# and emits two tab-separated display fields: this session's own state, and a
+# count of other sessions that need attention. A session keeps reporting "busy"
+# while a background task or subagent is still running, even after the turn
+# ends, which is what makes the distinction worth surfacing.
+#
+# Prints nothing when the session id is unknown, the CLI is missing, or the
+# query fails, so the status line degrades quietly rather than showing a broken
+# state.
+#
+# Only fixed strings and a validated integer reach stdout. Fields from the JSON
+# (session names, paths) are deliberately never echoed, so a crafted session
+# name cannot inject escape sequences into the terminal.
+agent_status_fields() {
+  local sid="$1"
+  [ -n "$sid" ] || return 0
+  command -v claude >/dev/null 2>&1 || return 0
+
+  # A hung query must not stall the status line, so cap it at 3 seconds.
+  local json
+  json=$(run_limited 3 claude agents --json 2>/dev/null) || return 0
+  [ -n "$json" ] || return 0
+
+  # The JSON reaches jq on stdin and the session id via --arg, so neither is
+  # ever re-parsed by the shell.
+  local own others
+  own=$(printf '%s' "$json" | jq -r --arg sid "$sid" \
+    '[.[] | select(.sessionId == $sid)] | .[0].status // ""' 2>/dev/null) || return 0
+  others=$(printf '%s' "$json" | jq -r --arg sid "$sid" \
+    '[.[] | select(.sessionId != $sid and (.status == "busy" or .status == "waiting"))] | length' 2>/dev/null)
+
+  # "busy" covers a running turn and a still-live background task or subagent.
+  # "waiting" means Claude is blocked on a prompt (permission or question), so
+  # it needs an answer. "idle" means the turn is over and the prompt is yours.
+  local own_field=""
+  case "$own" in
+    busy) own_field="${RED}🔴 稼働中${RESET}" ;;
+    waiting) own_field="${YELLOW}🟡 入力待ち${RESET}" ;;
+    idle) own_field="${GREEN}🟢 完了${RESET}" ;;
+  esac
+
+  # Trust the count only when it is a bare integer.
+  case "$others" in
+    ''|*[!0-9]*) others=0 ;;
+  esac
+  local others_field=""
+  [ "$others" -gt 0 ] && others_field="${WHITE}他:${others}${RESET}"
+
+  printf '%s\t%s' "$own_field" "$others_field"
+}
+
+# Line 0: the live agent state takes the leftmost slot because it is the signal
+# most easily missed — a finished-looking response can still have a background
+# task running. The session name/title follows, then the number of other
+# sessions needing attention. The row is omitted when all three are absent.
+agent_fields=$(agent_status_fields "$session_id")
+agent_own="${agent_fields%%$'\t'*}"
+agent_others="${agent_fields#*$'\t'}"
+
 line0=""
+if [ -n "$agent_own" ]; then
+  line0="$agent_own"
+fi
 if [ -n "$session_name" ]; then
-  line0="${WHITE}💬 ${session_name}${RESET}"
+  [ -n "$line0" ] && line0="${line0}${SEP}"
+  line0="${line0}${WHITE}💬 ${session_name}${RESET}"
+fi
+if [ -n "$agent_others" ]; then
+  [ -n "$line0" ] && line0="${line0}${SEP}"
+  line0="${line0}${agent_others}"
 fi
 
 # Line 1: current directory, project/added dirs, git branch/worktree
