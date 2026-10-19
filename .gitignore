@@ -66,6 +66,8 @@ tmux/plugins/**/*
 
 !herdr/config.toml
 
+!ghostty/config
+
 !vscode/snippets/go.json
 !vscode/extensions
 !vscode/keybindings.json

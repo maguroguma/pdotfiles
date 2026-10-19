@@ -1,0 +1,9 @@
+# wezterm (.wezterm.lua) とフォント・カラースキームを揃えた設定
+font-family = "PlemolJP Console NF"
+font-style = Medium
+# ghostty (macOS) の初期値は 13pt のため、wezterm の初期値 12pt に合わせる
+font-size = 12
+theme = Iceberg Light
+
+# Ctrl+J は Karabiner で F19 に置き換えて AquaSKK を迂回し、ここで LF (Ctrl+J) として端末へ送る
+keybind = f19=text:\x0a

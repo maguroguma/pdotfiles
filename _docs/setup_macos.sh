@@ -29,6 +29,7 @@ brew install curl
 brew install shellcheck
 brew install herdr
 brew install agavra/tap/tuicr
+brew install --cask ghostty
 
 # brew tap homebrew/cask-fonts
 # brew install font-plemol-jp

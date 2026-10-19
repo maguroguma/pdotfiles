@@ -140,6 +140,7 @@ git log         # ナビゲーション機能付き（n/N で移動）
 - `nvim/` → `~/.config/nvim/`
 - `git/` → `~/.config/git/`
 - `yazi/` → `~/.config/yazi/`
+- `ghostty/` → `~/.config/ghostty/`
 - `lazygit/` → `~/.config/lazygit/`
 
 ### ホームディレクトリ直下へのリンク
