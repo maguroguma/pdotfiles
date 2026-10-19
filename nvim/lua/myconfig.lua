@@ -2351,14 +2351,25 @@ require("orgmode").setup {
     -- そこで kill（<prefix>k）や refile（<prefix>r）と系列を揃えて <prefix>c に寄せ、
     -- <C-c> は残さず外す。capture ウィンドウの中ではグローバルの capture 起動
     -- （同じ <prefix>c）を覆うが、capture を入れ子にはしないので実害はない。
-    capture = { org_capture_finalize = "<prefix>c" },
+    -- 単打の C（確定）/ K（中断）も足す。旧キーは慣れるまでの移行期間として残している。
+    -- どちらも capture バッファの normal モードだけで効き、vim の C（行末まで変更）と
+    -- グローバルの K（10gk）を覆うが、capture は短文なので実害は小さい。
+    capture = {
+      org_capture_finalize = { "<prefix>c", "C" },
+      org_capture_kill = { "<prefix>k", "K" },
+    },
     -- note バッファ（org_add_note など）の確定も既定が <C-c> なので揃える。
-    note = { org_note_finalize = "<prefix>c" },
+    note = {
+      org_note_finalize = { "<prefix>c", "C" },
+      org_note_kill = { "<prefix>k", "K" },
+    },
     -- プレビュー（既定 K）は、LSP hover に割り当てている gh と操作感を揃える。
     -- agenda バッファには LSP が attach せず、orgmode がバッファローカルに
     -- keymap を張るため、グローバルの gh とも衝突しない。
     agenda = {
-      org_agenda_archive = "<prefix>z",
+      -- 単打の Z も足す（旧キーは移行期間として残す）。グローバルの Z（za）を覆うが、
+      -- agenda バッファでは fold を使わないので困らない。
+      org_agenda_archive = { "<prefix>z", "Z" },
       org_agenda_preview = "gh",
       -- 日付ジャンプ（既定 J）は無効化する。J はグローバルで 10gj に
       -- 割り当てており、agenda 上でも同じ移動感を保ちたいため。
