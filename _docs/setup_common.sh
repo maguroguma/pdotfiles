@@ -25,6 +25,8 @@ ln -fnsv $DOTFILES_DIR/.wezterm.lua $HOME/.wezterm.lua
 ln -fnsv $DOTFILES_DIR/ghostty $XDG_CONFIG_HOME/ghostty
 ln -fnsv $DOTFILES_DIR/yazi $XDG_CONFIG_HOME/yazi
 ln -fnsv $HOME/dotfiles/claude/CLAUDE.md $XDG_CONFIG_HOME/claude
+mkdir -p $HOME/.claude && \
+  ln -fnsv $DOTFILES_DIR/claude/themes $HOME/.claude/themes
 ln -fnsv $HOME/dotfiles $GOPATH/src/github.com/maguroguma/dotfiles
 
 #########

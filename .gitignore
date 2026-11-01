@@ -61,6 +61,7 @@ nvim/pack/
 !tmux/tmux-session-preview
 !tmux/git-diff-view-nvim
 !tmux/git-diff-stashed-view-nvim
+!tmux/ai.conf
 # tmux plugin
 tmux/plugins/**/*
 
@@ -114,6 +115,8 @@ tmux/plugins/**/*
 !claude/skills/skill-creator/**/*
 !claude/output-styles/my-original.md
 !claude/statusline-command.sh
+!claude/themes/pink-prompt.json
+!claude/skills/ai-notes-update/SKILL.md
 
 !raycast/script-commands/copy-chrome-tab-markdown-link.sh
 !raycast/script-commands/copy-chrome-tab-plain-link.sh

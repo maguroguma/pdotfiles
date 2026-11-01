@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_SCROLL_SPEED": "0.25"
+  },
   "permissions": {
     "deny": [
       "Bash(curl:*)"
@@ -70,6 +73,7 @@
   "outputStyle": "My Original",
   "alwaysThinkingEnabled": true,
   "tui": "fullscreen",
-  "theme": "light",
+  "theme": "custom:pink-prompt",
+  "wheelScrollAccelerationEnabled": false,
   "agentPushNotifEnabled": false
 }

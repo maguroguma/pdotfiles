@@ -501,11 +501,31 @@ alias gcommit-only-deleted='git ls-files --deleted | xargs git commit'
 alias docker-restart='docker-compose down && docker-compose build && docker-compose up -d'
 
 # tmux
-alias ta='tmux a'
-alias tks='tmux kill-server'
-alias tls='tmux ls'
+alias ta='tmux -L default a'
+alias tks='tmux -L default kill-server'
+alias tls='tmux -L default ls'
 alias tns='tmux new -s'
 alias tn='tmux new -c $DOTFILES_DIR'
+# AI チャット専用の tmux サーバー (ai) のセッション chat に接続する (無ければ作る)
+alias tai='tmux -L ai -f $XDG_CONFIG_HOME/tmux/ai.conf new-session -A -s chat'
+# tmux のソケットファイルを一覧する (停止済みサーバーのファイルも含む)
+alias tsock='ls -l "${TMUX_TMPDIR:-/tmp}/tmux-$(id -u)/"'
+# tmux のソケットごとに、サーバーが動いているか (●) 停止済みかを表示する
+tservers() {
+  local dir="${TMUX_TMPDIR:-/tmp}/tmux-$(id -u)"
+  if [[ ! -d "$dir" ]]; then
+    echo "tmux のソケットディレクトリがありません: $dir" >&2
+    return 1
+  fi
+  local s
+  for s in "$dir"/*(N=); do
+    if tmux -S "$s" ls >/dev/null 2>&1; then
+      echo "● ${s:t}"
+    else
+      echo "  ${s:t} (停止済み)"
+    fi
+  done
+}
 alias tcapture='tmux capture-pane -pS - > ./tmux-capture-pane-$(date +%Y%m%d-%H%M%S)'
 alias tmux-capture='tmux capture-pane -pS - > ./tmux-capture-pane-$(date +%Y%m%d-%H%M%S)'
 

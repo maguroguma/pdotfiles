@@ -1,0 +1,7 @@
+{
+  "name": "Pink Prompt",
+  "base": "light",
+  "overrides": {
+    "userMessageBackground": "#ffe4ec"
+  }
+}
