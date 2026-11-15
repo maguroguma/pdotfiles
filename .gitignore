@@ -26,6 +26,8 @@
 !nvim/lazysource.vim
 !nvim/minimal.init.vim
 !nvim/lua/myconfig.lua
+!nvim/lua/claude-response.lua
+!nvim/lua/claude-response-fzf.lua
 !nvim/fzf-any-dictionary
 !nvim/after/ftplugin/help.vim
 !nvim/previm-custom.css
@@ -37,6 +39,7 @@ nvim/pack/
 !nvim/lua/copilot-setting.lua.base
 
 !scripts/ai-notes-path.sh
+!scripts/claude-last-response.sh
 !scripts/date-to-ts.sh
 !scripts/github_compare.sh
 !scripts/github_go.sh
@@ -117,6 +120,14 @@ tmux/plugins/**/*
 !claude/statusline-command.sh
 !claude/themes/pink-prompt.json
 !claude/skills/ai-notes-update/SKILL.md
+!claude/skills/explainer-video/SKILL.md
+!claude/skills/explainer-video/scripts/*.sh
+!claude/skills/explainer-video/scripts/*.py
+!claude/skills/explainer-video/scripts/*.sb
+!claude/skills/explainer-video/assets/*.md
+!claude/skills/explainer-video/assets/*.tsv
+!claude/skills/explainer-video/assets/*.json
+!claude/skills/explainer-video/references/*.md
 
 !raycast/script-commands/copy-chrome-tab-markdown-link.sh
 !raycast/script-commands/copy-chrome-tab-plain-link.sh

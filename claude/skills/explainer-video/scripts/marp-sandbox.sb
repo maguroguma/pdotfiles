@@ -1,0 +1,35 @@
+;; marp (と、marp が起動する Chrome) を閉じ込める macOS の sandbox-exec 用プロファイル。
+;; build.sh が -D で次のパラメータを渡す:
+;;   OUT_DIR    書き込みを許す出力先 (work_dir/build)
+;;   USER_TMP   書き込みを許す macOS のユーザー用一時領域 (getconf DARWIN_USER_TEMP_DIR。Chrome が使う)
+;;   HOME_DIR   読み込みを原則禁止するホームディレクトリ
+;;   WORK_DIR   ホームの中でも読み込みを許す作業ディレクトリ
+;;   SKILL_DIR  ホームの中でも読み込みを許す skill のディレクトリ
+;;   MARP_ROOT, NODE_ROOT  marp と node が入っているホーム直下のディレクトリ (~/.volta, ~/.asdf など)
+;;              ホームの外にあるときは build.sh が存在しないパスを渡す
+;; 目的は、スライドに仕込まれた画像や CSS による外部への送信と、ホームのファイルの読み込み・上書きを防ぐこと。
+(version 1)
+(allow default)
+
+;; 外部への通信をすべて禁止する (Chrome との通信はパイプと UNIX ソケットで行う)
+(deny network-outbound)
+(allow network-outbound (remote unix-socket))
+
+;; 書き込みは出力先と一時領域だけ
+(deny file-write*)
+(allow file-write*
+  (subpath (param "OUT_DIR"))
+  (subpath (param "USER_TMP"))
+  (literal "/dev/null")
+  (literal "/dev/dtracehelper")
+  (regex #"^/dev/tty"))
+
+;; ホームの中のファイルは、作業ディレクトリ・skill・marp と node の置き場・Puppeteer の Chrome・フォント以外は読ませない
+(deny file-read-data (subpath (param "HOME_DIR")))
+(allow file-read-data
+  (subpath (param "WORK_DIR"))
+  (subpath (param "SKILL_DIR"))
+  (subpath (param "MARP_ROOT"))
+  (subpath (param "NODE_ROOT"))
+  (subpath (string-append (param "HOME_DIR") "/.cache/puppeteer"))
+  (subpath (string-append (param "HOME_DIR") "/Library/Fonts")))

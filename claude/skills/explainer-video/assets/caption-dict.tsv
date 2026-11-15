@@ -1,0 +1,29 @@
+# 字幕の表示用辞書: 読み上げ用のカタカナ表記<TAB>字幕での表示
+# 題材によらずよく出る語だけを置く。題材固有の語は作業ディレクトリの caption-dict.tsv に書く (そちらが優先)。
+# 長い読みから順に置換されるので、「クロードコード」と「クロード」のように重なっていても問題ない。
+クロードコード	Claude Code
+クロード	Claude
+ネオビム	Neovim
+ヴィム	Vim
+ティーマックス	tmux
+ギットハブ	GitHub
+ギット	git
+マークダウン	Markdown
+ジェイソン	JSON
+ヤムル	YAML
+ジェイキュー	jq
+エフゼットエフ	fzf
+ルア	Lua
+パイソン	Python
+タイプスクリプト	TypeScript
+ジャバスクリプト	JavaScript
+ゴー言語	Go
+ラスト言語	Rust
+ズィーシェル	zsh
+バッシュ	bash
+エーピーアイ	API
+シーエルアイ	CLI
+エルエスピー	LSP
+エスキューエル	SQL
+ユーアールエル	URL
+エイチティーティーピー	HTTP

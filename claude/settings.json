@@ -6,6 +6,12 @@
     "deny": [
       "Bash(curl:*)"
     ],
+    "ask": [
+      "Edit(~/.claude/settings.json)",
+      "Edit(~/dotfiles/claude/settings.json)",
+      "Edit(~/go/src/github.com/maguroguma/dotfiles/claude/settings.json)",
+      "Edit(~/.claude/settings.local.json)"
+    ],
     "defaultMode": "auto",
     "additionalDirectories": [
       "/Users/yokoyamamasahiro/go/src/github.com/maguroguma/ai-notes"
@@ -19,6 +25,10 @@
           {
             "type": "command",
             "command": "bash ~/dotfiles/scripts/ai-notes-path.sh --hook"
+          },
+          {
+            "type": "command",
+            "command": "bash ~/dotfiles/scripts/claude-last-response.sh --clear"
           }
         ]
       }
@@ -39,6 +49,16 @@
           {
             "type": "command",
             "command": "jq -r 'if .tool_input.command | test(\"rm -rf|dd if=|:(){ :|:& };:\") then {\"decision\": \"block\", \"reason\": \"危険なコマンドは実行できません。別の方法を検討してください。\"} else empty end'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/dotfiles/scripts/claude-last-response.sh"
           }
         ]
       }

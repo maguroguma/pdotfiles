@@ -1370,6 +1370,8 @@ autocmd FileType markdown nnoremap <buffer> <Space>` :call InsertCodeBlock()<CR>
 autocmd FileType markdown vnoremap <buffer> <Space>` :call SurroundWithCodeBlock()<CR>
 autocmd FileType markdown vnoremap <buffer> <Space>mq :call QuoteSelectedLines()<CR>
 autocmd FileType markdown vnoremap <silent> <Space>mb :<C-u>call <SID>markdown_bold_visual()<CR>
+" 現在行の下に区切り線を挿入する（o で入力するので . でリピートできる）
+autocmd FileType markdown nnoremap <buffer> - o---<Esc>
 
 " TODOリスト（markdownファイル専用）
 " Thanks to https://qiita.com/naoty_k/items/56eddc9b76fe630f9be7
@@ -2101,10 +2103,7 @@ cnoremap <C-r>r <C-r>"
 inoremap <C-r><Space> <C-r>+
 cnoremap <C-r><Space> <C-r>+
 
-" blackhole and clipboadrd register
-" ref: https://blog.atusy.net/2025/08/08/map-minus-to-blackhole-register/
-nnoremap - "_
-xnoremap - "_
+" clipboard register
 nnoremap + "+
 xnoremap + "+
 

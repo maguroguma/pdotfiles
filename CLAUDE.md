@@ -59,6 +59,10 @@ scripts/org-timeline.sh [YYYY-MM-DD]
 # --hook で Claude Code の SessionStart hook 向けの案内文を出力する (AI_NOTES_DIR で置き場所を変更可能)
 scripts/ai-notes-path.sh [--hook]
 
+# Claude Code の Stop hook。直近の回答を ~/.cache/claude-responses/<tmux server pid>/<pane>.md に保存する
+# editprompt の Neovim (nvim/lua/claude-response.lua) が無名レジスタ・補完・fzf 挿入 (<C-a>c) に使う
+scripts/claude-last-response.sh
+
 # その他のユーティリティ
 scripts/github_go.sh          # GitHubリポジトリへの直接移動
 scripts/github_search_PR.sh   # GitHub PR検索

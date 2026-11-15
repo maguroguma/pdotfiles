@@ -657,6 +657,7 @@ cmp.setup {
         nvim_lsp = "[LSP]",
         nvim_lua = "[Lua]",
         path = "[Path]",
+        claude_response = "[Claude]",
       })[entry.source.name]
       return vim_item
     end
@@ -671,6 +672,30 @@ cmp.setup.filetype('gitcommit', {
     { name = 'buffer' },
   })
 })
+
+-- editprompt では Claude Code の直近の回答 (nvim/lua/claude-response.lua) を補完候補に加える
+local ok_claude_response, claude_response = pcall(require, 'claude-response')
+if ok_claude_response then
+  claude_response.setup()
+else
+  vim.notify('claude-response の読み込みに失敗しました: ' .. tostring(claude_response), vim.log.levels.WARN)
+end
+cmp.setup.filetype('editprompt', {
+  sources = cmp.config.sources({
+    { name = 'claude_response' },
+    { name = 'nvim_lsp' },
+  }, {
+    { name = 'buffer' },
+    { name = 'path' },
+  })
+})
+-- 回答の行を fzf で選んで挿入する (<C-a>c)。不要になったら下の 6 行と nvim/lua/claude-response-fzf.lua を消す
+local ok_claude_fzf, claude_fzf = pcall(require, 'claude-response-fzf')
+if ok_claude_fzf then
+  claude_fzf.setup()
+else
+  vim.notify('claude-response-fzf の読み込みに失敗しました: ' .. tostring(claude_fzf), vim.log.levels.WARN)
+end
 
 -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
 -- cmp.setup.cmdline({ '/', '?' }, {
