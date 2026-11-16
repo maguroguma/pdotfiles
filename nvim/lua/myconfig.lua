@@ -658,6 +658,7 @@ cmp.setup {
         nvim_lua = "[Lua]",
         path = "[Path]",
         claude_response = "[Claude]",
+        claude_slash = "[Slash]",
       })[entry.source.name]
       return vim_item
     end
@@ -680,8 +681,17 @@ if ok_claude_response then
 else
   vim.notify('claude-response の読み込みに失敗しました: ' .. tostring(claude_response), vim.log.levels.WARN)
 end
+-- 語の先頭の `/` で Claude Code の skill やコマンドを補完する (nvim/lua/claude-slash.lua)
+local ok_claude_slash, claude_slash = pcall(require, 'claude-slash')
+if ok_claude_slash then
+  claude_slash.setup()
+else
+  vim.notify('claude-slash の読み込みに失敗しました: ' .. tostring(claude_slash), vim.log.levels.WARN)
+end
+-- claude_slash は入力に前方一致する候補だけを返すので、一致しない `/Us` などでは第 2 グループの path が出る
 cmp.setup.filetype('editprompt', {
   sources = cmp.config.sources({
+    { name = 'claude_slash' },
     { name = 'claude_response' },
     { name = 'nvim_lsp' },
   }, {

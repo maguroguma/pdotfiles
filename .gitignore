@@ -28,6 +28,7 @@
 !nvim/lua/myconfig.lua
 !nvim/lua/claude-response.lua
 !nvim/lua/claude-response-fzf.lua
+!nvim/lua/claude-slash.lua
 !nvim/fzf-any-dictionary
 !nvim/after/ftplugin/help.vim
 !nvim/previm-custom.css
