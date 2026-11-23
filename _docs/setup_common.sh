@@ -33,9 +33,11 @@ ln -fnsv $HOME/dotfiles $GOPATH/src/github.com/maguroguma/dotfiles
 # Must tools
 #########
 
-# zplug
-ZPLUG_HOME=$XDG_CONFIG_HOME/.zplug && \
-  git clone https://github.com/zplug/zplug $ZPLUG_HOME
+# zsh plugins（zplug は使わず、zsh/zsh.d/zshplugins で直接読み込む）
+ZSH_PLUGINS_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins && \
+  mkdir -p $ZSH_PLUGINS_DIR && \
+  git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_PLUGINS_DIR/zsh-autosuggestions && \
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting $ZSH_PLUGINS_DIR/zsh-syntax-highlighting
 
 # fzf
 FZF_HOME=$HOME/.fzf && \

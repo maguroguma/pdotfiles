@@ -205,8 +205,7 @@ zstyle ':completion:*:options' description 'yes'
 # ---
 # docker completion
 # ---
-
-fpath=(~/.zsh/completion $fpath)
+# 補完定義は Docker 側が fpath に置くものを使う。ここではオプションの連結 (-it 等) だけ許可する
 zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
@@ -455,8 +454,6 @@ fi
 alias hw='hostname;whoami'
 alias rgf='rg --files-with-matches'
 alias gr='go run'
-alias enja='trans en:ja'
-alias jaen='trans ja:en'
 
 # Git
 # add
@@ -538,9 +535,14 @@ alias diff-side-by-side='diff --side-by-side'
 alias tar-comp='tar -zcf'
 alias tar-decomp='tar -zxf'
 
-# ubuntu
-alias pbcopy='xsel --clipboard --input'
-alias pbpaste='xsel --clipboard --output'
+# ubuntu: macOS の pbcopy/pbpaste と同じ名前で X11 のクリップボードを使う
+# macOS で定義すると本物の pbcopy を隠してしまうので、Linux のときだけ定義する
+case "$OSTYPE" in
+    linux*)
+        alias pbcopy='xsel --clipboard --input'
+        alias pbpaste='xsel --clipboard --output'
+    ;;
+esac
 alias tmux-copy='tmux save-buffer - | pbcopy'
 
 # brew

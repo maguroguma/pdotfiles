@@ -79,17 +79,8 @@
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
   },
-  "enabledPlugins": {
-    "tmux-agent-sidebar@hiroppy": true
-  },
-  "extraKnownMarketplaces": {
-    "hiroppy": {
-      "source": {
-        "source": "directory",
-        "path": "/Users/yokoyamamasahiro/.config/tmux/plugins/tmux-agent-sidebar"
-      }
-    }
-  },
+  "enabledPlugins": {},
+  "extraKnownMarketplaces": {},
   "outputStyle": "My Original",
   "alwaysThinkingEnabled": true,
   "tui": "fullscreen",

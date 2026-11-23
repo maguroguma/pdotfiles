@@ -15,11 +15,13 @@ function loadlib() {
         fi
 }
 
-if [ -d "$XDG_CONFIG_HOME/.zplug" ]; then
-    loadlib $ZSH_SUB_FILES_DIR/zshzplug
-else
-    echo "zplug is not installed"
-fi
+# 2026-11: zplug をやめ、必要なプラグインは zsh.d/zshplugins で直接読み込む（~/.config/.zplug は残してある）
+# zplug に戻すときは、下のコメントを外し、末尾の zshplugins の読み込みを消す
+# if [ -d "$XDG_CONFIG_HOME/.zplug" ]; then
+#     loadlib $ZSH_SUB_FILES_DIR/zshzplug
+# else
+#     echo "zplug is not installed"
+# fi
 
 loadlib $ZSH_SUB_FILES_DIR/zshbasic
 
@@ -32,6 +34,8 @@ fi
 loadlib $ZSH_SUB_FILES_DIR/zshhooks
 loadlib $ZSH_SUB_FILES_DIR/_zshexternal
 loadlib $ZSH_SUB_FILES_DIR/meditation
+# zsh-syntax-highlighting を含むので、ほかの設定（ウィジェット定義）より後、最後に読む
+loadlib $ZSH_SUB_FILES_DIR/zshplugins
 
 echo "\e[33m[zsh configuration ended]\e[0m"
 

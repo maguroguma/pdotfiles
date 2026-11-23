@@ -45,11 +45,16 @@ OS共通のターミナルとして。
 3.2a以降をインストールする。
 基本的にはパッケージマネージャで問題なさそう。
 
-## zplugのインストール
+## zsh プラグインのインストール
+
+プラグインマネージャー（以前は zplug）は使わず、clone したものを `zsh/zsh.d/zshplugins` で直接読み込む。
+更新するときは、それぞれのディレクトリで `git pull` する。
 
 ```sh
-ZPLUG_HOME=$XDG_CONFIG_HOME/.zplug && \
-  git clone https://github.com/zplug/zplug $ZPLUG_HOME
+ZSH_PLUGINS_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins && \
+  mkdir -p $ZSH_PLUGINS_DIR && \
+  git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_PLUGINS_DIR/zsh-autosuggestions && \
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting $ZSH_PLUGINS_DIR/zsh-syntax-highlighting
 ```
 
 ## fzfのインストール

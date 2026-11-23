@@ -1,0 +1,32 @@
+# zshplugins - zsh のプラグインを、プラグインマネージャーを使わずに直接読み込む
+#
+# 置き場所: $XDG_DATA_HOME/zsh/plugins/<リポジトリ名>（git clone で入れ、git pull で更新する）
+# 入れ方は _docs/setup.md の「zsh プラグインのインストール」を参照
+#
+# 読み込み順に意味がある。zsh-syntax-highlighting はほかのウィジェット定義より後、最後に読む必要がある
+# (公式 README の指示)。そのため、このファイルは .zshrc の最後に読み込む
+
+ZSH_PLUGINS_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
+
+# プラグインのファイルがあれば読み込み、無ければ警告を出して飛ばす
+#
+# 引数:
+#   $1 - リポジトリ名（例: zsh-autosuggestions）
+#   $2 - 読み込むファイル名（例: zsh-autosuggestions.zsh）
+load_zsh_plugin() {
+    local file="$ZSH_PLUGINS_DIR/$1/$2"
+    if [[ -r "$file" ]]; then
+        source "$file"
+    else
+        echo "zsh plugin is not installed: $1 ($file)"
+    fi
+}
+
+# 入力中に、履歴から続きの候補を灰色で表示する（→ や End で確定）
+load_zsh_plugin zsh-autosuggestions zsh-autosuggestions.zsh
+# コマンドラインを色分けする（存在しないコマンドは赤など）。必ず最後に読む
+load_zsh_plugin zsh-syntax-highlighting zsh-syntax-highlighting.zsh
+
+unfunction load_zsh_plugin
+
+echo "\e[33m[${0:t}]\e[0m\t\e[32mloaded\e[0m"
